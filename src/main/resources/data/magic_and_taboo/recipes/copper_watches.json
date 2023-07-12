@@ -1,0 +1,19 @@
+{
+  "type": "crafting_shaped",
+  "pattern": [
+    " W ",
+    "W#W",
+    " W "
+  ],
+  "key": {
+    "#": {
+      "item": "minecraft:clock"
+    },
+    "W": {
+      "item": "minecraft:copper_ingot"
+    }
+  },
+  "result": {
+    "item": "magic_and_taboo:copper_watches"
+  }
+}

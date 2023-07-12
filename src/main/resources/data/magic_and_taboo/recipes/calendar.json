@@ -1,0 +1,19 @@
+{
+  "type": "crafting_shaped",
+  "pattern": [
+    "###",
+    "WWW",
+    "WWW"
+  ],
+  "key": {
+    "#": {
+      "item": "minecraft:copper_ingot"
+    },
+    "W": {
+      "item": "minecraft:paper"
+    }
+  },
+  "result": {
+    "item": "magic_and_taboo:calendar"
+  }
+}

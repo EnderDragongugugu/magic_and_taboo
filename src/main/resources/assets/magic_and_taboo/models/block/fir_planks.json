@@ -1,0 +1,6 @@
+{
+  "parent": "block/cube_all",
+  "textures": {
+    "all": "magic_and_taboo:block/fir/fir_planks"
+  }
+}
