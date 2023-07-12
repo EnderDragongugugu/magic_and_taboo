@@ -1,35 +1,21 @@
 package net.magic_and_taboo;
 
 import net.fabricmc.api.ModInitializer;
-import net.fabricmc.fabric.api.client.itemgroup.FabricItemGroupBuilder;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
-import net.magic_and_taboo.block.MATBlock;
-import net.magic_and_taboo.item.MATItems;
-import net.magic_and_taboo.lib.MJRegistry;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.Identifier;
+import net.magic_and_taboo.init.MATBlockEntities;
+import net.magic_and_taboo.init.MATBlocks;
+import net.magic_and_taboo.init.MATItemGroup;
+import net.magic_and_taboo.init.MATItems;
+import net.magic_and_taboo.util.MATRegistry;
 
 public class MagicAndTabooMod implements ModInitializer {
     public static final String MOD_ID = "magic_and_taboo";
 
-    public static final MJRegistry MJ_REGISTRY = new MJRegistry();
+    public static final MATRegistry MJ_REGISTRY = new MATRegistry();
     public static void main(String[] args){
 
     }
 
-    public static final ItemGroup MAGIC = FabricItemGroupBuilder
-            .create(new Identifier("magic_and_taboo","magic_group"))
-            .icon(()-> new ItemStack(MATItems.COPPER_COIN))
-            .build();
-    public static final ItemGroup BLOOD = FabricItemGroupBuilder
-            .create(new Identifier("magic_and_taboo","blood_group"))
-            .icon(()-> new ItemStack(MATItems.COPPER_COIN))
-            .build();
-    public static final ItemGroup MOONLIGHT = FabricItemGroupBuilder
-            .create(new Identifier("magic_and_taboo","moonlight_group"))
-            .icon(()-> new ItemStack(MATItems.COPPER_COIN))
-            .build();
     public void onInitialize(){
         MJ_REGISTRY.registryItem("calendar", MATItems.CALENDAR);
         MJ_REGISTRY.registryItem("calendar_watches", MATItems.CALENDAR_WATCHES);
@@ -52,8 +38,9 @@ public class MagicAndTabooMod implements ModInitializer {
         MJ_REGISTRY.registryItem("star_map_10",MATItems.STAR_MAP_10);
         MJ_REGISTRY.registryItem("star_map_11",MATItems.STAR_MAP_11);
         MJ_REGISTRY.registryItem("star_map_12",MATItems.STAR_MAP_12);
-        MJ_REGISTRY.registryBlock("fir_planks", MATBlock.FIR_PLANKS, new FabricItemSettings().group(MagicAndTabooMod.MAGIC));
-        MJ_REGISTRY.registryBlock("spyglass_sextant", MATBlock.SPYGLASSSEXTANT, new FabricItemSettings().group(MagicAndTabooMod.MOONLIGHT));
+        MJ_REGISTRY.registryBlock("fir_planks", MATBlocks.FIR_PLANKS, new FabricItemSettings().group(MATItemGroup.MAGIC));
+        MJ_REGISTRY.registryBlock("spyglass_sextant", MATBlocks.SPYGLASS_SEXTANT_BLOCK, new FabricItemSettings().group(MATItemGroup.MOONLIGHT));
+        MJ_REGISTRY.registryBlockEntity("spyglass_sextant", MATBlockEntities.SPYGLASS_SEXTANT_BLOCK_ENTITY);
 //        itemList.add(registry.basicItem("copper_coin", MagicAndTabooMod.MAGIC,64));
 
 ////        itemList.add(registry.basicItem("gold_coin", Main.MAGIC,64));

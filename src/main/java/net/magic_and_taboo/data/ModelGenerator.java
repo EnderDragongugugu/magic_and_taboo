@@ -2,10 +2,8 @@ package net.magic_and_taboo.data;
 
 import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricModelProvider;
-import net.magic_and_taboo.item.MATItems;
 import net.minecraft.data.client.BlockStateModelGenerator;
 import net.minecraft.data.client.ItemModelGenerator;
-import net.minecraft.data.client.Models;
 
 public class ModelGenerator extends FabricModelProvider {
     protected ModelGenerator(FabricDataGenerator generator){
