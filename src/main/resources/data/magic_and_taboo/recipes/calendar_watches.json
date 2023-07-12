@@ -1,0 +1,14 @@
+{
+  "type": "crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "magic_and_taboo:copper_watches"
+    },
+    {
+      "item": "magic_and_taboo:calendar"
+    }
+  ],
+  "result": {
+    "item": "magic_and_taboo:calendar_watches"
+  }
+}

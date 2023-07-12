@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=east": {
+      "model": "magic_and_taboo:block/spyglass_sextant",
+      "y": 90
+    },
+    "facing=north": {
+      "model": "magic_and_taboo:block/spyglass_sextant"
+    },
+    "facing=south": {
+      "model": "magic_and_taboo:block/spyglass_sextant",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "magic_and_taboo:block/spyglass_sextant",
+      "y": 270
+    }
+  }
+}
