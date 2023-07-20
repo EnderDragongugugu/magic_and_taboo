@@ -1,65 +1,115 @@
 package net.magic_and_taboo.block.entity;
 
 import net.magic_and_taboo.MagicAndTabooMod;
+import net.magic_and_taboo.client.MagicAndTabooClient;
+import net.magic_and_taboo.client.gui.screen.handler.SpyglassSextantUIScreenHandler;
 import net.magic_and_taboo.init.MATBlockEntities;
-import net.magic_and_taboo.init.MATBlocks;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
+import net.minecraft.block.entity.LootableContainerBlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.inventory.Inventories;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.text.TranslatableText;
+import net.minecraft.nbt.NbtCompound;
+import net.minecraft.screen.NamedScreenHandlerFactory;
+import net.minecraft.screen.ScreenHandler;
+import net.minecraft.text.Text;
+import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.math.BlockPos;
+import org.jetbrains.annotations.Nullable;
 
-public class SpyglassSextantEntity extends BlockEntity {
+public class SpyglassSextantEntity extends LootableContainerBlockEntity {
+    DefaultedList<ItemStack> inv = DefaultedList.ofSize(3,ItemStack.EMPTY);
     public SpyglassSextantEntity( BlockPos pos, BlockState state) {
         super(MATBlockEntities.SPYGLASS_SEXTANT_BLOCK_ENTITY, pos, state);
     }
-    private final Inventory inventory = new Inventory() {
-        @Override
-        public int size() {
-            return 3;
-        }
+    protected DefaultedList<ItemStack> getInv() {
+        return this.inv;
+    }
+    @Override
+    public void readNbt(NbtCompound nbt) {
+        super.readNbt(nbt);
+        Inventories.readNbt(nbt, this.inv);
+    }
 
-        @Override
-        public boolean isEmpty() {
-            return false;
-        }
+    @Override
+    public void writeNbt(NbtCompound nbt) {
+        super.writeNbt(nbt);
+        Inventories.writeNbt(nbt, this.inv);
+//        return nbt;
+    }
 
-        @Override
-        public ItemStack getStack(int slot) {
-            return null;
-        }
+    @Override
+    public Text getDisplayName() {
+        return null;
+    }
 
-        @Override
-        public ItemStack removeStack(int slot, int amount) {
-            return null;
-        }
+    @Override
+    protected Text getContainerName() {
+        return null;
+    }
 
-        @Override
-        public ItemStack removeStack(int slot) {
-            return null;
-        }
+    @Override
+    protected DefaultedList<ItemStack> getInvStackList() {
+        return this.inv;
+    }
 
-        @Override
-        public void setStack(int slot, ItemStack stack) {
+    @Override
+    protected void setInvStackList(DefaultedList<ItemStack> list) {
+        this.inv = list;
+    }
 
-        }
 
-        @Override
-        public void markDirty() {
+    @Override
+    protected ScreenHandler createScreenHandler(int syncId, PlayerInventory playerInventory) {
+        return  new SpyglassSextantUIScreenHandler(syncId,playerInventory, this);
+    }
 
-        }
-
-        @Override
-        public boolean canPlayerUse(PlayerEntity player) {
-            return true;
-        }
-
-        @Override
-        public void clear() {
-
-        }
-    };
+    @Override
+    public int size() {
+        return 3;
+    }
 }
+//public class SpyglassSextantEntity extends BlockEntity implements NamedScreenHandlerFactory {
+//    private final DefaultedList<ItemStack> inventory = DefaultedList.ofSize(9, ItemStack.EMPTY);
+//
+//
+//    public SpyglassSextantEntity( BlockPos pos, BlockState state) {
+//        super(MATBlockEntities.SPYGLASS_SEXTANT_BLOCK_ENTITY, pos, state);
+//    }
+//
+//
+//    // 从 ImplementedInventory 接口
+//
+//    public DefaultedList<ItemStack> getItems() {
+//        return inventory;
+//
+//    }
+//    @Override
+//    public ScreenHandler createMenu(int syncId, PlayerInventory playerInventory, PlayerEntity player) {
+//        return new SpyglassSextantUIScreenHandler(syncId, playerInventory, (Inventory) this);
+//    }
+//
+//
+//
+//    @Override
+//    public void readNbt(NbtCompound nbt) {
+//        super.readNbt(nbt);
+//        Inventories.readNbt(nbt, this.inventory);
+//    }
+//
+//    @Override
+//    public void writeNbt(NbtCompound nbt) {
+//        super.writeNbt(nbt);
+//        Inventories.writeNbt(nbt, this.inventory);
+////        return nbt;
+//    }
+//
+//    @Override
+//    public Text getDisplayName() {
+//        return null;
+//    }
+//}

@@ -2,20 +2,29 @@ package net.magic_and_taboo;
 
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
+import net.fabricmc.fabric.api.screenhandler.v1.ScreenHandlerRegistry;
+import net.magic_and_taboo.client.MagicAndTabooClient;
+import net.magic_and_taboo.client.gui.screen.handler.SpyglassSextantUIScreenHandler;
 import net.magic_and_taboo.init.MATBlockEntities;
 import net.magic_and_taboo.init.MATBlocks;
 import net.magic_and_taboo.init.MATItemGroup;
 import net.magic_and_taboo.init.MATItems;
 import net.magic_and_taboo.util.MATRegistry;
+import net.minecraft.screen.ScreenHandlerType;
+import net.minecraft.util.Identifier;
 
 public class MagicAndTabooMod implements ModInitializer {
     public static final String MOD_ID = "magic_and_taboo";
 
     public static final MATRegistry MJ_REGISTRY = new MATRegistry();
+    public MagicAndTabooMod(){}
     public static void main(String[] args){
 
     }
-
+    public static final ScreenHandlerType<net.magic_and_taboo.client.gui.screen.handler.SpyglassSextantUIScreenHandler> SpyglassSextantUIScreenHandler;
+    static {
+        SpyglassSextantUIScreenHandler = ScreenHandlerRegistry.registerSimple(new Identifier(MagicAndTabooMod.MOD_ID,"SpyglassSextantUI"), SpyglassSextantUIScreenHandler::new);
+    }
     public void onInitialize(){
         MJ_REGISTRY.registryItem("calendar", MATItems.CALENDAR);
         MJ_REGISTRY.registryItem("calendar_watches", MATItems.CALENDAR_WATCHES);

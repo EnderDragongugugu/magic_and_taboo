@@ -21,6 +21,9 @@
     "main": [
       "net.magic_and_taboo.MagicAndTabooMod"
     ],
+    "client": [
+      "net.magic_and_taboo.client.MagicAndTabooClient"
+    ],
     "fabric-datagen": [
       "net.magic_and_taboo.data.DataGeneration"
     ]
