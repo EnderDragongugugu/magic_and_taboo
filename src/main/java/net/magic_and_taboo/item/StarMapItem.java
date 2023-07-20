@@ -10,9 +10,10 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public class StarMapItems extends Item{
+public class StarMapItem extends Item {
     private final String str;
-    public StarMapItems(Settings settings,String str) {
+
+    public StarMapItem(Settings settings, String str) {
         super(settings);
         this.str = str;
     }
@@ -21,6 +22,7 @@ public class StarMapItems extends Item{
     public void appendTooltip(ItemStack stack, @Nullable World world, List<Text> tooltip, TooltipContext context) {
         tooltip.add(new TranslatableText(str));
     }
+
     @Override
     public String getTranslationKey() {
         return "magic_and_taboo.star_map";

@@ -1,7 +1,6 @@
-package net.magic_and_taboo.client.gui.screen.handler;
+package net.magic_and_taboo.screen;
 
 import net.magic_and_taboo.MagicAndTabooMod;
-import net.magic_and_taboo.client.MagicAndTabooClient;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.Inventory;
@@ -10,23 +9,24 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.slot.Slot;
 
-public class SpyglassSextantUIScreenHandler extends ScreenHandler {
+public class SpyglassSextantScreenHandler extends ScreenHandler {
     public Inventory inventory;
-    public SpyglassSextantUIScreenHandler(int syncId, PlayerInventory playerInventory) {
-        this(syncId,playerInventory, new SimpleInventory(3));
+
+    public SpyglassSextantScreenHandler(int syncId, PlayerInventory playerInventory) {
+        this(syncId, playerInventory, new SimpleInventory(3));
     }
-    public SpyglassSextantUIScreenHandler(int syncId, PlayerInventory playerInventory, Inventory inventory){
-//        super( MagicAndTabooClient.SpyglassSextantUIScreenHandler,syncId);
-        super( MagicAndTabooMod.SpyglassSextantUIScreenHandler,syncId);
+
+    public SpyglassSextantScreenHandler(int syncId, PlayerInventory playerInventory, Inventory inventory) {
+        super(MagicAndTabooMod.SPYGLASS_SEXTANT_SCREEN_HANDLER, syncId);
         this.inventory = inventory;
-        checkSize(this.inventory,3);
-        addSlot(new Slot(this.inventory,0,10,10){
+        checkSize(this.inventory, 3);
+        addSlot(new Slot(this.inventory, 0, 10, 10) {
             @Override
             public boolean canInsert(ItemStack stack) {
                 return true;
             }
         });
-        addSlot(new Slot(this.inventory,1,20,10){
+        addSlot(new Slot(this.inventory, 1, 20, 10) {
             @Override
             public boolean canInsert(ItemStack stack) {
                 return true;
@@ -56,8 +56,8 @@ public class SpyglassSextantUIScreenHandler extends ScreenHandler {
     @Override
     public ItemStack transferSlot(PlayerEntity player, int index) {
         ItemStack itemStack = ItemStack.EMPTY;
-        Slot slot = (Slot)this.slots.get(index);
-        if (slot != null && slot.hasStack()) {
+        Slot slot = this.slots.get(index);
+        if (slot.hasStack()) {
             ItemStack itemStack2 = slot.getStack();
             itemStack = itemStack2.copy();
             int i = this.inventory.size();
@@ -75,10 +75,9 @@ public class SpyglassSextantUIScreenHandler extends ScreenHandler {
                 }
             } else if (i <= 2 || !this.insertItem(itemStack2, 2, i, false)) {
                 int k;
-                int j = i;
-                int l = k = j + 27;
+                int l = k = i + 27;
                 int m = l + 9;
-                if (index >= l && index < m ? !this.insertItem(itemStack2, j, k, false) : (index >= j && index < k ? !this.insertItem(itemStack2, l, m, false) : !this.insertItem(itemStack2, l, k, false))) {
+                if (index >= l && index < m ? !this.insertItem(itemStack2, i, k, false) : index < k ? !this.insertItem(itemStack2, l, m, false) : !this.insertItem(itemStack2, l, k, false)) {
                     return ItemStack.EMPTY;
                 }
                 return ItemStack.EMPTY;

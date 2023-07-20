@@ -2,7 +2,7 @@ package net.magic_and_taboo.client.gui.screen;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.magic_and_taboo.MagicAndTabooMod;
-import net.magic_and_taboo.client.gui.screen.handler.SpyglassSextantUIScreenHandler;
+import net.magic_and_taboo.screen.SpyglassSextantScreenHandler;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.client.render.GameRenderer;
 import net.minecraft.client.util.math.MatrixStack;
@@ -10,14 +10,16 @@ import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 
-public class SpyglassSextantUIScreen extends HandledScreen<SpyglassSextantUIScreenHandler> {
-    private static final Identifier TEXTURE = new Identifier(MagicAndTabooMod.MOD_ID,"texture/block/spyglass_sextant.png");
-    public SpyglassSextantUIScreen(SpyglassSextantUIScreenHandler handler, PlayerInventory inventory, Text title) {
+public class SpyglassSextantScreen extends HandledScreen<SpyglassSextantScreenHandler> {
+    private static final Identifier TEXTURE = new Identifier(MagicAndTabooMod.MOD_ID, "texture/block/spyglass_sextant.png");
+
+    public SpyglassSextantScreen(SpyglassSextantScreenHandler handler, PlayerInventory inventory, Text title) {
         super(handler, inventory, title);
         this.passEvents = false;
         this.backgroundHeight = 167;
         this.playerInventoryTitleY = this.backgroundHeight - 94;
     }
+
     @Override
     protected void drawBackground(MatrixStack matrices, float delta, int mouseX, int mouseY) {
         RenderSystem.setShader(GameRenderer::getPositionTexShader);

@@ -5,7 +5,7 @@ import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Identifier;
 
-public class MATItemGroup {
+public class MATItemGroups {
     public static final ItemGroup MAGIC = FabricItemGroupBuilder
             .create(new Identifier("magic_and_taboo","magic_group"))
             .icon(()-> new ItemStack(MATItems.COPPER_COIN))
