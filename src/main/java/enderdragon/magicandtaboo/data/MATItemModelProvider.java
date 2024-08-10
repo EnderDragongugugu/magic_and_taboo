@@ -1,5 +1,6 @@
 package enderdragon.magicandtaboo.data;
 
+import enderdragon.magicandtaboo.item.MATItems;
 import net.minecraft.data.PackOutput;
 import net.minecraft.world.item.Item;
 import net.minecraftforge.client.model.generators.ItemModelBuilder;
@@ -17,7 +18,7 @@ public class MATItemModelProvider extends ItemModelProvider {
 
     @Override
     protected void registerModels() {
-
+        this.withExistingParent(MATItems.UNKNOWN_SWORD.getId().getPath(), "item/netherite_sword");
     }
 
     public ItemModelBuilder handheldItem(RegistryObject<? extends Item> item) {

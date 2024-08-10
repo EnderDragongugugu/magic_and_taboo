@@ -4,7 +4,9 @@ import enderdragon.magicandtaboo.block.MATBlocks;
 import enderdragon.magicandtaboo.effect.MATEffect;
 import enderdragon.magicandtaboo.enchantment.MATEnchantments;
 import enderdragon.magicandtaboo.item.MATItems;
+import enderdragon.magicandtaboo.item.UnknownSwordItem;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.apache.logging.log4j.LogManager;
@@ -26,5 +28,7 @@ public class MagicAndTabooMod {
         MATEffect.EFFECT.register(modBus);
         MATBlocks.BLOCKS.register(modBus);
         MATItems.ITEMS.register(modBus);
+        var forgeBus = MinecraftForge.EVENT_BUS;
+        forgeBus.addListener(UnknownSwordItem::onLivingDeath);
     }
 }
