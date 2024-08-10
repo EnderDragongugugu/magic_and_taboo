@@ -1,32 +1,30 @@
 package enderdragon.magicandtaboo;
 
-import enderdragon.magicandtaboo.block.MATBlock;
-import enderdragon.magicandtaboo.client.MATClient;
+import enderdragon.magicandtaboo.block.MATBlocks;
 import enderdragon.magicandtaboo.effect.MATEffect;
-import enderdragon.magicandtaboo.enchants.MATEnchants;
-import enderdragon.magicandtaboo.item.MATItem;
-import net.minecraftforge.eventbus.api.IEventBus;
+import enderdragon.magicandtaboo.enchantment.MATEnchantments;
+import enderdragon.magicandtaboo.item.MATItems;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import net.minecraftforge.fml.loading.FMLEnvironment;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-@Mod(MagicAndTabooMod.MODID)
+@Mod(MagicAndTabooMod.MOD_ID)
 public class MagicAndTabooMod {
+    public static final String MOD_ID = "magicandtaboo";
+    private static final ResourceLocation ROOT = new ResourceLocation(MOD_ID, "root");
+    private static final Logger LOGGER = LogManager.getLogger();
 
-    public static final String MODID = "magicandtaboo";
-    public static final Logger LOGGER = LogManager.getLogger();
-
+    public static ResourceLocation makeId(String name) {
+        return ROOT.withPath(name);
+    }
 
     public MagicAndTabooMod() {
-        IEventBus eventBus = FMLJavaModLoadingContext.get().getModEventBus();
-        if(FMLEnvironment.dist.isClient()){
-            eventBus.addListener(MATClient::init);
-        }
-        MATEnchants.ENCHATMENT.register(eventBus);
-        MATEffect.EFFECT.register(eventBus);
-        MATBlock.BLOCKS.register(eventBus);
-        MATItem.ITEMS.register(eventBus);
+        var modBus = FMLJavaModLoadingContext.get().getModEventBus();
+        MATEnchantments.ENCHATMENT.register(modBus);
+        MATEffect.EFFECT.register(modBus);
+        MATBlocks.BLOCKS.register(modBus);
+        MATItems.ITEMS.register(modBus);
     }
 }
