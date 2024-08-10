@@ -1,0 +1,23 @@
+pluginManagement {
+    repositories {
+        gradlePluginPortal()
+        maven {
+            name 'ParchmentMC'
+            url 'https://maven.parchmentmc.org/'
+        }
+        maven {
+            name = 'MinecraftForge'
+            url = 'https://maven.minecraftforge.net/'
+        }
+    }
+}
+
+plugins {
+    id 'org.gradle.toolchains.foojay-resolver-convention' version '0.7.0'
+}
+//rootProject.name = 'Parchment'
+
+//plugins {
+//    // This should be below the net.minecraftforge.gradle plugin
+//    id 'org.parchmentmc.librarian.forgegradle' version '2023.09.03-1.20.1'
+//}
