@@ -13,7 +13,7 @@ import net.minecraftforge.registries.RegistryObject;
 
 public class MATBlocks {
     public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, MagicAndTabooMod.MOD_ID);
-    public static final RegistryObject<DropExperienceBlock> MERCURY_ORE = BLOCKS.register("mercury_ore", () -> new DropExperienceBlock(BlockBehaviour.Properties
+    public static final RegistryObject<DropExperienceBlock> MERCURY_ORE = BLOCKS.register("mercury_ore", () -> new MercuryOre(BlockBehaviour.Properties
             .of()
             .mapColor(MapColor.STONE)
             .instrument(NoteBlockInstrument.BASEDRUM)

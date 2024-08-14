@@ -1,4 +1,12 @@
 {
+//  enchantment
   "enchantment.magicandtaboo.mercury_toxins": "§6水银毒素",
-  "effect.magicandtaboo.mercury_toxins": "水银中毒"
+//  effect
+  "effect.magicandtaboo.mercury_toxins": "水银中毒",
+//  block
+  "block.magicandtaboo.mercury_ore": "水银矿石",
+//  item
+  "item.magicandtaboo.sacrificial_dagger": "献祭匕首",
+//  tooltip
+  "tooltip.magicandtaboo.mercury_ore": "小心有毒!"
 }
