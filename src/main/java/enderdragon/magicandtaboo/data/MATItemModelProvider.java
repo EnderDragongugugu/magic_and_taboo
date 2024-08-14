@@ -18,11 +18,8 @@ public class MATItemModelProvider extends ItemModelProvider {
 
     @Override
     protected void registerModels() {
-<<<<<<< Updated upstream
         this.withExistingParent(MATItems.UNKNOWN_SWORD.getId().getPath(), "item/netherite_sword");
-=======
         this.withExistingParent(MATItems.SACRIFICIAL_DAGGER.getId().getPath(), "item/netherite_sword");
->>>>>>> Stashed changes
     }
 
     public ItemModelBuilder handheldItem(RegistryObject<? extends Item> item) {

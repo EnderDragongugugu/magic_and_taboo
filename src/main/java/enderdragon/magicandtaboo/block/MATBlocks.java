@@ -12,8 +12,8 @@ import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
 public class MATBlocks {
-    public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, MagicAndTabooMod.MOD_ID);
-    public static final RegistryObject<DropExperienceBlock> MERCURY_ORE = BLOCKS.register("mercury_ore", () -> new MercuryOre(BlockBehaviour.Properties
+    public static final DeferredRegister<Block> REGISTRY = DeferredRegister.create(ForgeRegistries.BLOCKS, MagicAndTabooMod.MOD_ID);
+    public static final RegistryObject<DropExperienceBlock> MERCURY_ORE = REGISTRY.register("mercury_ore", () -> new MercuryOre(BlockBehaviour.Properties
             .of()
             .mapColor(MapColor.STONE)
             .instrument(NoteBlockInstrument.BASEDRUM)

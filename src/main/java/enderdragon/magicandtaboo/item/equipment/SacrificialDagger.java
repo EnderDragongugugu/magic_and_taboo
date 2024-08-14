@@ -1,25 +1,22 @@
 package enderdragon.magicandtaboo.item.equipment;
 
-import enderdragon.magicandtaboo.MagicAndTabooMod;
-import enderdragon.magicandtaboo.util.ItemUtil;
+import enderdragon.magicandtaboo.util.ContainerUtil;
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
-import net.minecraft.world.InteractionResultHolder;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.*;
-import net.minecraft.world.item.context.UseOnContext;
-import net.minecraft.world.level.Level;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.SwordItem;
+import net.minecraft.world.item.Tier;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 
 public class SacrificialDagger extends SwordItem {
-    public SacrificialDagger(Properties pProperties) {
-        super(Tiers.IRON, 1, 1, pProperties);
+    private static final Logger LOGGER = LogManager.getLogger();
+
+    public SacrificialDagger(Tier tier, int damageModifier, float speedModifier, Properties props) {
+        super(tier, damageModifier, speedModifier, props);
     }
 
 //    @Override
@@ -29,13 +26,12 @@ public class SacrificialDagger extends SwordItem {
 //    }
 
     @Override
-    public boolean hurtEnemy(ItemStack pStack, LivingEntity pTarget, LivingEntity pAttacker) {
-        if(pAttacker instanceof Player player){
-            Inventory inventory = new Inventory(player);
-//            LogManager.getLogger().debug(Items.GLASS_BOTTLE.TAG);
-            int slot = ItemUtil.findFirstItemStack(inventory, Items.GLASS_BOTTLE);
-            player.displayClientMessage(Component.translatable(slot + ""),false);
+    public boolean hurtEnemy(ItemStack stack, LivingEntity target, LivingEntity attacker) {
+        if (attacker instanceof Player player) {
+            int slot = ContainerUtil.find(player.getInventory(), Items.GLASS_BOTTLE);
+            player.displayClientMessage(Component.literal(Integer.toString(slot)), false);
+            LOGGER.info("slot: {}", slot);
         }
-        return true;
+        return super.hurtEnemy(stack, target, attacker);
     }
 }

@@ -9,6 +9,6 @@ import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
 public class MATEnchantments {
-    public static final DeferredRegister<Enchantment> ENCHATMENT = DeferredRegister.create(ForgeRegistries.ENCHANTMENTS, MagicAndTabooMod.MOD_ID);
-    public static RegistryObject<Enchantment> mercuryToxins = ENCHATMENT.register("mercury_toxins", () -> new MercuryToxinsEnchantment(Enchantment.Rarity.UNCOMMON, EnchantmentCategory.WEAPON, EquipmentSlot.values()));
+    public static final DeferredRegister<Enchantment> REGISTRY = DeferredRegister.create(ForgeRegistries.ENCHANTMENTS, MagicAndTabooMod.MOD_ID);
+    public static RegistryObject<Enchantment> MERCURY_TOXINS = REGISTRY.register("mercury_toxins", () -> new MercuryToxinsEnchantment(Enchantment.Rarity.UNCOMMON, EnchantmentCategory.WEAPON, EquipmentSlot.values()));
 }
