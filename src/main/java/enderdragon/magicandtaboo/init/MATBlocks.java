@@ -1,4 +1,4 @@
-package init;
+package enderdragon.magicandtaboo.init;
 
 import enderdragon.magicandtaboo.MagicAndTabooMod;
 import enderdragon.magicandtaboo.block.MercuryOre;

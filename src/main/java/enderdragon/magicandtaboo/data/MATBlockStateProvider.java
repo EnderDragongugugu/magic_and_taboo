@@ -1,6 +1,6 @@
 package enderdragon.magicandtaboo.data;
 
-import init.MATBlocks;
+import enderdragon.magicandtaboo.init.MATBlocks;
 import net.minecraft.data.PackOutput;
 import net.minecraft.world.level.block.Block;
 import net.minecraftforge.client.model.generators.BlockStateProvider;

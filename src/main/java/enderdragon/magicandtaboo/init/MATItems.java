@@ -1,4 +1,4 @@
-package init;
+package enderdragon.magicandtaboo.init;
 
 import enderdragon.magicandtaboo.MagicAndTabooMod;
 import enderdragon.magicandtaboo.item.BloodBottle;
@@ -11,8 +11,8 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
-import static enderdragon.magicandtaboo.item.MATItemGroups.BLOCKS;
-import static enderdragon.magicandtaboo.item.MATItemGroups.ITEMS;
+import static enderdragon.magicandtaboo.init.MATItemGroups.BLOCKS;
+import static enderdragon.magicandtaboo.init.MATItemGroups.ITEMS;
 
 public class MATItems {
     public static final DeferredRegister<Item> REGISTRY = DeferredRegister.create(ForgeRegistries.ITEMS, MagicAndTabooMod.MOD_ID);
@@ -25,7 +25,6 @@ public class MATItems {
     public static final RegistryObject<Item> SACRIFICIAL_DAGGER = ITEMS.register(REGISTRY, "sacrificial_dagger", () ->
             new SacrificialDagger(Tiers.IRON, 1, 1, new Item.Properties())
     );
-    public static final RegistryObject<Item> BLOOD_BOTTLE = ITEMS.register(REGISTRY,"blood_bottle",()->
-            new BloodBottle(new Item.Properties()
-                    .stacksTo(1)));
+    public static final RegistryObject<Item> BLOOD_BOTTLE = ITEMS.register(REGISTRY, "blood_bottle", () ->
+            new BloodBottle(new Item.Properties().stacksTo(1)));
 }

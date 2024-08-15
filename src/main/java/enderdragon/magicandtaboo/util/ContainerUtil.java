@@ -4,10 +4,10 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.world.Container;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import org.apache.logging.log4j.LogManager;
+import org.jetbrains.annotations.NotNull;
 
+import java.util.List;
 import java.util.function.Predicate;
-import java.util.logging.Logger;
 
 public class ContainerUtil {
     public static int find(Container container, Item item) {
@@ -30,11 +30,16 @@ public class ContainerUtil {
         }
         return -1;
     }
-    public static void consumeStack(ItemStack itemStack,int count){
-        if(itemStack.getCount() > 1){
-            itemStack.setCount(count);
-        }else {
-            itemStack.setCount(0);
+
+    @SafeVarargs
+    public static @NotNull ItemStack findStack(Item item, List<ItemStack>... areas) {
+        for (int i = 0, n = areas.length; i < n; ++i) {
+            var stacks = areas[i];
+            for (int j = 0, m = stacks.size(); j < m; ++j) {
+                var stack = stacks.get(i);
+                if (stack.getItem() == item) return stack;
+            }
         }
+        return ItemStack.EMPTY;
     }
 }

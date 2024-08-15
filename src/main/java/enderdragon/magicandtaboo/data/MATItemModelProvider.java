@@ -1,8 +1,7 @@
 package enderdragon.magicandtaboo.data;
 
-import init.MATItems;
+import enderdragon.magicandtaboo.init.MATItems;
 import net.minecraft.data.PackOutput;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraftforge.client.model.generators.ItemModelBuilder;
 import net.minecraftforge.client.model.generators.ItemModelProvider;
@@ -22,19 +21,12 @@ public class MATItemModelProvider extends ItemModelProvider {
         this.withExistingParent(MATItems.UNKNOWN_SWORD.getId().getPath(), "item/netherite_sword");
         this.withExistingParent(MATItems.SACRIFICIAL_DAGGER.getId().getPath(), "item/netherite_sword");
         this.basicItem(MATItems.BLOOD_BOTTLE.getId());
-//        this.generatedItem(MATItems.BLOOD_BOTTLE);
     }
 
     public ItemModelBuilder handheldItem(RegistryObject<? extends Item> item) {
         var id = item.getId();
         return this.getBuilder(id.toString())
                 .parent(new ModelFile.UncheckedModelFile("item/handheld"))
-                .texture("layer0", id.withPrefix("item/"));
-    }
-    public ItemModelBuilder generatedItem(RegistryObject<? extends Item> item){
-        ResourceLocation id = item.getId();
-        return this.getBuilder(id.toString())
-                .parent(new ModelFile.UncheckedModelFile("item/generated"))
                 .texture("layer0", id.withPrefix("item/"));
     }
 }

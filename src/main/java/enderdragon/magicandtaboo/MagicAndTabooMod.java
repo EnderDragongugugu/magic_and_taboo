@@ -1,10 +1,10 @@
 package enderdragon.magicandtaboo;
 
-import init.MATBlocks;
 import enderdragon.magicandtaboo.effect.MATEffect;
 import enderdragon.magicandtaboo.enchantment.MATEnchantments;
-import enderdragon.magicandtaboo.item.MATItemGroups;
-import init.MATItems;
+import enderdragon.magicandtaboo.init.MATBlocks;
+import enderdragon.magicandtaboo.init.MATItemGroups;
+import enderdragon.magicandtaboo.init.MATItems;
 import enderdragon.magicandtaboo.item.UnknownSwordItem;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
