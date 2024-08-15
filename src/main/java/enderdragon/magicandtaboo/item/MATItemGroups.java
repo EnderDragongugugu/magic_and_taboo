@@ -1,8 +1,9 @@
 package enderdragon.magicandtaboo.item;
 
 import enderdragon.magicandtaboo.MagicAndTabooMod;
-import enderdragon.magicandtaboo.block.MATBlocks;
+
 import enderdragon.magicandtaboo.util.ItemGroup;
+import init.MATBlocks;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraftforge.registries.DeferredRegister;

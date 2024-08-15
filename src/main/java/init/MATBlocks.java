@@ -1,6 +1,7 @@
-package enderdragon.magicandtaboo.block;
+package init;
 
 import enderdragon.magicandtaboo.MagicAndTabooMod;
+import enderdragon.magicandtaboo.block.MercuryOre;
 import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.DropExperienceBlock;

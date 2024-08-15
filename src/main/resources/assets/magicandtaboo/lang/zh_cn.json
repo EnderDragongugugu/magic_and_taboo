@@ -7,6 +7,11 @@
   "block.magicandtaboo.mercury_ore": "水银矿石",
 //  item
   "item.magicandtaboo.sacrificial_dagger": "献祭匕首",
+  "item.magicandtaboo.blood_bottle": "血瓶",
 //  tooltip
-  "tooltip.magicandtaboo.mercury_ore": "小心有毒!"
+  "tooltip.magicandtaboo.mercury_ore": "小心有毒!",
+//  itemGroup
+  "itemGroup.magicandtaboo.items": "魔法与禁忌: 物品",
+  "itemGroup.magicandtaboo.blocks": "魔法与禁忌: 方块"
+
 }

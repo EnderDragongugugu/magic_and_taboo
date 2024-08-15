@@ -1,7 +1,8 @@
-package enderdragon.magicandtaboo.item;
+package init;
 
 import enderdragon.magicandtaboo.MagicAndTabooMod;
-import enderdragon.magicandtaboo.block.MATBlocks;
+import enderdragon.magicandtaboo.item.BloodBottle;
+import enderdragon.magicandtaboo.item.UnknownSwordItem;
 import enderdragon.magicandtaboo.item.equipment.SacrificialDagger;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
@@ -24,4 +25,7 @@ public class MATItems {
     public static final RegistryObject<Item> SACRIFICIAL_DAGGER = ITEMS.register(REGISTRY, "sacrificial_dagger", () ->
             new SacrificialDagger(Tiers.IRON, 1, 1, new Item.Properties())
     );
+    public static final RegistryObject<Item> BLOOD_BOTTLE = ITEMS.register(REGISTRY,"blood_bottle",()->
+            new BloodBottle(new Item.Properties()
+                    .stacksTo(1)));
 }

@@ -1,6 +1,6 @@
 package enderdragon.magicandtaboo.data;
 
-import enderdragon.magicandtaboo.block.MATBlocks;
+import init.MATBlocks;
 import net.minecraft.core.HolderLookup.Provider;
 import net.minecraft.data.PackOutput;
 import net.minecraft.tags.BlockTags;
