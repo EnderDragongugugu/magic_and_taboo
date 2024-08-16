@@ -2,6 +2,8 @@ package enderdragon.magicandtaboo.util;
 
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.Container;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
@@ -29,6 +31,14 @@ public class ContainerUtil {
             if (predicate.test(container.getItem(i))) return i;
         }
         return -1;
+    }
+    public static void addItem( Player player , ItemStack itemStack){
+        Inventory inventory = player.getInventory();
+        if(inventory.getFreeSlot() > 0){
+            inventory.add(itemStack);
+        }else {
+            player.spawnAtLocation(itemStack);
+        }
     }
 
     @SafeVarargs

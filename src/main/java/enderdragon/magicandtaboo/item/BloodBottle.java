@@ -32,51 +32,37 @@ public class BloodBottle extends Item {
         super(props);
     }
 
-    @Override
-    public boolean isBarVisible(ItemStack stack) {
-        var data = stack.getTag();
-        return data != null && data.contains(TAG_DATA, 10);
-    }
-
-    @Override
-    public int getBarWidth(ItemStack stack) {
-        var tag = stack.getTag();
-        if (tag == null) return 13;
-        var data = tag.getCompound(TAG_DATA);
-        return data.isEmpty() ? 13 : Math.round(data.getInt(TAG_PURENESS) * 0.0054166666F);// 13F / 2400F -> 0.0054166666F
-    }
-
-    @Override
-    public int getBarColor(ItemStack stack) {
-        return (this.getBarWidth(stack) + 15) << 20;
-    }
-
-    @Override
-    public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltips, TooltipFlag flag) {
-        var tag = stack.getTag();
-        if (tag == null) return;
-        var data = tag.getCompound(TAG_DATA);
-        if (data.isEmpty()) return;
-        tooltips.add(Component.literal(Integer.toString(data.getInt(TAG_PURENESS))));
-    }
-
     public static void tryLootBlood(Player player, LivingEntity target) {
         var inventory = player.getInventory();
         var bottle = ContainerUtil.findStack(Items.GLASS_BOTTLE, inventory.offhand, inventory.items);
         if (bottle.isEmpty()) return;
         float health = target.getHealth();
         float maxHealth = target.getMaxHealth();
-        if (health <= 0.2 * maxHealth) {// -> health / maxHealth <= 0.2
+        if (health <= 0.2 * maxHealth) {
             var tag = new CompoundTag();
             var entityData = new CompoundTag();
             var blood = new ItemStack(MATItems.BLOOD_BOTTLE.get());
-            entityData.putString("entity_name", Component.Serializer.toJson(target.getName()));
+            entityData.putString("entity_name", target.getName().getString());
             entityData.putInt(TAG_PURENESS, 2400);
             tag.put(TAG_DATA, entityData);
             blood.setTag(tag);
             target.spawnAtLocation(blood, 0.25F);
             bottle.shrink(1);
         }
+    }
+
+    public static int getPureness(ItemStack stack) {
+        var tag = stack.getTag();
+        if (tag == null) return -1;
+        var data = tag.getCompound(TAG_DATA);
+        if (data.isEmpty()) return -1;
+        return data.getInt(TAG_PURENESS);
+    }
+    public static int getPureness(CompoundTag nbt) {
+        if (nbt == null) return -1;
+        var data = nbt.getCompound(TAG_DATA);
+        if (data.isEmpty()) return -1;
+        return data.getInt(TAG_PURENESS);
     }
 
     public static boolean tryConsume(Player player) {
@@ -111,4 +97,42 @@ public class BloodBottle extends Item {
             list = inventory.items;
         } while (true);
     }
+
+    @Override
+    public boolean isBarVisible(ItemStack stack) {
+        var data = stack.getTag();
+        return data != null && data.contains(TAG_DATA, 10);
+    }
+
+    @Override
+    public int getBarWidth(ItemStack stack) {
+        var tag = stack.getTag();
+        if (tag == null) return 13;
+        var data = tag.getCompound(TAG_DATA);
+        return data.isEmpty() ? 13 : Math.round(data.getInt(TAG_PURENESS) * 0.0054166666F);
+    }
+
+    @Override
+    public int getBarColor(ItemStack stack) {
+        return (this.getBarWidth(stack) + 15) << 20;
+    }
+
+    @Override
+    public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltips, TooltipFlag flag) {
+        int pureness = BloodBottle.getPureness(stack);
+        if (pureness > -1) {
+            String num = pureness / 24.0F + "%";
+            tooltips.add(Component.translatable("tooltip.magicandtaboo.blood_bottle_pureness", num));
+        }
+    }
+
+    @Override
+    public Component getName(ItemStack pStack) {
+        var tag = pStack.getTag();
+        if (tag == null) return super.getName(pStack);
+        var data = tag.getCompound(TAG_DATA);
+        if (data.isEmpty()) return super.getName(pStack);
+        return Component.translatable("item.magicandtaboo.blood_bottle.has_entity",data.getString("entity_name"));
+    }
+
 }
