@@ -11,6 +11,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -19,7 +20,6 @@ import java.util.function.Predicate;
 public class BloodBottle extends Item {
     public static final String TAG_DATA = "blood_bottle_data";
     public static final String TAG_PURENESS = "pureness";
-
     public static final Predicate<ItemStack> IS_VALID = stack -> {
         if (stack.getItem() != MATItems.BLOOD_BOTTLE.get()) return false;
         var tag = stack.getTag();
@@ -53,16 +53,12 @@ public class BloodBottle extends Item {
 
     public static int getPureness(ItemStack stack) {
         var tag = stack.getTag();
-        if (tag == null) return -1;
-        var data = tag.getCompound(TAG_DATA);
-        if (data.isEmpty()) return -1;
-        return data.getInt(TAG_PURENESS);
+        return tag == null ? -1 : getPureness(tag);
     }
-    public static int getPureness(CompoundTag nbt) {
-        if (nbt == null) return -1;
-        var data = nbt.getCompound(TAG_DATA);
-        if (data.isEmpty()) return -1;
-        return data.getInt(TAG_PURENESS);
+
+    public static int getPureness(@NotNull CompoundTag tag) {
+        var data = tag.getCompound(TAG_DATA);
+        return data.isEmpty() ? -1 : data.getInt(TAG_PURENESS);
     }
 
     public static boolean tryConsume(Player player) {
@@ -114,25 +110,24 @@ public class BloodBottle extends Item {
 
     @Override
     public int getBarColor(ItemStack stack) {
-        return (this.getBarWidth(stack) + 15) << 20;
+        return ((this.getBarWidth(stack) + 2) << 20) | 0x0F0000;
     }
 
     @Override
     public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltips, TooltipFlag flag) {
         int pureness = BloodBottle.getPureness(stack);
         if (pureness > -1) {
-            String num = pureness / 24.0F + "%";
-            tooltips.add(Component.translatable("tooltip.magicandtaboo.blood_bottle_pureness", num));
+            tooltips.add(Component.translatable("tooltip.magicandtaboo.blood_bottle_pureness", String.format("%.1f%%", pureness / 24.0F)));
         }
     }
 
     @Override
-    public Component getName(ItemStack pStack) {
+    public @NotNull Component getName(ItemStack pStack) {
         var tag = pStack.getTag();
         if (tag == null) return super.getName(pStack);
         var data = tag.getCompound(TAG_DATA);
         if (data.isEmpty()) return super.getName(pStack);
-        return Component.translatable("item.magicandtaboo.blood_bottle.has_entity",data.getString("entity_name"));
+        return Component.translatable("item.magicandtaboo.blood_bottle.has_entity", data.getString("entity_name"));
     }
 
 }

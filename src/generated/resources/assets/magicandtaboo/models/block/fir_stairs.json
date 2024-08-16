@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/stairs",
+  "textures": {
+    "bottom": "magicandtaboo:block/fir/fir_planks",
+    "side": "magicandtaboo:block/fir/fir_planks",
+    "top": "magicandtaboo:block/fir/fir_planks"
+  }
+}

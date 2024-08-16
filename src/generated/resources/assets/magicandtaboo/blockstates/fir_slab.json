@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "magicandtaboo:block/fir_slab"
+    },
+    "type=double": {
+      "model": "magicandtaboo:block/fir_planks"
+    },
+    "type=top": {
+      "model": "magicandtaboo:block/fir_slab_top"
+    }
+  }
+}

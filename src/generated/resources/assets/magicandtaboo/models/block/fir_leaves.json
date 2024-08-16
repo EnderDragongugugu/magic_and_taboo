@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/leaves",
+  "textures": {
+    "all": "magicandtaboo:block/fir/fir_leaves"
+  }
+}

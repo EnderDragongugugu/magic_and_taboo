@@ -22,5 +22,12 @@ public class MATBlockTagProvider extends BlockTagsProvider {
     protected void addTags(@NotNull Provider registry) {
         this.tag(BlockTags.NEEDS_IRON_TOOL).add(MATBlocks.MERCURY_ORE.get());
         this.tag(BlockTags.MINEABLE_WITH_PICKAXE).add(MATBlocks.MERCURY_ORE.get());
+        this.tag(BlockTags.WOODEN_BUTTONS).add(MATBlocks.FIR_BUTTON.get());
+        this.tag(BlockTags.WOODEN_DOORS).add(MATBlocks.FIR_DOOR.get());
+        this.tag(BlockTags.WOODEN_STAIRS).add(MATBlocks.FIR_STAIRS.get());
+        this.tag(BlockTags.WOODEN_SLABS).add(MATBlocks.FIR_SLAB.get());
+        this.tag(BlockTags.WOODEN_FENCES).add(MATBlocks.FIR_FENCE.get());
+        this.tag(BlockTags.WOODEN_PRESSURE_PLATES).add(MATBlocks.FIR_PRESSURE_PLATE.get());
+        this.tag(BlockTags.WOODEN_TRAPDOORS).add(MATBlocks.FIR_TRAPDOOR.get());
     }
 }

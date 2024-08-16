@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/cross",
+  "textures": {
+    "cross": "magicandtaboo:block/fir/fir_sapling"
+  }
+}

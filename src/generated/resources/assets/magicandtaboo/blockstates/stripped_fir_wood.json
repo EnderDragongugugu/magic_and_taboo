@@ -1,0 +1,16 @@
+{
+  "variants": {
+    "axis=x": {
+      "model": "magicandtaboo:block/stripped_fir_wood_horizontal",
+      "x": 90,
+      "y": 90
+    },
+    "axis=y": {
+      "model": "magicandtaboo:block/stripped_fir_wood"
+    },
+    "axis=z": {
+      "model": "magicandtaboo:block/stripped_fir_wood_horizontal",
+      "x": 90
+    }
+  }
+}

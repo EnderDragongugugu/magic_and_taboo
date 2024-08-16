@@ -1,6 +1,5 @@
 package enderdragon.magicandtaboo.item.equipment;
 
-import enderdragon.magicandtaboo.init.MATItems;
 import enderdragon.magicandtaboo.item.BloodBottle;
 import enderdragon.magicandtaboo.util.ContainerUtil;
 import net.minecraft.nbt.CompoundTag;
@@ -24,6 +23,7 @@ import java.util.List;
 @ParametersAreNonnullByDefault
 public class SacrificialDagger extends SwordItem {
     public static final String TAG_SACRIFICING = "sacrificing";
+    public static final String TAG_BLOOD_BOTTLE = "blood_bottle";
     private static final Logger LOGGER = LogManager.getLogger();
 
     public SacrificialDagger(Tier tier, int damageModifier, float speedModifier, Properties props) {
@@ -47,19 +47,15 @@ public class SacrificialDagger extends SwordItem {
                     : InteractionResultHolder.fail(stack);
         }
         var data = stack.getOrCreateTag();
-        boolean flag = data.getBoolean(TAG_SACRIFICING);
-        int slot = ContainerUtil.find(inventory,MATItems.BLOOD_BOTTLE.get());
-        if (!flag &&  slot > -1) {
-            ItemStack bloodBottle =inventory.getItem(slot);
-            if(BloodBottle.IS_VALID.test(bloodBottle)){
-                data.putBoolean(TAG_SACRIFICING, true);
-                this.addBloodBottle(stack,bloodBottle);
-                return InteractionResultHolder.consume(stack);
-            }
-        }
-        if (flag) {
+        if (data.getBoolean(TAG_SACRIFICING)) {
             data.putBoolean(TAG_SACRIFICING, false);
-            this.removeBloodBottle(player,stack);
+            releaseBloodBottle(player, stack);
+            return InteractionResultHolder.consume(stack);
+        }
+        var blood = ContainerUtil.findStack(BloodBottle.IS_VALID, inventory.offhand, inventory.items);
+        if (blood != null) {
+            data.putBoolean(TAG_SACRIFICING, true);
+            bindBloodBottle(stack, blood);
             return InteractionResultHolder.consume(stack);
         }
         return InteractionResultHolder.fail(stack);
@@ -68,13 +64,11 @@ public class SacrificialDagger extends SwordItem {
     @Override
     public void appendHoverText(ItemStack pStack, @Nullable Level pLevel, List<Component> pTooltipComponents, TooltipFlag pIsAdvanced) {
         CompoundTag nbt = pStack.getTag();
-        if(nbt != null && nbt.contains("blood_bottle_nbt",10)){
-            CompoundTag bloodBottleNBT = nbt.getCompound("blood_bottle_nbt").getCompound("tag");
-            int pureness = BloodBottle.getPureness(bloodBottleNBT);
-            if(pureness > -1){
-                String num = pureness / 24.0F + "%";
-                pTooltipComponents.add(Component.translatable("tooltip.magicandtaboo.blood_bottle_pureness",num ));
-            }else {
+        if (nbt != null && nbt.contains(TAG_BLOOD_BOTTLE, 10)) {
+            int pureness = BloodBottle.getPureness(nbt.getCompound(TAG_BLOOD_BOTTLE).getCompound("tag"));
+            if (pureness > -1) {
+                pTooltipComponents.add(Component.translatable("tooltip.magicandtaboo.blood_bottle_pureness", String.format("%.1f%%", pureness / 24.0F)));
+            } else {
                 pTooltipComponents.add(Component.translatable("tooltip.magicandtaboo.sacrificial_dagger_warn"));
             }
         }
@@ -87,37 +81,25 @@ public class SacrificialDagger extends SwordItem {
         }
         return super.hurtEnemy(stack, target, attacker);
     }
-    public void addBloodBottle(ItemStack sword, ItemStack bloodBottle){
+
+    public static void bindBloodBottle(ItemStack sword, ItemStack bloodBottle) {
         CompoundTag addItemNBT = new CompoundTag();
         CompoundTag swordNBT = sword.getOrCreateTag();
-        if(swordNBT.isEmpty() || !swordNBT.contains("blood_bottle_nbt",10)){
-            swordNBT.put("blood_bottle_nbt",bloodBottle.save(addItemNBT));
-            sword.setTag(swordNBT);
+        if (swordNBT.isEmpty() || !swordNBT.contains(TAG_BLOOD_BOTTLE, 10)) {
+            swordNBT.put(TAG_BLOOD_BOTTLE, bloodBottle.save(addItemNBT));
             bloodBottle.shrink(1);
         }
     }
-    public void removeBloodBottle(Player player,ItemStack itemStack){
-        CompoundTag nbt = itemStack.getTag();
-        if(nbt != null && nbt.contains("blood_bottle_nbt",10)){
-            CompoundTag itemStackNBT = nbt.getCompound("blood_bottle_nbt").getCompound("tag");
-            ItemStack bloodBottle = new ItemStack(MATItems.BLOOD_BOTTLE.get(),1);
-            bloodBottle.setTag(itemStackNBT);
-            CompoundTag bloodBottleNBT = bloodBottle.getTag();
-            if(bloodBottleNBT != null && bloodBottleNBT.contains(BloodBottle.TAG_DATA,10)){
-                CompoundTag data = bloodBottleNBT.getCompound(BloodBottle.TAG_DATA);
-                int pureness = data.getInt(BloodBottle.TAG_PURENESS);
-                if(pureness > 0){
-                    ContainerUtil.addItem(player,bloodBottle);
-                    nbt.remove("blood_bottle_nbt");
-                    itemStack.setTag(nbt);
-                    return;
-                }
-            }
-            ItemStack glassBottle = new ItemStack(Items.GLASS_BOTTLE);
-            nbt.remove("blood_bottle_nbt");
-            itemStack.setTag(nbt);
-            ContainerUtil.addItem(player, glassBottle);
-        }
+
+    public static void releaseBloodBottle(Player player, ItemStack dagger) {
+        var tag = dagger.getTag();
+        if (tag == null) return;
+        var blood = ItemStack.of(tag.getCompound(TAG_BLOOD_BOTTLE));
+        tag.remove(TAG_BLOOD_BOTTLE);
+        if (blood.isEmpty()) return;
+        ContainerUtil.addItem(player,
+                BloodBottle.getPureness(blood) > 0 ? blood : new ItemStack(Items.GLASS_BOTTLE)
+        );
     }
 
     //    public void getSoul(Player player , ItemStack itemStack) {

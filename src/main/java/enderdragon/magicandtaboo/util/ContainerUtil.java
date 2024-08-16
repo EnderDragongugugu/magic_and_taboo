@@ -2,11 +2,11 @@ package enderdragon.magicandtaboo.util;
 
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.Container;
-import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.function.Predicate;
@@ -32,24 +32,30 @@ public class ContainerUtil {
         }
         return -1;
     }
-    public static void addItem( Player player , ItemStack itemStack){
-        Inventory inventory = player.getInventory();
-        if(inventory.getFreeSlot() > 0){
-            inventory.add(itemStack);
-        }else {
-            player.spawnAtLocation(itemStack);
+
+    public static void addItem(Player player, ItemStack stack) {
+        if (!player.addItem(stack)) {
+            player.drop(stack, false);
         }
     }
 
     @SafeVarargs
     public static @NotNull ItemStack findStack(Item item, List<ItemStack>... areas) {
-        for (int i = 0, n = areas.length; i < n; ++i) {
-            var stacks = areas[i];
-            for (int j = 0, m = stacks.size(); j < m; ++j) {
-                var stack = stacks.get(i);
+        for (var stacks : areas) {
+            for (var stack : stacks) {
                 if (stack.getItem() == item) return stack;
             }
         }
         return ItemStack.EMPTY;
+    }
+
+    @SafeVarargs
+    public static @Nullable ItemStack findStack(Predicate<ItemStack> predicate, List<ItemStack>... areas) {
+        for (var stacks : areas) {
+            for (var stack : stacks) {
+                if (predicate.test(stack)) return stack;
+            }
+        }
+        return null;
     }
 }
