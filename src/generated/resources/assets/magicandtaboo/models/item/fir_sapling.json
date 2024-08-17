@@ -1,3 +1,6 @@
 {
-  "parent": "magicandtaboo:block/fir_sapling"
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "magicandtaboo:block/fir/fir_sapling"
+  }
 }

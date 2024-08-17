@@ -41,6 +41,9 @@ public class MATItemModelProvider extends ItemModelProvider {
                 .texture("texture", makeId("block/fir/fir_planks"));
         this.withExistingParent(MATBlocks.FIR_FENCE.getId().getPath(), "block/fence_inventory")
                 .texture("texture", makeId("block/fir/fir_planks"));
+        this.getBuilder(MATItems.FIR_SAPLING.getId().getPath())
+                .parent(new ModelFile.UncheckedModelFile("item/generated"))
+                .texture("layer0", makeId("block/fir/fir_sapling"));
     }
 
     public ItemModelBuilder handheldItem(RegistryObject<? extends Item> item) {

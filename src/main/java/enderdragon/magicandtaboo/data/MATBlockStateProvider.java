@@ -33,11 +33,21 @@ public class MATBlockStateProvider extends BlockStateProvider {
         var strippedSide = makeId("block/fir/stripped_fir_log");
         var strippedTop = makeId("block/fir/stripped_fir_log_top");
         var planks = makeId("block/fir/fir_planks");
+        var sapling = makeId("block/fir/fir_sapling");
+        var cutout = new ResourceLocation("cutout");
         this.axisBlock(MATBlocks.FIR_WOOD.get(), side, side);
         this.axisBlock(MATBlocks.FIR_LOG.get(), side, top);
         this.axisBlock(MATBlocks.STRIPPED_FIR_WOOD.get(), strippedSide, strippedSide);
         this.axisBlock(MATBlocks.STRIPPED_FIR_LOG.get(), strippedSide, strippedTop);
-        this.simpleBlockWithItem(MATBlocks.FIR_SAPLING.get(), this.models().cross(MATBlocks.FIR_SAPLING.getId().getPath(), makeId("block/fir/fir_sapling")));
+        this.simpleBlock(MATBlocks.FIR_SAPLING.get(), this.models()
+                .cross(MATBlocks.FIR_SAPLING.getId().getPath(), sapling)
+                .renderType(cutout)
+        );
+        this.simpleBlock(MATBlocks.POTTED_FIR_SAPLING.get(), this.models()
+                .withExistingParent(MATBlocks.POTTED_FIR_SAPLING.getId().getPath(), "block/flower_pot_cross")
+                .texture("plant", sapling)
+                .renderType(cutout)
+        );
         this.simpleBlockWithItem(MATBlocks.FIR_LEAVES.get(), this.models().leaves(MATBlocks.FIR_LEAVES.getId().getPath(), makeId("block/fir/fir_leaves")));
         this.simpleBlockWithItem(MATBlocks.FIR_PLANKS.get(), this.models().cubeAll(MATBlocks.FIR_PLANKS.getId().getPath(), planks));
         this.signBlock(MATBlocks.FIR_SIGN.get(), MATBlocks.FIR_WALL_SIGN.get(), planks);

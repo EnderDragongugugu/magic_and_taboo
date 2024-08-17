@@ -1,11 +1,16 @@
 package enderdragon.magicandtaboo.data;
 
 import enderdragon.magicandtaboo.MagicAndTabooMod;
+import net.minecraft.data.loot.LootTableProvider;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.minecraftforge.data.event.GatherDataEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
+import java.util.List;
+import java.util.Set;
 
 @Mod.EventBusSubscriber(modid = MagicAndTabooMod.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class DataGenerator {
@@ -23,5 +28,10 @@ public class DataGenerator {
         }
         var blockTags = generator.addProvider(true, new MATBlockTagProvider(output, registry, helper));
         generator.addProvider(true, new MATItemTagProvider(output, registry, blockTags.contentsGetter(), helper));
+        generator.addProvider(true, new MATEntityTagProvider(output, registry, helper));
+        generator.addProvider(true, new MATRecipeProvider(output));
+        generator.addProvider(true, new LootTableProvider(output, Set.of(), List.of(
+                new LootTableProvider.SubProviderEntry(MATBlockLootProvider::new, LootContextParamSets.BLOCK)
+        )));
     }
 }

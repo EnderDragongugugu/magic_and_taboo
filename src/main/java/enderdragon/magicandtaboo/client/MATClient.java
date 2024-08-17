@@ -2,20 +2,55 @@ package enderdragon.magicandtaboo.client;
 
 import enderdragon.magicandtaboo.MagicAndTabooMod;
 import enderdragon.magicandtaboo.client.gui.MercuryToxinsOverlay;
+import enderdragon.magicandtaboo.init.MATBlocks;
+import enderdragon.magicandtaboo.init.MATItems;
+import net.minecraft.client.renderer.Sheets;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.RegisterGuiOverlaysEvent;
+import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 
 @Mod.EventBusSubscriber(modid = MagicAndTabooMod.MOD_ID, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class MATClient {
+    @SubscribeEvent
     public static void init(final FMLClientSetupEvent event) {
+        event.enqueueWork(() -> Sheets.addWoodType(MATBlocks.FIR_WOOD_TYPE));
     }
 
     @SubscribeEvent
     public static void registerOverlay(RegisterGuiOverlaysEvent event) {
         event.registerAbove(new ResourceLocation("player_health"), "mercury_toxins", new MercuryToxinsOverlay());
+    }
+
+    @SubscribeEvent
+    public static void loadItemGroup(BuildCreativeModeTabContentsEvent event) {
+        var tab = event.getTabKey();
+        if (CreativeModeTabs.BUILDING_BLOCKS.equals(tab)) {
+            event.accept(MATItems.FIR_LOG);
+            event.accept(MATItems.FIR_WOOD);
+            event.accept(MATItems.STRIPPED_FIR_LOG);
+            event.accept(MATItems.STRIPPED_FIR_WOOD);
+            event.accept(MATItems.FIR_PLANKS);
+            event.accept(MATItems.FIR_STAIRS);
+            event.accept(MATItems.FIR_SLAB);
+            event.accept(MATItems.FIR_FENCE);
+            event.accept(MATItems.FIR_FENCE_GATE);
+            event.accept(MATItems.FIR_DOOR);
+            event.accept(MATItems.FIR_TRAPDOOR);
+            event.accept(MATItems.FIR_PRESSURE_PLATE);
+            event.accept(MATItems.FIR_BUTTON);
+        } else if (CreativeModeTabs.NATURAL_BLOCKS.equals(tab)) {
+            event.accept(MATItems.MERCURY_ORE);
+            event.accept(MATItems.FIR_LOG);
+            event.accept(MATItems.FIR_LEAVES);
+            event.accept(MATItems.FIR_SAPLING);
+        } else if (CreativeModeTabs.FUNCTIONAL_BLOCKS.equals(tab)) {
+            event.accept(MATItems.FIR_SIGN);
+            event.accept(MATItems.FIR_HANGING_SIGN);
+        }
     }
 }

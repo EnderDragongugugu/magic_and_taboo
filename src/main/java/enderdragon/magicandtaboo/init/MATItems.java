@@ -1,8 +1,7 @@
 package enderdragon.magicandtaboo.init;
 
 import enderdragon.magicandtaboo.MagicAndTabooMod;
-import enderdragon.magicandtaboo.item.BloodBottle;
-import enderdragon.magicandtaboo.item.UnknownSwordItem;
+import enderdragon.magicandtaboo.item.*;
 import enderdragon.magicandtaboo.item.equipment.SacrificialDagger;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
@@ -17,67 +16,67 @@ import static enderdragon.magicandtaboo.init.MATItemGroups.ITEMS;
 
 public class MATItems {
     public static final DeferredRegister<Item> REGISTRY = DeferredRegister.create(ForgeRegistries.ITEMS, MagicAndTabooMod.MOD_ID);
-    public static final RegistryObject<UnknownSwordItem> UNKNOWN_SWORD = ITEMS.register(REGISTRY, "unknown_sword", () ->
-            new UnknownSwordItem(Tiers.NETHERITE, 20, -2.4F, new Properties())
+    public static final RegistryObject<FuelBlockItem> FIR_LOG = BLOCKS.register(REGISTRY, "fir_log", () ->
+            new FuelBlockItem(MATBlocks.FIR_LOG, 300, new Properties())
+    );
+    public static final RegistryObject<FuelBlockItem> FIR_WOOD = BLOCKS.register(REGISTRY, "fir_wood", () ->
+            new FuelBlockItem(MATBlocks.FIR_WOOD, 300, new Properties())
+    );
+    public static final RegistryObject<FuelBlockItem> STRIPPED_FIR_LOG = BLOCKS.register(REGISTRY, "stripped_fir_log", () ->
+            new FuelBlockItem(MATBlocks.STRIPPED_FIR_LOG, 300, new Properties())
+    );
+    public static final RegistryObject<FuelBlockItem> STRIPPED_FIR_WOOD = BLOCKS.register(REGISTRY, "stripped_fir_wood", () ->
+            new FuelBlockItem(MATBlocks.STRIPPED_FIR_WOOD, 300, new Properties())
+    );
+    public static final RegistryObject<FuelBlockItem> FIR_PLANKS = BLOCKS.register(REGISTRY, "fir_planks", () ->
+            new FuelBlockItem(MATBlocks.FIR_PLANKS, 300, new Properties())
+    );
+    public static final RegistryObject<FuelBlockItem> FIR_STAIRS = BLOCKS.register(REGISTRY, "fir_stairs", () ->
+            new FuelBlockItem(MATBlocks.FIR_STAIRS, 300, new Properties())
+    );
+    public static final RegistryObject<FuelBlockItem> FIR_SLAB = BLOCKS.register(REGISTRY, "fir_slab", () ->
+            new FuelBlockItem(MATBlocks.FIR_SLAB, 150, new Properties())
+    );
+    public static final RegistryObject<FuelBlockItem> FIR_FENCE = BLOCKS.register(REGISTRY, "fir_fence", () ->
+            new FuelBlockItem(MATBlocks.FIR_FENCE, 300, new Properties())
+    );
+    public static final RegistryObject<FuelBlockItem> FIR_FENCE_GATE = BLOCKS.register(REGISTRY, "fir_fence_gate", () ->
+            new FuelBlockItem(MATBlocks.FIR_FENCE_GATE, 300, new Properties())
+    );
+    public static final RegistryObject<FuelBlockItem> FIR_DOOR = BLOCKS.register(REGISTRY, "fir_door", () ->
+            new FuelBlockItem(MATBlocks.FIR_DOOR, 200, new Properties())
+    );
+    public static final RegistryObject<FuelBlockItem> FIR_TRAPDOOR = BLOCKS.register(REGISTRY, "fir_trapdoor", () ->
+            new FuelBlockItem(MATBlocks.FIR_TRAPDOOR, 300, new Properties())
+    );
+    public static final RegistryObject<FuelBlockItem> FIR_PRESSURE_PLATE = BLOCKS.register(REGISTRY, "fir_pressure_plate", () ->
+            new FuelBlockItem(MATBlocks.FIR_PRESSURE_PLATE, 300, new Properties())
+    );
+    public static final RegistryObject<FuelBlockItem> FIR_BUTTON = BLOCKS.register(REGISTRY, "fir_button", () ->
+            new FuelBlockItem(MATBlocks.FIR_BUTTON, 100, new Properties())
     );
     public static final RegistryObject<BlockItem> MERCURY_ORE = BLOCKS.register(REGISTRY, "mercury_ore", () ->
             new BlockItem(MATBlocks.MERCURY_ORE.get(), new Properties())
     );
-    public static final RegistryObject<SacrificialDagger> SACRIFICIAL_DAGGER = ITEMS.register(REGISTRY, "sacrificial_dagger", () ->
-            new SacrificialDagger(Tiers.IRON, 1, 1, new Properties())
-    );
-    public static final RegistryObject<BloodBottle> BLOOD_BOTTLE = ITEMS.register(REGISTRY, "blood_bottle", () ->
-            new BloodBottle(new Properties().stacksTo(1))
-    );
-    public static final RegistryObject<BlockItem> FIR_PLANKS = BLOCKS.register(REGISTRY, "fir_planks", () ->
-            new BlockItem(MATBlocks.FIR_PLANKS.get(), new Properties())
-    );
-    public static final RegistryObject<BlockItem> FIR_SAPLING = BLOCKS.register(REGISTRY, "fir_sapling", () ->
-            new BlockItem(MATBlocks.FIR_SAPLING.get(), new Properties())
-    );
-    public static final RegistryObject<BlockItem> FIR_LOG = BLOCKS.register(REGISTRY, "fir_log", () ->
-            new BlockItem(MATBlocks.FIR_LOG.get(), new Properties())
-    );
-    public static final RegistryObject<BlockItem> STRIPPED_FIR_LOG = BLOCKS.register(REGISTRY, "stripped_fir_log", () ->
-            new BlockItem(MATBlocks.STRIPPED_FIR_LOG.get(), new Properties())
-    );
-    public static final RegistryObject<BlockItem> FIR_WOOD = BLOCKS.register(REGISTRY, "fir_wood", () ->
-            new BlockItem(MATBlocks.FIR_WOOD.get(), new Properties())
-    );
-    public static final RegistryObject<BlockItem> STRIPPED_FIR_WOOD = BLOCKS.register(REGISTRY, "stripped_fir_wood", () ->
-            new BlockItem(MATBlocks.STRIPPED_FIR_WOOD.get(), new Properties())
-    );
     public static final RegistryObject<BlockItem> FIR_LEAVES = BLOCKS.register(REGISTRY, "fir_leaves", () ->
             new BlockItem(MATBlocks.FIR_LEAVES.get(), new Properties())
     );
-    public static final RegistryObject<BlockItem> FIR_SIGN = BLOCKS.register(REGISTRY, "fir_sign", () ->
-            new BlockItem(MATBlocks.FIR_SIGN.get(), new Properties())
+    public static final RegistryObject<SacrificialDagger> SACRIFICIAL_DAGGER = ITEMS.register(REGISTRY, "sacrificial_dagger", () ->
+            new SacrificialDagger(Tiers.IRON, 1, 1, new Properties())
     );
-    public static final RegistryObject<BlockItem> FIR_HANGING_SIGN = BLOCKS.register(REGISTRY, "fir_hanging_sing", () ->
-            new BlockItem(MATBlocks.FIR_HANGING_SIGN.get(), new Properties())
+    public static final RegistryObject<BloodBottle> BLOOD_BOTTLE = REGISTRY.register("blood_bottle", () ->
+            new BloodBottle(new Properties().stacksTo(1))
     );
-    public static final RegistryObject<BlockItem> FIR_PRESSURE_PLATE = BLOCKS.register(REGISTRY, "fir_pressure_plate", () ->
-            new BlockItem(MATBlocks.FIR_PRESSURE_PLATE.get(), new Properties())
+    public static final RegistryObject<FuelBlockItem> FIR_SAPLING = ITEMS.register(REGISTRY, "fir_sapling", () ->
+            new FuelBlockItem(MATBlocks.FIR_SAPLING, 100, new Properties())
     );
-    public static final RegistryObject<BlockItem> FIR_TRAPDOOR = BLOCKS.register(REGISTRY, "fir_trapdoor", () ->
-            new BlockItem(MATBlocks.FIR_TRAPDOOR.get(), new Properties())
+    public static final RegistryObject<MATSignItem> FIR_SIGN = ITEMS.register(REGISTRY, "fir_sign", () ->
+            new MATSignItem(MATBlocks.FIR_SIGN, MATBlocks.FIR_WALL_SIGN, 200, new Properties())
     );
-    public static final RegistryObject<BlockItem> FIR_STAIRS = BLOCKS.register(REGISTRY, "fir_stairs", () ->
-            new BlockItem(MATBlocks.FIR_STAIRS.get(), new Properties())
+    public static final RegistryObject<MATHangingSignItem> FIR_HANGING_SIGN = ITEMS.register(REGISTRY, "fir_hanging_sign", () ->
+            new MATHangingSignItem(MATBlocks.FIR_HANGING_SIGN, MATBlocks.FIR_WALL_HANGING_SIGN, 200, new Properties())
     );
-    public static final RegistryObject<BlockItem> FIR_BUTTON = BLOCKS.register(REGISTRY, "fir_button", () ->
-            new BlockItem(MATBlocks.FIR_BUTTON.get(), new Properties())
-    );
-    public static final RegistryObject<BlockItem> FIR_SLAB = BLOCKS.register(REGISTRY, "fir_slab", () ->
-            new BlockItem(MATBlocks.FIR_SLAB.get(), new Properties())
-    );
-    public static final RegistryObject<BlockItem> FIR_FENCE_GATE = BLOCKS.register(REGISTRY, "fir_fence_gate", () ->
-            new BlockItem(MATBlocks.FIR_FENCE_GATE.get(), new Properties())
-    );
-    public static final RegistryObject<BlockItem> FIR_FENCE = BLOCKS.register(REGISTRY, "fir_fence", () ->
-            new BlockItem(MATBlocks.FIR_FENCE.get(), new Properties())
-    );
-    public static final RegistryObject<BlockItem> FIR_DOOR = BLOCKS.register(REGISTRY, "fir_door", () ->
-            new BlockItem(MATBlocks.FIR_DOOR.get(), new Properties())
+    public static final RegistryObject<UnknownSwordItem> UNKNOWN_SWORD = REGISTRY.register("unknown_sword", () ->
+            new UnknownSwordItem(Tiers.NETHERITE, 20, -2.4F, new Properties())
     );
 }
