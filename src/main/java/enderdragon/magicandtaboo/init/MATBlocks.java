@@ -33,6 +33,12 @@ public class MATBlocks {
             .strength(3.0F, 3.0F),
             UniformInt.of(3, 7)
     ));
+    public static final RegistryObject<HorizontalDirectionalBlock> Federation_Workstations_Block = REGISTRY.register("federation_workstations",()->new FederationWorkstationsBlock(Properties.of()
+            .mapColor(MapColor.WOOD)
+            .instrument(NoteBlockInstrument.BASS)
+            .strength(2.5F)
+            .sound(SoundType.WOOD)
+            .ignitedByLava()));
     public static final RegistryObject<FlammableBlock> FIR_PLANKS;
     public static final RegistryObject<SaplingBlock> FIR_SAPLING;
     public static final RegistryObject<StrippableLogBlock> FIR_LOG;
@@ -53,6 +59,7 @@ public class MATBlocks {
     public static final RegistryObject<MATFenceGateBlock> FIR_FENCE_GATE;
     public static final RegistryObject<MATFenceBlock> FIR_FENCE;
     public static final RegistryObject<DoorBlock> FIR_DOOR;
+
 
     static Properties firPlanks(Function<BlockState, MapColor> color) {
         return Properties.of().mapColor(color).instrument(NoteBlockInstrument.BASS).strength(2.0F, 3.0F).sound(SoundType.WOOD).ignitedByLava();

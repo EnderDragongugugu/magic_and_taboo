@@ -20,6 +20,8 @@ import java.util.function.Predicate;
 public class BloodBottle extends Item {
     public static final String TAG_DATA = "blood_bottle_data";
     public static final String TAG_PURENESS = "pureness";
+    public static final String TAG_ENTITY_NAME = "entity_name";
+
     public static final Predicate<ItemStack> IS_VALID = stack -> {
         if (stack.getItem() != MATItems.BLOOD_BOTTLE.get()) return false;
         var tag = stack.getTag();
@@ -42,7 +44,7 @@ public class BloodBottle extends Item {
             var tag = new CompoundTag();
             var entityData = new CompoundTag();
             var blood = new ItemStack(MATItems.BLOOD_BOTTLE.get());
-            entityData.putString("entity_name", target.getName().getString());
+            entityData.putString(BloodBottle.TAG_ENTITY_NAME, target.getName().getString());
             entityData.putInt(TAG_PURENESS, 2400);
             tag.put(TAG_DATA, entityData);
             blood.setTag(tag);
@@ -60,39 +62,48 @@ public class BloodBottle extends Item {
         var data = tag.getCompound(TAG_DATA);
         return data.isEmpty() ? -1 : data.getInt(TAG_PURENESS);
     }
-
-    public static boolean tryConsume(Player player) {
-        var blood = MATItems.BLOOD_BOTTLE.get();
-        var inventory = player.getInventory();
-        var list = inventory.offhand;
-        do {
-            for (int i = 0, n = list.size(); i < n; ++i) {
-                var stack = list.get(i);
-                if (stack.getItem() != blood) continue;
-                var tag = stack.getTag();
-                if (tag == null) continue;
-                var data = tag.getCompound(TAG_DATA);
-                if (data.isEmpty()) continue;
-                int pureness = data.getInt(TAG_PURENESS) - 10;
-                if (pureness > 0) {
-                    data.putInt(TAG_PURENESS, pureness);
-                    return true;
-                }
-                stack.shrink(1);
-                var bottle = new ItemStack(Items.GLASS_BOTTLE);
-                if (stack.isEmpty()) {
-                    list.set(i, bottle);
-                    return true;
-                }
-                if (!inventory.add(bottle)) {
-                    player.drop(bottle, false);
-                }
-                return true;
-            }
-            if (list == inventory.items) return false;
-            list = inventory.items;
-        } while (true);
+    public static String getEntityName(ItemStack stack) {
+        var tag = stack.getTag();
+        return tag == null ? "" : getEntityName(tag);
     }
+
+    public static String getEntityName(@NotNull CompoundTag tag) {
+        var data = tag.getCompound(TAG_DATA);
+        return data.isEmpty() ? "" : data.getString(BloodBottle.TAG_ENTITY_NAME);
+    }
+
+//    public static boolean tryConsume(Player player) {
+//        var blood = MATItems.BLOOD_BOTTLE.get();
+//        var inventory = player.getInventory();
+//        var list = inventory.offhand;
+//        do {
+//            for (int i = 0, n = list.size(); i < n; ++i) {
+//                var stack = list.get(i);
+//                if (stack.getItem() != blood) continue;
+//                var tag = stack.getTag();
+//                if (tag == null) continue;
+//                var data = tag.getCompound(TAG_DATA);
+//                if (data.isEmpty()) continue;
+//                int pureness = data.getInt(TAG_PURENESS) - 10;
+//                if (pureness > 0) {
+//                    data.putInt(TAG_PURENESS, pureness);
+//                    return true;
+//                }
+//                stack.shrink(1);
+//                var bottle = new ItemStack(Items.GLASS_BOTTLE);
+//                if (stack.isEmpty()) {
+//                    list.set(i, bottle);
+//                    return true;
+//                }
+//                if (!inventory.add(bottle)) {
+//                    player.drop(bottle, false);
+//                }
+//                return true;
+//            }
+//            if (list == inventory.items) return false;
+//            list = inventory.items;
+//        } while (true);
+//    }
 
     @Override
     public boolean isBarVisible(ItemStack stack) {
@@ -116,9 +127,14 @@ public class BloodBottle extends Item {
     @Override
     public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltips, TooltipFlag flag) {
         int pureness = BloodBottle.getPureness(stack);
+        String entityName = BloodBottle.getEntityName(stack);
+        if(entityName.length() > 0){
+            tooltips.add(Component.translatable("tooltip.magicandtaboo.blood_bottle_entity_name", "§4"+ entityName + "§f"));
+        }
         if (pureness > -1) {
             tooltips.add(Component.translatable("tooltip.magicandtaboo.blood_bottle_pureness", String.format("%.1f%%", pureness / 24.0F)));
         }
+
     }
 
     @Override

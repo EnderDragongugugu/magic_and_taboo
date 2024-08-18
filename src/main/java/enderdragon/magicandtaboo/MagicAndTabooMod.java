@@ -5,7 +5,7 @@ import enderdragon.magicandtaboo.enchantment.MATEnchantments;
 import enderdragon.magicandtaboo.init.MATBlocks;
 import enderdragon.magicandtaboo.init.MATItemGroups;
 import enderdragon.magicandtaboo.init.MATItems;
-import enderdragon.magicandtaboo.item.UnknownSwordItem;
+import enderdragon.magicandtaboo.item.equipment.SacrificialDagger;
 import enderdragon.magicandtaboo.util.BlockEntityTypeEx;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -35,7 +35,8 @@ public class MagicAndTabooMod {
         MATItemGroups.REGISTRY.register(modBus);
         modBus.addListener(MagicAndTabooMod::onComplete);
         var forgeBus = MinecraftForge.EVENT_BUS;
-        forgeBus.addListener(UnknownSwordItem::onLivingDeath);
+//        forgeBus.addListener(UnknownSwordItem::onLivingDeath);
+        forgeBus.addListener(SacrificialDagger::onLivingDeath);
     }
 
     public static void onComplete(FMLLoadCompleteEvent event) {

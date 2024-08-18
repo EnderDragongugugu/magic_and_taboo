@@ -34,6 +34,7 @@
   //  tooltip
   "tooltip.magicandtaboo.mercury_ore": "小心有毒!",
   "tooltip.magicandtaboo.blood_bottle_pureness": "当前血液浓度: %s",
+  "tooltip.magicandtaboo.blood_bottle_entity_name": "当前装有§4%s§f的血液",
   "tooltip.magicandtaboo.sacrificial_dagger_warn": "它似乎在渴望鲜血",
   //  itemGroup
   "itemGroup.magicandtaboo.items": "魔法与禁忌: 物品",

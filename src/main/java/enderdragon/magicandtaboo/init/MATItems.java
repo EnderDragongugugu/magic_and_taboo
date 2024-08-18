@@ -58,6 +58,9 @@ public class MATItems {
     public static final RegistryObject<BlockItem> MERCURY_ORE = BLOCKS.register(REGISTRY, "mercury_ore", () ->
             new BlockItem(MATBlocks.MERCURY_ORE.get(), new Properties())
     );
+    public static final RegistryObject<BlockItem> Federation_Workstations_Block = BLOCKS.register(REGISTRY, "federation_workstations", () ->
+            new BlockItem(MATBlocks.Federation_Workstations_Block.get(), new Properties())
+    );
     public static final RegistryObject<BlockItem> FIR_LEAVES = BLOCKS.register(REGISTRY, "fir_leaves", () ->
             new BlockItem(MATBlocks.FIR_LEAVES.get(), new Properties())
     );
@@ -75,8 +78,5 @@ public class MATItems {
     );
     public static final RegistryObject<MATHangingSignItem> FIR_HANGING_SIGN = ITEMS.register(REGISTRY, "fir_hanging_sign", () ->
             new MATHangingSignItem(MATBlocks.FIR_HANGING_SIGN, MATBlocks.FIR_WALL_HANGING_SIGN, 200, new Properties())
-    );
-    public static final RegistryObject<UnknownSwordItem> UNKNOWN_SWORD = REGISTRY.register("unknown_sword", () ->
-            new UnknownSwordItem(Tiers.NETHERITE, 20, -2.4F, new Properties())
     );
 }

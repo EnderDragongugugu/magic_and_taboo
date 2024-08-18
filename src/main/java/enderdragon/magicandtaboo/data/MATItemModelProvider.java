@@ -22,7 +22,6 @@ public class MATItemModelProvider extends ItemModelProvider {
 
     @Override
     protected void registerModels() {
-        this.withExistingParent(MATItems.UNKNOWN_SWORD.getId().getPath(), "item/netherite_sword");
         this.withExistingParent(MATItems.SACRIFICIAL_DAGGER.getId().getPath(), "item/netherite_sword");
         this.basicItem(MATItems.BLOOD_BOTTLE.getId());
         this.basicItem(MATBlocks.FIR_FENCE_GATE);

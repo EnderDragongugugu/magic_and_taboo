@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "magicandtaboo:block/federation_workstations"
+    },
+    "facing=south": {
+      "model": "magicandtaboo:block/federation_workstations",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "magicandtaboo:block/federation_workstations",
+      "y": 270
+    },
+    "facing=east": {
+      "model": "magicandtaboo:block/federation_workstations",
+      "y": 90
+    }
+  }
+}

@@ -1,10 +1,12 @@
 package enderdragon.magicandtaboo.data;
 
+import enderdragon.magicandtaboo.MagicAndTabooMod;
 import enderdragon.magicandtaboo.init.MATBlocks;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
 import net.minecraftforge.client.model.generators.BlockStateProvider;
+import net.minecraftforge.client.model.generators.ModelFile;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.registries.RegistryObject;
 
@@ -20,11 +22,17 @@ public class MATBlockStateProvider extends BlockStateProvider {
     protected void registerStatesAndModels() {
         this.simpleBlockWithItem(MATBlocks.MERCURY_ORE);
         this.firWood();
+        this.simpleBlockModel(MATBlocks.Federation_Workstations_Block);
     }
 
     public void simpleBlockWithItem(RegistryObject<? extends Block> block) {
         var id = block.getId();
         this.simpleBlockWithItem(block.get(), this.models().cubeAll(id.getPath(), id.withPrefix("block/")));
+    }
+    public void simpleBlockModel(RegistryObject<? extends Block> block){
+        ResourceLocation id = new ResourceLocation(MOD_ID,"block/" + block.getId().getPath());
+        ModelFile modelFile = new ModelFile.ExistingModelFile(id,models().existingFileHelper);
+        this.simpleBlockWithItem(block.get(),modelFile);
     }
 
     void firWood() {
