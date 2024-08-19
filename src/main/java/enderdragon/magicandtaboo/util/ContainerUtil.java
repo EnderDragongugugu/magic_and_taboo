@@ -1,8 +1,12 @@
 package enderdragon.magicandtaboo.util;
 
+import net.minecraft.network.protocol.game.ClientboundContainerSetSlotPacket;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.Container;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
@@ -57,5 +61,22 @@ public class ContainerUtil {
             }
         }
         return null;
+    }
+
+    public static void forcedSync(ServerPlayer player, InteractionHand hand, ItemStack stack) {
+        var menu = player.containerMenu;
+        if (hand == InteractionHand.OFF_HAND) {
+            player.connection.send(new ClientboundContainerSetSlotPacket(menu.containerId, menu.incrementStateId(), InventoryMenu.SHIELD_SLOT, stack));
+            return;
+        }
+        var inventory = player.getInventory();
+        var slots = menu.slots;
+        for (int i = 0, n = slots.size(), selected = inventory.selected; i < n; ++i) {
+            var slot = slots.get(i);
+            if (slot.container == inventory && slot.getContainerSlot() == selected) {
+                player.connection.send(new ClientboundContainerSetSlotPacket(menu.containerId, menu.incrementStateId(), i, stack));
+                return;
+            }
+        }
     }
 }

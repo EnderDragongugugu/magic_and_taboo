@@ -1,7 +1,10 @@
 package enderdragon.magicandtaboo.init;
 
 import enderdragon.magicandtaboo.MagicAndTabooMod;
-import enderdragon.magicandtaboo.item.*;
+import enderdragon.magicandtaboo.item.BloodBottle;
+import enderdragon.magicandtaboo.item.FuelBlockItem;
+import enderdragon.magicandtaboo.item.MATHangingSignItem;
+import enderdragon.magicandtaboo.item.MATSignItem;
 import enderdragon.magicandtaboo.item.equipment.SacrificialDagger;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
@@ -55,11 +58,42 @@ public class MATItems {
     public static final RegistryObject<FuelBlockItem> FIR_BUTTON = BLOCKS.register(REGISTRY, "fir_button", () ->
             new FuelBlockItem(MATBlocks.FIR_BUTTON, 100, new Properties())
     );
+    public static final RegistryObject<BlockItem> GILDED_MARBLE = BLOCKS.register(REGISTRY, "gilded_marble", () ->
+            new BlockItem(MATBlocks.GILDED_MARBLE.get(), new Properties()));
+    public static final RegistryObject<BlockItem> GILDED_MARBLE_STAIRS = BLOCKS.register(REGISTRY, "gilded_marble_stairs", () ->
+            new BlockItem(MATBlocks.GILDED_MARBLE_STAIRS.get(), new Properties())
+    );
+    public static final RegistryObject<BlockItem> GILDED_MARBLE_SLAB = BLOCKS.register(REGISTRY, "gilded_marble_slab", () ->
+            new BlockItem(MATBlocks.GILDED_MARBLE_SLAB.get(), new Properties())
+    );
+    public static final RegistryObject<BlockItem> GILDED_MARBLE_WALL = BLOCKS.register(REGISTRY, "gilded_marble_wall", () ->
+            new BlockItem(MATBlocks.GILDED_MARBLE_WALL.get(), new Properties())
+    );
+    public static final RegistryObject<BlockItem> CHISELED_GILDED_MARBLE = BLOCKS.register(REGISTRY, "chiseled_gilded_marble", () ->
+            new BlockItem(MATBlocks.CHISELED_GILDED_MARBLE.get(), new Properties())
+    );
+    public static final RegistryObject<BlockItem> POLISHED_GILDED_MARBLE = BLOCKS.register(REGISTRY, "polished_gilded_marble", () ->
+            new BlockItem(MATBlocks.POLISHED_GILDED_MARBLE.get(), new Properties())
+    );
+    public static final RegistryObject<BlockItem> POLISHED_GILDED_MARBLE_STAIRS = BLOCKS.register(REGISTRY, "polished_gilded_marble_stairs", () ->
+            new BlockItem(MATBlocks.POLISHED_GILDED_MARBLE_STAIRS.get(), new Properties())
+    );
+    public static final RegistryObject<BlockItem> POLISHED_GILDED_MARBLE_SLAB = BLOCKS.register(REGISTRY, "polished_gilded_marble_slab", () ->
+            new BlockItem(MATBlocks.POLISHED_GILDED_MARBLE_SLAB.get(), new Properties())
+    );
+    public static final RegistryObject<BlockItem> POLISHED_GILDED_MARBLE_WALL = BLOCKS.register(REGISTRY, "polished_gilded_marble_wall", () ->
+            new BlockItem(MATBlocks.POLISHED_GILDED_MARBLE_WALL.get(), new Properties())
+    );
+    public static final RegistryObject<BlockItem> POLISHED_GILDED_MARBLE_PRESSURE_PLATE = BLOCKS.register(REGISTRY, "polished_gilded_marble_pressure_plate", () ->
+            new BlockItem(MATBlocks.POLISHED_GILDED_MARBLE_PRESSURE_PLATE.get(), new Properties()));
+    public static final RegistryObject<BlockItem> POLISHED_GILDED_MARBLE_BUTTON = BLOCKS.register(REGISTRY, "polished_gilded_marble_button", () ->
+            new BlockItem(MATBlocks.POLISHED_GILDED_MARBLE_BUTTON.get(), new Properties())
+    );
     public static final RegistryObject<BlockItem> MERCURY_ORE = BLOCKS.register(REGISTRY, "mercury_ore", () ->
             new BlockItem(MATBlocks.MERCURY_ORE.get(), new Properties())
     );
-    public static final RegistryObject<BlockItem> Federation_Workstations_Block = BLOCKS.register(REGISTRY, "federation_workstations", () ->
-            new BlockItem(MATBlocks.Federation_Workstations_Block.get(), new Properties())
+    public static final RegistryObject<BlockItem> FEDERATION_WORKSTATION = BLOCKS.register(REGISTRY, "federation_workstation", () ->
+            new BlockItem(MATBlocks.FEDERATION_WORKSTATION.get(), new Properties())
     );
     public static final RegistryObject<BlockItem> FIR_LEAVES = BLOCKS.register(REGISTRY, "fir_leaves", () ->
             new BlockItem(MATBlocks.FIR_LEAVES.get(), new Properties())

@@ -43,5 +43,8 @@ public class MATBlockTagProvider extends BlockTagsProvider {
         this.tag(WOODEN_FENCES).add(FIR_FENCE.get());
         this.tag(WOODEN_PRESSURE_PLATES).add(FIR_PRESSURE_PLATE.get());
         this.tag(WOODEN_TRAPDOORS).add(FIR_TRAPDOOR.get());
+        this.tag(WALLS)
+                .add(GILDED_MARBLE_WALL.get())
+                .add(POLISHED_GILDED_MARBLE_WALL.get());
     }
 }

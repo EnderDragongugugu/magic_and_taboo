@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/inner_stairs",
+  "textures": {
+    "bottom": "magicandtaboo:block/gilded_marble",
+    "side": "magicandtaboo:block/gilded_marble",
+    "top": "magicandtaboo:block/gilded_marble"
+  }
+}

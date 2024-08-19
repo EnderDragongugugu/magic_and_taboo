@@ -7,6 +7,8 @@ import enderdragon.magicandtaboo.init.MATItemGroups;
 import enderdragon.magicandtaboo.init.MATItems;
 import enderdragon.magicandtaboo.item.equipment.SacrificialDagger;
 import enderdragon.magicandtaboo.util.BlockEntityTypeEx;
+import net.minecraft.core.Registry;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraftforge.common.MinecraftForge;
@@ -15,6 +17,7 @@ import net.minecraftforge.fml.event.lifecycle.FMLLoadCompleteEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.jetbrains.annotations.NotNull;
 
 @Mod(MagicAndTabooMod.MOD_ID)
 public class MagicAndTabooMod {
@@ -22,7 +25,11 @@ public class MagicAndTabooMod {
     private static final ResourceLocation ROOT = new ResourceLocation(MOD_ID, "root");
     private static final Logger LOGGER = LogManager.getLogger();
 
-    public static ResourceLocation makeId(String name) {
+    public static <T> @NotNull ResourceKey<T> makeKey(ResourceKey<? extends Registry<T>> registry, String name) {
+        return ResourceKey.create(registry, ROOT.withPath(name));
+    }
+
+    public static @NotNull ResourceLocation makeId(String name) {
         return ROOT.withPath(name);
     }
 
@@ -35,7 +42,6 @@ public class MagicAndTabooMod {
         MATItemGroups.REGISTRY.register(modBus);
         modBus.addListener(MagicAndTabooMod::onComplete);
         var forgeBus = MinecraftForge.EVENT_BUS;
-//        forgeBus.addListener(UnknownSwordItem::onLivingDeath);
         forgeBus.addListener(SacrificialDagger::onLivingDeath);
     }
 

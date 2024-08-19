@@ -6,6 +6,7 @@ import enderdragon.magicandtaboo.tag.MATItemTags;
 import net.minecraft.data.BlockFamily;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.data.recipes.RecipeCategory;
 import net.minecraft.data.recipes.RecipeProvider;
 import org.jetbrains.annotations.NotNull;
 
@@ -36,5 +37,34 @@ public class MATRecipeProvider extends RecipeProvider {
                 .recipeUnlockedBy("has_planks")
                 .getFamily()
         );
+        generateRecipes(writer, new BlockFamily.Builder(MATBlocks.GILDED_MARBLE.get())
+                .wall(MATBlocks.GILDED_MARBLE_WALL.get())
+                .stairs(MATBlocks.GILDED_MARBLE_STAIRS.get())
+                .slab(MATBlocks.GILDED_MARBLE_SLAB.get())
+                .polished(MATBlocks.POLISHED_GILDED_MARBLE.get())
+                .chiseled(MATBlocks.CHISELED_GILDED_MARBLE.get())
+                .getFamily()
+        );
+        generateRecipes(writer, new BlockFamily.Builder(MATBlocks.POLISHED_GILDED_MARBLE.get())
+                .wall(MATBlocks.POLISHED_GILDED_MARBLE_WALL.get())
+                .pressurePlate(MATBlocks.POLISHED_GILDED_MARBLE_PRESSURE_PLATE.get())
+                .button(MATBlocks.POLISHED_GILDED_MARBLE_BUTTON.get())
+                .stairs(MATBlocks.POLISHED_GILDED_MARBLE_STAIRS.get())
+                .slab(MATBlocks.POLISHED_GILDED_MARBLE_SLAB.get())
+                .getFamily()
+        );
+        stonecutterResultFromBase(writer, RecipeCategory.BUILDING_BLOCKS, MATBlocks.GILDED_MARBLE_SLAB.get(), MATBlocks.GILDED_MARBLE.get(), 2);
+        stonecutterResultFromBase(writer, RecipeCategory.BUILDING_BLOCKS, MATBlocks.GILDED_MARBLE_STAIRS.get(), MATBlocks.GILDED_MARBLE.get());
+        stonecutterResultFromBase(writer, RecipeCategory.DECORATIONS, MATBlocks.GILDED_MARBLE_WALL.get(), MATBlocks.GILDED_MARBLE.get());
+        stonecutterResultFromBase(writer, RecipeCategory.BUILDING_BLOCKS, MATBlocks.POLISHED_GILDED_MARBLE.get(), MATBlocks.GILDED_MARBLE.get());
+        stonecutterResultFromBase(writer, RecipeCategory.DECORATIONS, MATBlocks.POLISHED_GILDED_MARBLE_WALL.get(), MATBlocks.GILDED_MARBLE.get());
+        stonecutterResultFromBase(writer, RecipeCategory.BUILDING_BLOCKS, MATBlocks.POLISHED_GILDED_MARBLE_SLAB.get(), MATBlocks.GILDED_MARBLE.get(), 2);
+        stonecutterResultFromBase(writer, RecipeCategory.BUILDING_BLOCKS, MATBlocks.POLISHED_GILDED_MARBLE_STAIRS.get(), MATBlocks.GILDED_MARBLE.get());
+        stonecutterResultFromBase(writer, RecipeCategory.BUILDING_BLOCKS, MATBlocks.CHISELED_GILDED_MARBLE.get(), MATBlocks.GILDED_MARBLE.get());
+        stonecutterResultFromBase(writer, RecipeCategory.BUILDING_BLOCKS, MATBlocks.POLISHED_GILDED_MARBLE_SLAB.get(), MATBlocks.POLISHED_GILDED_MARBLE.get(), 2);
+        stonecutterResultFromBase(writer, RecipeCategory.BUILDING_BLOCKS, MATBlocks.POLISHED_GILDED_MARBLE_STAIRS.get(), MATBlocks.POLISHED_GILDED_MARBLE.get());
+        stonecutterResultFromBase(writer, RecipeCategory.DECORATIONS, MATBlocks.POLISHED_GILDED_MARBLE_WALL.get(), MATBlocks.POLISHED_GILDED_MARBLE.get());
+        stonecutterResultFromBase(writer, RecipeCategory.BUILDING_BLOCKS, MATBlocks.CHISELED_GILDED_MARBLE.get(), MATBlocks.POLISHED_GILDED_MARBLE.get());
+
     }
 }

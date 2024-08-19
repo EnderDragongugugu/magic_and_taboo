@@ -1,4 +1,4 @@
 package enderdragon.magicandtaboo.block.entity;
 
-public class FederationWorkstationsBlockEntity {
+public class FederationWorkstationBlockEntity {
 }

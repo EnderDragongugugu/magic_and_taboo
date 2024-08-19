@@ -1,6 +1,5 @@
 package enderdragon.magicandtaboo.data;
 
-import enderdragon.magicandtaboo.MagicAndTabooMod;
 import enderdragon.magicandtaboo.init.MATBlocks;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
@@ -21,21 +20,21 @@ public class MATBlockStateProvider extends BlockStateProvider {
     @Override
     protected void registerStatesAndModels() {
         this.simpleBlockWithItem(MATBlocks.MERCURY_ORE);
-        this.firWood();
-        this.simpleBlockModel(MATBlocks.Federation_Workstations_Block);
+        this.registerFirWood();
+        this.registerGildedMarble();
+        this.horizontalBlock(
+                MATBlocks.FEDERATION_WORKSTATION.get(),
+                new ModelFile.UncheckedModelFile(MATBlocks.FEDERATION_WORKSTATION.getId().withPrefix("block/")),
+                90
+        );
     }
 
     public void simpleBlockWithItem(RegistryObject<? extends Block> block) {
         var id = block.getId();
         this.simpleBlockWithItem(block.get(), this.models().cubeAll(id.getPath(), id.withPrefix("block/")));
     }
-    public void simpleBlockModel(RegistryObject<? extends Block> block){
-        ResourceLocation id = new ResourceLocation(MOD_ID,"block/" + block.getId().getPath());
-        ModelFile modelFile = new ModelFile.ExistingModelFile(id,models().existingFileHelper);
-        this.simpleBlockWithItem(block.get(),modelFile);
-    }
 
-    void firWood() {
+    void registerFirWood() {
         var side = makeId("block/fir/fir_log_side");
         var top = makeId("block/fir/fir_log_top");
         var strippedSide = makeId("block/fir/stripped_fir_log");
@@ -70,5 +69,21 @@ public class MATBlockStateProvider extends BlockStateProvider {
         var hanging = this.models().sign(MATBlocks.FIR_HANGING_SIGN.getId().getPath(), strippedSide);
         this.simpleBlock(MATBlocks.FIR_HANGING_SIGN.get(), hanging);
         this.simpleBlock(MATBlocks.FIR_WALL_HANGING_SIGN.get(), hanging);
+    }
+
+    void registerGildedMarble() {
+        var raw = makeId("block/gilded_marble");
+        var polished = makeId("block/polished_gilded_marble");
+        this.simpleBlockWithItem(MATBlocks.GILDED_MARBLE);
+        this.stairsBlock(MATBlocks.GILDED_MARBLE_STAIRS.get(), raw);
+        this.slabBlock(MATBlocks.GILDED_MARBLE_SLAB.get(), MATBlocks.GILDED_MARBLE.getId(), raw);
+        this.wallBlock(MATBlocks.GILDED_MARBLE_WALL.get(), raw);
+        this.simpleBlockWithItem(MATBlocks.CHISELED_GILDED_MARBLE);
+        this.simpleBlockWithItem(MATBlocks.POLISHED_GILDED_MARBLE);
+        this.stairsBlock(MATBlocks.POLISHED_GILDED_MARBLE_STAIRS.get(), polished);
+        this.slabBlock(MATBlocks.POLISHED_GILDED_MARBLE_SLAB.get(), MATBlocks.POLISHED_GILDED_MARBLE.getId(), polished);
+        this.wallBlock(MATBlocks.POLISHED_GILDED_MARBLE_WALL.get(), polished);
+        this.pressurePlateBlock(MATBlocks.POLISHED_GILDED_MARBLE_PRESSURE_PLATE.get(), polished);
+        this.buttonBlock(MATBlocks.POLISHED_GILDED_MARBLE_BUTTON.get(), polished);
     }
 }

@@ -1,9 +1,14 @@
 package enderdragon.magicandtaboo.item.equipment;
 
+import enderdragon.magicandtaboo.capability.IPurenessStorage;
+import enderdragon.magicandtaboo.capability.PurenessStorage;
+import enderdragon.magicandtaboo.init.MATItems;
 import enderdragon.magicandtaboo.item.BloodBottle;
 import enderdragon.magicandtaboo.util.ContainerUtil;
+import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.Entity;
@@ -12,6 +17,7 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.Level;
+import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -21,10 +27,10 @@ import org.jetbrains.annotations.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 
+import static enderdragon.magicandtaboo.init.MATCapabilities.PURENESS;
+
 @ParametersAreNonnullByDefault
 public class SacrificialDagger extends SwordItem {
-    public static final String TAG_SACRIFICING = "sacrificing";
-    public static final String TAG_BLOOD_BOTTLE = "blood_bottle";
     private static final Logger LOGGER = LogManager.getLogger();
 
     public SacrificialDagger(Tier tier, int damageModifier, float speedModifier, Properties props) {
@@ -32,118 +38,87 @@ public class SacrificialDagger extends SwordItem {
     }
 
     public static void onLivingDeath(LivingDeathEvent event) {
-        if (event.getSource().getEntity() instanceof Player player && player.getMainHandItem().getItem() instanceof SacrificialDagger) {
-            Entity deathEntity = event.getEntity();
-            CompoundTag nbt = player.getMainHandItem().getTag();
-            if (nbt != null && nbt.getBoolean(TAG_SACRIFICING)) {
-                if (nbt.contains(TAG_BLOOD_BOTTLE, 10) && nbt.getCompound(TAG_BLOOD_BOTTLE).contains("tag", 10)) {
-                    int pureness = BloodBottle.getPureness(nbt.getCompound(TAG_BLOOD_BOTTLE).getCompound(("tag")));
-                    if (pureness > 0) {
-                        deathEntity.spawnAtLocation(Items.ENCHANTED_GOLDEN_APPLE.asItem());
-                        return;
-                    }
-                }
+        if (event.getSource().getEntity() instanceof Player player) {
+            var stack = player.getMainHandItem();
+            if (!(stack.getItem() instanceof SacrificialDagger)) return;
+            var target = event.getEntity();
+            var storage = stack.getCapability(PURENESS).orElse(IPurenessStorage.EMPTY);
+            if (storage.isValid() && storage.getPureness() > 0) {
+                target.spawnAtLocation(Items.ENCHANTED_GOLDEN_APPLE);
+            } else {
+                BloodBottle.tryLootBlood(player, target);
             }
-            BloodBottle.tryLootBlood(player, (LivingEntity) deathEntity);
         }
     }
 
-        public static void bindBloodBottle (ItemStack sword, ItemStack bloodBottle){
-            CompoundTag addItemNBT = new CompoundTag();
-            CompoundTag swordNBT = sword.getOrCreateTag();
-            if (swordNBT.isEmpty() || !swordNBT.contains(TAG_BLOOD_BOTTLE, 10)) {
-                swordNBT.put(TAG_BLOOD_BOTTLE, bloodBottle.save(addItemNBT));
-                bloodBottle.shrink(1);
-            }
-        }
-
-        public static void releaseBloodBottle (Player player, ItemStack dagger){
-            var tag = dagger.getTag();
-            if (tag == null) return;
-            var blood = ItemStack.of(tag.getCompound(TAG_BLOOD_BOTTLE));
-            tag.remove(TAG_BLOOD_BOTTLE);
-            if (blood.isEmpty()) return;
-            ContainerUtil.addItem(player,
-                    BloodBottle.getPureness(blood) > 0 ? blood : new ItemStack(Items.GLASS_BOTTLE)
-            );
-        }
-
-        @Override
-        public boolean isFoil (ItemStack stack){
-            if (stack.isEnchanted()) return true;
-            var data = stack.getTag();
-            return data != null && data.getBoolean(TAG_SACRIFICING);
-        }
-
-        @Override
-        public @NotNull InteractionResultHolder<ItemStack> use (Level level, Player player, InteractionHand hand){
-            Inventory inventory = player.getInventory();
-            var stack = player.getItemInHand(hand);
-            if (level.isClientSide) {
-                return inventory.hasAnyMatching(BloodBottle.IS_VALID)
-                        ? InteractionResultHolder.consume(stack)
-                        : InteractionResultHolder.fail(stack);
-            }
-            var data = stack.getOrCreateTag();
-            if (data.getBoolean(TAG_SACRIFICING)) {
-                data.putBoolean(TAG_SACRIFICING, false);
-                releaseBloodBottle(player, stack);
-                return InteractionResultHolder.consume(stack);
-            }
-            var blood = ContainerUtil.findStack(BloodBottle.IS_VALID, inventory.offhand, inventory.items);
-            if (blood != null) {
-                data.putBoolean(TAG_SACRIFICING, true);
-                bindBloodBottle(stack, blood);
-                return InteractionResultHolder.consume(stack);
-            }
-            return InteractionResultHolder.fail(stack);
-        }
-
-        @Override
-        public void inventoryTick (ItemStack pStack, Level pLevel, Entity pEntity,int pSlotId, boolean pIsSelected){
-            CompoundTag nbt = pStack.getTag();
-            if (nbt != null && nbt.contains(TAG_BLOOD_BOTTLE, 10)) {
-                CompoundTag bloodBottleNBT = nbt.getCompound(TAG_BLOOD_BOTTLE).getCompound("tag");
-                int pureness = BloodBottle.getPureness(bloodBottleNBT);
-                if (pureness > 0) {
-                    bloodBottleNBT.getCompound(BloodBottle.TAG_DATA).putInt(BloodBottle.TAG_PURENESS, pureness - 1);
-                    nbt.getCompound(TAG_BLOOD_BOTTLE).put("tag", bloodBottleNBT);
-                    pStack.setTag(nbt);
-                }
-            }
-        }
-
-        @Override
-        public void appendHoverText (ItemStack pStack, @Nullable Level
-        pLevel, List < Component > pTooltipComponents, TooltipFlag pIsAdvanced){
-            CompoundTag nbt = pStack.getTag();
-            if (nbt != null && nbt.contains(TAG_BLOOD_BOTTLE, 10)) {
-                CompoundTag bloodBottleNBT = nbt.getCompound(TAG_BLOOD_BOTTLE).getCompound("tag");
-                int pureness = BloodBottle.getPureness(bloodBottleNBT);
-                String entityName = BloodBottle.getEntityName(bloodBottleNBT);
-                if (entityName.length() > 0) {
-                    pTooltipComponents.add(Component.translatable("tooltip.magicandtaboo.blood_bottle_entity_name", "§4" + entityName + "§f"));
-                }
-                if (pureness > 0) {
-                    pTooltipComponents.add(Component.translatable("tooltip.magicandtaboo.blood_bottle_pureness", String.format("%.1f%%", pureness / 24.0F)));
-                } else {
-                    pTooltipComponents.add(Component.translatable("tooltip.magicandtaboo.sacrificial_dagger_warn"));
-                }
-            }
-        }
+    @Override
+    public boolean isFoil(ItemStack stack) {
+        return stack.isEnchanted() || stack.getCapability(PURENESS).orElse(IPurenessStorage.EMPTY).isValid();
+    }
 
     @Override
-    public boolean hurtEnemy(ItemStack pStack, LivingEntity pTarget, LivingEntity pAttacker) {
-        CompoundTag nbt = pStack.getTag();
-        if (nbt != null && nbt.contains(TAG_BLOOD_BOTTLE, 10)) {
-            CompoundTag bloodBottleNBT = nbt.getCompound(TAG_BLOOD_BOTTLE).getCompound("tag");
-            String entityName = BloodBottle.getEntityName(bloodBottleNBT);
-            int pureness = BloodBottle.getPureness(bloodBottleNBT);
-            LogManager.getLogger().debug(pTarget.getName().getString().equals(entityName) && pureness > 0);
-            if(pTarget.getName().getString().equals(entityName) && pureness > 0){
-                pTarget.hurt(pAttacker.damageSources().magic(),4);
+    public @NotNull InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
+        Inventory inventory = player.getInventory();
+        var stack = player.getItemInHand(hand);
+        if (level.isClientSide) {
+            return inventory.hasAnyMatching(BloodBottle.IS_VALID)
+                    ? InteractionResultHolder.consume(stack)
+                    : InteractionResultHolder.fail(stack);
+        }
+        var storage = stack.getCapability(PURENESS).orElse(IPurenessStorage.EMPTY);
+        if (storage.isValid()) {
+            var blood = new ItemStack(MATItems.BLOOD_BOTTLE.get());
+            if (blood.getCapability(PURENESS).orElse(IPurenessStorage.EMPTY).transferForm(storage)) {
+                ContainerUtil.addItem(player, blood);
+                ContainerUtil.forcedSync((ServerPlayer) player, hand, stack);
+            }
+            return InteractionResultHolder.consume(stack);
+        }
+        if (BloodBottle.tryTransferTo(player, storage)) {
+            ContainerUtil.forcedSync((ServerPlayer) player, hand, stack);
+            return InteractionResultHolder.consume(stack);
+        }
+        return InteractionResultHolder.fail(stack);
+    }
+
+    @Override
+    public void inventoryTick(ItemStack stack, Level level, Entity entity, int slot, boolean isSelected) {
+        stack.getCapability(PURENESS).orElse(IPurenessStorage.EMPTY).extractPureness(1);
+    }
+
+    @Override
+    public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltips, TooltipFlag flag) {
+        var storage = stack.getCapability(PURENESS).orElse(IPurenessStorage.EMPTY);
+        var source = storage.getSource();
+        if (source != null) {
+            tooltips.add(Component.translatable(
+                    "tooltip.magicandtaboo.blood_bottle_entity_name",
+                    Component.translatable(source.getDescriptionId()).withStyle(ChatFormatting.DARK_RED)
+            ));
+        }
+        if (storage.getPureness() > 0) {
+            tooltips.add(Component.translatable("tooltip.magicandtaboo.blood_bottle_entity_name", storage.getFormattedPureness()));
+        } else {
+            tooltips.add(Component.translatable("tooltip.magicandtaboo.sacrificial_dagger_warn"));
+        }
+    }
+
+    @Override
+    public boolean hurtEnemy(ItemStack stack, LivingEntity target, LivingEntity attacker) {
+        var storage = stack.getCapability(PURENESS).orElse(IPurenessStorage.EMPTY);
+        if (storage.isValid()) {
+            boolean flag = target.getType() == storage.getSource() && storage.getPureness() > 0;
+            LOGGER.debug(flag);
+            if (flag) {
+                target.invulnerableTime = 0;//解除受击后伤害免疫
+                target.hurt(attacker.damageSources().magic(), 4);
             }
         }
-        return super.hurtEnemy(pStack, pTarget, pAttacker);
+        return super.hurtEnemy(stack, target, attacker);
+    }
+
+    @Override
+    public @Nullable ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundTag nbt) {
+        return new PurenessStorage(2400);
     }
 }

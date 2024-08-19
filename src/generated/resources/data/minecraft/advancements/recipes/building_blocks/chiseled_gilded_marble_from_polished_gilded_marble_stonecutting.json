@@ -1,0 +1,35 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_polished_gilded_marble": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "magicandtaboo:polished_gilded_marble"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "minecraft:chiseled_gilded_marble_from_polished_gilded_marble_stonecutting"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_polished_gilded_marble",
+      "has_the_recipe"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "minecraft:chiseled_gilded_marble_from_polished_gilded_marble_stonecutting"
+    ]
+  },
+  "sends_telemetry_event": false
+}

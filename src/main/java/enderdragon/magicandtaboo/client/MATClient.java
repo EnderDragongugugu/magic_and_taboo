@@ -43,6 +43,17 @@ public class MATClient {
             event.accept(MATItems.FIR_TRAPDOOR);
             event.accept(MATItems.FIR_PRESSURE_PLATE);
             event.accept(MATItems.FIR_BUTTON);
+            event.accept(MATItems.GILDED_MARBLE);
+            event.accept(MATItems.GILDED_MARBLE_STAIRS);
+            event.accept(MATItems.GILDED_MARBLE_SLAB);
+            event.accept(MATItems.GILDED_MARBLE_WALL);
+            event.accept(MATItems.CHISELED_GILDED_MARBLE);
+            event.accept(MATItems.POLISHED_GILDED_MARBLE);
+            event.accept(MATItems.POLISHED_GILDED_MARBLE_STAIRS);
+            event.accept(MATItems.POLISHED_GILDED_MARBLE_SLAB);
+            event.accept(MATItems.POLISHED_GILDED_MARBLE_WALL);
+            event.accept(MATItems.POLISHED_GILDED_MARBLE_PRESSURE_PLATE);
+            event.accept(MATItems.POLISHED_GILDED_MARBLE_BUTTON);
         } else if (CreativeModeTabs.NATURAL_BLOCKS.equals(tab)) {
             event.accept(MATItems.MERCURY_ORE);
             event.accept(MATItems.FIR_LOG);
