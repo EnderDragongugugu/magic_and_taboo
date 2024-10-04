@@ -2,9 +2,7 @@ package enderdragon.magicandtaboo;
 
 import enderdragon.magicandtaboo.effect.MATEffect;
 import enderdragon.magicandtaboo.enchantment.MATEnchantments;
-import enderdragon.magicandtaboo.init.MATBlocks;
-import enderdragon.magicandtaboo.init.MATItemGroups;
-import enderdragon.magicandtaboo.init.MATItems;
+import enderdragon.magicandtaboo.init.*;
 import enderdragon.magicandtaboo.item.equipment.SacrificialDagger;
 import enderdragon.magicandtaboo.util.BlockEntityTypeEx;
 import net.minecraft.core.Registry;
@@ -40,6 +38,8 @@ public class MagicAndTabooMod {
         MATBlocks.REGISTRY.register(modBus);
         MATItems.REGISTRY.register(modBus);
         MATItemGroups.REGISTRY.register(modBus);
+        MATBlockEntityTypes.BLOCKENTITYTYPES.register(modBus);
+        MATMenuTypes.REGISTRY.register(modBus);
         modBus.addListener(MagicAndTabooMod::onComplete);
         var forgeBus = MinecraftForge.EVENT_BUS;
         forgeBus.addListener(SacrificialDagger::onLivingDeath);

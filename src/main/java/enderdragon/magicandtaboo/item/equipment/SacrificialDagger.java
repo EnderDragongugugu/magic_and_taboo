@@ -33,6 +33,8 @@ import static enderdragon.magicandtaboo.init.MATCapabilities.PURENESS;
 public class SacrificialDagger extends SwordItem {
     private static final Logger LOGGER = LogManager.getLogger();
 
+//    private static final
+
     public SacrificialDagger(Tier tier, int damageModifier, float speedModifier, Properties props) {
         super(tier, damageModifier, speedModifier, props);
     }

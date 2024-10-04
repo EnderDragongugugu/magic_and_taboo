@@ -1,32 +1,32 @@
 {
   "variants": {
-    "facing=east,waterlogged=false": {
-      "model": "magicandtaboo:block/federation_workstation"
-    },
-    "facing=east,waterlogged=true": {
-      "model": "magicandtaboo:block/federation_workstation"
-    },
     "facing=north,waterlogged=false": {
-      "model": "magicandtaboo:block/federation_workstation",
-      "y": 270
+      "model": "magicandtaboo:block/federation_workstation"
     },
     "facing=north,waterlogged=true": {
-      "model": "magicandtaboo:block/federation_workstation",
-      "y": 270
-    },
-    "facing=south,waterlogged=false": {
-      "model": "magicandtaboo:block/federation_workstation",
-      "y": 90
-    },
-    "facing=south,waterlogged=true": {
-      "model": "magicandtaboo:block/federation_workstation",
-      "y": 90
+      "model": "magicandtaboo:block/federation_workstation"
     },
     "facing=west,waterlogged=false": {
       "model": "magicandtaboo:block/federation_workstation",
-      "y": 180
+      "y": 270
     },
     "facing=west,waterlogged=true": {
+      "model": "magicandtaboo:block/federation_workstation",
+      "y": 270
+    },
+    "facing=east,waterlogged=false": {
+      "model": "magicandtaboo:block/federation_workstation",
+      "y": 90
+    },
+    "facing=east,waterlogged=true": {
+      "model": "magicandtaboo:block/federation_workstation",
+      "y": 90
+    },
+    "facing=south,waterlogged=false": {
+      "model": "magicandtaboo:block/federation_workstation",
+      "y": 180
+    },
+    "facing=south,waterlogged=true": {
       "model": "magicandtaboo:block/federation_workstation",
       "y": 180
     }
