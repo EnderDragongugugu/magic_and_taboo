@@ -53,9 +53,10 @@ public class FederationWorkstationMenu extends AbstractContainerMenu {
     }
 
     @Override
-    public boolean stillValid(Player pPlayer) {
-        return false;
+    public boolean stillValid(Player player) {
+        return true;
     }
+
     private static FederationWorkstationBlockEntity getTileEntity(final Inventory playerInventory, final FriendlyByteBuf data) {
         final BlockEntity tileAtPos = playerInventory.player.level().getBlockEntity(data.readBlockPos());
         if (tileAtPos instanceof FederationWorkstationBlockEntity) {

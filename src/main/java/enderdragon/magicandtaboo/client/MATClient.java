@@ -22,8 +22,10 @@ import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 public class MATClient {
     @SubscribeEvent
     public static void init(final FMLClientSetupEvent event) {
-        event.enqueueWork(() -> Sheets.addWoodType(MATBlocks.FIR_WOOD_TYPE));
-        event.enqueueWork(() ->  MenuScreens.register(MATMenuTypes.FWMENU.get(), FederationWorkstationScreen::new));
+        event.enqueueWork(() -> {
+            Sheets.addWoodType(MATBlocks.FIR_WOOD_TYPE);
+            MenuScreens.register(MATMenuTypes.FWMENU.get(), FederationWorkstationScreen::new);
+        });
     }
 
     @SubscribeEvent

@@ -4,6 +4,7 @@ import enderdragon.magicandtaboo.init.MATBlockEntityTypes;
 import enderdragon.magicandtaboo.inventory.menu.FederationWorkstationMenu;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
@@ -11,9 +12,11 @@ import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.items.ItemStackHandler;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class FederationWorkstationBlockEntity extends BaseContainerBlockEntity {
+    private static final Logger LOGGER = LogManager.getLogger();
     protected final ContainerData data;
     private int time;
     private int timeTotal;
@@ -25,7 +28,7 @@ public class FederationWorkstationBlockEntity extends BaseContainerBlockEntity {
 
     @Override
     protected Component getDefaultName() {
-        return null;
+        return Component.translatable("container.magicandtaboo.federation_workstation");
     }
 
     @Override
@@ -64,8 +67,8 @@ public class FederationWorkstationBlockEntity extends BaseContainerBlockEntity {
     }
 
     @Override
-    public boolean stillValid(Player pPlayer) {
-        return false;
+    public boolean stillValid(Player player) {
+        return Container.stillValidBlockEntity(this, player);
     }
 
     @Override
