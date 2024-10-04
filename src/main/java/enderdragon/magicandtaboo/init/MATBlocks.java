@@ -1,6 +1,7 @@
 package enderdragon.magicandtaboo.init;
 
 import enderdragon.magicandtaboo.block.*;
+import enderdragon.magicandtaboo.block.grower.FirTreeGrower;
 import net.minecraft.core.Direction.Axis;
 import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.level.block.*;

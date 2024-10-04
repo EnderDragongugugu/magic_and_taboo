@@ -1,32 +1,31 @@
 package enderdragon.magicandtaboo.client.gui;
 
-import enderdragon.magicandtaboo.inventory.menu.FederationWorkstationMenu;
+import enderdragon.magicandtaboo.inventory.FederationWorkstationMenu;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
-import net.minecraft.world.inventory.AbstractContainerMenu;
+import org.jetbrains.annotations.NotNull;
 
-public class FederationWorkstationScreen extends AbstractContainerScreen<FederationWorkstationMenu>{
-
+public class FederationWorkstationScreen extends AbstractContainerScreen<FederationWorkstationMenu> {
     private static final ResourceLocation TEXTURE = new ResourceLocation("textures/gui/container/furnace.png");
 
-    public FederationWorkstationScreen(FederationWorkstationMenu pMenu, Inventory pPlayerInventory, Component pTitle) {
-        super(pMenu, pPlayerInventory, pTitle);
+    public FederationWorkstationScreen(FederationWorkstationMenu menu, Inventory inventory, Component title) {
+        super(menu, inventory, title);
     }
 
-    public void render(GuiGraphics pGuiGraphics, int pMouseX, int pMouseY, float pPartialTick) {
-        this.renderBackground(pGuiGraphics);
-            this.renderBg(pGuiGraphics, pPartialTick, pMouseX, pMouseY);
-        this.renderTooltip(pGuiGraphics, pMouseX, pMouseY);
+    public void render(@NotNull GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
+        this.renderBackground(graphics);
+        this.renderBg(graphics, partialTick, mouseX, mouseY);
+        this.renderTooltip(graphics, mouseX, mouseY);
     }
 
     @Override
-    protected void renderBg(GuiGraphics pGuiGraphics, float pPartialTick, int pMouseX, int pMouseY) {
+    protected void renderBg(GuiGraphics graphics, float partialTick, int mouseX, int mouseY) {
         int i = this.leftPos;
         int j = this.topPos;
-        pGuiGraphics.blit(TEXTURE, i, j, 0, 0, this.imageWidth, this.imageHeight);
+        graphics.blit(TEXTURE, i, j, 0, 0, this.imageWidth, this.imageHeight);
 //        if (this.menu.isLit()) {
 //            int k = this.menu.getLitProgress();
 //            pGuiGraphics.blit(TEXTURE, i + 56, j + 36 + 12 - k, 176, 12 - k, 14, k + 1);

@@ -1,8 +1,9 @@
 package enderdragon.magicandtaboo.block.entity;
 
 import enderdragon.magicandtaboo.init.MATBlockEntityTypes;
-import enderdragon.magicandtaboo.inventory.menu.FederationWorkstationMenu;
+import enderdragon.magicandtaboo.inventory.FederationWorkstationMenu;
 import net.minecraft.core.BlockPos;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Inventory;
@@ -12,18 +13,31 @@ import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
-public class FederationWorkstationBlockEntity extends BaseContainerBlockEntity {
-    private static final Logger LOGGER = LogManager.getLogger();
-    protected final ContainerData data;
+import java.util.function.Consumer;
+
+public class FederationWorkstationBlockEntity extends BaseContainerBlockEntity implements Consumer<FriendlyByteBuf> {
     private int time;
     private int timeTotal;
 
-    public FederationWorkstationBlockEntity(BlockPos pPos, BlockState pBlockState) {
-        super(MATBlockEntityTypes.FederationWorkstationBlockEntity.get(), pPos, pBlockState);
-        this.data = getData();
+    public FederationWorkstationBlockEntity(BlockPos pos, BlockState state) {
+        super(MATBlockEntityTypes.FEDERATION_WORKSTATION.get(), pos, state);
+    }
+
+    public int getTime() {
+        return this.time;
+    }
+
+    public void setTime(int time) {
+        this.time = time;
+    }
+
+    public int getTotalTime() {
+        return this.timeTotal;
+    }
+
+    public void setTotalTime(int time) {
+        this.timeTotal = time;
     }
 
     @Override
@@ -32,8 +46,8 @@ public class FederationWorkstationBlockEntity extends BaseContainerBlockEntity {
     }
 
     @Override
-    protected AbstractContainerMenu createMenu(int pContainerId, Inventory pInventory) {
-        return new FederationWorkstationMenu(pContainerId, pInventory, this, data);
+    protected AbstractContainerMenu createMenu(int id, Inventory inventory) {
+        return new FederationWorkstationMenu(id, inventory, this);
     }
 
     @Override
@@ -47,22 +61,22 @@ public class FederationWorkstationBlockEntity extends BaseContainerBlockEntity {
     }
 
     @Override
-    public ItemStack getItem(int pSlot) {
-        return null;
+    public ItemStack getItem(int slot) {
+        return ItemStack.EMPTY;
     }
 
     @Override
-    public ItemStack removeItem(int pSlot, int pAmount) {
-        return null;
+    public ItemStack removeItem(int slot, int amount) {
+        return ItemStack.EMPTY;
     }
 
     @Override
-    public ItemStack removeItemNoUpdate(int pSlot) {
-        return null;
+    public ItemStack removeItemNoUpdate(int slot) {
+        return ItemStack.EMPTY;
     }
 
     @Override
-    public void setItem(int pSlot, ItemStack pStack) {
+    public void setItem(int slot, ItemStack stack) {
 
     }
 
@@ -80,6 +94,7 @@ public class FederationWorkstationBlockEntity extends BaseContainerBlockEntity {
 //        return inventory;
 //    }
 
+    @Deprecated
     private ContainerData getData() {
         return new ContainerData() {
             @Override
@@ -104,5 +119,13 @@ public class FederationWorkstationBlockEntity extends BaseContainerBlockEntity {
                 return 2;
             }
         };
+    }
+
+    /**
+     * Write data into network packet buffer
+     */
+    @Override
+    public void accept(FriendlyByteBuf buffer) {
+        buffer.writeBlockPos(this.worldPosition).writeVarInt(this.time).writeVarInt(this.timeTotal);
     }
 }

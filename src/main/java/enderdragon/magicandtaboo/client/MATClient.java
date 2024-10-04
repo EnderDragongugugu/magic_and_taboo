@@ -6,7 +6,6 @@ import enderdragon.magicandtaboo.client.gui.MercuryToxinsOverlay;
 import enderdragon.magicandtaboo.init.MATBlocks;
 import enderdragon.magicandtaboo.init.MATItems;
 import enderdragon.magicandtaboo.init.MATMenuTypes;
-import enderdragon.magicandtaboo.inventory.menu.FederationWorkstationMenu;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.client.renderer.Sheets;
 import net.minecraft.resources.ResourceLocation;
@@ -24,7 +23,7 @@ public class MATClient {
     public static void init(final FMLClientSetupEvent event) {
         event.enqueueWork(() -> {
             Sheets.addWoodType(MATBlocks.FIR_WOOD_TYPE);
-            MenuScreens.register(MATMenuTypes.FWMENU.get(), FederationWorkstationScreen::new);
+            MenuScreens.register(MATMenuTypes.FEDERATION_WORKSTATION.get(), FederationWorkstationScreen::new);
         });
     }
 

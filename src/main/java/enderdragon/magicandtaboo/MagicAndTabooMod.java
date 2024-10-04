@@ -13,15 +13,12 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLLoadCompleteEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 
 @Mod(MagicAndTabooMod.MOD_ID)
 public class MagicAndTabooMod {
     public static final String MOD_ID = "magicandtaboo";
     private static final ResourceLocation ROOT = new ResourceLocation(MOD_ID, "root");
-    private static final Logger LOGGER = LogManager.getLogger();
 
     public static <T> @NotNull ResourceKey<T> makeKey(ResourceKey<? extends Registry<T>> registry, String name) {
         return ResourceKey.create(registry, ROOT.withPath(name));
@@ -38,7 +35,7 @@ public class MagicAndTabooMod {
         MATBlocks.REGISTRY.register(modBus);
         MATItems.REGISTRY.register(modBus);
         MATItemGroups.REGISTRY.register(modBus);
-        MATBlockEntityTypes.BLOCKENTITYTYPES.register(modBus);
+        MATBlockEntityTypes.REGISTRY.register(modBus);
         MATMenuTypes.REGISTRY.register(modBus);
         modBus.addListener(MagicAndTabooMod::onComplete);
         var forgeBus = MinecraftForge.EVENT_BUS;

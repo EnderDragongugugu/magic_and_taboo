@@ -1,9 +1,10 @@
-package enderdragon.magicandtaboo.block;
+package enderdragon.magicandtaboo.block.grower;
 
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.block.grower.AbstractMegaTreeGrower;
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
+import org.jetbrains.annotations.NotNull;
 
 import static enderdragon.magicandtaboo.MagicAndTabooMod.makeKey;
 import static net.minecraft.core.registries.Registries.CONFIGURED_FEATURE;
@@ -15,7 +16,7 @@ public class FirTreeGrower extends AbstractMegaTreeGrower {
     public static final FirTreeGrower INSTANCE = new FirTreeGrower();
 
     @Override
-    protected ResourceKey<ConfiguredFeature<?, ?>> getConfiguredFeature(RandomSource random, boolean hasFlowers) {
+    protected ResourceKey<ConfiguredFeature<?, ?>> getConfiguredFeature(@NotNull RandomSource random, boolean hasFlowers) {
         return FIR_TREE;
     }
 

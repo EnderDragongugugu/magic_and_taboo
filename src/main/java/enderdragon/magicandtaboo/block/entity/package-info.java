@@ -1,4 +1,3 @@
 @javax.annotation.ParametersAreNonnullByDefault
 @net.minecraft.MethodsReturnNonnullByDefault
-package enderdragon.magicandtaboo.block;
-
+package enderdragon.magicandtaboo.block.entity;

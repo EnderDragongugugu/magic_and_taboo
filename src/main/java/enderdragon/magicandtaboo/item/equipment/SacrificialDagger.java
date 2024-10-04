@@ -19,8 +19,6 @@ import net.minecraft.world.item.*;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -31,10 +29,6 @@ import static enderdragon.magicandtaboo.init.MATCapabilities.PURENESS;
 
 @ParametersAreNonnullByDefault
 public class SacrificialDagger extends SwordItem {
-    private static final Logger LOGGER = LogManager.getLogger();
-
-//    private static final
-
     public SacrificialDagger(Tier tier, int damageModifier, float speedModifier, Properties props) {
         super(tier, damageModifier, speedModifier, props);
     }
@@ -109,9 +103,7 @@ public class SacrificialDagger extends SwordItem {
     public boolean hurtEnemy(ItemStack stack, LivingEntity target, LivingEntity attacker) {
         var storage = stack.getCapability(PURENESS).orElse(IPurenessStorage.EMPTY);
         if (storage.isValid()) {
-            boolean flag = target.getType() == storage.getSource() && storage.getPureness() > 0;
-            LOGGER.debug(flag);
-            if (flag) {
+            if (target.getType() == storage.getSource() && storage.getPureness() > 0) {
                 target.invulnerableTime = 0;//解除受击后伤害免疫
                 target.hurt(attacker.damageSources().magic(), 4);
             }
