@@ -1,10 +1,12 @@
 package enderdragon.magicandtaboo.block;
 
-import enderdragon.magicandtaboo.block.entity.FederationWorkstationBlockEntity;
+import enderdragon.magicandtaboo.block.entity.WorkHubBlockEntity;
 import enderdragon.magicandtaboo.init.MATBlockEntityTypes;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.Container;
+import net.minecraft.world.Containers;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
@@ -29,10 +31,10 @@ import org.jetbrains.annotations.Nullable;
 import static net.minecraft.world.level.block.HorizontalDirectionalBlock.FACING;
 import static net.minecraft.world.level.block.state.properties.BlockStateProperties.WATERLOGGED;
 
-public class FederationWorkstationBlock extends BaseEntityBlock implements SimpleWaterloggedBlock {
+public class WorkHubBlock extends BaseEntityBlock implements SimpleWaterloggedBlock {
     protected static final VoxelShape AABB = Block.box(1.0D, 0.0D, 1.0D, 15.0D, 14.0D, 15.0D);
 
-    public FederationWorkstationBlock(Properties props) {
+    public WorkHubBlock(Properties props) {
         super(props);
         this.registerDefaultState(this.stateDefinition.any()
                 .setValue(FACING, Direction.SOUTH)
@@ -60,7 +62,10 @@ public class FederationWorkstationBlock extends BaseEntityBlock implements Simpl
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext context) {
         FluidState fluidstate = context.getLevel().getFluidState(context.getClickedPos());
-        return this.defaultBlockState().setValue(WATERLOGGED, fluidstate.getType() == Fluids.WATER);
+        return this.defaultBlockState()
+                .setValue(WATERLOGGED, fluidstate.getType() == Fluids.WATER)
+                .setValue(FACING, context.getHorizontalDirection().getOpposite())
+                ;
     }
 
     @SuppressWarnings("deprecation")
@@ -92,15 +97,28 @@ public class FederationWorkstationBlock extends BaseEntityBlock implements Simpl
     @Nullable
     @Override
     public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
-        return MATBlockEntityTypes.FEDERATION_WORKSTATION.get().create(pos, state);
+        return MATBlockEntityTypes.WORK_HUB.get().create(pos, state);
     }
 
     @SuppressWarnings("deprecation")
     @Override
     public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
-        if (player instanceof ServerPlayer && level.getBlockEntity(pos) instanceof FederationWorkstationBlockEntity workstation) {
+        if (player instanceof ServerPlayer && level.getBlockEntity(pos) instanceof WorkHubBlockEntity workstation) {
             NetworkHooks.openScreen((ServerPlayer) player, workstation, workstation);
         }
         return InteractionResult.SUCCESS;
+    }
+
+    @Override
+    public void onRemove(BlockState pState, Level pLevel, BlockPos pPos, BlockState pNewState, boolean pMovedByPiston) {
+        if (!pState.is(pNewState.getBlock())) {
+            BlockEntity blockentity = pLevel.getBlockEntity(pPos);
+            if (blockentity instanceof Container) {
+                Containers.dropContents(pLevel, pPos, (Container) blockentity);
+                pLevel.updateNeighbourForOutputSignal(pPos, this);
+            }
+
+            super.onRemove(pState, pLevel, pPos, pNewState, pMovedByPiston);
+        }
     }
 }

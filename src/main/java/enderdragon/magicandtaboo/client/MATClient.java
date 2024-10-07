@@ -1,7 +1,7 @@
 package enderdragon.magicandtaboo.client;
 
 import enderdragon.magicandtaboo.MagicAndTabooMod;
-import enderdragon.magicandtaboo.client.gui.FederationWorkstationScreen;
+import enderdragon.magicandtaboo.client.gui.WorkHubScreen;
 import enderdragon.magicandtaboo.client.gui.MercuryToxinsOverlay;
 import enderdragon.magicandtaboo.init.MATBlocks;
 import enderdragon.magicandtaboo.init.MATItems;
@@ -23,7 +23,7 @@ public class MATClient {
     public static void init(final FMLClientSetupEvent event) {
         event.enqueueWork(() -> {
             Sheets.addWoodType(MATBlocks.FIR_WOOD_TYPE);
-            MenuScreens.register(MATMenuTypes.FEDERATION_WORKSTATION.get(), FederationWorkstationScreen::new);
+            MenuScreens.register(MATMenuTypes.WORK_HUB.get(), WorkHubScreen::new);
         });
     }
 

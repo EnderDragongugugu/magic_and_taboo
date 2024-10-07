@@ -34,7 +34,7 @@ public class MATBlocks {
             .strength(3.0F, 3.0F),
             UniformInt.of(3, 7)
     ));
-    public static final RegistryObject<Block> FEDERATION_WORKSTATION = REGISTRY.register("federation_workstation", () -> new FederationWorkstationBlock(Properties.of()
+    public static final RegistryObject<Block> WORK_HUB = REGISTRY.register("work_hub", () -> new WorkHubBlock(Properties.of()
             .mapColor(MapColor.WOOD)
             .instrument(NoteBlockInstrument.BASS)
             .strength(2.5F)

@@ -23,8 +23,8 @@ public class MATBlockStateProvider extends BlockStateProvider {
         this.registerFirWood();
         this.registerGildedMarble();
         this.horizontalBlock(
-                MATBlocks.FEDERATION_WORKSTATION.get(),
-                new ModelFile.UncheckedModelFile(MATBlocks.FEDERATION_WORKSTATION.getId().withPrefix("block/")),
+                MATBlocks.WORK_HUB.get(),
+                new ModelFile.UncheckedModelFile(MATBlocks.WORK_HUB.getId().withPrefix("block/")),
                 90
         );
     }

@@ -92,8 +92,8 @@ public class MATItems {
     public static final RegistryObject<BlockItem> MERCURY_ORE = BLOCKS.register(REGISTRY, "mercury_ore", () ->
             new BlockItem(MATBlocks.MERCURY_ORE.get(), new Properties())
     );
-    public static final RegistryObject<BlockItem> FEDERATION_WORKSTATION = BLOCKS.register(REGISTRY, "federation_workstation", () ->
-            new BlockItem(MATBlocks.FEDERATION_WORKSTATION.get(), new Properties())
+    public static final RegistryObject<BlockItem> WORK_HUB = BLOCKS.register(REGISTRY, "work_hub", () ->
+            new BlockItem(MATBlocks.WORK_HUB.get(), new Properties())
     );
     public static final RegistryObject<BlockItem> FIR_LEAVES = BLOCKS.register(REGISTRY, "fir_leaves", () ->
             new BlockItem(MATBlocks.FIR_LEAVES.get(), new Properties())

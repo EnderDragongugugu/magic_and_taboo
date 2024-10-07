@@ -53,7 +53,7 @@ public class MATItemModelProvider extends ItemModelProvider {
         this.wallItem(MATBlocks.POLISHED_GILDED_MARBLE_WALL, makeId("block/polished_gilded_marble"));
         this.basicItem(MATBlocks.POLISHED_GILDED_MARBLE_PRESSURE_PLATE);
         this.buttonItem(MATBlocks.POLISHED_GILDED_MARBLE_BUTTON, polishedMarble);
-        this.basicItem(MATBlocks.FEDERATION_WORKSTATION);
+        this.basicItem(MATBlocks.WORK_HUB);
     }
 
     public ItemModelBuilder handheldItem(RegistryObject<? extends Item> item) {

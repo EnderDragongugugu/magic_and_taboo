@@ -32,7 +32,7 @@
   "block.magicandtaboo.potted_fir_sapling": "冷杉树苗盆栽",
   "block.magicandtaboo.stripped_fir_log": "去皮冷杉原木",
   "block.magicandtaboo.stripped_fir_wood": "去皮冷杉木",
-  "block.magicandtaboo.federation_workstation": "联合工作站",
+  "block.magicandtaboo.work_hub": "联合工作站",
   //  effect
   "effect.magicandtaboo.mercury_toxins": "水银中毒",
   //  enchantment
@@ -50,5 +50,7 @@
   "tooltip.magicandtaboo.mercury_ore": "小心有毒!",
   "tooltip.magicandtaboo.blood_bottle_pureness": "当前血液浓度: %s",
   "tooltip.magicandtaboo.blood_bottle_entity_name": "当前装有§4%s§f的血液",
-  "tooltip.magicandtaboo.sacrificial_dagger_warn": "它似乎在渴望鲜血"
+  "tooltip.magicandtaboo.sacrificial_dagger_warn": "它似乎在渴望鲜血",
+  //  container
+  "container.magicandtaboo.work_hub": "联合工作站"
 }

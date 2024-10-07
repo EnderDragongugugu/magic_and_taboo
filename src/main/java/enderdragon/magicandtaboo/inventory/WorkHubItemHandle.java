@@ -4,17 +4,19 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.items.IItemHandler;
 import org.jetbrains.annotations.NotNull;
 
-public class FederationWorkstationItemHandle implements IItemHandler {
+public class WorkHubItemHandle implements IItemHandler {
 
     private final IItemHandler itemHandler;
+    private final static int MAX_SLOT = 11;
 
-    public FederationWorkstationItemHandle(IItemHandler itemHandler){
+
+    public WorkHubItemHandle(IItemHandler itemHandler){
         this.itemHandler = itemHandler;
     }
 
     @Override
     public int getSlots() {
-        return 10;
+        return MAX_SLOT;
     }
 
     @Override

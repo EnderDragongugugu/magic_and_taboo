@@ -4,7 +4,7 @@
 	"parent": "block/block",
 	"texture_size": [64, 64],
 	"textures": {
-		"0": "magicandtaboo:block/federation_workstation",
+		"0": "magicandtaboo:block/work_hub",
 		"particle": "magicandtaboo:block/fir/fir_planks"
 	},
 	"elements": [
