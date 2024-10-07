@@ -2,66 +2,41 @@ package enderdragon.magicandtaboo.block.entity;
 
 import enderdragon.magicandtaboo.init.MATBlockEntityTypes;
 import enderdragon.magicandtaboo.inventory.WorkHubMenu;
+import enderdragon.magicandtaboo.util.DataSlotImpl;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.Container;
 import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
-import net.minecraft.world.inventory.ContainerData;
+import net.minecraft.world.inventory.DataSlot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 
-import java.util.function.Consumer;
-
-public class WorkHubBlockEntity extends BaseContainerBlockEntity implements Consumer<FriendlyByteBuf> {
-    private int time;
-    private int timeTotal;
+public class WorkHubBlockEntity extends BaseContainerBlockEntity {
+    public final DataSlot time = new DataSlotImpl();
+    public final DataSlot timeTotal = new DataSlotImpl();
     private NonNullList<ItemStack> items = NonNullList.withSize(11, ItemStack.EMPTY);
 
     public WorkHubBlockEntity(BlockPos pos, BlockState state) {
         super(MATBlockEntityTypes.WORK_HUB.get(), pos, state);
     }
 
-    public int getTime() {
-        return this.time;
-    }
-
-    public void setTime(int time) {
-        this.time = time;
-    }
-
-    public int getTotalTime() {
-        return this.timeTotal;
-    }
-
-    public void setTotalTime(int time) {
-        this.timeTotal = time;
-    }
-
-
-
     @Override
-    public void load(CompoundTag pTag) {
-        super.load(pTag);
+    public void load(CompoundTag tag) {
+        super.load(tag);
         this.items = NonNullList.withSize(this.getContainerSize(), ItemStack.EMPTY);
-        ContainerHelper.loadAllItems(pTag, this.items);
+        ContainerHelper.loadAllItems(tag, this.items);
     }
 
     @Override
-    public CompoundTag getUpdateTag() {
-        return super.getUpdateTag();
-    }
-
-    @Override
-    protected void saveAdditional(CompoundTag pTag) {
-        super.saveAdditional(pTag);
-        ContainerHelper.saveAllItems(pTag, this.items);
+    protected void saveAdditional(CompoundTag tag) {
+        super.saveAdditional(tag);
+        ContainerHelper.saveAllItems(tag, this.items);
     }
 
     @Override
@@ -103,13 +78,12 @@ public class WorkHubBlockEntity extends BaseContainerBlockEntity implements Cons
         return ContainerHelper.takeItem(this.items, slot);
     }
 
-
     @Override
-    public void setItem(int pSlot, ItemStack pStack) {
+    public void setItem(int slot, ItemStack stack) {
 //        this.unpackLootTable((Player)null);
-        this.getItems().set(pSlot, pStack);
-        if (pStack.getCount() > this.getMaxStackSize()) {
-            pStack.setCount(this.getMaxStackSize());
+        this.getItems().set(slot, stack);
+        if (stack.getCount() > this.getMaxStackSize()) {
+            stack.setCount(this.getMaxStackSize());
         }
     }
 
@@ -126,39 +100,4 @@ public class WorkHubBlockEntity extends BaseContainerBlockEntity implements Cons
 //    public ItemStackHandler getInventory() {
 //        return inventory;
 //    }
-
-    @Deprecated
-    private ContainerData getData() {
-        return new ContainerData() {
-            @Override
-            public int get(int index) {
-                return switch (index) {
-                    case 0 -> WorkHubBlockEntity.this.time;
-                    case 1 -> WorkHubBlockEntity.this.timeTotal;
-                    default -> 0;
-                };
-            }
-
-            @Override
-            public void set(int index, int value) {
-                switch (index) {
-                    case 0 -> WorkHubBlockEntity.this.time = value;
-                    case 1 -> WorkHubBlockEntity.this.timeTotal = value;
-                }
-            }
-
-            @Override
-            public int getCount() {
-                return 2;
-            }
-        };
-    }
-
-    /**
-     * Write data into network packet buffer
-     */
-    @Override
-    public void accept(FriendlyByteBuf buffer) {
-        buffer.writeBlockPos(this.worldPosition).writeVarInt(this.time).writeVarInt(this.timeTotal);
-    }
 }

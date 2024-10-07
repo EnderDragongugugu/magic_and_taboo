@@ -25,7 +25,6 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.network.NetworkHooks;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import static net.minecraft.world.level.block.HorizontalDirectionalBlock.FACING;
@@ -50,8 +49,7 @@ public class WorkHubBlock extends BaseEntityBlock implements SimpleWaterloggedBl
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-        super.createBlockStateDefinition(builder);
-        builder.add(FACING, WATERLOGGED);
+        super.createBlockStateDefinition(builder.add(FACING, WATERLOGGED));
     }
 
     @Override
@@ -61,11 +59,9 @@ public class WorkHubBlock extends BaseEntityBlock implements SimpleWaterloggedBl
 
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext context) {
-        FluidState fluidstate = context.getLevel().getFluidState(context.getClickedPos());
         return this.defaultBlockState()
-                .setValue(WATERLOGGED, fluidstate.getType() == Fluids.WATER)
-                .setValue(FACING, context.getHorizontalDirection().getOpposite())
-                ;
+                .setValue(WATERLOGGED, context.getLevel().getFluidState(context.getClickedPos()).getType() == Fluids.WATER)
+                .setValue(FACING, context.getHorizontalDirection().getOpposite());
     }
 
     @SuppressWarnings("deprecation")
@@ -83,10 +79,9 @@ public class WorkHubBlock extends BaseEntityBlock implements SimpleWaterloggedBl
         return super.updateShape(state, facing, facingState, level, pos, facingPos);
     }
 
-
     @Override
     @SuppressWarnings("deprecation")
-    public @NotNull VoxelShape getOcclusionShape(BlockState state, BlockGetter level, BlockPos pos) {
+    public VoxelShape getOcclusionShape(BlockState state, BlockGetter level, BlockPos pos) {
         return Shapes.empty();
     }
 
@@ -103,22 +98,21 @@ public class WorkHubBlock extends BaseEntityBlock implements SimpleWaterloggedBl
     @SuppressWarnings("deprecation")
     @Override
     public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
-        if (player instanceof ServerPlayer && level.getBlockEntity(pos) instanceof WorkHubBlockEntity workstation) {
-            NetworkHooks.openScreen((ServerPlayer) player, workstation, workstation);
+        if (player instanceof ServerPlayer && level.getBlockEntity(pos) instanceof WorkHubBlockEntity hub) {
+            NetworkHooks.openScreen((ServerPlayer) player, hub, pos);
         }
         return InteractionResult.SUCCESS;
     }
 
+    @SuppressWarnings("deprecation")
     @Override
-    public void onRemove(BlockState pState, Level pLevel, BlockPos pPos, BlockState pNewState, boolean pMovedByPiston) {
-        if (!pState.is(pNewState.getBlock())) {
-            BlockEntity blockentity = pLevel.getBlockEntity(pPos);
-            if (blockentity instanceof Container) {
-                Containers.dropContents(pLevel, pPos, (Container) blockentity);
-                pLevel.updateNeighbourForOutputSignal(pPos, this);
+    public void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean movedByPiston) {
+        if (!state.is(newState.getBlock())) {
+            if (level.getBlockEntity(pos) instanceof Container container) {
+                Containers.dropContents(level, pos, container);
+                level.updateNeighbourForOutputSignal(pos, this);
             }
-
-            super.onRemove(pState, pLevel, pPos, pNewState, pMovedByPiston);
+            super.onRemove(state, level, pos, newState, movedByPiston);
         }
     }
 }

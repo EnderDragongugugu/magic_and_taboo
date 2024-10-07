@@ -39,7 +39,8 @@ public class MATBlocks {
             .instrument(NoteBlockInstrument.BASS)
             .strength(2.5F)
             .sound(SoundType.WOOD)
-            .ignitedByLava()));
+            .ignitedByLava()
+    ));
     public static final RegistryObject<FlammableBlock> FIR_PLANKS;
     public static final RegistryObject<SaplingBlock> FIR_SAPLING;
     public static final RegistryObject<StrippableLogBlock> FIR_LOG;
