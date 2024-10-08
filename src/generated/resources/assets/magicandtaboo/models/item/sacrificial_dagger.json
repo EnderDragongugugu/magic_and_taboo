@@ -1,3 +1,20 @@
 {
-  "parent": "minecraft:item/netherite_sword"
+  "parent": "minecraft:item/handheld",
+  "textures": {
+    "layer0": "magicandtaboo:item/sacrificial_dagger"
+  },
+  "overrides": [
+    {
+      "predicate": {
+        "minecraft:has_blood": 1.0
+      },
+      "model": "magicandtaboo:item/sacrificial_dagger_0"
+    },
+    {
+      "predicate": {
+        "minecraft:has_blood": 0.0
+      },
+      "model": "magicandtaboo:item/sacrificial_dagger"
+    }
+  ]
 }

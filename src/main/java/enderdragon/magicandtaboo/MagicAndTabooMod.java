@@ -1,7 +1,7 @@
 package enderdragon.magicandtaboo;
 
 import enderdragon.magicandtaboo.effect.MATEffect;
-import enderdragon.magicandtaboo.enchantment.MATEnchantments;
+import enderdragon.magicandtaboo.init.MATEnchantments;
 import enderdragon.magicandtaboo.init.*;
 import enderdragon.magicandtaboo.item.equipment.SacrificialDagger;
 import enderdragon.magicandtaboo.util.BlockEntityTypeEx;

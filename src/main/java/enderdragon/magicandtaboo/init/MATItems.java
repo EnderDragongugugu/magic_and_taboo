@@ -113,4 +113,19 @@ public class MATItems {
     public static final RegistryObject<MATHangingSignItem> FIR_HANGING_SIGN = ITEMS.register(REGISTRY, "fir_hanging_sign", () ->
             new MATHangingSignItem(MATBlocks.FIR_HANGING_SIGN, MATBlocks.FIR_WALL_HANGING_SIGN, 200, new Properties())
     );
+    public static final RegistryObject<Item> MORTAR = ITEMS.register(REGISTRY, "mortar", () ->
+            new Item(new Properties()
+                    .durability(128)
+            )
+    );
+    public static final RegistryObject<Item> BLAZE_LANTERN = ITEMS.register(REGISTRY, "blaze_lantern", () ->
+            new Item(new Properties()
+                    .durability(256)
+            )
+    );
+    public static final RegistryObject<Item> BLAZE_BURNER = ITEMS.register(REGISTRY, "blaze_burner", () ->
+            new Item(new Properties()
+                    .durability(32)
+            )
+    );
 }

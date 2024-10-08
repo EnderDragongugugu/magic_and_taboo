@@ -25,7 +25,10 @@ public class MATItemModelProvider extends ItemModelProvider {
     protected void registerModels() {
         var firPlanks = makeId("block/fir/fir_planks");
         var polishedMarble = makeId("block/polished_gilded_marble");
-        this.withExistingParent(MATItems.SACRIFICIAL_DAGGER.getId().getPath(), "item/netherite_sword");
+        this.handheldItem(MATItems.SACRIFICIAL_DAGGER);
+        this.withExistingParent(MATItems.MORTAR.getId().getPath(), "item/netherite_sword");
+        this.withExistingParent(MATItems.BLAZE_LANTERN.getId().getPath(), "item/netherite_sword");
+        this.withExistingParent(MATItems.BLAZE_BURNER.getId().getPath(), "item/netherite_sword");
         this.basicItem(MATItems.BLOOD_BOTTLE.getId());
         this.basicItem(MATBlocks.FIR_FENCE_GATE);
         this.basicItem(MATBlocks.FIR_WOOD);

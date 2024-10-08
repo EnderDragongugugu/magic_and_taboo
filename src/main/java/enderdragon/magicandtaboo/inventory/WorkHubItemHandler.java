@@ -4,13 +4,13 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.items.IItemHandler;
 import org.jetbrains.annotations.NotNull;
 
-public class WorkHubItemHandle implements IItemHandler {
+public class WorkHubItemHandler implements IItemHandler {
 
     private final IItemHandler itemHandler;
     private final static int MAX_SLOT = 11;
 
 
-    public WorkHubItemHandle(IItemHandler itemHandler){
+    public WorkHubItemHandler(IItemHandler itemHandler){
         this.itemHandler = itemHandler;
     }
 

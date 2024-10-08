@@ -1,7 +1,9 @@
 package enderdragon.magicandtaboo.inventory;
 
 import enderdragon.magicandtaboo.block.entity.WorkHubBlockEntity;
+import enderdragon.magicandtaboo.init.MATItems;
 import enderdragon.magicandtaboo.init.MATMenuTypes;
+import enderdragon.magicandtaboo.init.MATTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -29,8 +31,8 @@ public class WorkHubMenu extends AbstractContainerMenu {
         super(MATMenuTypes.WORK_HUB.get(), id);
         this.workHub = workHub;
         workHub.startOpen(playerInventory.player);
-        this.addSlot(new Slot(workHub, 0, 12, 23));
-        this.addSlot(new Slot(workHub, 1, 12, 45));
+        this.addSlot(new PlaceItemTagSlot(workHub, MATTag.MORTAR,0, 12, 23));
+        this.addSlot(new PlaceItemTagSlot(workHub,MATTag.BLAZE_LANTERN, 1, 12, 45));
         for (int i = 0, slot = 1; i < 2; i++) {
             for (int j = 0; j < 3; j++) {
                 this.addSlot(new Slot(workHub, ++slot, 38 + i * 18, 17 + 18 * j));

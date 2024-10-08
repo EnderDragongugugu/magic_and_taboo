@@ -1,6 +1,7 @@
-package enderdragon.magicandtaboo.enchantment;
+package enderdragon.magicandtaboo.init;
 
 import enderdragon.magicandtaboo.MagicAndTabooMod;
+import enderdragon.magicandtaboo.enchantment.MercuryToxinsEnchantment;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentCategory;
