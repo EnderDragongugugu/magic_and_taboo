@@ -30,6 +30,8 @@
   "block.magicandtaboo.potted_fir_sapling": "Potted Fir Sapling",
   "block.magicandtaboo.stripped_fir_log": "Stripped Fir Log",
   "block.magicandtaboo.stripped_fir_wood": "Stripped Fir Wood",
+  "item.magicandtaboo.blaze_burner": "Blaze Burner",
+  "item.magicandtaboo.blaze_blast_burner": "Blaze Blast Burner",
   "item.magicandtaboo.fir_boat": "Fir Boat",
   "item.magicandtaboo.fir_chest_boat": "Fir Boat with Chest"
 }

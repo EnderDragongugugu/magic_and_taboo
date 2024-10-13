@@ -25,10 +25,9 @@ public class MATItemModelProvider extends ItemModelProvider {
     protected void registerModels() {
         var firPlanks = makeId("block/fir/fir_planks");
         var polishedMarble = makeId("block/polished_gilded_marble");
-        this.handheldItem(MATItems.SACRIFICIAL_DAGGER);
         this.withExistingParent(MATItems.MORTAR.getId().getPath(), "item/netherite_sword");
-        this.withExistingParent(MATItems.BLAZE_LANTERN.getId().getPath(), "item/netherite_sword");
         this.withExistingParent(MATItems.BLAZE_BURNER.getId().getPath(), "item/netherite_sword");
+        this.withExistingParent(MATItems.BLAZE_BLAST_BURNER.getId().getPath(), "item/netherite_sword");
         this.basicItem(MATItems.BLOOD_BOTTLE.getId());
         this.basicItem(MATBlocks.FIR_FENCE_GATE);
         this.basicItem(MATBlocks.FIR_WOOD);
@@ -57,6 +56,16 @@ public class MATItemModelProvider extends ItemModelProvider {
         this.basicItem(MATBlocks.POLISHED_GILDED_MARBLE_PRESSURE_PLATE);
         this.buttonItem(MATBlocks.POLISHED_GILDED_MARBLE_BUTTON, polishedMarble);
         this.basicItem(MATBlocks.WORK_HUB);
+        var handheld = new ModelFile.UncheckedModelFile("item/handheld");
+        this.getBuilder("sacrificial_dagger")
+                .parent(handheld)
+                .texture("layer0", makeId("item/sacrificial_dagger"))
+                .override()
+                .predicate(new ResourceLocation("bloody"), 1.0F)
+                .model(this.getBuilder("bloody_sacrificial_dagger")
+                        .parent(handheld)
+                        .texture("layer0", makeId("item/bloody_sacrificial_dagger"))
+                );
     }
 
     public ItemModelBuilder handheldItem(RegistryObject<? extends Item> item) {

@@ -1,20 +1,14 @@
 {
   "parent": "minecraft:item/handheld",
-  "textures": {
-    "layer0": "magicandtaboo:item/sacrificial_dagger"
-  },
   "overrides": [
     {
+      "model": "magicandtaboo:item/bloody_sacrificial_dagger",
       "predicate": {
-        "minecraft:has_blood": 1.0
-      },
-      "model": "magicandtaboo:item/sacrificial_dagger_0"
-    },
-    {
-      "predicate": {
-        "minecraft:has_blood": 0.0
-      },
-      "model": "magicandtaboo:item/sacrificial_dagger"
+        "minecraft:bloody": 1.0
+      }
     }
-  ]
+  ],
+  "textures": {
+    "layer0": "magicandtaboo:item/sacrificial_dagger"
+  }
 }

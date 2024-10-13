@@ -118,12 +118,12 @@ public class MATItems {
                     .durability(128)
             )
     );
-    public static final RegistryObject<Item> BLAZE_LANTERN = ITEMS.register(REGISTRY, "blaze_lantern", () ->
+    public static final RegistryObject<Item> BLAZE_BURNER = ITEMS.register(REGISTRY, "blaze_burner", () ->
             new Item(new Properties()
                     .durability(256)
             )
     );
-    public static final RegistryObject<Item> BLAZE_BURNER = ITEMS.register(REGISTRY, "blaze_burner", () ->
+    public static final RegistryObject<Item> BLAZE_BLAST_BURNER = ITEMS.register(REGISTRY, "blaze_blast_burner", () ->
             new Item(new Properties()
                     .durability(32)
             )

@@ -1,7 +1,6 @@
 package enderdragon.magicandtaboo.data;
 
 import enderdragon.magicandtaboo.init.MATItems;
-import enderdragon.magicandtaboo.init.MATTag;
 import enderdragon.magicandtaboo.tag.MATBlockTags;
 import enderdragon.magicandtaboo.tag.MATItemTags;
 import net.minecraft.core.HolderLookup.Provider;
@@ -39,10 +38,10 @@ public class MATItemTagProvider extends ItemTagsProvider {
         this.copy(BlockTags.WOODEN_FENCES, ItemTags.WOODEN_FENCES);
         this.copy(BlockTags.WOODEN_PRESSURE_PLATES, ItemTags.WOODEN_PRESSURE_PLATES);
         this.copy(BlockTags.WOODEN_TRAPDOORS, ItemTags.WOODEN_TRAPDOORS);
-        tag(MATTag.MORTAR)
+        this.tag(MATItemTags.MORTARS)
                 .add(MATItems.MORTAR.get());
-        tag(MATTag.BLAZE_LANTERN)
-                .add(MATItems.BLAZE_LANTERN.get())
-                .add(MATItems.BLAZE_BURNER.get());
+        this.tag(MATItemTags.BLAZE_BURNERS)
+                .add(MATItems.BLAZE_BURNER.get())
+                .add(MATItems.BLAZE_BLAST_BURNER.get());
     }
 }

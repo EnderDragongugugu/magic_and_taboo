@@ -2,8 +2,8 @@ package enderdragon.magicandtaboo.client;
 
 import enderdragon.magicandtaboo.MagicAndTabooMod;
 import enderdragon.magicandtaboo.capability.IPurenessStorage;
-import enderdragon.magicandtaboo.client.gui.WorkHubScreen;
 import enderdragon.magicandtaboo.client.gui.MercuryToxinsOverlay;
+import enderdragon.magicandtaboo.client.gui.WorkHubScreen;
 import enderdragon.magicandtaboo.init.MATBlocks;
 import enderdragon.magicandtaboo.init.MATItems;
 import enderdragon.magicandtaboo.init.MATMenuTypes;
@@ -11,16 +11,11 @@ import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.client.renderer.Sheets;
 import net.minecraft.client.renderer.item.ClampedItemPropertyFunction;
 import net.minecraft.client.renderer.item.ItemProperties;
-import net.minecraft.client.resources.model.ModelBaker;
-import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.ClientForgeMod;
 import net.minecraftforge.client.event.ModelEvent;
 import net.minecraftforge.client.event.RegisterGuiOverlaysEvent;
-import net.minecraftforge.client.model.ItemLayerModel;
-import net.minecraftforge.client.model.generators.ItemModelProvider;
 import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -37,11 +32,12 @@ public class MATClient {
             MenuScreens.register(MATMenuTypes.WORK_HUB.get(), WorkHubScreen::new);
         });
     }
+
     @SubscribeEvent
-    public static void modelBake(ModelEvent.RegisterGeometryLoaders event){
-        final ResourceLocation hasBlood = new ResourceLocation("has_blood");
-        ClampedItemPropertyFunction change = (stack, $, entity, i)-> entity != null && entity.isUsingItem() && entity.getUseItem() == stack && stack.getCapability(PURENESS).orElse(IPurenessStorage.EMPTY).isValid() ? 0.0F : 1.0F;
-        ItemProperties.register(MATItems.SACRIFICIAL_DAGGER.get(),hasBlood,change);
+    public static void modelBake(ModelEvent.ModifyBakingResult event) {
+        final ResourceLocation bloody = new ResourceLocation("bloody");
+        ClampedItemPropertyFunction isBloody = (stack, $, entity, i) -> stack.getCapability(PURENESS).orElse(IPurenessStorage.EMPTY).isValid() ? 1.0F : 0.0F;
+        ItemProperties.register(MATItems.SACRIFICIAL_DAGGER.get(), bloody, isBloody);
     }
 
     @SubscribeEvent

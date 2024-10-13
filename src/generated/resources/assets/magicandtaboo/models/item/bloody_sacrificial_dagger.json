@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/handheld",
   "textures": {
-    "layer0": "magicandtaboo:item/sacrificial_dagger"
+    "layer0": "magicandtaboo:item/bloody_sacrificial_dagger"
   }
 }
