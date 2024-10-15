@@ -37,10 +37,13 @@ public class MATItemModelProvider extends ItemModelProvider {
         this.basicItem(MATBlocks.FIR_PRESSURE_PLATE);
         this.basicItem(MATBlocks.FIR_SLAB);
         this.basicItem(MATBlocks.FIR_STAIRS);
-        this.withExistingParent(MATBlocks.FIR_TRAPDOOR.getId().getPath(), makeId("block/fir_trapdoor_bottom"));
-        this.withExistingParent(MATItems.FIR_DOOR.getId().getPath(), "item/spruce_door");
-        this.withExistingParent(MATItems.FIR_SIGN.getId().getPath(), "item/spruce_sign");
-        this.withExistingParent(MATItems.FIR_HANGING_SIGN.getId().getPath(), "item/spruce_hanging_sign");
+        this.withExistingParent(MATBlocks.FIR_TRAPDOOR.getId().getPath(),makeId("block/fir_trapdoor_bottom"));
+        this.withExistingParent(MATItems.FIR_DOOR.getId().getPath(), "item/generated")
+                .texture("layer0",makeId("item/fir_door"));
+        this.withExistingParent(MATItems.FIR_SIGN.getId().getPath(), "item/generated")
+                .texture("layer0",makeId("item/fir_sign"));
+        this.withExistingParent(MATItems.FIR_HANGING_SIGN.getId().getPath(), "item/generated")
+                .texture("layer0",makeId("item/fir_hanging_sign"));
         this.buttonItem(MATBlocks.FIR_BUTTON, firPlanks);
         this.withExistingParent(MATBlocks.FIR_FENCE.getId().getPath(), "block/fence_inventory")
                 .texture("texture", firPlanks);

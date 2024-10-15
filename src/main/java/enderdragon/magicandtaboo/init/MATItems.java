@@ -99,7 +99,7 @@ public class MATItems {
             new BlockItem(MATBlocks.FIR_LEAVES.get(), new Properties())
     );
     public static final RegistryObject<SacrificialDagger> SACRIFICIAL_DAGGER = ITEMS.register(REGISTRY, "sacrificial_dagger", () ->
-            new SacrificialDagger(Tiers.IRON, 1, 1, new Properties())
+            new SacrificialDagger(Tiers.IRON, 3, -2.4F, new Properties())
     );
     public static final RegistryObject<BloodBottle> BLOOD_BOTTLE = REGISTRY.register("blood_bottle", () ->
             new BloodBottle(new Properties().stacksTo(1))
