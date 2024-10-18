@@ -7,7 +7,7 @@ import org.jetbrains.annotations.NotNull;
 public class WorkHubItemHandler implements IItemHandler {
 
     private final IItemHandler itemHandler;
-    private final static int MAX_SLOT = 11;
+    public final static int MAX_SLOT = 11;
 
 
     public WorkHubItemHandler(IItemHandler itemHandler){

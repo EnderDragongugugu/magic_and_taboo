@@ -37,6 +37,8 @@ public class MagicAndTabooMod {
         MATItemGroups.REGISTRY.register(modBus);
         MATBlockEntityTypes.REGISTRY.register(modBus);
         MATMenuTypes.REGISTRY.register(modBus);
+        MATRecipeTypes.REGISTRY.register(modBus);
+        MATSerializer.REGISTRY.register(modBus);
         modBus.addListener(MagicAndTabooMod::onComplete);
         var forgeBus = MinecraftForge.EVENT_BUS;
         forgeBus.addListener(SacrificialDagger::onLivingDeath);

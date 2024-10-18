@@ -1,0 +1,22 @@
+{
+  "type": "magic_and_taboo:work_hub",
+  "work_time": 200,
+  "experience": 100,
+  "ingredients": [
+    {
+      "item":"minecraft:apple"
+    }
+  ],
+  "mortar": {
+    "item":"magic_and_taboo:mortar"
+  },
+  "blaze_burner": {
+    "tag":"magic_and_taboo:blaze_burner"
+  },
+  "container": {
+    "item":"minecraft:apple"
+  },
+  "result": {
+    "item":"minecraft:apple"
+  }
+}
