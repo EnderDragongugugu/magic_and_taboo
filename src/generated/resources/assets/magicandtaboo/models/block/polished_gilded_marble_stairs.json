@@ -1,8 +1,0 @@
-{
-  "parent": "minecraft:block/stairs",
-  "textures": {
-    "bottom": "magicandtaboo:block/polished_gilded_marble",
-    "side": "magicandtaboo:block/polished_gilded_marble",
-    "top": "magicandtaboo:block/polished_gilded_marble"
-  }
-}

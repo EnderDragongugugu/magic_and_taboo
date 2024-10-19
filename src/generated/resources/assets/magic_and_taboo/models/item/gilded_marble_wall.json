@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/wall_inventory",
+  "textures": {
+    "wall": "magic_and_taboo:block/gilded_marble"
+  }
+}

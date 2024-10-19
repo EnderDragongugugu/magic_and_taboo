@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/button",
+  "textures": {
+    "texture": "magic_and_taboo:block/fir/fir_planks"
+  }
+}

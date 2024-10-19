@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "#": {
+      "item": "magic_and_taboo:gilded_marble_slab"
+    }
+  },
+  "pattern": [
+    "#",
+    "#"
+  ],
+  "result": {
+    "item": "magic_and_taboo:chiseled_gilded_marble"
+  },
+  "show_notification": true
+}

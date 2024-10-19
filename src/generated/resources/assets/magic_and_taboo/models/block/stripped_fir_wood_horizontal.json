@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cube_column_horizontal",
+  "textures": {
+    "end": "magic_and_taboo:block/fir/stripped_fir_log",
+    "side": "magic_and_taboo:block/fir/stripped_fir_log"
+  }
+}

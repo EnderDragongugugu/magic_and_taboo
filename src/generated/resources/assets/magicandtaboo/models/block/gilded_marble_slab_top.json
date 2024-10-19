@@ -1,8 +1,0 @@
-{
-  "parent": "minecraft:block/slab_top",
-  "textures": {
-    "bottom": "magicandtaboo:block/gilded_marble",
-    "side": "magicandtaboo:block/gilded_marble",
-    "top": "magicandtaboo:block/gilded_marble"
-  }
-}

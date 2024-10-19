@@ -2,7 +2,7 @@
   "type": "minecraft:stonecutting",
   "count": 1,
   "ingredient": {
-    "item": "magicandtaboo:gilded_marble"
+    "item": "magic_and_taboo:gilded_marble"
   },
-  "result": "magicandtaboo:polished_gilded_marble_stairs"
+  "result": "magic_and_taboo:polished_gilded_marble_stairs"
 }

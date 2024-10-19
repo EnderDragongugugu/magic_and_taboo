@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/door_bottom_right",
+  "textures": {
+    "bottom": "magic_and_taboo:block/fir/fir_door_bottom",
+    "top": "magic_and_taboo:block/fir/fir_door_top"
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "building",
+  "group": "planks",
+  "ingredients": [
+    {
+      "tag": "magic_and_taboo:fir_logs"
+    }
+  ],
+  "result": {
+    "count": 4,
+    "item": "magic_and_taboo:fir_planks"
+  }
+}

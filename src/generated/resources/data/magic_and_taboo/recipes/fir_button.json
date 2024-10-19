@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "redstone",
+  "group": "wooden_button",
+  "ingredients": [
+    {
+      "item": "magic_and_taboo:fir_planks"
+    }
+  ],
+  "result": {
+    "item": "magic_and_taboo:fir_button"
+  }
+}

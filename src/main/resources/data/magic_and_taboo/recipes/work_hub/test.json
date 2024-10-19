@@ -1,0 +1,21 @@
+{
+  "type": "magic_and_taboo:work_hub",
+  "work_time": 200,
+  "experience": 100,
+  "requireMortar": true,
+  "ingredients": [
+    {
+      "item": "minecraft:apple"
+    }
+  ],
+  "blaze_burner": {
+    "tag": "magic_and_taboo:blaze_burners"
+  },
+  "container": {
+    "item": "minecraft:apple"
+  },
+  "result": {
+    "item": "minecraft:golden_apple",
+    "count": 1
+  }
+}

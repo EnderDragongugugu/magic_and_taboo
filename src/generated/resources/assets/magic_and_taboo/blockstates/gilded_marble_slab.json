@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "magic_and_taboo:block/gilded_marble_slab"
+    },
+    "type=double": {
+      "model": "magic_and_taboo:block/gilded_marble"
+    },
+    "type=top": {
+      "model": "magic_and_taboo:block/gilded_marble_slab_top"
+    }
+  }
+}

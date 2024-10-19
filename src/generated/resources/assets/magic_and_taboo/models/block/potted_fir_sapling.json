@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/flower_pot_cross",
+  "render_type": "minecraft:cutout",
+  "textures": {
+    "plant": "magic_and_taboo:block/fir/fir_sapling"
+  }
+}

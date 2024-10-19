@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/handheld",
+  "textures": {
+    "layer0": "magic_and_taboo:item/bloody_sacrificial_dagger"
+  }
+}

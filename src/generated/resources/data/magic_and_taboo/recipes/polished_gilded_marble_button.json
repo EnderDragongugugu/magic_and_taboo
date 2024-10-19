@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "redstone",
+  "ingredients": [
+    {
+      "item": "magic_and_taboo:polished_gilded_marble"
+    }
+  ],
+  "result": {
+    "item": "magic_and_taboo:polished_gilded_marble_button"
+  }
+}

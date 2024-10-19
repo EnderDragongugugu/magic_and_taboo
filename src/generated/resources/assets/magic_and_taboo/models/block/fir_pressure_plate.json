@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/pressure_plate_up",
+  "textures": {
+    "texture": "magic_and_taboo:block/fir/fir_planks"
+  }
+}

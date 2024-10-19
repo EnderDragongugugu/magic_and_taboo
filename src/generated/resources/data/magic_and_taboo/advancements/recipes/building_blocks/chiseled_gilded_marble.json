@@ -1,0 +1,35 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_gilded_marble_slab": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "magic_and_taboo:gilded_marble_slab"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "magic_and_taboo:chiseled_gilded_marble"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_gilded_marble_slab",
+      "has_the_recipe"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "magic_and_taboo:chiseled_gilded_marble"
+    ]
+  },
+  "sends_telemetry_event": false
+}
