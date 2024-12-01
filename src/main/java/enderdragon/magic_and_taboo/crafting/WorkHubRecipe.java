@@ -27,6 +27,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 
+
 public record WorkHubRecipe(
         ImmutableList<Ingredient> ingredients,
         ResourceLocation id,
@@ -66,8 +67,12 @@ public record WorkHubRecipe(
 
     @Override
     public boolean matches(WorkHubBlockEntity hub, Level level) {
-        if (this.requireMortar && !hub.getStackInSlot(0).is(MATItemTags.MORTARS)) return false;
-        if (!this.burner.isEmpty() && !this.burner.test(hub.getStackInSlot(1))) return false;
+        if (this.requireMortar != hub.getStackInSlot(0).is(MATItemTags.MORTARS)) return false;
+        if (this.burner.isEmpty() && this.burner.isEmpty() != this.burner.test(hub.getStackInSlot(1))) {
+            return false;
+        } else if (!this.burner.test(hub.getStackInSlot(1))) {
+            return false;
+        }
         var inputs = new ArrayList<ItemStack>(6);
         for (int i = 2; i <= 7; ++i) {
             var stack = hub.getItem(i);
@@ -76,7 +81,6 @@ public record WorkHubRecipe(
             }
         }
         boolean temp = RecipeMatcher.findMatches(inputs, this.ingredients) != null;
-        LOGGER.debug("test recipe {}: {}", this.id, temp);
         return temp;
     }
 
@@ -172,4 +176,5 @@ public record WorkHubRecipe(
             buffer.writeVarInt(recipe.workTime);
         }
     }
+
 }

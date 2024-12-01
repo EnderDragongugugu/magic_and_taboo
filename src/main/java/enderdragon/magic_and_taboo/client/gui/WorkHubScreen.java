@@ -1,6 +1,7 @@
 package enderdragon.magic_and_taboo.client.gui;
 
 import enderdragon.magic_and_taboo.MagicAndTabooMod;
+import enderdragon.magic_and_taboo.block.entity.WorkHubBlockEntity;
 import enderdragon.magic_and_taboo.inventory.WorkHubMenu;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
@@ -24,15 +25,11 @@ public class WorkHubScreen extends AbstractContainerScreen<WorkHubMenu> {
 
     @Override
     protected void renderBg(GuiGraphics graphics, float partialTick, int mouseX, int mouseY) {
+        WorkHubBlockEntity hub = this.menu.workHub;
         int i = this.leftPos;
         int j = this.topPos;
         graphics.blit(TEXTURE, i, j, 0, 0, this.imageWidth, this.imageHeight);
-//        if (this.menu.isLit()) {
-//            int k = this.menu.getLitProgress();
-//            pGuiGraphics.blit(TEXTURE, i + 56, j + 36 + 12 - k, 176, 12 - k, 14, k + 1);
-//        }
-//
-//        int l = this.menu.getBurnProgress();
-//        pGuiGraphics.blit(TEXTURE, i + 79, j + 34, 176, 14, l + 1, 16);
+        int k = (int) ((float) hub.time.get() / (float) hub.timeTotal.get() * 24);
+        graphics.blit(TEXTURE, i + 78, j + 19, 176, 0, k + 1, 16);
     }
 }

@@ -1,5 +1,7 @@
 package enderdragon.magic_and_taboo.block.entity;
 
+import enderdragon.magic_and_taboo.MagicAndTabooMod;
+import enderdragon.magic_and_taboo.crafting.WorkHubRecipe;
 import enderdragon.magic_and_taboo.init.MATBlockEntityTypes;
 import enderdragon.magic_and_taboo.init.MATRecipeTypes;
 import enderdragon.magic_and_taboo.inventory.WorkHubMenu;
@@ -9,6 +11,8 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.Container;
 import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.entity.player.Inventory;
@@ -31,6 +35,7 @@ import static net.minecraftforge.items.ItemHandlerHelper.copyStackWithSize;
 public class WorkHubBlockEntity extends BaseContainerBlockEntity implements IItemHandlerModifiable {
     public final static int MAX_SIZE = 11;
     private static final Logger LOGGER = LogManager.getLogger();
+    private WorkHubRecipe lastRecipe;
 
     public final DataSlot time = new DataSlotImpl();
     public final DataSlot timeTotal = new DataSlotImpl();
@@ -42,25 +47,138 @@ public class WorkHubBlockEntity extends BaseContainerBlockEntity implements IIte
     }
 
     public static void tick(Level level, BlockPos pos, BlockState state, WorkHubBlockEntity hub) {
-        var recipe = hub.checker.getRecipeFor(hub, level).orElse(null);
-        LOGGER.info("tick hub: {}", recipe == null ? "null" : recipe.getId());
+        WorkHubRecipe recipe = (WorkHubRecipe) hub.checker.getRecipeFor(hub, level).orElse(null);
+        if (recipe != null) {
+            ItemStack resultItem = recipe.getResultItem(level.registryAccess());
+            if (hub.canOutput(resultItem, hub.getStackInSlot(8))) {
+                hub.addProcess(recipe);
+//                if (level.isClientSide) {
+//                    hub.playParticle(recipe);
+//                }
+                if (hub.time.get() == hub.timeTotal.get()) {
+                    hub.addItem(8, resultItem, resultItem.getCount());
+                    hub.removeItemStack(recipe);
+                    hub.time.set(0);
+                    hub.lastRecipe = recipe;
+                }
+            }
+        } else {
+            hub.time.set(0);
+        }
+        if (hub.lastRecipe != null) {
+            hub.output(hub.lastRecipe);
+        }
     }
 
+//    protected void playParticle(WorkHubRecipe recipe) {
+////        if (level != null && !recipe.burner().isEmpty()) {
+//        var pos = this.getBlockPos();
+//        var facing = this.getBlockState().getValue(HorizontalDirectionalBlock.FACING);
+//        level.addParticle(ParticleTypes.SMOKE, pos.getX() + 0.08, pos.getY() + 1.3125, pos.getZ() + 0.85, 0.0, 0.1, 0.0);
+////            switch (facing) {
+////                case NORTH ->
+////                        level.addParticle(ParticleTypes.SMOKE, pos.getX() + 0.5, pos.getY() + 1.76, pos.getZ() + 0.5, 0.0, 0.1, 0.0);
+////                case SOUTH ->
+////                        level.addParticle(ParticleTypes.SMOKE, pos.getX() + 0.5, pos.getY() + 1.76, pos.getZ() + 0.5, 0.0, 0.1, 0.0);
+////                case EAST ->
+////                        level.addParticle(ParticleTypes.SMOKE, pos.getX() + 0.5, pos.getY() + 1.76, pos.getZ() + 0.5, 0.0, 0.1, 0.0);
+////                case WEST ->
+////                        level.addParticle(ParticleTypes.SMOKE, pos.getX() + 0.5, pos.getY() + 1.76, pos.getZ() + 0.5, 0.0, 0.1, 0.0);
+////            }
+//
+////        }
+//    }
+
+    protected void addProcess(WorkHubRecipe recipe) {
+        timeTotal.set(recipe.workTime());
+        time.set(time.get() + 1);
+    }
+
+    protected void removeItemStack(WorkHubRecipe recipe) {
+        if (recipe.requireMortar()) {
+            getStackInSlot(0).setDamageValue(getStackInSlot(0).getDamageValue() + 1);
+        }
+        if (!recipe.burner().isEmpty()) {
+            getStackInSlot(1).setDamageValue(getStackInSlot(1).getDamageValue() + 1);
+        }
+        for (int i = 2; i <= 7; i++) {
+            getStackInSlot(i).shrink(1);
+        }
+    }
+
+    protected void output(WorkHubRecipe recipe) {
+        var oldOutput = getStackInSlot(8);
+        var resultItem = recipe.getResultItem(level.registryAccess());
+        var container = recipe.container();
+        var itemStack = getStackInSlot(9);
+        if (container.isEmpty() && !oldOutput.isEmpty()) {
+            oldOutput.shrink(1);
+            addItem(10, resultItem, 1);
+        } else if (!itemStack.isEmpty() && !oldOutput.isEmpty() && container.test(itemStack)) {
+            oldOutput.shrink(1);
+            itemStack.shrink(1);
+            addItem(10, resultItem, 1);
+        }
+    }
+
+    protected void addItem(int slot, ItemStack resultItem, int count) {
+        var itemStack = getStackInSlot(slot);
+        if (itemStack.isEmpty()) {
+            setItem(slot, resultItem.copyWithCount(count));
+        } else {
+            itemStack.grow(1);
+        }
+    }
+
+
+    protected boolean canOutput(ItemStack newItemStack, ItemStack oldItemStack) {
+        if (oldItemStack.isEmpty()) return true;
+        if (newItemStack.is(oldItemStack.getItem())) {
+            return newItemStack.getCount() + oldItemStack.getCount() <= oldItemStack.getMaxStackSize();
+        }
+        return false;
+    }
+
+
     protected void onContentsChanged(int slot) {
-        LOGGER.debug("111");
+    }
+
+    public NonNullList<ItemStack> getItems() {
+        return stacks;
+    }
+
+    public ClientboundBlockEntityDataPacket getUpdatePacket() {
+        return ClientboundBlockEntityDataPacket.create(this);
+    }
+
+    public CompoundTag getUpdateTag() {
+        CompoundTag compoundtag = new CompoundTag();
+        ContainerHelper.saveAllItems(compoundtag, stacks, true);
+        return compoundtag;
     }
 
     @Override
     public void load(CompoundTag tag) {
         super.load(tag);
         stacks = NonNullList.withSize(this.getContainerSize(), ItemStack.EMPTY);
+        time.set(tag.getInt("time"));
+        timeTotal.set(tag.getInt("time_total"));
         ContainerHelper.loadAllItems(tag, stacks);
+        ResourceLocation id = MagicAndTabooMod.makeId(tag.getString("last_recipe"));
+        if (level != null) {
+            lastRecipe = (WorkHubRecipe) level.getRecipeManager().byKey(id).orElse(null);
+        }
     }
 
     @Override
     protected void saveAdditional(CompoundTag tag) {
         super.saveAdditional(tag);
         ContainerHelper.saveAllItems(tag, stacks);
+        tag.putInt("time", time.get());
+        tag.putInt("time_total", timeTotal.get());
+        if (this.lastRecipe != null) {
+            tag.putString("last_recipe", this.lastRecipe.getId().getPath());
+        }
     }
 
     @Override

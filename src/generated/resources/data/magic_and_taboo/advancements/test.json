@@ -1,0 +1,30 @@
+{
+  "parent": "magic_and_taboo:root",
+  "criteria": {
+    "dummy": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "display": {
+    "announce_to_chat": false,
+    "description": {
+      "translate": "advancement.magic_and_taboo.root.desc"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "magic_and_taboo:blaze_burner",
+      "nbt": "{Damage:0}"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "advancement.magic_and_taboo.root"
+    }
+  },
+  "requirements": [
+    [
+      "dummy"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

@@ -33,5 +33,6 @@ public class DataGenerator {
         generator.addProvider(true, new LootTableProvider(output, Set.of(), List.of(
                 new LootTableProvider.SubProviderEntry(MATBlockLootProvider::new, LootContextParamSets.BLOCK)
         )));
+        generator.addProvider(true, new MATAdvancementProvider(output, registry, helper));
     }
 }

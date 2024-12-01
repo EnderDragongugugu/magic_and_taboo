@@ -4,6 +4,8 @@ import enderdragon.magic_and_taboo.MagicAndTabooMod;
 import enderdragon.magic_and_taboo.capability.IPurenessStorage;
 import enderdragon.magic_and_taboo.client.gui.MercuryToxinsOverlay;
 import enderdragon.magic_and_taboo.client.gui.WorkHubScreen;
+import enderdragon.magic_and_taboo.client.render.WorkHubRender;
+import enderdragon.magic_and_taboo.init.MATBlockEntityTypes;
 import enderdragon.magic_and_taboo.init.MATBlocks;
 import enderdragon.magic_and_taboo.init.MATItems;
 import enderdragon.magic_and_taboo.init.MATMenuTypes;
@@ -14,6 +16,7 @@ import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.client.event.ModelEvent;
 import net.minecraftforge.client.event.RegisterGuiOverlaysEvent;
 import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
@@ -32,6 +35,13 @@ public class MATClient {
             MenuScreens.register(MATMenuTypes.WORK_HUB.get(), WorkHubScreen::new);
         });
     }
+
+
+    @SubscribeEvent
+    public static void onRegisterRenderers(EntityRenderersEvent.RegisterRenderers event) {
+        event.registerBlockEntityRenderer(MATBlockEntityTypes.WORK_HUB.get(), WorkHubRender::new);
+    }
+
 
     @SubscribeEvent
     public static void modelBake(ModelEvent.ModifyBakingResult event) {

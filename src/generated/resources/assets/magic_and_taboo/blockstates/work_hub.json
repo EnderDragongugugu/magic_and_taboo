@@ -1,34 +1,34 @@
 {
   "variants": {
     "facing=east,waterlogged=false": {
-      "model": "magic_and_taboo:block/work_hub"
+      "model": "magic_and_taboo:block/work_hub",
+      "y": 270
     },
     "facing=east,waterlogged=true": {
-      "model": "magic_and_taboo:block/work_hub"
+      "model": "magic_and_taboo:block/work_hub",
+      "y": 270
     },
     "facing=north,waterlogged=false": {
       "model": "magic_and_taboo:block/work_hub",
-      "y": 270
+      "y": 180
     },
     "facing=north,waterlogged=true": {
       "model": "magic_and_taboo:block/work_hub",
-      "y": 270
+      "y": 180
     },
     "facing=south,waterlogged=false": {
-      "model": "magic_and_taboo:block/work_hub",
-      "y": 90
+      "model": "magic_and_taboo:block/work_hub"
     },
     "facing=south,waterlogged=true": {
-      "model": "magic_and_taboo:block/work_hub",
-      "y": 90
+      "model": "magic_and_taboo:block/work_hub"
     },
     "facing=west,waterlogged=false": {
       "model": "magic_and_taboo:block/work_hub",
-      "y": 180
+      "y": 90
     },
     "facing=west,waterlogged=true": {
       "model": "magic_and_taboo:block/work_hub",
-      "y": 180
+      "y": 90
     }
   }
 }

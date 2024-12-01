@@ -1,0 +1,14 @@
+{
+  "type": "magic_and_taboo:work_hub",
+  "work_time": 400,
+  "experience": 100,
+  "ingredients": [
+    {
+      "item": "minecraft:stick"
+    }
+  ],
+  "result": {
+    "item": "minecraft:golden_apple",
+    "count": 1
+  }
+}

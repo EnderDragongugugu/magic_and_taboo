@@ -7,7 +7,9 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.ResultSlot;
 import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.inventory.TransientCraftingContainer;
 import net.minecraft.world.item.ItemStack;
 
 import javax.annotation.Nullable;
@@ -37,9 +39,9 @@ public class WorkHubMenu extends AbstractContainerMenu {
                 this.addSlot(new Slot(workHub, ++slot, 38 + i * 18, 17 + 18 * j));
             }
         }
-        this.addSlot(new Slot(workHub, 8, 117, 19));
+        this.addSlot(new ResultSlot(playerInventory.player, new TransientCraftingContainer(this, 1, 1), workHub, 8, 117, 19));
         this.addSlot(new Slot(workHub, 9, 86, 53));
-        this.addSlot(new Slot(workHub, 10, 136, 53));
+        this.addSlot(new ResultSlot(playerInventory.player, new TransientCraftingContainer(this, 1, 1), workHub, 10, 136, 53));
         for (int i = 0; i < 3; ++i) {
             for (int j = 0; j < 9; ++j) {
                 this.addSlot(new Slot(playerInventory, j + i * 9 + 9, 8 + j * 18, 84 + i * 18));

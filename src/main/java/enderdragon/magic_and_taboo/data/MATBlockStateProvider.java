@@ -25,7 +25,7 @@ public class MATBlockStateProvider extends BlockStateProvider {
         this.horizontalBlock(
                 MATBlocks.WORK_HUB.get(),
                 new ModelFile.UncheckedModelFile(MATBlocks.WORK_HUB.getId().withPrefix("block/")),
-                90
+                360
         );
     }
 

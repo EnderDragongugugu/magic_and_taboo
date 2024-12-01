@@ -55,5 +55,8 @@
   "tooltip.magic_and_taboo.blood_bottle_entity_name": "当前装有§4%s§f的血液",
   "tooltip.magic_and_taboo.sacrificial_dagger_warn": "它似乎在渴望鲜血",
   //  container
-  "container.magic_and_taboo.work_hub": "联合工作站"
+  "container.magic_and_taboo.work_hub": "联合工作站",
+  //  advancement
+  "advancement.magic_and_taboo.root": "\\ LPaicen /",
+  "advancement.magic_and_taboo.root.desc": "获取研钵来开启全新冒险吧!"
 }
