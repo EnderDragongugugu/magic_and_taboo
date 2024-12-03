@@ -1,11 +1,11 @@
 package enderdragon.magic_and_taboo.block.entity;
 
-import enderdragon.magic_and_taboo.MagicAndTabooMod;
 import enderdragon.magic_and_taboo.crafting.WorkHubRecipe;
 import enderdragon.magic_and_taboo.init.MATBlockEntityTypes;
 import enderdragon.magic_and_taboo.init.MATRecipeTypes;
 import enderdragon.magic_and_taboo.inventory.WorkHubMenu;
 import enderdragon.magic_and_taboo.tag.MATItemTags;
+import enderdragon.magic_and_taboo.util.ContainerUtil;
 import enderdragon.magic_and_taboo.util.DataSlotImpl;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.NonNullList;
@@ -18,9 +18,7 @@ import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
-import net.minecraft.world.inventory.DataSlot;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
@@ -37,27 +35,24 @@ public class WorkHubBlockEntity extends BaseContainerBlockEntity implements IIte
     private static final Logger LOGGER = LogManager.getLogger();
     private WorkHubRecipe lastRecipe;
 
-    public final DataSlot time = new DataSlotImpl();
-    public final DataSlot timeTotal = new DataSlotImpl();
+    public final DataSlotImpl time = new DataSlotImpl();
+    public final DataSlotImpl timeTotal = new DataSlotImpl();
     private NonNullList<ItemStack> stacks = NonNullList.withSize(MAX_SIZE, ItemStack.EMPTY);
-    private final RecipeManager.CachedCheck<WorkHubBlockEntity, ? extends Recipe<?>> checker = RecipeManager.createCheck(MATRecipeTypes.WORK_HUB_RECIPE_TYPE.get());
+    private final RecipeManager.CachedCheck<WorkHubBlockEntity, WorkHubRecipe> checker = RecipeManager.createCheck(MATRecipeTypes.WORK_HUB_RECIPE_TYPE.get());
 
     public WorkHubBlockEntity(BlockPos pos, BlockState state) {
         super(MATBlockEntityTypes.WORK_HUB.get(), pos, state);
     }
 
     public static void tick(Level level, BlockPos pos, BlockState state, WorkHubBlockEntity hub) {
-        WorkHubRecipe recipe = (WorkHubRecipe) hub.checker.getRecipeFor(hub, level).orElse(null);
+        var recipe = hub.checker.getRecipeFor(hub, level).orElse(null);
         if (recipe != null) {
-            ItemStack resultItem = recipe.getResultItem(level.registryAccess());
-            if (hub.canOutput(resultItem, hub.getStackInSlot(8))) {
-                hub.addProcess(recipe);
-//                if (level.isClientSide) {
-//                    hub.playParticle(recipe);
-//                }
-                if (hub.time.get() == hub.timeTotal.get()) {
-                    hub.addItem(8, resultItem, resultItem.getCount());
-                    hub.removeItemStack(recipe);
+            var result = recipe.getResultItem(level.registryAccess());
+            if (ContainerUtil.canMerge(hub.getStackInSlot(8), result)) {
+                hub.timeTotal.set(recipe.workTime());
+                if (hub.time.increase() == hub.timeTotal.get()) {
+                    hub.addItem(8, result, result.getCount());
+                    hub.executeRecipe(recipe);
                     hub.time.set(0);
                     hub.lastRecipe = recipe;
                 }
@@ -89,20 +84,18 @@ public class WorkHubBlockEntity extends BaseContainerBlockEntity implements IIte
 ////        }
 //    }
 
-    protected void addProcess(WorkHubRecipe recipe) {
-        timeTotal.set(recipe.workTime());
-        time.set(time.get() + 1);
-    }
-
-    protected void removeItemStack(WorkHubRecipe recipe) {
+    protected void executeRecipe(WorkHubRecipe recipe) {
+        ItemStack temp;
         if (recipe.requireMortar()) {
-            getStackInSlot(0).setDamageValue(getStackInSlot(0).getDamageValue() + 1);
+            temp = this.stacks.get(0);
+            temp.setDamageValue(temp.getDamageValue() + 1);
         }
         if (!recipe.burner().isEmpty()) {
-            getStackInSlot(1).setDamageValue(getStackInSlot(1).getDamageValue() + 1);
+            temp = this.stacks.get(1);
+            temp.setDamageValue(temp.getDamageValue() + 1);
         }
         for (int i = 2; i <= 7; i++) {
-            getStackInSlot(i).shrink(1);
+            this.stacks.get(i).shrink(1);
         }
     }
 
@@ -130,31 +123,20 @@ public class WorkHubBlockEntity extends BaseContainerBlockEntity implements IIte
         }
     }
 
-
-    protected boolean canOutput(ItemStack newItemStack, ItemStack oldItemStack) {
-        if (oldItemStack.isEmpty()) return true;
-        if (newItemStack.is(oldItemStack.getItem())) {
-            return newItemStack.getCount() + oldItemStack.getCount() <= oldItemStack.getMaxStackSize();
-        }
-        return false;
-    }
-
-
-    protected void onContentsChanged(int slot) {
-    }
+    protected void onContentsChanged(int slot) {}
 
     public NonNullList<ItemStack> getItems() {
-        return stacks;
+        return this.stacks;
     }
 
+    @Override
     public ClientboundBlockEntityDataPacket getUpdatePacket() {
         return ClientboundBlockEntityDataPacket.create(this);
     }
 
+    @Override
     public CompoundTag getUpdateTag() {
-        CompoundTag compoundtag = new CompoundTag();
-        ContainerHelper.saveAllItems(compoundtag, stacks, true);
-        return compoundtag;
+        return ContainerHelper.saveAllItems(new CompoundTag(), this.stacks, true);
     }
 
     @Override
@@ -164,9 +146,11 @@ public class WorkHubBlockEntity extends BaseContainerBlockEntity implements IIte
         time.set(tag.getInt("time"));
         timeTotal.set(tag.getInt("time_total"));
         ContainerHelper.loadAllItems(tag, stacks);
-        ResourceLocation id = MagicAndTabooMod.makeId(tag.getString("last_recipe"));
-        if (level != null) {
-            lastRecipe = (WorkHubRecipe) level.getRecipeManager().byKey(id).orElse(null);
+        if (this.level == null) return;
+        var id = ResourceLocation.tryParse(tag.getString("last_recipe"));
+        if (id == null) return;
+        if (this.level.getRecipeManager().byKey(id).orElse(null) instanceof WorkHubRecipe recipe) {
+            this.lastRecipe = recipe;
         }
     }
 
@@ -177,7 +161,7 @@ public class WorkHubBlockEntity extends BaseContainerBlockEntity implements IIte
         tag.putInt("time", time.get());
         tag.putInt("time_total", timeTotal.get());
         if (this.lastRecipe != null) {
-            tag.putString("last_recipe", this.lastRecipe.getId().getPath());
+            tag.putString("last_recipe", this.lastRecipe.getId().toString());
         }
     }
 

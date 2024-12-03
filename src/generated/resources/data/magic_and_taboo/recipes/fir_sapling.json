@@ -1,0 +1,23 @@
+{
+  "type": "magic_and_taboo:work_hub",
+  "blaze_burner": {
+    "item": "magic_and_taboo:blaze_blast_burner"
+  },
+  "container": {
+    "item": "minecraft:bucket"
+  },
+  "experience": 10,
+  "ingredients": [
+    {
+      "item": "minecraft:dragon_egg"
+    },
+    {
+      "item": "minecraft:dragon_head"
+    }
+  ],
+  "require_mortar": false,
+  "result": {
+    "item": "magic_and_taboo:fir_sapling"
+  },
+  "work_time": 100
+}

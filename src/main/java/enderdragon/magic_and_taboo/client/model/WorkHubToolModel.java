@@ -27,9 +27,11 @@ public class WorkHubToolModel extends Model {
     private final ModelPart output_2;
     private final ModelPart output_3;
     private final ModelPart container;
+    private final ModelPart root;
 
     public WorkHubToolModel(ModelPart root) {
         super(RenderType::entitySolid);
+        this.root = root;
         this.blaze_burner = root.getChild("blaze_burner");
         this.table = root.getChild("table");
         this.mortar = root.getChild("mortar");
@@ -132,20 +134,7 @@ public class WorkHubToolModel extends Model {
 
     @Override
     public void renderToBuffer(PoseStack poseStack, VertexConsumer vertexConsumer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
-        blaze_burner.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
-        table.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
-        mortar.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
-        item_stack_list.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
-        item_stack_1.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
-        item_stack_4.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
-        item_stack_2.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
-        item_stack_3.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
-        item_stack_6.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
-        item_stack_5.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
-        output_1.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
-        output_2.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
-        output_3.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
-        container.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
+        root.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
     }
 
     public void setOtherGroupVisible(String name, boolean bool) {

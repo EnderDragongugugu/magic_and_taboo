@@ -27,7 +27,6 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 
-
 public record WorkHubRecipe(
         ImmutableList<Ingredient> ingredients,
         ResourceLocation id,
@@ -80,8 +79,7 @@ public record WorkHubRecipe(
                 inputs.add(stack);
             }
         }
-        boolean temp = RecipeMatcher.findMatches(inputs, this.ingredients) != null;
-        return temp;
+        return RecipeMatcher.findMatches(inputs, this.ingredients) != null;
     }
 
     @Override
@@ -137,7 +135,7 @@ public record WorkHubRecipe(
                     GsonHelper.getAsString(recipe, "group", ""),
                     GsonHelper.getAsFloat(recipe, "experience", 0.0F),
                     GsonHelper.getAsInt(recipe, "work_time", 200),
-                    GsonHelper.getAsBoolean(recipe, "requireMortar", false)
+                    GsonHelper.getAsBoolean(recipe, "require_mortar", false)
             );
         }
 

@@ -36,7 +36,6 @@ public class MATClient {
         });
     }
 
-
     @SubscribeEvent
     public static void onRegisterRenderers(EntityRenderersEvent.RegisterRenderers event) {
         event.registerBlockEntityRenderer(MATBlockEntityTypes.WORK_HUB.get(), WorkHubRender::new);

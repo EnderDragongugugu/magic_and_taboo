@@ -52,47 +52,34 @@ public class WorkHubBlock extends BaseEntityBlock implements SimpleWaterloggedBl
         );
     }
 
-    protected void saveToItem(ItemStack pStack, BlockEntityType<?> pBlockEntityType, CompoundTag pBlockEntityData) {
-        if (pBlockEntityData.isEmpty()) {
-            pStack.removeTagKey("BlockEntityTag");
-        } else {
-            ListTag list = new ListTag();
-            if (pBlockEntityData.contains("Items", 9)) {
-                ListTag itemList = pBlockEntityData.getList("Items", 10);
-                for (int i = 0; i < itemList.size(); i++) {
-                    CompoundTag itemStack = itemList.getCompound(i);
-                    if (itemStack.getByte("Slot") == 8) list.add(itemStack);
-                }
+    @Override
+    public void playerWillDestroy(Level level, BlockPos pos, BlockState state, Player player) {
+        if (!level.isClientSide && level.getBlockEntity(pos) instanceof WorkHubBlockEntity hub && !hub.isEmpty()) {
+            var stack = new ItemStack(MATBlocks.WORK_HUB.get());
+            var content = hub.getStackInSlot(8);
+            if (!content.isEmpty()) {
+                var data = new CompoundTag();
+                var list = new ListTag();
+                var item = content.save(new CompoundTag());
+                item.putByte("Slot", (byte) 8);
+                list.add(item);
+                data.put("Items", list);
+                BlockEntity.addEntityType(data, hub.getType());
+                stack.addTagElement("BlockEntityTag", data);
             }
-            if (!list.isEmpty()) {
-                pBlockEntityData.put("Items", list);
-                BlockEntity.addEntityType(pBlockEntityData, pBlockEntityType);
-                pStack.addTagElement("BlockEntityTag", pBlockEntityData);
+            if (hub.hasCustomName()) {
+                stack.setHoverName(hub.getCustomName());
             }
+            var entity = new ItemEntity(level, pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D, stack);
+            entity.setDefaultPickUpDelay();
+            level.addFreshEntity(entity);
         }
+        super.playerWillDestroy(level, pos, state, player);
     }
 
     @Override
-    public void playerWillDestroy(Level pLevel, BlockPos pPos, BlockState pState, Player pPlayer) {
-        BlockEntity blockEntity = pLevel.getBlockEntity(pPos);
-        if (blockEntity instanceof WorkHubBlockEntity hub) {
-            if (pPlayer.isCreative() && !pLevel.isClientSide && !hub.isEmpty()) {
-                ItemStack itemStack = new ItemStack(MATBlocks.WORK_HUB.get());
-                saveToItem(itemStack, hub.getType(), hub.saveWithoutMetadata());
-                if (hub.hasCustomName()) {
-                    itemStack.setHoverName(hub.getCustomName());
-                }
-                ItemEntity itemEntity = new ItemEntity(pLevel, (double) pPos.getX() + 0.5D, (double) pPos.getY() + 0.5D, (double) pPos.getZ() + 0.5D, itemStack);
-                itemEntity.setDefaultPickUpDelay();
-                pLevel.addFreshEntity(itemEntity);
-            }
-        }
-        super.playerWillDestroy(pLevel, pPos, pState, pPlayer);
-    }
+    public void appendHoverText(ItemStack stack, @Nullable BlockGetter level, List<Component> tooltips, TooltipFlag flag) {
 
-    @Override
-    public void appendHoverText(ItemStack pStack, @Nullable BlockGetter pLevel, List<Component> pTooltip, TooltipFlag pFlag) {
-        super.appendHoverText(pStack, pLevel, pTooltip, pFlag);
     }
 
     @SuppressWarnings("deprecation")
@@ -168,7 +155,7 @@ public class WorkHubBlock extends BaseEntityBlock implements SimpleWaterloggedBl
                 for (int i = 0; i < container.getContainerSize(); i++) {
                     if (i != 8) {
                         ItemStack itemStack = container.getItem(i);
-                        Containers.dropItemStack(level, (double) pos.getX(), (double) pos.getY(), (double) pos.getZ(), itemStack);
+                        Containers.dropItemStack(level, pos.getX(), pos.getY(), pos.getZ(), itemStack);
                     }
                 }
                 level.updateNeighbourForOutputSignal(pos, this);
@@ -180,6 +167,7 @@ public class WorkHubBlock extends BaseEntityBlock implements SimpleWaterloggedBl
     @Nullable
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type) {
+        if (level.isClientSide) return null;
         return createTickerHelper(type, MATBlockEntityTypes.WORK_HUB.get(), WorkHubBlockEntity::tick);
     }
 }

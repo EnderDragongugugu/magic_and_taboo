@@ -1,5 +1,6 @@
 package enderdragon.magic_and_taboo.data;
 
+import enderdragon.magic_and_taboo.data.recipe.WorkHubRecipeBuilder;
 import enderdragon.magic_and_taboo.init.MATBlocks;
 import enderdragon.magic_and_taboo.init.MATItems;
 import enderdragon.magic_and_taboo.tag.MATItemTags;
@@ -8,6 +9,7 @@ import net.minecraft.data.PackOutput;
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.data.recipes.RecipeCategory;
 import net.minecraft.data.recipes.RecipeProvider;
+import net.minecraft.world.item.Items;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Consumer;
@@ -65,6 +67,12 @@ public class MATRecipeProvider extends RecipeProvider {
         stonecutterResultFromBase(writer, RecipeCategory.BUILDING_BLOCKS, MATBlocks.POLISHED_GILDED_MARBLE_STAIRS.get(), MATBlocks.POLISHED_GILDED_MARBLE.get());
         stonecutterResultFromBase(writer, RecipeCategory.DECORATIONS, MATBlocks.POLISHED_GILDED_MARBLE_WALL.get(), MATBlocks.POLISHED_GILDED_MARBLE.get());
         stonecutterResultFromBase(writer, RecipeCategory.BUILDING_BLOCKS, MATBlocks.CHISELED_GILDED_MARBLE.get(), MATBlocks.POLISHED_GILDED_MARBLE.get());
-
+        new WorkHubRecipeBuilder(false, 100, 10, MATItems.FIR_SAPLING.get(), 1)
+                .requires(Items.DRAGON_EGG)
+                .requires(Items.DRAGON_HEAD)
+                .withBlazeBurner(MATItems.BLAZE_BLAST_BURNER.get())
+                .withContainer(Items.BUCKET)
+                .unlockedBy("has_material", has(MATItems.BLAZE_BLAST_BURNER.get()))
+                .save(writer);
     }
 }

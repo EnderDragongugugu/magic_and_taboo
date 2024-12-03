@@ -2,7 +2,7 @@
   "type": "magic_and_taboo:work_hub",
   "work_time": 200,
   "experience": 100,
-  "requireMortar": true,
+  "require_mortar": true,
   "ingredients": [
     {
       "item": "minecraft:apple"
