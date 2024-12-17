@@ -1,10 +1,7 @@
 package enderdragon.magic_and_taboo.init;
 
 import enderdragon.magic_and_taboo.MagicAndTabooMod;
-import enderdragon.magic_and_taboo.item.BloodBottle;
-import enderdragon.magic_and_taboo.item.FuelBlockItem;
-import enderdragon.magic_and_taboo.item.MATHangingSignItem;
-import enderdragon.magic_and_taboo.item.MATSignItem;
+import enderdragon.magic_and_taboo.item.*;
 import enderdragon.magic_and_taboo.item.equipment.SacrificialDagger;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
@@ -93,7 +90,7 @@ public class MATItems {
             new BlockItem(MATBlocks.MERCURY_ORE.get(), new Properties())
     );
     public static final RegistryObject<BlockItem> WORK_HUB = BLOCKS.register(REGISTRY, "work_hub", () ->
-            new BlockItem(MATBlocks.WORK_HUB.get(), new Properties())
+            new WorkHubBlockItem(MATBlocks.WORK_HUB.get(), new Properties())
     );
     public static final RegistryObject<BlockItem> FIR_LEAVES = BLOCKS.register(REGISTRY, "fir_leaves", () ->
             new BlockItem(MATBlocks.FIR_LEAVES.get(), new Properties())

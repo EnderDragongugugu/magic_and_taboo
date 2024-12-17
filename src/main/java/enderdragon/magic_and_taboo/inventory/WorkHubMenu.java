@@ -39,7 +39,7 @@ public class WorkHubMenu extends AbstractContainerMenu {
                 this.addSlot(new Slot(workHub, ++slot, 38 + i * 18, 17 + 18 * j));
             }
         }
-        this.addSlot(new ResultSlot(playerInventory.player, new TransientCraftingContainer(this, 1, 1), workHub, 8, 117, 19));
+        this.addSlot(new CacheItemSlot(workHub, 8, 117, 19));
         this.addSlot(new Slot(workHub, 9, 86, 53));
         this.addSlot(new ResultSlot(playerInventory.player, new TransientCraftingContainer(this, 1, 1), workHub, 10, 136, 53));
         for (int i = 0; i < 3; ++i) {

@@ -4,6 +4,7 @@ import enderdragon.magic_and_taboo.MagicAndTabooMod;
 import enderdragon.magic_and_taboo.capability.IPurenessStorage;
 import enderdragon.magic_and_taboo.client.gui.MercuryToxinsOverlay;
 import enderdragon.magic_and_taboo.client.gui.WorkHubScreen;
+import enderdragon.magic_and_taboo.client.gui.WorkHubTooltip;
 import enderdragon.magic_and_taboo.client.render.WorkHubRender;
 import enderdragon.magic_and_taboo.init.MATBlockEntityTypes;
 import enderdragon.magic_and_taboo.init.MATBlocks;
@@ -18,6 +19,7 @@ import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.client.event.ModelEvent;
+import net.minecraftforge.client.event.RegisterClientTooltipComponentFactoriesEvent;
 import net.minecraftforge.client.event.RegisterGuiOverlaysEvent;
 import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -34,6 +36,11 @@ public class MATClient {
             Sheets.addWoodType(MATBlocks.FIR_WOOD_TYPE);
             MenuScreens.register(MATMenuTypes.WORK_HUB.get(), WorkHubScreen::new);
         });
+    }
+
+    @SubscribeEvent
+    public static void registerClientTooltipComponentFactoriesEvent(RegisterClientTooltipComponentFactoriesEvent event) {
+        event.register(WorkHubTooltip.WorkHubTooltipComponent.class, WorkHubTooltip::new);
     }
 
     @SubscribeEvent

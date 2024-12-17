@@ -67,12 +67,21 @@ public class MATRecipeProvider extends RecipeProvider {
         stonecutterResultFromBase(writer, RecipeCategory.BUILDING_BLOCKS, MATBlocks.POLISHED_GILDED_MARBLE_STAIRS.get(), MATBlocks.POLISHED_GILDED_MARBLE.get());
         stonecutterResultFromBase(writer, RecipeCategory.DECORATIONS, MATBlocks.POLISHED_GILDED_MARBLE_WALL.get(), MATBlocks.POLISHED_GILDED_MARBLE.get());
         stonecutterResultFromBase(writer, RecipeCategory.BUILDING_BLOCKS, MATBlocks.CHISELED_GILDED_MARBLE.get(), MATBlocks.POLISHED_GILDED_MARBLE.get());
+//        test
         new WorkHubRecipeBuilder(false, 100, 10, MATItems.FIR_SAPLING.get(), 1)
                 .requires(Items.DRAGON_EGG)
                 .requires(Items.DRAGON_HEAD)
                 .withBlazeBurner(MATItems.BLAZE_BLAST_BURNER.get())
                 .withContainer(Items.BUCKET)
                 .unlockedBy("has_material", has(MATItems.BLAZE_BLAST_BURNER.get()))
+                .save(writer);
+//        烈焰粉
+        new WorkHubRecipeBuilder(true, 100, 10, Items.BLAZE_POWDER, 1)
+                .requires(Items.MAGMA_BLOCK)
+                .requires(Items.GUNPOWDER)
+                .requires(Items.SUGAR)
+                .requires(Items.SUGAR)
+                .unlockedBy("has_material", has(Items.MAGMA_BLOCK))
                 .save(writer);
     }
 }

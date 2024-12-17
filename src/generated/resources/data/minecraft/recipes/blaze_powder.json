@@ -1,0 +1,23 @@
+{
+  "type": "magic_and_taboo:work_hub",
+  "experience": 10,
+  "ingredients": [
+    {
+      "item": "minecraft:magma_block"
+    },
+    {
+      "item": "minecraft:gunpowder"
+    },
+    {
+      "item": "minecraft:sugar"
+    },
+    {
+      "item": "minecraft:sugar"
+    }
+  ],
+  "require_mortar": true,
+  "result": {
+    "item": "minecraft:blaze_powder"
+  },
+  "work_time": 100
+}
