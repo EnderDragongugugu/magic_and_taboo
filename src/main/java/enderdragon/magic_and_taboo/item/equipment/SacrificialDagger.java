@@ -38,13 +38,12 @@ public class SacrificialDagger extends SwordItem {
             if (!(stack.getItem() instanceof SacrificialDagger)) return;
             var target = event.getEntity();
             var storage = stack.getCapability(PURENESS).orElse(IPurenessStorage.EMPTY);
-            if (storage.isValid() && storage.getPureness() > 0) {
-                target.spawnAtLocation(Items.ENCHANTED_GOLDEN_APPLE);
-            } else {
+            if (!storage.isValid()) {
                 BloodBottle.tryLootBlood(player, target);
             }
         }
     }
+
 
     @Override
     public boolean isFoil(ItemStack stack) {
@@ -119,4 +118,5 @@ public class SacrificialDagger extends SwordItem {
     public @Nullable ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundTag nbt) {
         return new PurenessStorage(2400, Items.AIR, true);
     }
+    
 }

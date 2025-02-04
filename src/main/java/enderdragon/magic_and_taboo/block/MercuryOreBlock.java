@@ -1,7 +1,7 @@
 package enderdragon.magic_and_taboo.block;
 
 
-import enderdragon.magic_and_taboo.effect.MATEffect;
+import enderdragon.magic_and_taboo.init.MATEffects;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.valueproviders.IntProvider;
@@ -32,7 +32,7 @@ public class MercuryOreBlock extends DropExperienceBlock {
     public void playerDestroy(Level level, Player player, BlockPos pos, BlockState state, @Nullable BlockEntity entity, ItemStack tool) {
         super.playerDestroy(level, player, pos, state, entity, tool);
         if (level.random.nextFloat() < 0.2F) {
-            player.addEffect(new MobEffectInstance(MATEffect.MERCURY_TOXINS.get(), 600, 1));
+            player.addEffect(new MobEffectInstance(MATEffects.MERCURY_TOXINS.get(), 600, 1));
         }
     }
 }

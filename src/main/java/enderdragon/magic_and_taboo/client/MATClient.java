@@ -1,35 +1,57 @@
 package enderdragon.magic_and_taboo.client;
 
+import com.mojang.datafixers.util.Either;
 import enderdragon.magic_and_taboo.MagicAndTabooMod;
 import enderdragon.magic_and_taboo.capability.IPurenessStorage;
+import enderdragon.magic_and_taboo.client.gui.AlchemyElementTooltip;
 import enderdragon.magic_and_taboo.client.gui.MercuryToxinsOverlay;
 import enderdragon.magic_and_taboo.client.gui.WorkHubScreen;
 import enderdragon.magic_and_taboo.client.gui.WorkHubTooltip;
+import enderdragon.magic_and_taboo.client.render.EnchantedCrucibleRender;
 import enderdragon.magic_and_taboo.client.render.WorkHubRender;
 import enderdragon.magic_and_taboo.init.MATBlockEntityTypes;
 import enderdragon.magic_and_taboo.init.MATBlocks;
 import enderdragon.magic_and_taboo.init.MATItems;
 import enderdragon.magic_and_taboo.init.MATMenuTypes;
+import enderdragon.magic_and_taboo.registry.AlchemyElement;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.client.renderer.Sheets;
 import net.minecraft.client.renderer.item.ClampedItemPropertyFunction;
 import net.minecraft.client.renderer.item.ItemProperties;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.event.EntityRenderersEvent;
-import net.minecraftforge.client.event.ModelEvent;
-import net.minecraftforge.client.event.RegisterClientTooltipComponentFactoriesEvent;
-import net.minecraftforge.client.event.RegisterGuiOverlaysEvent;
+import net.minecraftforge.client.event.*;
 import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import static enderdragon.magic_and_taboo.init.MATCapabilities.PURENESS;
 
 @Mod.EventBusSubscriber(modid = MagicAndTabooMod.MOD_ID, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class MATClient {
+    @Mod.EventBusSubscriber(modid = MagicAndTabooMod.MOD_ID, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.FORGE)
+    public static class ForgeBusEvent {
+        @SubscribeEvent
+        public static void onGatherTooltips(RenderTooltipEvent.GatherComponents event) {
+            var itemStack = event.getItemStack();
+            var level = Minecraft.getInstance().level;
+            var key = ForgeRegistries.ITEMS.getKey(itemStack.getItem());
+            if (level == null || key == null) return;
+            level.registryAccess().registryOrThrow(AlchemyElement.RESOURCE_KEY).getOptional(
+                    ResourceKey.create(AlchemyElement.RESOURCE_KEY, key)
+            ).ifPresent(element -> {
+                var map = element.getElementMap().getElement();
+                event.getTooltipElements().add(1, Either.right(new AlchemyElementTooltip.AlchemyElementTooltipComp(map))
+                );
+            });
+        }
+    }
+
     @SubscribeEvent
     public static void init(final FMLClientSetupEvent event) {
         event.enqueueWork(() -> {
@@ -41,10 +63,13 @@ public class MATClient {
     @SubscribeEvent
     public static void registerClientTooltipComponentFactoriesEvent(RegisterClientTooltipComponentFactoriesEvent event) {
         event.register(WorkHubTooltip.WorkHubTooltipComponent.class, WorkHubTooltip::new);
+        event.register(AlchemyElementTooltip.AlchemyElementTooltipComp.class, AlchemyElementTooltip::new);
     }
+
 
     @SubscribeEvent
     public static void onRegisterRenderers(EntityRenderersEvent.RegisterRenderers event) {
+        event.registerBlockEntityRenderer(MATBlockEntityTypes.ENCHANTED_CRUCIBLE.get(), EnchantedCrucibleRender::new);
         event.registerBlockEntityRenderer(MATBlockEntityTypes.WORK_HUB.get(), WorkHubRender::new);
     }
 

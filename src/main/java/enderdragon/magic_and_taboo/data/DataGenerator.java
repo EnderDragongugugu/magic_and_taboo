@@ -27,6 +27,7 @@ public class DataGenerator {
             generator.addProvider(true, new MATItemModelProvider(output, helper));
         }
         var blockTags = generator.addProvider(true, new MATBlockTagProvider(output, registry, helper));
+        var registryDataGenerator = new RegistryDataGenerator(output, registry);
         generator.addProvider(true, new MATItemTagProvider(output, registry, blockTags.contentsGetter(), helper));
         generator.addProvider(true, new MATEntityTagProvider(output, registry, helper));
         generator.addProvider(true, new MATRecipeProvider(output));
@@ -34,5 +35,6 @@ public class DataGenerator {
                 new LootTableProvider.SubProviderEntry(MATBlockLootProvider::new, LootContextParamSets.BLOCK)
         )));
         generator.addProvider(true, new MATAdvancementProvider(output, registry, helper));
+        generator.addProvider(true, registryDataGenerator);
     }
 }

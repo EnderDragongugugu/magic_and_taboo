@@ -1,0 +1,9 @@
+{
+  "blood_drug_concentration": {
+    "max": 50.0,
+    "min": 10.0
+  },
+  "effect_icon": "minecraft:textures/mob_effect/nausea.png",
+  "effect_id": "minecraft:nausea",
+  "element_name": "element.magic_and_taboo.element_nausea"
+}

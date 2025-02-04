@@ -5,7 +5,7 @@ import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.entity.LivingEntity;
 
 public class MercuryToxinsEffect extends MobEffect {
-    protected MercuryToxinsEffect() {
+    public MercuryToxinsEffect() {
         super(MobEffectCategory.BENEFICIAL, 114514);
     }
 

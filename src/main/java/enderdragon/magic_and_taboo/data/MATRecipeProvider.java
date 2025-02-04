@@ -3,6 +3,7 @@ package enderdragon.magic_and_taboo.data;
 import enderdragon.magic_and_taboo.data.recipe.WorkHubRecipeBuilder;
 import enderdragon.magic_and_taboo.init.MATBlocks;
 import enderdragon.magic_and_taboo.init.MATItems;
+import enderdragon.magic_and_taboo.tag.ForgeTags;
 import enderdragon.magic_and_taboo.tag.MATItemTags;
 import net.minecraft.data.BlockFamily;
 import net.minecraft.data.PackOutput;
@@ -67,7 +68,8 @@ public class MATRecipeProvider extends RecipeProvider {
         stonecutterResultFromBase(writer, RecipeCategory.BUILDING_BLOCKS, MATBlocks.POLISHED_GILDED_MARBLE_STAIRS.get(), MATBlocks.POLISHED_GILDED_MARBLE.get());
         stonecutterResultFromBase(writer, RecipeCategory.DECORATIONS, MATBlocks.POLISHED_GILDED_MARBLE_WALL.get(), MATBlocks.POLISHED_GILDED_MARBLE.get());
         stonecutterResultFromBase(writer, RecipeCategory.BUILDING_BLOCKS, MATBlocks.CHISELED_GILDED_MARBLE.get(), MATBlocks.POLISHED_GILDED_MARBLE.get());
-//        test
+//work hub
+        //        test
         new WorkHubRecipeBuilder(false, 100, 10, MATItems.FIR_SAPLING.get(), 1)
                 .requires(Items.DRAGON_EGG)
                 .requires(Items.DRAGON_HEAD)
@@ -82,6 +84,17 @@ public class MATRecipeProvider extends RecipeProvider {
                 .requires(Items.SUGAR)
                 .requires(Items.SUGAR)
                 .unlockedBy("has_material", has(Items.MAGMA_BLOCK))
+                .save(writer);
+//    水银碎片
+
+        new WorkHubRecipeBuilder(true, 400, 10, MATItems.MERCURY_SLAG.get(), 2)
+                .requires(MATItems.MERCURY_ORE.get())
+                .unlockedBy("has_material", has(MATItems.MERCURY_ORE.get()))
+                .save(writer);
+//        碎肉
+        new WorkHubRecipeBuilder(true, 100, 10, MATItems.GROUND_MEAT.get(), 1)
+                .requires(ForgeTags.RAW_MEATS)
+                .unlockedBy("has_material", has(ForgeTags.RAW_MEATS))
                 .save(writer);
     }
 }

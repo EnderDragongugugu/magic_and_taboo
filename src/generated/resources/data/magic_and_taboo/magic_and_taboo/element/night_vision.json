@@ -1,0 +1,9 @@
+{
+  "blood_drug_concentration": {
+    "max": 100.0,
+    "min": 30.0
+  },
+  "effect_icon": "magic_and_taboo:textures/mob_effect/element_eye.png",
+  "effect_id": "minecraft:night_vision",
+  "element_name": "element.magic_and_taboo.element_eye"
+}

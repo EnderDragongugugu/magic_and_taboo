@@ -41,6 +41,16 @@ public class MATBlocks {
             .sound(SoundType.WOOD)
             .ignitedByLava()
     ));
+    public static final RegistryObject<EnchantedCrucibleBlock> ENCHANTED_CRUCIBLE = REGISTRY.register("enchanted_crucible", () -> new EnchantedCrucibleBlock(Properties.of()
+            .mapColor(MapColor.WOOD)
+            .instrument(NoteBlockInstrument.BASS)
+            .ignitedByLava()
+            .mapColor(MapColor.STONE)
+            .requiresCorrectToolForDrops()
+            .strength(2.0F)
+            .noOcclusion()
+    ));
+    //    public static final RegistryObject<LiquidBlock> HONEY_LIQUID_BLOCK = REGISTRY.register("honey_fluid_block", () -> new LiquidBlock(MATFluids.HONEY_FLUID, BlockBehaviour.Properties.of().liquid()));
     public static final RegistryObject<FlammableBlock> FIR_PLANKS;
     public static final RegistryObject<SaplingBlock> FIR_SAPLING;
     public static final RegistryObject<StrippableLogBlock> FIR_LOG;
@@ -206,4 +216,5 @@ public class MATBlocks {
         ));
         POLISHED_GILDED_MARBLE_WALL = REGISTRY.register("polished_gilded_marble_wall", () -> new WallBlock(gildedMarble(color, 1.0F).forceSolidOn()));
     }
+
 }

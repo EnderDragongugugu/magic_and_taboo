@@ -25,6 +25,8 @@ public class MATItemModelProvider extends ItemModelProvider {
     protected void registerModels() {
         var firPlanks = makeId("block/fir/fir_planks");
         var polishedMarble = makeId("block/polished_gilded_marble");
+        this.basicItem(MATItems.GROUND_MEAT.getId());
+        this.basicItem(MATItems.MERCURY_SLAG.getId());
         this.basicItem(MATItems.MORTAR.getId());
         this.basicItem(MATItems.BLAZE_BURNER.getId());
         this.basicItem(MATItems.BLAZE_BLAST_BURNER.getId());
@@ -56,6 +58,7 @@ public class MATItemModelProvider extends ItemModelProvider {
         this.basicItem(MATBlocks.POLISHED_GILDED_MARBLE_PRESSURE_PLATE);
         this.buttonItem(MATBlocks.POLISHED_GILDED_MARBLE_BUTTON, polishedMarble);
         this.basicItem(MATBlocks.WORK_HUB);
+        this.basicItem(MATBlocks.ENCHANTED_CRUCIBLE);
         var handheld = new ModelFile.UncheckedModelFile("item/handheld");
         this.getBuilder("sacrificial_dagger")
                 .parent(handheld)

@@ -1,6 +1,6 @@
 package enderdragon.magic_and_taboo.enchantment;
 
-import enderdragon.magic_and_taboo.effect.MATEffect;
+import enderdragon.magic_and_taboo.init.MATEffects;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -21,7 +21,7 @@ public class MercuryToxinsEnchantment extends Enchantment {
     @Override
     public void doPostAttack(LivingEntity attacker, Entity target, int level) {
         if (target instanceof LivingEntity victim) {
-            var effect = MATEffect.MERCURY_TOXINS.get();
+            var effect = MATEffects.MERCURY_TOXINS.get();
             if (victim.hasEffect(effect)) {
                 victim.hurt(attacker.damageSources().magic(), 2.0F * level);
             } else {

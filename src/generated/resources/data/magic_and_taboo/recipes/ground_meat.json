@@ -1,0 +1,14 @@
+{
+  "type": "magic_and_taboo:work_hub",
+  "experience": 10,
+  "ingredients": [
+    {
+      "tag": "forge:raw_meats"
+    }
+  ],
+  "require_mortar": true,
+  "result": {
+    "item": "magic_and_taboo:ground_meat"
+  },
+  "work_time": 100
+}

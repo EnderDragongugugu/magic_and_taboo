@@ -1,8 +1,9 @@
 package enderdragon.magic_and_taboo;
 
-import enderdragon.magic_and_taboo.effect.MATEffect;
 import enderdragon.magic_and_taboo.init.*;
 import enderdragon.magic_and_taboo.item.equipment.SacrificialDagger;
+import enderdragon.magic_and_taboo.registry.AlchemyElement;
+import enderdragon.magic_and_taboo.registry.Element;
 import enderdragon.magic_and_taboo.util.BlockEntityTypeEx;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;
@@ -12,6 +13,7 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLLoadCompleteEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraftforge.registries.DataPackRegistryEvent;
 import org.jetbrains.annotations.NotNull;
 
 @Mod(MagicAndTabooMod.MOD_ID)
@@ -30,7 +32,7 @@ public class MagicAndTabooMod {
     public MagicAndTabooMod() {
         var modBus = FMLJavaModLoadingContext.get().getModEventBus();
         MATEnchantments.REGISTRY.register(modBus);
-        MATEffect.REGISTRY.register(modBus);
+        MATEffects.REGISTRY.register(modBus);
         MATBlocks.REGISTRY.register(modBus);
         MATItems.REGISTRY.register(modBus);
         MATItemGroups.REGISTRY.register(modBus);
@@ -38,7 +40,10 @@ public class MagicAndTabooMod {
         MATMenuTypes.REGISTRY.register(modBus);
         MATRecipeTypes.REGISTRY.register(modBus);
         MATSerializers.REGISTRY.register(modBus);
+//        MATFluids.FLUIDS.register(modBus);
+//        MATFluids.FLUID_TYPES.register(modBus);
         modBus.addListener(MagicAndTabooMod::onComplete);
+        modBus.addListener(MagicAndTabooMod::registerDataPackRegistry);
         var forgeBus = MinecraftForge.EVENT_BUS;
         forgeBus.addListener(SacrificialDagger::onLivingDeath);
     }
@@ -54,5 +59,10 @@ public class MagicAndTabooMod {
                     MATBlocks.FIR_WALL_HANGING_SIGN.get()
             );
         });
+    }
+
+    public static void registerDataPackRegistry(DataPackRegistryEvent.NewRegistry event) {
+        event.dataPackRegistry(AlchemyElement.RESOURCE_KEY, AlchemyElement.CODEC, AlchemyElement.CODEC);
+        event.dataPackRegistry(Element.RESOURCE_KEY, Element.CODEC, Element.CODEC);
     }
 }

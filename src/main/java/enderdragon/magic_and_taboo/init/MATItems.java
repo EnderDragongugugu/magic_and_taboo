@@ -3,6 +3,9 @@ package enderdragon.magic_and_taboo.init;
 import enderdragon.magic_and_taboo.MagicAndTabooMod;
 import enderdragon.magic_and_taboo.item.*;
 import enderdragon.magic_and_taboo.item.equipment.SacrificialDagger;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Item.Properties;
@@ -92,6 +95,9 @@ public class MATItems {
     public static final RegistryObject<BlockItem> WORK_HUB = BLOCKS.register(REGISTRY, "work_hub", () ->
             new WorkHubBlockItem(MATBlocks.WORK_HUB.get(), new Properties())
     );
+    public static final RegistryObject<BlockItem> ENCHANTED_CRUCIBLE = BLOCKS.register(REGISTRY, "enchanted_crucible", () ->
+            new BlockItem(MATBlocks.ENCHANTED_CRUCIBLE.get(), new Properties())
+    );
     public static final RegistryObject<BlockItem> FIR_LEAVES = BLOCKS.register(REGISTRY, "fir_leaves", () ->
             new BlockItem(MATBlocks.FIR_LEAVES.get(), new Properties())
     );
@@ -123,6 +129,30 @@ public class MATItems {
     public static final RegistryObject<Item> BLAZE_BLAST_BURNER = ITEMS.register(REGISTRY, "blaze_blast_burner", () ->
             new Item(new Properties()
                     .durability(32)
+            )
+    );
+    public static final RegistryObject<Item> MERCURY_SLAG = ITEMS.register(REGISTRY, "mercury_slag", () ->
+            new Item(new Properties()
+                    .food(new FoodProperties.Builder()
+                            .meat()
+                            .alwaysEat()
+                            .nutrition(-5)
+                            .saturationMod(-0.6F)
+                            .effect(() -> (
+                                    new MobEffectInstance(MATEffects.MERCURY_TOXINS.get(), 15 * 20)
+                            ), 1)
+                            .build())
+            )
+    );
+    public static final RegistryObject<Item> GROUND_MEAT = ITEMS.register(REGISTRY, "ground_meat", () ->
+            new Item(new Properties()
+                    .food(new FoodProperties.Builder()
+                            .meat()
+                            .alwaysEat()
+                            .nutrition(1)
+                            .saturationMod(0.6F)
+                            .effect(() -> (new MobEffectInstance(MobEffects.CONFUSION, 30 * 20)), 1)
+                            .build())
             )
     );
 }

@@ -1,7 +1,7 @@
 package enderdragon.magic_and_taboo.client.gui;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import enderdragon.magic_and_taboo.effect.MATEffect;
+import enderdragon.magic_and_taboo.init.MATEffects;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.client.gui.overlay.ForgeGui;
@@ -15,7 +15,7 @@ public class MercuryToxinsOverlay implements IGuiOverlay {
         var minecraft = gui.getMinecraft();
         if (!minecraft.options.hideGui && gui.shouldDrawSurvivalElements()) {
             var player = minecraft.player;
-            if (player == null || !player.hasEffect(MATEffect.MERCURY_TOXINS.get())) return;
+            if (player == null || !player.hasEffect(MATEffects.MERCURY_TOXINS.get())) return;
             gui.setupOverlayRenderState(true, false);
             RenderSystem.disableDepthTest();
             RenderSystem.depthMask(false);

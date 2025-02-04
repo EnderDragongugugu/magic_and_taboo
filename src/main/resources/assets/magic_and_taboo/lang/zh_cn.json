@@ -33,6 +33,7 @@
   "block.magic_and_taboo.potted_fir_sapling": "冷杉树苗盆栽",
   "block.magic_and_taboo.stripped_fir_log": "去皮冷杉原木",
   "block.magic_and_taboo.stripped_fir_wood": "去皮冷杉木",
+  "block.magic_and_taboo.enchanted_crucible": "蕴魔坩埚",
   "block.magic_and_taboo.work_hub": "联合工作站",
   "container.magic_and_taboo.work_hub": "联合工作站",
   "effect.magic_and_taboo.mercury_toxins": "水银中毒",
@@ -43,6 +44,8 @@
   "item.magic_and_taboo.blood_bottle.has_entity": "%s的血",
   "item.magic_and_taboo.fir_boat": "冷杉木船",
   "item.magic_and_taboo.fir_chest_boat": "冷杉木运输船",
+  "item.magic_and_taboo.ground_meat": "碎肉",
+  "item.magic_and_taboo.mercury_slag": "水银碎渣",
   "item.magic_and_taboo.mortar": "研钵",
   "item.magic_and_taboo.sacrificial_dagger": "献祭匕首",
   "itemGroup.magic_and_taboo.blocks": "魔法与禁忌: 方块",
@@ -52,6 +55,10 @@
   "tooltip.magic_and_taboo.mercury_ore": "小心有毒!",
   "tooltip.magic_and_taboo.sacrificial_dagger_warn": "它似乎在渴望鲜血",
   "tooltip.magic_and_taboo.work_hub_item": "存有: ",
+  "tooltip.magic_and_taboo.work_hub_item_empty": "里面什么都没有!",
   "tooltip.magic_and_taboo.work_hub_item_show": "存有: %s, 共 %d 个",
-  "tooltip.magic_and_taboo.work_hub_item_empty": "里面什么都没有!"
+  "element.magic_and_taboo.element_unknown": "未知要素",
+  "element.magic_and_taboo.element_mercury": "跑银",
+  "element.magic_and_taboo.element_eye": "枭眼",
+  "element.magic_and_taboo.element_nausea": "恶心"
 }

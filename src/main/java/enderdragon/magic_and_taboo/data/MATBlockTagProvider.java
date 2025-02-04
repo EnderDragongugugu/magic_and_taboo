@@ -22,6 +22,7 @@ public class MATBlockTagProvider extends BlockTagsProvider {
     @Override
     protected void addTags(@NotNull Provider registry) {
         this.tag(NEEDS_IRON_TOOL).add(MERCURY_ORE.get());
+        this.tag(NEEDS_STONE_TOOL).add(ENCHANTED_CRUCIBLE.get());
         this.tag(MINEABLE_WITH_PICKAXE).add(MERCURY_ORE.get());
         this.tag(FIR_LOGS)
                 .add(FIR_LOG.get())
