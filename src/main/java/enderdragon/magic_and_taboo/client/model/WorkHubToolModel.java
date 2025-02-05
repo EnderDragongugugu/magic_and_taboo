@@ -10,6 +10,9 @@ import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
+
+import java.util.List;
 
 public class WorkHubToolModel extends Model {
     public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(new ResourceLocation(MagicAndTabooMod.MOD_ID, "work_hub_tool"), "main");
@@ -133,38 +136,30 @@ public class WorkHubToolModel extends Model {
     }
 
     @Override
-    public void renderToBuffer(PoseStack poseStack, VertexConsumer vertexConsumer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
-        root.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
+    public void renderToBuffer(PoseStack matrices, VertexConsumer buffer, int light, int overlay, float red, float green, float blue, float alpha) {
+        this.root.render(matrices, buffer, light, overlay, red, green, blue, alpha);
     }
 
-    public void setOtherGroupVisible(String name, boolean bool) {
-        switch (name) {
-            case "blaze_burner" -> blaze_burner.visible = bool;
-            case "mortar" -> mortar.visible = bool;
-            case "container" -> container.visible = bool;
+    public void setup(List<ItemStack> stacks) {
+        this.mortar.visible = !stacks.get(0).isEmpty();
+        this.blaze_burner.visible = !stacks.get(1).isEmpty();
+        this.item_stack_1.visible = !stacks.get(2).isEmpty();
+        this.item_stack_2.visible = !stacks.get(3).isEmpty();
+        this.item_stack_3.visible = !stacks.get(4).isEmpty();
+        this.item_stack_4.visible = !stacks.get(5).isEmpty();
+        this.item_stack_5.visible = !stacks.get(6).isEmpty();
+        this.item_stack_6.visible = !stacks.get(7).isEmpty();
+        var output = stacks.get(8);
+        if (output.isEmpty()) {
+            this.output_1.visible = false;
+            this.output_2.visible = false;
+            this.output_3.visible = false;
+        } else {
+            float factor = output.getCount() / (float) output.getMaxStackSize();
+            this.output_1.visible = false;
+            this.output_2.visible = factor > 0.3F;
+            this.output_3.visible = factor > 0.6F;
         }
-    }
-
-    public void setOutputGroupVisible(int count, int maxCount) {
-        output_1.visible = false;
-        output_2.visible = false;
-        output_3.visible = false;
-        if (count > 0) {
-            float num = (float) count / maxCount;
-            output_1.visible = true;
-            if (num > 0.3) output_2.visible = true;
-            if (num > 0.6) output_3.visible = true;
-        }
-    }
-
-    public void setItemStackGroupVisible(int num, boolean bool) {
-        switch (num) {
-            case 2 -> item_stack_1.visible = bool;
-            case 3 -> item_stack_2.visible = bool;
-            case 4 -> item_stack_3.visible = bool;
-            case 5 -> item_stack_4.visible = bool;
-            case 6 -> item_stack_5.visible = bool;
-            case 7 -> item_stack_6.visible = bool;
-        }
+        this.container.visible = !stacks.get(9).isEmpty();
     }
 }

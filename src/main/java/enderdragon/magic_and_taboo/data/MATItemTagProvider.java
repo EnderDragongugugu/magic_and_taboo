@@ -1,7 +1,6 @@
 package enderdragon.magic_and_taboo.data;
 
 import enderdragon.magic_and_taboo.init.MATItems;
-import enderdragon.magic_and_taboo.tag.ForgeTags;
 import enderdragon.magic_and_taboo.tag.MATBlockTags;
 import enderdragon.magic_and_taboo.tag.MATItemTags;
 import net.minecraft.core.HolderLookup.Provider;
@@ -47,9 +46,11 @@ public class MATItemTagProvider extends ItemTagsProvider {
         this.tag(MATItemTags.BLAZE_BURNERS)
                 .add(MATItems.BLAZE_BURNER.get())
                 .addTag(MATItemTags.BLAZE_BLAST_BURNERS);
-        this.tag(ForgeTags.RAW_MEATS)
+        this.tag(MATItemTags.RAW_MEAT)
                 .add(Items.BEEF)
                 .add(Items.CHICKEN)
+                .add(Items.MUTTON)
+                .add(Items.PORKCHOP)
                 .add(Items.RABBIT);
     }
 }

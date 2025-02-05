@@ -1,6 +1,6 @@
 package enderdragon.magic_and_taboo.block;
 
-import enderdragon.magic_and_taboo.init.MATBlockEntityTypes;
+import enderdragon.magic_and_taboo.init.MATBlockEntities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.item.context.BlockPlaceContext;
@@ -21,13 +21,12 @@ import org.jetbrains.annotations.Nullable;
 import static net.minecraft.world.level.block.HorizontalDirectionalBlock.FACING;
 import static net.minecraft.world.level.block.state.properties.BlockStateProperties.WATERLOGGED;
 
+/**
+ * @see net.minecraft.world.level.block.AbstractCauldronBlock
+ */
 public class EnchantedCrucibleBlock extends BaseEntityBlock implements SimpleWaterloggedBlock {
     public static final VoxelShape INSIDE = box(2.0D, 4.0D, 2.0D, 14.0D, 15.0D, 14.0D);
-    public static final VoxelShape AABB = Shapes.join(
-            box(0.0D, 0.0D, 0.0D, 16.0D, 15.0D, 16.0D),
-            Shapes.or(INSIDE
-            )
-            , BooleanOp.ONLY_FIRST);
+    public static final VoxelShape AABB = Shapes.join(box(0.0D, 0.0D, 0.0D, 16.0D, 15.0D, 16.0D), INSIDE, BooleanOp.ONLY_FIRST);
 
     public EnchantedCrucibleBlock(Properties pProperties) {
         super(pProperties);
@@ -92,10 +91,9 @@ public class EnchantedCrucibleBlock extends BaseEntityBlock implements SimpleWat
         return RenderShape.MODEL;
     }
 
-
     @Nullable
     @Override
     public BlockEntity newBlockEntity(BlockPos pPos, BlockState pState) {
-        return MATBlockEntityTypes.ENCHANTED_CRUCIBLE.get().create(pPos, pState);
+        return MATBlockEntities.ENCHANTED_CRUCIBLE.get().create(pPos, pState);
     }
 }

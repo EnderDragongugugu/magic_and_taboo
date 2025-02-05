@@ -22,11 +22,10 @@ public class Element {
             ResourceLocation.CODEC.fieldOf("effect_icon").forGetter(Element::getIcon),
             CONCENTRATION_CODEC.fieldOf("blood_drug_concentration").forGetter(Element::getConcentration)
     ).apply(elementInstance, Element::new));
-    public ResourceLocation id;
-    public ResourceLocation icon;
-    private String name;
-    public Concentration concentration;
-
+    public final ResourceLocation id;
+    public final String name;
+    public final Concentration concentration;
+    private ResourceLocation icon;
 
     public Element(ResourceLocation effectId, String name, @Nullable ResourceLocation icon, Concentration concentration) {
         this.id = effectId;

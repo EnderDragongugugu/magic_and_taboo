@@ -85,14 +85,15 @@ public class MATItems {
             new BlockItem(MATBlocks.POLISHED_GILDED_MARBLE_WALL.get(), new Properties())
     );
     public static final RegistryObject<BlockItem> POLISHED_GILDED_MARBLE_PRESSURE_PLATE = BLOCKS.register(REGISTRY, "polished_gilded_marble_pressure_plate", () ->
-            new BlockItem(MATBlocks.POLISHED_GILDED_MARBLE_PRESSURE_PLATE.get(), new Properties()));
+            new BlockItem(MATBlocks.POLISHED_GILDED_MARBLE_PRESSURE_PLATE.get(), new Properties())
+    );
     public static final RegistryObject<BlockItem> POLISHED_GILDED_MARBLE_BUTTON = BLOCKS.register(REGISTRY, "polished_gilded_marble_button", () ->
             new BlockItem(MATBlocks.POLISHED_GILDED_MARBLE_BUTTON.get(), new Properties())
     );
     public static final RegistryObject<BlockItem> MERCURY_ORE = BLOCKS.register(REGISTRY, "mercury_ore", () ->
             new BlockItem(MATBlocks.MERCURY_ORE.get(), new Properties())
     );
-    public static final RegistryObject<BlockItem> WORK_HUB = BLOCKS.register(REGISTRY, "work_hub", () ->
+    public static final RegistryObject<WorkHubBlockItem> WORK_HUB = BLOCKS.register(REGISTRY, "work_hub", () ->
             new WorkHubBlockItem(MATBlocks.WORK_HUB.get(), new Properties())
     );
     public static final RegistryObject<BlockItem> ENCHANTED_CRUCIBLE = BLOCKS.register(REGISTRY, "enchanted_crucible", () ->
@@ -116,43 +117,29 @@ public class MATItems {
     public static final RegistryObject<MATHangingSignItem> FIR_HANGING_SIGN = ITEMS.register(REGISTRY, "fir_hanging_sign", () ->
             new MATHangingSignItem(MATBlocks.FIR_HANGING_SIGN, MATBlocks.FIR_WALL_HANGING_SIGN, 200, new Properties())
     );
-    public static final RegistryObject<Item> MORTAR = ITEMS.register(REGISTRY, "mortar", () ->
-            new Item(new Properties()
-                    .durability(128)
-            )
-    );
-    public static final RegistryObject<Item> BLAZE_BURNER = ITEMS.register(REGISTRY, "blaze_burner", () ->
-            new Item(new Properties()
-                    .durability(256)
-            )
-    );
-    public static final RegistryObject<Item> BLAZE_BLAST_BURNER = ITEMS.register(REGISTRY, "blaze_blast_burner", () ->
-            new Item(new Properties()
-                    .durability(32)
-            )
-    );
-    public static final RegistryObject<Item> MERCURY_SLAG = ITEMS.register(REGISTRY, "mercury_slag", () ->
-            new Item(new Properties()
-                    .food(new FoodProperties.Builder()
-                            .meat()
-                            .alwaysEat()
-                            .nutrition(-5)
-                            .saturationMod(-0.6F)
-                            .effect(() -> (
-                                    new MobEffectInstance(MATEffects.MERCURY_TOXINS.get(), 15 * 20)
-                            ), 1)
-                            .build())
-            )
-    );
-    public static final RegistryObject<Item> GROUND_MEAT = ITEMS.register(REGISTRY, "ground_meat", () ->
-            new Item(new Properties()
-                    .food(new FoodProperties.Builder()
-                            .meat()
-                            .alwaysEat()
-                            .nutrition(1)
-                            .saturationMod(0.6F)
-                            .effect(() -> (new MobEffectInstance(MobEffects.CONFUSION, 30 * 20)), 1)
-                            .build())
-            )
-    );
+    public static final RegistryObject<Item> MORTAR = ITEMS.register(REGISTRY, "mortar", () -> new Item(new Properties()
+            .durability(128)
+    ));
+    public static final RegistryObject<Item> BLAZE_BURNER = ITEMS.register(REGISTRY, "blaze_burner", () -> new Item(new Properties()
+            .durability(256)
+    ));
+    public static final RegistryObject<Item> BLAZE_BLAST_BURNER = ITEMS.register(REGISTRY, "blaze_blast_burner", () -> new Item(new Properties()
+            .durability(32)
+    ));
+    public static final RegistryObject<Item> MERCURY_SLAG = ITEMS.register(REGISTRY, "mercury_slag", () -> new Item(new Properties().food(new FoodProperties.Builder()
+            .meat()
+            .alwaysEat()
+            .nutrition(-5)
+            .saturationMod(-0.6F)
+            .effect(() -> (new MobEffectInstance(MATEffects.MERCURY_TOXINS.get(), 15 * 20)), 1)
+            .build()
+    )));
+    public static final RegistryObject<Item> GROUND_MEAT = ITEMS.register(REGISTRY, "ground_meat", () -> new Item(new Properties().food(new FoodProperties.Builder()
+            .meat()
+            .alwaysEat()
+            .nutrition(1)
+            .saturationMod(0.6F)
+            .effect(() -> (new MobEffectInstance(MobEffects.CONFUSION, 30 * 20)), 1)
+            .build()
+    )));
 }

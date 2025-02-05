@@ -1,13 +1,10 @@
 package enderdragon.magic_and_taboo.block;
 
 import enderdragon.magic_and_taboo.block.entity.WorkHubBlockEntity;
-import enderdragon.magic_and_taboo.init.MATBlockEntityTypes;
+import enderdragon.magic_and_taboo.init.MATBlockEntities;
 import enderdragon.magic_and_taboo.init.MATBlocks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListTag;
-import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.Container;
 import net.minecraft.world.Containers;
@@ -16,7 +13,6 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
@@ -30,13 +26,15 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
+import net.minecraftforge.items.IItemHandlerModifiable;
+import net.minecraftforge.items.wrapper.EmptyHandler;
 import net.minecraftforge.network.NetworkHooks;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.List;
 
 import static net.minecraft.world.level.block.HorizontalDirectionalBlock.FACING;
 import static net.minecraft.world.level.block.state.properties.BlockStateProperties.WATERLOGGED;
@@ -56,16 +54,8 @@ public class WorkHubBlock extends BaseEntityBlock implements SimpleWaterloggedBl
     public void playerWillDestroy(Level level, BlockPos pos, BlockState state, Player player) {
         if (!level.isClientSide && level.getBlockEntity(pos) instanceof WorkHubBlockEntity hub && !hub.isEmpty()) {
             var stack = new ItemStack(MATBlocks.WORK_HUB.get());
-            var content = hub.getStackInSlot(8);
-            if (!content.isEmpty()) {
-                var data = new CompoundTag();
-                var list = new ListTag();
-                var item = content.save(new CompoundTag());
-                item.putByte("Slot", (byte) 8);
-                list.add(item);
-                data.put("Items", list);
-                BlockEntity.addEntityType(data, hub.getType());
-                stack.addTagElement("BlockEntityTag", data);
+            if (stack.getCapability(ForgeCapabilities.ITEM_HANDLER).orElse(EmptyHandler.INSTANCE) instanceof IItemHandlerModifiable handler && handler.getSlots() > 0) {
+                handler.setStackInSlot(0, hub.getStackInSlot(8));
             }
             if (hub.hasCustomName()) {
                 stack.setHoverName(hub.getCustomName());
@@ -78,8 +68,18 @@ public class WorkHubBlock extends BaseEntityBlock implements SimpleWaterloggedBl
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable BlockGetter level, List<Component> tooltips, TooltipFlag flag) {
-
+    public ItemStack getCloneItemStack(BlockState state, HitResult target, BlockGetter level, BlockPos pos, Player player) {
+        ItemStack content;
+        var stack = new ItemStack(MATBlocks.WORK_HUB.get());
+        if (level.getBlockEntity(pos) instanceof WorkHubBlockEntity hub &&
+                !(content = hub.getStackInSlot(8)).isEmpty() &&
+                stack.getCapability(ForgeCapabilities.ITEM_HANDLER).orElse(EmptyHandler.INSTANCE) instanceof IItemHandlerModifiable handler &&
+                handler.getSlots() > 0
+        ) {
+            handler.setStackInSlot(0, content);
+            return stack;
+        }
+        return stack;
     }
 
     @SuppressWarnings("deprecation")
@@ -135,7 +135,7 @@ public class WorkHubBlock extends BaseEntityBlock implements SimpleWaterloggedBl
     @Nullable
     @Override
     public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
-        return MATBlockEntityTypes.WORK_HUB.get().create(pos, state);
+        return MATBlockEntities.WORK_HUB.get().create(pos, state);
     }
 
     @SuppressWarnings("deprecation")
@@ -167,7 +167,6 @@ public class WorkHubBlock extends BaseEntityBlock implements SimpleWaterloggedBl
     @Nullable
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type) {
-        if (level.isClientSide) return null;
-        return createTickerHelper(type, MATBlockEntityTypes.WORK_HUB.get(), WorkHubBlockEntity::tick);
+        return level.isClientSide ? null : createTickerHelper(type, MATBlockEntities.WORK_HUB.get(), WorkHubBlockEntity::tick);
     }
 }

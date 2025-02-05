@@ -32,7 +32,9 @@ public class MATBlockStateProvider extends BlockStateProvider {
                 new ModelFile.UncheckedModelFile(MATBlocks.ENCHANTED_CRUCIBLE.getId().withPrefix("block/")),
                 0
         );
-//        this.simpleBlock(MATBlocks.HONEY_LIQUID_BLOCK.get(), ModelTemplates.FO/);
+        this.simpleBlock(MATBlocks.HONEY.get(), this.models().getBuilder(MATBlocks.HONEY.getId().getPath())
+                .texture("particle", new ResourceLocation("block/honey_block_side"))
+        );
     }
 
     public void simpleBlockWithItem(RegistryObject<? extends Block> block) {

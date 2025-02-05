@@ -5,7 +5,7 @@
       "conditions": {
         "items": [
           {
-            "tag": "forge:raw_meats"
+            "tag": "c:foods/raw_meat"
           }
         ]
       },

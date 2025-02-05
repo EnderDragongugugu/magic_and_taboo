@@ -1,5 +1,6 @@
 package enderdragon.magic_and_taboo.init;
 
+import enderdragon.magic_and_taboo.block.HoneyBlock;
 import enderdragon.magic_and_taboo.block.*;
 import enderdragon.magic_and_taboo.block.grower.FirTreeGrower;
 import net.minecraft.core.Direction.Axis;
@@ -42,7 +43,7 @@ public class MATBlocks {
             .ignitedByLava()
     ));
     public static final RegistryObject<EnchantedCrucibleBlock> ENCHANTED_CRUCIBLE = REGISTRY.register("enchanted_crucible", () -> new EnchantedCrucibleBlock(Properties.of()
-            .mapColor(MapColor.WOOD)
+            .mapColor(MapColor.WOOD) // ?
             .instrument(NoteBlockInstrument.BASS)
             .ignitedByLava()
             .mapColor(MapColor.STONE)
@@ -50,7 +51,15 @@ public class MATBlocks {
             .strength(2.0F)
             .noOcclusion()
     ));
-    //    public static final RegistryObject<LiquidBlock> HONEY_LIQUID_BLOCK = REGISTRY.register("honey_fluid_block", () -> new LiquidBlock(MATFluids.HONEY_FLUID, BlockBehaviour.Properties.of().liquid()));
+    public static final RegistryObject<HoneyBlock> HONEY = REGISTRY.register("honey", () -> new HoneyBlock(MATFluids.FLOWING_HONEY, Properties.of()
+            .pushReaction(PushReaction.DESTROY)
+            .sound(SoundType.EMPTY)
+            .strength(100.0F)
+            .noCollission()
+            .noLootTable()
+            .replaceable()
+            .liquid()
+    ));
     public static final RegistryObject<FlammableBlock> FIR_PLANKS;
     public static final RegistryObject<SaplingBlock> FIR_SAPLING;
     public static final RegistryObject<StrippableLogBlock> FIR_LOG;

@@ -3,7 +3,6 @@ package enderdragon.magic_and_taboo.data;
 import enderdragon.magic_and_taboo.data.recipe.WorkHubRecipeBuilder;
 import enderdragon.magic_and_taboo.init.MATBlocks;
 import enderdragon.magic_and_taboo.init.MATItems;
-import enderdragon.magic_and_taboo.tag.ForgeTags;
 import enderdragon.magic_and_taboo.tag.MATItemTags;
 import net.minecraft.data.BlockFamily;
 import net.minecraft.data.PackOutput;
@@ -93,8 +92,8 @@ public class MATRecipeProvider extends RecipeProvider {
                 .save(writer);
 //        碎肉
         new WorkHubRecipeBuilder(true, 100, 10, MATItems.GROUND_MEAT.get(), 1)
-                .requires(ForgeTags.RAW_MEATS)
-                .unlockedBy("has_material", has(ForgeTags.RAW_MEATS))
+                .requires(MATItemTags.RAW_MEAT)
+                .unlockedBy("has_material", has(MATItemTags.RAW_MEAT))
                 .save(writer);
     }
 }

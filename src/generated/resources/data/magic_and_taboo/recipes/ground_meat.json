@@ -3,7 +3,7 @@
   "experience": 10,
   "ingredients": [
     {
-      "tag": "forge:raw_meats"
+      "tag": "c:foods/raw_meat"
     }
   ],
   "require_mortar": true,

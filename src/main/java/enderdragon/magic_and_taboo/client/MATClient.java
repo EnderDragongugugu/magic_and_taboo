@@ -3,13 +3,15 @@ package enderdragon.magic_and_taboo.client;
 import com.mojang.datafixers.util.Either;
 import enderdragon.magic_and_taboo.MagicAndTabooMod;
 import enderdragon.magic_and_taboo.capability.IPurenessStorage;
+import enderdragon.magic_and_taboo.capability.WorkHubResult;
 import enderdragon.magic_and_taboo.client.gui.AlchemyElementTooltip;
 import enderdragon.magic_and_taboo.client.gui.MercuryToxinsOverlay;
 import enderdragon.magic_and_taboo.client.gui.WorkHubScreen;
 import enderdragon.magic_and_taboo.client.gui.WorkHubTooltip;
+import enderdragon.magic_and_taboo.client.model.WorkHubToolModel;
 import enderdragon.magic_and_taboo.client.render.EnchantedCrucibleRender;
 import enderdragon.magic_and_taboo.client.render.WorkHubRender;
-import enderdragon.magic_and_taboo.init.MATBlockEntityTypes;
+import enderdragon.magic_and_taboo.init.MATBlockEntities;
 import enderdragon.magic_and_taboo.init.MATBlocks;
 import enderdragon.magic_and_taboo.init.MATItems;
 import enderdragon.magic_and_taboo.init.MATMenuTypes;
@@ -38,17 +40,13 @@ public class MATClient {
     public static class ForgeBusEvent {
         @SubscribeEvent
         public static void onGatherTooltips(RenderTooltipEvent.GatherComponents event) {
-            var itemStack = event.getItemStack();
+            var stack = event.getItemStack();
             var level = Minecraft.getInstance().level;
-            var key = ForgeRegistries.ITEMS.getKey(itemStack.getItem());
+            var key = ForgeRegistries.ITEMS.getKey(stack.getItem());
             if (level == null || key == null) return;
             level.registryAccess().registryOrThrow(AlchemyElement.RESOURCE_KEY).getOptional(
                     ResourceKey.create(AlchemyElement.RESOURCE_KEY, key)
-            ).ifPresent(element -> {
-                var map = element.getElementMap().getElement();
-                event.getTooltipElements().add(1, Either.right(new AlchemyElementTooltip.AlchemyElementTooltipComp(map))
-                );
-            });
+            ).ifPresent(element -> event.getTooltipElements().add(1, Either.right(element)));
         }
     }
 
@@ -62,21 +60,20 @@ public class MATClient {
 
     @SubscribeEvent
     public static void registerClientTooltipComponentFactoriesEvent(RegisterClientTooltipComponentFactoriesEvent event) {
-        event.register(WorkHubTooltip.WorkHubTooltipComponent.class, WorkHubTooltip::new);
-        event.register(AlchemyElementTooltip.AlchemyElementTooltipComp.class, AlchemyElementTooltip::new);
+        event.register(WorkHubResult.class, WorkHubTooltip::new);
+        event.register(AlchemyElement.class, AlchemyElementTooltip::new);
     }
-
 
     @SubscribeEvent
     public static void onRegisterRenderers(EntityRenderersEvent.RegisterRenderers event) {
-        event.registerBlockEntityRenderer(MATBlockEntityTypes.ENCHANTED_CRUCIBLE.get(), EnchantedCrucibleRender::new);
-        event.registerBlockEntityRenderer(MATBlockEntityTypes.WORK_HUB.get(), WorkHubRender::new);
+        event.registerBlockEntityRenderer(MATBlockEntities.ENCHANTED_CRUCIBLE.get(), EnchantedCrucibleRender::new);
+        event.registerBlockEntityRenderer(MATBlockEntities.WORK_HUB.get(), WorkHubRender::new);
     }
 
 
     @SubscribeEvent
     public static void modelBake(ModelEvent.ModifyBakingResult event) {
-        final ResourceLocation bloody = new ResourceLocation("bloody");
+        var bloody = new ResourceLocation("bloody");
         ClampedItemPropertyFunction isBloody = (stack, $, entity, i) -> stack.getCapability(PURENESS).orElse(IPurenessStorage.EMPTY).isValid() ? 1.0F : 0.0F;
         ItemProperties.register(MATItems.SACRIFICIAL_DAGGER.get(), bloody, isBloody);
     }
@@ -84,6 +81,11 @@ public class MATClient {
     @SubscribeEvent
     public static void registerOverlay(RegisterGuiOverlaysEvent event) {
         event.registerAbove(new ResourceLocation("player_health"), "mercury_toxins", new MercuryToxinsOverlay());
+    }
+
+    @SubscribeEvent
+    public static void registerLayerDefinitions(EntityRenderersEvent.RegisterLayerDefinitions event) {
+        event.registerLayerDefinition(WorkHubToolModel.LAYER_LOCATION, WorkHubToolModel::createBodyLayer);
     }
 
     @SubscribeEvent

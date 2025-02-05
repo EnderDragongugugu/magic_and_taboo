@@ -1,6 +1,6 @@
 package enderdragon.magic_and_taboo.block.entity;
 
-import enderdragon.magic_and_taboo.init.MATBlockEntityTypes;
+import enderdragon.magic_and_taboo.init.MATBlockEntities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.NonNullList;
 import net.minecraft.world.item.ItemStack;
@@ -11,7 +11,7 @@ public class EnchantedCrucibleBlockEntity extends BlockEntity {
     private final NonNullList<ItemStack> stacks = NonNullList.withSize(8, ItemStack.EMPTY);
 
     public EnchantedCrucibleBlockEntity(BlockPos pPos, BlockState pBlockState) {
-        super(MATBlockEntityTypes.ENCHANTED_CRUCIBLE.get(), pPos, pBlockState);
+        super(MATBlockEntities.ENCHANTED_CRUCIBLE.get(), pPos, pBlockState);
     }
 
     public NonNullList<ItemStack> getStacks() {

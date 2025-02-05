@@ -1,7 +1,7 @@
 package enderdragon.magic_and_taboo.block.entity;
 
 import enderdragon.magic_and_taboo.crafting.WorkHubRecipe;
-import enderdragon.magic_and_taboo.init.MATBlockEntityTypes;
+import enderdragon.magic_and_taboo.init.MATBlockEntities;
 import enderdragon.magic_and_taboo.init.MATRecipeTypes;
 import enderdragon.magic_and_taboo.inventory.WorkHubMenu;
 import enderdragon.magic_and_taboo.tag.MATItemTags;
@@ -41,7 +41,7 @@ public class WorkHubBlockEntity extends BaseContainerBlockEntity implements IIte
     private final RecipeManager.CachedCheck<WorkHubBlockEntity, WorkHubRecipe> checker = RecipeManager.createCheck(MATRecipeTypes.WORK_HUB_RECIPE_TYPE.get());
 
     public WorkHubBlockEntity(BlockPos pos, BlockState state) {
-        super(MATBlockEntityTypes.WORK_HUB.get(), pos, state);
+        super(MATBlockEntities.WORK_HUB.get(), pos, state);
     }
 
     public static void tick(Level level, BlockPos pos, BlockState state, WorkHubBlockEntity hub) {
@@ -65,25 +65,24 @@ public class WorkHubBlockEntity extends BaseContainerBlockEntity implements IIte
         }
     }
 
-//    protected void playParticle(WorkHubRecipe recipe) {
-////        if (level != null && !recipe.burner().isEmpty()) {
+    //    protected void playParticle(WorkHubRecipe recipe) {
+//        if (level != null && !recipe.burner().isEmpty()) {
 //        var pos = this.getBlockPos();
 //        var facing = this.getBlockState().getValue(HorizontalDirectionalBlock.FACING);
 //        level.addParticle(ParticleTypes.SMOKE, pos.getX() + 0.08, pos.getY() + 1.3125, pos.getZ() + 0.85, 0.0, 0.1, 0.0);
-////            switch (facing) {
-////                case NORTH ->
-////                        level.addParticle(ParticleTypes.SMOKE, pos.getX() + 0.5, pos.getY() + 1.76, pos.getZ() + 0.5, 0.0, 0.1, 0.0);
-////                case SOUTH ->
-////                        level.addParticle(ParticleTypes.SMOKE, pos.getX() + 0.5, pos.getY() + 1.76, pos.getZ() + 0.5, 0.0, 0.1, 0.0);
-////                case EAST ->
-////                        level.addParticle(ParticleTypes.SMOKE, pos.getX() + 0.5, pos.getY() + 1.76, pos.getZ() + 0.5, 0.0, 0.1, 0.0);
-////                case WEST ->
-////                        level.addParticle(ParticleTypes.SMOKE, pos.getX() + 0.5, pos.getY() + 1.76, pos.getZ() + 0.5, 0.0, 0.1, 0.0);
-////            }
+//            switch (facing) {
+//                case NORTH ->
+//                        level.addParticle(ParticleTypes.SMOKE, pos.getX() + 0.5, pos.getY() + 1.76, pos.getZ() + 0.5, 0.0, 0.1, 0.0);
+//                case SOUTH ->
+//                        level.addParticle(ParticleTypes.SMOKE, pos.getX() + 0.5, pos.getY() + 1.76, pos.getZ() + 0.5, 0.0, 0.1, 0.0);
+//                case EAST ->
+//                        level.addParticle(ParticleTypes.SMOKE, pos.getX() + 0.5, pos.getY() + 1.76, pos.getZ() + 0.5, 0.0, 0.1, 0.0);
+//                case WEST ->
+//                        level.addParticle(ParticleTypes.SMOKE, pos.getX() + 0.5, pos.getY() + 1.76, pos.getZ() + 0.5, 0.0, 0.1, 0.0);
+//            }
 //
-////        }
+//        }
 //    }
-
     protected void executeRecipe(WorkHubRecipe recipe) {
         ItemStack temp;
         if (recipe.requireMortar()) {
@@ -125,7 +124,7 @@ public class WorkHubBlockEntity extends BaseContainerBlockEntity implements IIte
 
     protected void onContentsChanged(int slot) {}
 
-    public NonNullList<ItemStack> getItems() {
+    public NonNullList<ItemStack> getStacks() {
         return this.stacks;
     }
 

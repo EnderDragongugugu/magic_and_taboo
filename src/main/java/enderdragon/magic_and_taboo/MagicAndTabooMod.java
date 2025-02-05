@@ -36,12 +36,12 @@ public class MagicAndTabooMod {
         MATBlocks.REGISTRY.register(modBus);
         MATItems.REGISTRY.register(modBus);
         MATItemGroups.REGISTRY.register(modBus);
-        MATBlockEntityTypes.REGISTRY.register(modBus);
+        MATBlockEntities.REGISTRY.register(modBus);
         MATMenuTypes.REGISTRY.register(modBus);
         MATRecipeTypes.REGISTRY.register(modBus);
         MATSerializers.REGISTRY.register(modBus);
-//        MATFluids.FLUIDS.register(modBus);
-//        MATFluids.FLUID_TYPES.register(modBus);
+        MATFluids.FLUIDS.register(modBus);
+        MATFluids.FLUID_TYPES.register(modBus);
         modBus.addListener(MagicAndTabooMod::onComplete);
         modBus.addListener(MagicAndTabooMod::registerDataPackRegistry);
         var forgeBus = MinecraftForge.EVENT_BUS;
