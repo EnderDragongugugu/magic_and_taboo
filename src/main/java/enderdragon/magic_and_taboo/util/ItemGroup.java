@@ -12,10 +12,10 @@ import java.util.function.Supplier;
 
 public class ItemGroup implements CreativeModeTab.DisplayItemsGenerator {
     protected final ObjectArrayList<RegistryObject<? extends ItemLike>> items = new ObjectArrayList<>();
-    protected final Supplier<? extends ItemLike> icon;
     protected final Component title;
+    public final Supplier<ItemStack> icon;
 
-    public ItemGroup(DeferredRegister<CreativeModeTab> registry, String name, String title, Supplier<? extends ItemLike> icon) {
+    public ItemGroup(DeferredRegister<CreativeModeTab> registry, String name, String title, Supplier<ItemStack> icon) {
         this.icon = icon;
         this.title = Component.translatable(title);
         registry.register(name, this::makeTab);
@@ -31,12 +31,8 @@ public class ItemGroup implements CreativeModeTab.DisplayItemsGenerator {
         this.items.add(item);
     }
 
-    public ItemStack getIcon() {
-        return new ItemStack(this.icon.get());
-    }
-
     public CreativeModeTab makeTab() {
-        return CreativeModeTab.builder().title(this.title).icon(this::getIcon).displayItems(this).build();
+        return CreativeModeTab.builder().title(this.title).icon(this.icon).displayItems(this).build();
     }
 
     @Override

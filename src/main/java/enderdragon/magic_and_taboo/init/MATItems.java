@@ -143,6 +143,10 @@ public class MATItems {
             .effect(() -> (new MobEffectInstance(MobEffects.CONFUSION, 30 * 20)), 1)
             .build()
     )));
-    public static final RegistryObject<Item> HONEY_BUCKET = ITEMS.register(REGISTRY, "honey_bucket", () -> new BucketItem(MATFluids.HONEY, new Properties().stacksTo(1)));
-    public static final RegistryObject<Item> PLANT_EXTRACT_BUCKET = ITEMS.register(REGISTRY, "plant_extract_bucket", () -> new BucketItem(MATFluids.HONEY, new Properties().stacksTo(1)));
+    public static final RegistryObject<Item> HONEY_BUCKET = ITEMS.register(REGISTRY, "honey_bucket", () ->
+            new BucketItem(MATFluids.HONEY, new Properties().stacksTo(1))
+    );
+    public static final RegistryObject<Item> PLANT_EXTRACT_BUCKET = ITEMS.register(REGISTRY, "plant_extract_bucket", () ->
+            new BucketItem(MATFluids.HONEY, new Properties().stacksTo(1))
+    );
 }

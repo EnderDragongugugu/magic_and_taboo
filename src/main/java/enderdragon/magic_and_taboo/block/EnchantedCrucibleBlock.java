@@ -28,11 +28,7 @@ import net.minecraft.world.phys.shapes.BooleanOp;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.HashSet;
 
 import static net.minecraft.world.level.block.HorizontalDirectionalBlock.FACING;
 import static net.minecraft.world.level.block.state.properties.BlockStateProperties.WATERLOGGED;
@@ -41,11 +37,8 @@ import static net.minecraft.world.level.block.state.properties.BlockStatePropert
  * @see net.minecraft.world.level.block.AbstractCauldronBlock
  */
 public class EnchantedCrucibleBlock extends BaseEntityBlock implements SimpleWaterloggedBlock {
-    private static final Logger LOGGER = LogManager.getLogger();
-    private static final HashSet FUEL = new HashSet();
-
-    public static final VoxelShape INSIDE = box(2.0D, 4.0D, 2.0D, 14.0D, 15.0D, 14.0D);
-    public static final VoxelShape AABB = Shapes.join(box(0.0D, 0.0D, 0.0D, 16.0D, 15.0D, 16.0D), INSIDE, BooleanOp.ONLY_FIRST);
+    private static final VoxelShape INSIDE = box(2.0D, 4.0D, 2.0D, 14.0D, 15.0D, 14.0D);
+    private static final VoxelShape AABB = Shapes.join(box(0.0D, 0.0D, 0.0D, 16.0D, 15.0D, 16.0D), INSIDE, BooleanOp.ONLY_FIRST);
 
     public EnchantedCrucibleBlock(Properties pProperties) {
         super(pProperties);
@@ -53,13 +46,14 @@ public class EnchantedCrucibleBlock extends BaseEntityBlock implements SimpleWat
                 .setValue(FACING, Direction.NORTH)
                 .setValue(WATERLOGGED, false)
         );
-        FUEL.add(Blocks.FIRE);
     }
 
     @Nullable
     @Override
-    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level pLevel, BlockState pState, BlockEntityType<T> pBlockEntityType) {
-        return pLevel.isClientSide ? null : createTickerHelper(pBlockEntityType, MATBlockEntities.ENCHANTED_CRUCIBLE.get(), EnchantedCrucibleBlockEntity::tick);
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type) {
+        return level.isClientSide
+                ? createTickerHelper(type, MATBlockEntities.ENCHANTED_CRUCIBLE.get(), EnchantedCrucibleBlockEntity::tickClient)
+                : createTickerHelper(type, MATBlockEntities.ENCHANTED_CRUCIBLE.get(), EnchantedCrucibleBlockEntity::tickServer);
     }
 
     @SuppressWarnings("deprecation")
@@ -69,7 +63,7 @@ public class EnchantedCrucibleBlock extends BaseEntityBlock implements SimpleWat
     }
 
     @Override
-    public VoxelShape getInteractionShape(BlockState pState, BlockGetter pLevel, BlockPos pPos) {
+    public VoxelShape getInteractionShape(BlockState state, BlockGetter level, BlockPos pos) {
         return INSIDE;
     }
 
@@ -123,30 +117,25 @@ public class EnchantedCrucibleBlock extends BaseEntityBlock implements SimpleWat
 
     @Nullable
     @Override
-    public BlockEntity newBlockEntity(BlockPos pPos, BlockState pState) {
-        return MATBlockEntities.ENCHANTED_CRUCIBLE.get().create(pPos, pState);
+    public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
+        return MATBlockEntities.ENCHANTED_CRUCIBLE.get().create(pos, state);
     }
 
-
     @Override
-    public InteractionResult use(BlockState pState, Level pLevel, BlockPos pPos, Player pPlayer, InteractionHand pHand, BlockHitResult pHit) {
-        BlockEntity blockEntity = pLevel.getBlockEntity(pPos);
-        if (blockEntity instanceof EnchantedCrucibleBlockEntity crucible) {
-            ItemStack itemStack = pPlayer.getItemInHand(pHand);
-            if (crucible.getFluids().isEmpty()) {
-                crucible.putFluid(itemStack, pPlayer, pHand);
+    public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult) {
+        if (level.getBlockEntity(pos) instanceof EnchantedCrucibleBlockEntity crucible) {
+            if (level.isClientSide) return InteractionResult.CONSUME;
+            ItemStack stack = player.getItemInHand(hand);
+            if (crucible.getFluidStack().isEmpty()) {
+                crucible.putFluid(stack, player, hand);
                 return InteractionResult.SUCCESS;
-            } else {
-                if (itemStack.is(Items.GLASS_BOTTLE)) {
-                    crucible.test(itemStack, pPlayer);
-                    return InteractionResult.SUCCESS;
-                } else {
-                    if (pPlayer.isShiftKeyDown() && crucible.remove(pPlayer)) {
-                        return InteractionResult.SUCCESS;
-                    } else if (crucible.place(pPlayer.getAbilities().instabuild ? itemStack.copy() : itemStack, pPlayer)) {
-                        return InteractionResult.SUCCESS;
-                    }
-                }
+            } else if (stack.is(Items.GLASS_BOTTLE)) {
+                crucible.test(stack, player);
+                return InteractionResult.SUCCESS;
+            } else if (player.isShiftKeyDown() && crucible.remove(player)) {
+                return InteractionResult.SUCCESS;
+            } else if (crucible.place(player.getAbilities().instabuild ? stack.copy() : stack, player)) {
+                return InteractionResult.SUCCESS;
             }
             return InteractionResult.CONSUME;
         }

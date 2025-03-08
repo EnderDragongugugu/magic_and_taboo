@@ -2,6 +2,7 @@ package enderdragon.magic_and_taboo.data;
 
 import net.minecraft.core.HolderLookup.Provider;
 import net.minecraft.data.PackOutput;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.common.data.BlockTagsProvider;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import org.jetbrains.annotations.NotNull;
@@ -12,6 +13,7 @@ import java.util.concurrent.CompletableFuture;
 import static enderdragon.magic_and_taboo.MagicAndTabooMod.MOD_ID;
 import static enderdragon.magic_and_taboo.init.MATBlocks.*;
 import static enderdragon.magic_and_taboo.tag.MATBlockTags.FIR_LOGS;
+import static enderdragon.magic_and_taboo.tag.MATBlockTags.HEATERS;
 import static net.minecraft.tags.BlockTags.*;
 
 public class MATBlockTagProvider extends BlockTagsProvider {
@@ -48,5 +50,6 @@ public class MATBlockTagProvider extends BlockTagsProvider {
         this.tag(WALLS)
                 .add(GILDED_MARBLE_WALL.get())
                 .add(POLISHED_GILDED_MARBLE_WALL.get());
+        this.tag(HEATERS).add(Blocks.FIRE);
     }
 }

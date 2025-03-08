@@ -26,10 +26,9 @@ public class WorkHubScreen extends AbstractContainerScreen<WorkHubMenu> {
     @Override
     protected void renderBg(GuiGraphics graphics, float partialTick, int mouseX, int mouseY) {
         WorkHubBlockEntity hub = this.menu.workHub;
-        int i = this.leftPos;
-        int j = this.topPos;
-        graphics.blit(TEXTURE, i, j, 0, 0, this.imageWidth, this.imageHeight);
-        int k = (int) ((float) hub.time.get() / (float) hub.timeTotal.get() * 24);
-        graphics.blit(TEXTURE, i + 78, j + 19, 176, 0, k + 1, 16);
+        int left = this.leftPos, top = this.topPos;
+        graphics.blit(TEXTURE, left, top, 0, 0, this.imageWidth, this.imageHeight);
+        int width = 1 + (int) (hub.time.get() * 24 / (float) hub.timeTotal.get());
+        graphics.blit(TEXTURE, left + 78, top + 19, 176, 0, width, 16);
     }
 }

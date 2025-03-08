@@ -7,7 +7,6 @@ import enderdragon.magic_and_taboo.capability.WorkHubResult;
 import enderdragon.magic_and_taboo.client.gui.*;
 import enderdragon.magic_and_taboo.client.model.WorkHubToolModel;
 import enderdragon.magic_and_taboo.client.render.EnchantedCrucibleRender;
-import enderdragon.magic_and_taboo.client.render.EnchantedCrucibleRenderElements;
 import enderdragon.magic_and_taboo.client.render.WorkHubRender;
 import enderdragon.magic_and_taboo.init.MATBlockEntities;
 import enderdragon.magic_and_taboo.init.MATBlocks;
@@ -47,12 +46,6 @@ public class MATClient {
                     ResourceKey.create(AlchemyElement.RESOURCE_KEY, key)
             ).ifPresent(element -> event.getTooltipElements().add(1, Either.right(element)));
         }
-
-        @SubscribeEvent
-        public static void onRenderWorld(RenderLevelStageEvent event) {
-            EnchantedCrucibleRenderElements.render(event);
-        }
-
     }
 
     @SubscribeEvent
@@ -62,7 +55,6 @@ public class MATClient {
             MenuScreens.register(MATMenuTypes.WORK_HUB.get(), WorkHubScreen::new);
         });
     }
-
 
     @SubscribeEvent
     public static void registerClientTooltipComponentFactoriesEvent(RegisterClientTooltipComponentFactoriesEvent event) {
@@ -76,7 +68,6 @@ public class MATClient {
         event.registerBlockEntityRenderer(MATBlockEntities.WORK_HUB.get(), WorkHubRender::new);
     }
 
-
     @SubscribeEvent
     public static void modelBake(ModelEvent.ModifyBakingResult event) {
         var bloody = new ResourceLocation("bloody");
@@ -86,7 +77,7 @@ public class MATClient {
 
     @SubscribeEvent
     public static void registerOverlay(RegisterGuiOverlaysEvent event) {
-        event.registerAbove(new ResourceLocation("player_health"), "mercury_toxins", new MercuryToxinsOverlay());
+        event.registerAbove(VanillaGuiOverlay.PLAYER_HEALTH.id(), "mercury_toxins", new MercuryToxinsOverlay());
         event.registerAbove(VanillaGuiOverlay.CROSSHAIR.id(), "sacrificial_dagger", new SacrificialDaggerOverlay());
     }
 

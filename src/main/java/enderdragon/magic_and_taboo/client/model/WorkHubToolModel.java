@@ -2,20 +2,20 @@ package enderdragon.magic_and_taboo.client.model;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import enderdragon.magic_and_taboo.MagicAndTabooMod;
 import net.minecraft.client.model.Model;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 
 import java.util.List;
 
+import static enderdragon.magic_and_taboo.MagicAndTabooMod.makeId;
+
 public class WorkHubToolModel extends Model {
-    public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(new ResourceLocation(MagicAndTabooMod.MOD_ID, "work_hub_tool"), "main");
+    public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(makeId("work_hub_tool"), "main");
     private final ModelPart blaze_burner;
     private final ModelPart table;
     private final ModelPart mortar;
