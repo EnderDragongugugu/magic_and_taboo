@@ -103,10 +103,12 @@ public class WorkHubBlockEntity extends BaseContainerBlockEntity implements IIte
         var resultItem = recipe.getResultItem(level.registryAccess());
         var container = recipe.container();
         var itemStack = getStackInSlot(9);
-        if (container.isEmpty() && !oldOutput.isEmpty()) {
+        var output = getStackInSlot(10);
+        var canOutput = output.getCount() + 1 < output.getMaxStackSize();
+        if (container.isEmpty() && !oldOutput.isEmpty() && canOutput) {
             oldOutput.shrink(1);
             addItem(10, resultItem, 1);
-        } else if (!itemStack.isEmpty() && !oldOutput.isEmpty() && container.test(itemStack)) {
+        } else if (!itemStack.isEmpty() && !oldOutput.isEmpty() && container.test(itemStack) && canOutput) {
             oldOutput.shrink(1);
             itemStack.shrink(1);
             addItem(10, resultItem, 1);
@@ -122,7 +124,8 @@ public class WorkHubBlockEntity extends BaseContainerBlockEntity implements IIte
         }
     }
 
-    protected void onContentsChanged(int slot) {}
+    protected void onContentsChanged(int slot) {
+    }
 
     public NonNullList<ItemStack> getStacks() {
         return this.stacks;

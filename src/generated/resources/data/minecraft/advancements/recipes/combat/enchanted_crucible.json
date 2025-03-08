@@ -6,7 +6,7 @@
         "items": [
           {
             "items": [
-              "minecraft:spruce_sapling"
+              "minecraft:amethyst_shard"
             ]
           }
         ]
@@ -15,7 +15,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "magic_and_taboo:fir_sapling"
+        "recipe": "minecraft:enchanted_crucible"
       },
       "trigger": "minecraft:recipe_unlocked"
     }
@@ -28,7 +28,7 @@
   ],
   "rewards": {
     "recipes": [
-      "magic_and_taboo:fir_sapling"
+      "minecraft:enchanted_crucible"
     ]
   },
   "sends_telemetry_event": false

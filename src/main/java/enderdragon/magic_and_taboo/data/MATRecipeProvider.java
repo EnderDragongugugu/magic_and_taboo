@@ -9,7 +9,9 @@ import net.minecraft.data.PackOutput;
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.data.recipes.RecipeCategory;
 import net.minecraft.data.recipes.RecipeProvider;
+import net.minecraft.data.recipes.ShapedRecipeBuilder;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.level.block.Blocks;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Consumer;
@@ -55,6 +57,32 @@ public class MATRecipeProvider extends RecipeProvider {
                 .slab(MATBlocks.POLISHED_GILDED_MARBLE_SLAB.get())
                 .getFamily()
         );
+        ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, MATBlocks.ENCHANTED_CRUCIBLE.get(), 1)
+                .define('X', Items.AMETHYST_SHARD)
+                .define('Y', Blocks.CAULDRON)
+                .pattern(" X ")
+                .pattern("XYX")
+                .pattern(" X ")
+                .unlockedBy("has_material", has(Items.AMETHYST_SHARD))
+                .save(writer, getSimpleRecipeName(MATBlocks.ENCHANTED_CRUCIBLE.get()));
+        ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, MATItems.SACRIFICIAL_DAGGER.get(), 1)
+                .define('X', MATItems.GROUND_MEAT.get())
+                .define('Y', Items.IRON_SWORD)
+                .define('Z', Items.GLASS_BOTTLE)
+                .pattern("  X")
+                .pattern("ZYX")
+                .pattern("X  ")
+                .unlockedBy("has_material", has(Items.IRON_SWORD))
+                .save(writer, getSimpleRecipeName(MATItems.SACRIFICIAL_DAGGER.get()));
+        ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, MATBlocks.WORK_HUB.get(), 1)
+                .define('X', Items.IRON_INGOT)
+                .define('Y', Blocks.CRAFTING_TABLE)
+                .define('Z', MATBlocks.FIR_PLANKS.get())
+                .pattern(" X ")
+                .pattern("ZYZ")
+                .pattern("Z Z")
+                .unlockedBy("has_material", has(Blocks.CRAFTING_TABLE))
+                .save(writer, getSimpleRecipeName(MATBlocks.WORK_HUB.get()));
         stonecutterResultFromBase(writer, RecipeCategory.BUILDING_BLOCKS, MATBlocks.GILDED_MARBLE_SLAB.get(), MATBlocks.GILDED_MARBLE.get(), 2);
         stonecutterResultFromBase(writer, RecipeCategory.BUILDING_BLOCKS, MATBlocks.GILDED_MARBLE_STAIRS.get(), MATBlocks.GILDED_MARBLE.get());
         stonecutterResultFromBase(writer, RecipeCategory.DECORATIONS, MATBlocks.GILDED_MARBLE_WALL.get(), MATBlocks.GILDED_MARBLE.get());
@@ -69,12 +97,16 @@ public class MATRecipeProvider extends RecipeProvider {
         stonecutterResultFromBase(writer, RecipeCategory.BUILDING_BLOCKS, MATBlocks.CHISELED_GILDED_MARBLE.get(), MATBlocks.POLISHED_GILDED_MARBLE.get());
 //work hub
         //        test
-        new WorkHubRecipeBuilder(false, 100, 10, MATItems.FIR_SAPLING.get(), 1)
-                .requires(Items.DRAGON_EGG)
-                .requires(Items.DRAGON_HEAD)
+        new WorkHubRecipeBuilder(true, 100, 10, MATItems.FIR_SAPLING.get(), 1)
+                .requires(Blocks.ICE)
+                .requires(Blocks.ICE)
+                .requires(Blocks.ICE)
+                .requires(Blocks.ICE)
+                .requires(Blocks.ICE)
+                .requires(Blocks.ICE)
                 .withBlazeBurner(MATItems.BLAZE_BLAST_BURNER.get())
-                .withContainer(Items.BUCKET)
-                .unlockedBy("has_material", has(MATItems.BLAZE_BLAST_BURNER.get()))
+                .withContainer(Blocks.SPRUCE_SAPLING)
+                .unlockedBy("has_material", has(Blocks.SPRUCE_SAPLING))
                 .save(writer);
 //        烈焰粉
         new WorkHubRecipeBuilder(true, 100, 10, Items.BLAZE_POWDER, 1)
@@ -84,8 +116,7 @@ public class MATRecipeProvider extends RecipeProvider {
                 .requires(Items.SUGAR)
                 .unlockedBy("has_material", has(Items.MAGMA_BLOCK))
                 .save(writer);
-//    水银碎片
-
+//        水银碎块
         new WorkHubRecipeBuilder(true, 400, 10, MATItems.MERCURY_SLAG.get(), 2)
                 .requires(MATItems.MERCURY_ORE.get())
                 .unlockedBy("has_material", has(MATItems.MERCURY_ORE.get()))
@@ -94,6 +125,25 @@ public class MATRecipeProvider extends RecipeProvider {
         new WorkHubRecipeBuilder(true, 100, 10, MATItems.GROUND_MEAT.get(), 1)
                 .requires(MATItemTags.RAW_MEAT)
                 .unlockedBy("has_material", has(MATItemTags.RAW_MEAT))
+                .save(writer);
+//        研钵
+        new WorkHubRecipeBuilder(false, 100, 10, MATItems.MORTAR.get(), 1)
+                .requires(Items.BOWL)
+                .requires(Items.STICK)
+                .unlockedBy("has_material", has(Items.BOWL))
+                .save(writer);
+//        烈焰灯
+        new WorkHubRecipeBuilder(false, 100, 10, MATItems.BLAZE_BURNER.get(), 1)
+                .requires(Items.BLAZE_POWDER)
+                .withContainer(Items.GLASS_BOTTLE)
+                .unlockedBy("has_material", has(Items.BLAZE_POWDER))
+                .save(writer);
+//        烈焰喷灯
+        new WorkHubRecipeBuilder(false, 100, 10, MATItems.BLAZE_BLAST_BURNER.get(), 1)
+                .requires(Items.BLAZE_POWDER)
+                .requires(Items.BLAZE_POWDER)
+                .withContainer(MATItems.BLAZE_BURNER.get())
+                .unlockedBy("has_material", has(MATItems.BLAZE_BURNER.get()))
                 .save(writer);
     }
 }

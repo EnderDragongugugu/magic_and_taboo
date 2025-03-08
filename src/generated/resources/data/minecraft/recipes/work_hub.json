@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "X": {
+      "item": "minecraft:iron_ingot"
+    },
+    "Y": {
+      "item": "minecraft:crafting_table"
+    },
+    "Z": {
+      "item": "magic_and_taboo:fir_planks"
+    }
+  },
+  "pattern": [
+    " X ",
+    "ZYZ",
+    "Z Z"
+  ],
+  "result": {
+    "item": "magic_and_taboo:work_hub"
+  },
+  "show_notification": true
+}

@@ -4,18 +4,30 @@
     "item": "magic_and_taboo:blaze_blast_burner"
   },
   "container": {
-    "item": "minecraft:bucket"
+    "item": "minecraft:spruce_sapling"
   },
   "experience": 10,
   "ingredients": [
     {
-      "item": "minecraft:dragon_egg"
+      "item": "minecraft:ice"
     },
     {
-      "item": "minecraft:dragon_head"
+      "item": "minecraft:ice"
+    },
+    {
+      "item": "minecraft:ice"
+    },
+    {
+      "item": "minecraft:ice"
+    },
+    {
+      "item": "minecraft:ice"
+    },
+    {
+      "item": "minecraft:ice"
     }
   ],
-  "require_mortar": false,
+  "require_mortar": true,
   "result": {
     "item": "magic_and_taboo:fir_sapling"
   },
