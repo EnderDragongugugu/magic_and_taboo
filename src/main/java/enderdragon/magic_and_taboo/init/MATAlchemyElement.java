@@ -26,8 +26,6 @@ public class MATAlchemyElement {
                 ResourceKey.create(AlchemyElement.RESOURCE_KEY, ForgeRegistries.ITEMS.getKey(Items.ARROW)),
                 new AlchemyElement.Builder()
                         .put(mercury, 1.0F)
-                        .put(confusion, 10.5F)
-                        .put(night_vision, 0.5F)
                         .build(300)
         );
     }

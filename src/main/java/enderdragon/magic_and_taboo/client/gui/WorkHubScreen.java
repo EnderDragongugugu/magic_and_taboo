@@ -11,7 +11,7 @@ import net.minecraft.world.entity.player.Inventory;
 import org.jetbrains.annotations.NotNull;
 
 public class WorkHubScreen extends AbstractContainerScreen<WorkHubMenu> {
-    private static final ResourceLocation TEXTURE = new ResourceLocation(MagicAndTabooMod.MOD_ID, "textures/gui/container/work_hub.png");
+    private static final ResourceLocation TEXTURE = MagicAndTabooMod.makeId("textures/gui/container/work_hub.png");
 
     public WorkHubScreen(WorkHubMenu menu, Inventory inventory, Component title) {
         super(menu, inventory, title);

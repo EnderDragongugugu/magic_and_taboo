@@ -36,6 +36,8 @@
   "block.magic_and_taboo.enchanted_crucible": "蕴魔坩埚",
   "block.magic_and_taboo.work_hub": "联合工作站",
   "container.magic_and_taboo.work_hub": "联合工作站",
+  "block.magic_and_taboo.plant_extract": "植物萃取液",
+  "item.magic_and_taboo.plant_extract_bucket": "植物萃取液桶",
   "effect.magic_and_taboo.mercury_toxins": "水银中毒",
   "enchantment.magic_and_taboo.mercury_toxins": "§6水银毒素",
   "item.magic_and_taboo.blaze_blast_burner": "烈焰喷灯",
@@ -44,6 +46,7 @@
   "item.magic_and_taboo.blood_bottle.has_entity": "%s的血",
   "item.magic_and_taboo.fir_boat": "冷杉木船",
   "item.magic_and_taboo.fir_chest_boat": "冷杉木运输船",
+  "item.magic_and_taboo.honey_bucket": "蜂蜜桶",
   "item.magic_and_taboo.ground_meat": "碎肉",
   "item.magic_and_taboo.mercury_slag": "水银碎渣",
   "item.magic_and_taboo.mortar": "研钵",
@@ -60,5 +63,6 @@
   "element.magic_and_taboo.element_unknown": "未知要素",
   "element.magic_and_taboo.element_mercury": "跑银",
   "element.magic_and_taboo.element_eye": "枭眼",
-  "element.magic_and_taboo.element_nausea": "恶心"
+  "element.magic_and_taboo.element_nausea": "恶心",
+  "text.warn.place": "坩埚似乎在抗拒%s"
 }

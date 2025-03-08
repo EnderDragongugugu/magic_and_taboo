@@ -7,6 +7,7 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.BucketItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Item.Properties;
 import net.minecraft.world.item.Tiers;
@@ -142,4 +143,6 @@ public class MATItems {
             .effect(() -> (new MobEffectInstance(MobEffects.CONFUSION, 30 * 20)), 1)
             .build()
     )));
+    public static final RegistryObject<Item> HONEY_BUCKET = ITEMS.register(REGISTRY, "honey_bucket", () -> new BucketItem(MATFluids.HONEY, new Properties().stacksTo(1)));
+    public static final RegistryObject<Item> PLANT_EXTRACT_BUCKET = ITEMS.register(REGISTRY, "plant_extract_bucket", () -> new BucketItem(MATFluids.HONEY, new Properties().stacksTo(1)));
 }

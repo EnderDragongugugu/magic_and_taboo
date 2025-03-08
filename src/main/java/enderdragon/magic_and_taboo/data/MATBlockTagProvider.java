@@ -24,6 +24,7 @@ public class MATBlockTagProvider extends BlockTagsProvider {
         this.tag(NEEDS_IRON_TOOL).add(MERCURY_ORE.get());
         this.tag(NEEDS_STONE_TOOL).add(ENCHANTED_CRUCIBLE.get());
         this.tag(MINEABLE_WITH_PICKAXE).add(MERCURY_ORE.get());
+        this.tag(MINEABLE_WITH_PICKAXE).add(ENCHANTED_CRUCIBLE.get());
         this.tag(FIR_LOGS)
                 .add(FIR_LOG.get())
                 .add(FIR_WOOD.get())

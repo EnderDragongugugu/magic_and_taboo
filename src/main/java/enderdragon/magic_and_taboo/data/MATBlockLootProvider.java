@@ -20,6 +20,7 @@ public class MATBlockLootProvider extends BlockLootSubProvider {
     @Override
     protected void generate() {
         this.dropSelf(MERCURY_ORE.get());
+        this.dropSelf(ENCHANTED_CRUCIBLE.get());
         this.dropSelf(FIR_PLANKS.get());
         this.dropSelf(FIR_SAPLING.get());
         this.dropSelf(FIR_LOG.get());

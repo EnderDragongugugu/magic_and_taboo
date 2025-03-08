@@ -26,6 +26,8 @@ public class MATItemModelProvider extends ItemModelProvider {
         var firPlanks = makeId("block/fir/fir_planks");
         var polishedMarble = makeId("block/polished_gilded_marble");
         this.basicItem(MATItems.GROUND_MEAT.getId());
+        this.basicItem(MATItems.HONEY_BUCKET.getId());
+        this.basicItem(MATItems.PLANT_EXTRACT_BUCKET.getId());
         this.basicItem(MATItems.MERCURY_SLAG.getId());
         this.basicItem(MATItems.MORTAR.getId());
         this.basicItem(MATItems.BLAZE_BURNER.getId());

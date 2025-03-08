@@ -4,12 +4,10 @@ import com.mojang.datafixers.util.Either;
 import enderdragon.magic_and_taboo.MagicAndTabooMod;
 import enderdragon.magic_and_taboo.capability.IPurenessStorage;
 import enderdragon.magic_and_taboo.capability.WorkHubResult;
-import enderdragon.magic_and_taboo.client.gui.AlchemyElementTooltip;
-import enderdragon.magic_and_taboo.client.gui.MercuryToxinsOverlay;
-import enderdragon.magic_and_taboo.client.gui.WorkHubScreen;
-import enderdragon.magic_and_taboo.client.gui.WorkHubTooltip;
+import enderdragon.magic_and_taboo.client.gui.*;
 import enderdragon.magic_and_taboo.client.model.WorkHubToolModel;
 import enderdragon.magic_and_taboo.client.render.EnchantedCrucibleRender;
+import enderdragon.magic_and_taboo.client.render.EnchantedCrucibleRenderElements;
 import enderdragon.magic_and_taboo.client.render.WorkHubRender;
 import enderdragon.magic_and_taboo.init.MATBlockEntities;
 import enderdragon.magic_and_taboo.init.MATBlocks;
@@ -26,6 +24,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.*;
+import net.minecraftforge.client.gui.overlay.VanillaGuiOverlay;
 import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -48,6 +47,12 @@ public class MATClient {
                     ResourceKey.create(AlchemyElement.RESOURCE_KEY, key)
             ).ifPresent(element -> event.getTooltipElements().add(1, Either.right(element)));
         }
+
+        @SubscribeEvent
+        public static void onRenderWorld(RenderLevelStageEvent event) {
+            EnchantedCrucibleRenderElements.render(event);
+        }
+
     }
 
     @SubscribeEvent
@@ -57,6 +62,7 @@ public class MATClient {
             MenuScreens.register(MATMenuTypes.WORK_HUB.get(), WorkHubScreen::new);
         });
     }
+
 
     @SubscribeEvent
     public static void registerClientTooltipComponentFactoriesEvent(RegisterClientTooltipComponentFactoriesEvent event) {
@@ -81,6 +87,7 @@ public class MATClient {
     @SubscribeEvent
     public static void registerOverlay(RegisterGuiOverlaysEvent event) {
         event.registerAbove(new ResourceLocation("player_health"), "mercury_toxins", new MercuryToxinsOverlay());
+        event.registerAbove(VanillaGuiOverlay.CROSSHAIR.id(), "sacrificial_dagger", new SacrificialDaggerOverlay());
     }
 
     @SubscribeEvent

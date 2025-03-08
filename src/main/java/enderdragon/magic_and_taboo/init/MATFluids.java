@@ -91,7 +91,7 @@ public class MATFluids {
     public static final ForgeFlowingFluid.Properties HONEY_PROPERTIES = new ForgeFlowingFluid
             .Properties(HONEY_FLUID_TYPE, HONEY, FLOWING_HONEY)
             .block(MATBlocks.HONEY)
-            .bucket(MATItems.BLAZE_BLAST_BURNER)
+            .bucket(MATItems.HONEY_BUCKET)
             .explosionResistance(100.0F)
             .slopeFindDistance(2)
             .levelDecreasePerBlock(2)
