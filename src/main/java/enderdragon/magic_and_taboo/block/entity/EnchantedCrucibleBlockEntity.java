@@ -1,5 +1,6 @@
 package enderdragon.magic_and_taboo.block.entity;
 
+import enderdragon.magic_and_taboo.client.render.EnchantedCrucibleInfo;
 import enderdragon.magic_and_taboo.init.MATBlockEntities;
 import enderdragon.magic_and_taboo.registry.AlchemyElement;
 import enderdragon.magic_and_taboo.registry.Element;
@@ -7,6 +8,7 @@ import enderdragon.magic_and_taboo.util.ContainerUtil;
 import it.unimi.dsi.fastutil.objects.Object2FloatMap;
 import it.unimi.dsi.fastutil.objects.Object2FloatOpenHashMap;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
@@ -23,42 +25,64 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.Fluids;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
+import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.capability.IFluidHandler;
-import net.minecraftforge.fluids.capability.templates.FluidTank;
 import net.minecraftforge.registries.ForgeRegistries;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
 
+/**
+ * @see net.minecraftforge.fluids.capability.templates.FluidTank
+ * @see net.minecraftforge.fluids.capability.FluidHandlerBlockEntity
+ */
 public class EnchantedCrucibleBlockEntity extends BlockEntity implements IFluidHandler {
-    public static final int MAX_SIZE = 8;
-    private static final Logger LOGGER = LogManager.getLogger();
+    public static void tickServer(Level level, BlockPos pos, BlockState state, EnchantedCrucibleBlockEntity crucible) {
+        cookTick(level, pos, state, crucible);
+        heating(level, pos, state, crucible);
+    }
 
+    public static void tickClient(Level level, BlockPos pos, BlockState state, EnchantedCrucibleBlockEntity crucible) {
+        var info = crucible.getRenderingInfo();
+        info.fluid = crucible.getFluidStack();
+        info.fluidColor = info.fluid.getFluid().isSame(Fluids.WATER)
+                ? level.getBiome(pos).get().getWaterColor()
+                : 0xFFFFFF;
+        ++info.tick;
+    }
+
+    public static final int MAX_SIZE = 8;
+    public static final int CAPACITY = 1000;
     private final NonNullList<ItemStack> stacks = NonNullList.withSize(MAX_SIZE, ItemStack.EMPTY);
+    private final LazyOptional<IFluidHandler> holder = LazyOptional.of(() -> this);
     private final int[] cookingTime = new int[MAX_SIZE];
     private int temperature = 0;
-    private FluidTank fluids = new FluidTank(1000);
+    protected @NotNull FluidStack fluid = FluidStack.EMPTY;
+    /**
+     * Should only be used for rendering
+     */
+    private EnchantedCrucibleInfo info;
 
-    public EnchantedCrucibleBlockEntity(BlockPos pPos, BlockState pBlockState) {
-        super(MATBlockEntities.ENCHANTED_CRUCIBLE.get(), pPos, pBlockState);
+    public EnchantedCrucibleBlockEntity(BlockPos pos, BlockState state) {
+        super(MATBlockEntities.ENCHANTED_CRUCIBLE.get(), pos, state);
+    }
+
+    public EnchantedCrucibleInfo getRenderingInfo() {
+        return this.info == null ? this.info = new EnchantedCrucibleInfo() : this.info;
     }
 
     public NonNullList<ItemStack> getStacks() {
-
         return stacks;
     }
 
     public int[] getCookingTime() {
         return cookingTime;
-    }
-
-    public FluidTank getFluids() {
-        return fluids;
     }
 
     public int getTemperature() {
@@ -67,7 +91,7 @@ public class EnchantedCrucibleBlockEntity extends BlockEntity implements IFluidH
 
     public static void heating(Level level, BlockPos pos, BlockState state, EnchantedCrucibleBlockEntity crucible) {
         boolean flag = false;
-        if (crucible.temperature < 100 && !crucible.getFluids().isEmpty() && level.getGameTime() % 10 == 0) {
+        if (crucible.temperature < 100 && !crucible.fluid.isEmpty() && level.getGameTime() % 10 == 0) {
             flag = true;
             crucible.temperature = Mth.clamp(crucible.temperature + 1, 0, 100);
 
@@ -78,13 +102,12 @@ public class EnchantedCrucibleBlockEntity extends BlockEntity implements IFluidH
     }
 
     public void test(ItemStack hand, Player player) {
-        var tank = this.fluids.getFluid();
-        var amount = tank.getAmount();
+        int amount = this.fluid.getAmount();
         if (amount % 250 == 0) {
             spawnMagicP(hand, player);
-            tank.setAmount(amount - 250);
+            this.fluid.setAmount(amount - 250);
         }
-        if (amount - 250 <= 0) {
+        if (amount <= 250) {
             stacks.clear();
         }
     }
@@ -110,7 +133,7 @@ public class EnchantedCrucibleBlockEntity extends BlockEntity implements IFluidH
         alchemyElement.elementMap().forEach((elementHolder, aFloat) -> {
             var element = elementHolder.get();
             var range = element.getTemperatureRange();
-            if (t >= range.getMin() && t <= range.getMax()) {
+            if (t >= range.min() && t <= range.max()) {
                 map.put(elementHolder, aFloat);
             }
         });
@@ -149,29 +172,27 @@ public class EnchantedCrucibleBlockEntity extends BlockEntity implements IFluidH
         }
     }
 
-    public void load(CompoundTag pTag) {
-        super.load(pTag);
-        if (pTag.contains("Fluids")) {
-            fluids.readFromNBT(pTag.getCompound("Fluids"));
+    public void load(CompoundTag tag) {
+        super.load(tag);
+        if (tag.contains("Fluid")) {
+            this.fluid = FluidStack.loadFluidStackFromNBT(tag.getCompound("Fluid"));
         }
-        ContainerHelper.loadAllItems(pTag, stacks);
-        if (pTag.contains("cooking_total_times", 11)) {
-            int[] cookingTotalTimes = pTag.getIntArray("cooking_total_times");
+        ContainerHelper.loadAllItems(tag, stacks);
+        if (tag.contains("cooking_total_times", 11)) {
+            int[] cookingTotalTimes = tag.getIntArray("cooking_total_times");
             System.arraycopy(cookingTotalTimes, 0, this.cookingTime, 0, Math.min(this.cookingTime.length, cookingTotalTimes.length));
         }
-        if (pTag.contains("temperature", 11)) {
-            temperature = pTag.getInt("temperature");
+        if (tag.contains("temperature", 11)) {
+            temperature = tag.getInt("temperature");
         }
     }
 
-    protected void saveAdditional(CompoundTag pTag) {
-        super.saveAdditional(pTag);
-        ContainerHelper.saveAllItems(pTag, stacks, true);
-        pTag.putIntArray("cooking_total_times", this.cookingTime);
-        pTag.putInt("temperature", this.temperature);
-        CompoundTag fluidNBT = new CompoundTag();
-        fluids.writeToNBT(fluidNBT);
-        pTag.put("Fluids", fluidNBT);
+    protected void saveAdditional(CompoundTag tag) {
+        super.saveAdditional(tag);
+        ContainerHelper.saveAllItems(tag, stacks, true);
+        tag.putIntArray("cooking_total_times", this.cookingTime);
+        tag.putInt("temperature", this.temperature);
+        tag.put("Fluid", this.fluid.writeToNBT(new CompoundTag()));
     }
 
     public boolean place(ItemStack stack, Player player) {
@@ -216,7 +237,7 @@ public class EnchantedCrucibleBlockEntity extends BlockEntity implements IFluidH
     }
 
     public void putFluid(ItemStack itemStack, Player player, InteractionHand hand) {
-        boolean result = FluidUtil.interactWithFluidHandler(player, hand, this.getFluids());
+        boolean result = FluidUtil.interactWithFluidHandler(player, hand, this);
         if (result) {
 //            if (!player.isCreative()) {
 //                player.setItemInHand(hand, result.getResult());
@@ -237,11 +258,6 @@ public class EnchantedCrucibleBlockEntity extends BlockEntity implements IFluidH
         return tag;
     }
 
-    public static void tick(Level level, BlockPos pos, BlockState state, EnchantedCrucibleBlockEntity crucible) {
-        cookTick(level, pos, state, crucible);
-        heating(level, pos, state, crucible);
-    }
-
     @Override
     public void setChanged() {
         super.setChanged();
@@ -255,14 +271,22 @@ public class EnchantedCrucibleBlockEntity extends BlockEntity implements IFluidH
         return 1;
     }
 
+    public @NotNull FluidStack getFluidStack() {
+        return this.fluid;
+    }
+
+    /**
+     * @deprecated Use {@link #getFluidStack()} instead.
+     */
     @Override
+    @Deprecated
     public @NotNull FluidStack getFluidInTank(int tank) {
-        return fluids.getFluid();
+        return this.fluid;
     }
 
     @Override
     public int getTankCapacity(int tank) {
-        return fluids.getCapacity();
+        return CAPACITY;
     }
 
     @Override
@@ -272,28 +296,60 @@ public class EnchantedCrucibleBlockEntity extends BlockEntity implements IFluidH
 
     @Override
     public int fill(FluidStack resource, FluidAction action) {
-        int amountFilled = fluids.fill(resource, action);
-        if (amountFilled > 0 && action == FluidAction.EXECUTE) {
-            setChanged();
+        if (resource.isEmpty()) return 0;
+        final var fluid = this.fluid;
+        if (action.simulate()) {
+            return fluid.isEmpty()
+                    ? Math.min(CAPACITY, resource.getAmount())
+                    : fluid.isFluidEqual(resource)
+                    ? Math.min(CAPACITY - fluid.getAmount(), resource.getAmount())
+                    : 0;
         }
-        return amountFilled;
+        if (fluid.isEmpty()) {
+            this.fluid = new FluidStack(resource, Math.min(CAPACITY, resource.getAmount()));
+            this.setChanged();
+            return fluid.getAmount();
+        }
+        if (!fluid.isFluidEqual(resource)) return 0;
+        int filled = CAPACITY - fluid.getAmount();
+        if (resource.getAmount() < filled) {
+            fluid.grow(resource.getAmount());
+            filled = resource.getAmount();
+        } else {
+            fluid.setAmount(CAPACITY);
+        }
+        if (filled > 0) {
+            this.setChanged();
+        }
+        return filled;
     }
 
     @Override
     public FluidStack drain(int maxDrain, FluidAction action) {
-        FluidStack drained = fluids.drain(maxDrain, action);
-        if (!drained.isEmpty() && action == FluidAction.EXECUTE) {
-            setChanged();
+        int drained = maxDrain;
+        if (this.fluid.getAmount() < drained) {
+            drained = this.fluid.getAmount();
         }
-        return drained;
+        FluidStack stack = new FluidStack(this.fluid, drained);
+        if (action.execute() && drained > 0) {
+            this.fluid.shrink(drained);
+            this.setChanged();
+        }
+        return stack;
     }
 
     @Override
     public FluidStack drain(FluidStack resource, FluidAction action) {
-        FluidStack drained = fluids.drain(resource, action);
-        if (!drained.isEmpty() && action == FluidAction.EXECUTE) {
-            setChanged();
-        }
-        return drained;
+        return resource.isEmpty() || !resource.isFluidEqual(this.fluid)
+                ? FluidStack.EMPTY
+                : drain(resource.getAmount(), action);
+    }
+
+    @Override
+    @NotNull
+    public <T> LazyOptional<T> getCapability(@NotNull Capability<T> capability, @Nullable Direction facing) {
+        return capability == ForgeCapabilities.FLUID_HANDLER
+                ? this.holder.cast()
+                : super.getCapability(capability, facing);
     }
 }

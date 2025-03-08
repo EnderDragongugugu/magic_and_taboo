@@ -79,7 +79,7 @@ public class WorkHubBlockItem extends BlockItem {
     public @Nullable ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundTag nbt) {
         return new WorkHubResult(nbt == null || !nbt.contains("Result")
                 ? ItemStack.EMPTY
-                : ItemStack.of(nbt.getCompound("Result")
-        ));
+                : ItemStack.of(nbt.getCompound("Result"))
+        );
     }
 }

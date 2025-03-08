@@ -3,7 +3,7 @@ package enderdragon.magic_and_taboo.registry;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import enderdragon.magic_and_taboo.MagicAndTabooMod;
-import enderdragon.magic_and_taboo.util.CodecRange;
+import enderdragon.magic_and_taboo.util.FloatRange;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
@@ -13,34 +13,25 @@ import org.jetbrains.annotations.Nullable;
 
 public class Element {
     public static final ResourceKey<Registry<Element>> RESOURCE_KEY = ResourceKey.createRegistryKey(MagicAndTabooMod.makeId("element"));
-    public static final Codec<CodecRange> CONCENTRATION_CODEC = RecordCodecBuilder.create(elementInstance -> elementInstance.group(
-            Codec.FLOAT.fieldOf("min").forGetter(CodecRange::getMin),
-            Codec.FLOAT.fieldOf("max").forGetter(CodecRange::getMax)
-    ).apply(elementInstance, CodecRange::new));
-    public static final Codec<CodecRange> TEMPERATURE_RANGE_CODEC = RecordCodecBuilder.create(elementInstance -> elementInstance.group(
-            Codec.FLOAT.fieldOf("min").forGetter(CodecRange::getMin),
-            Codec.FLOAT.fieldOf("max").forGetter(CodecRange::getMax)
-    ).apply(elementInstance, CodecRange::new));
     public static final Codec<Element> CODEC = RecordCodecBuilder.create(elementInstance -> elementInstance.group(
             ResourceLocation.CODEC.fieldOf("effect_id").forGetter(Element::getEffectId),
             Codec.STRING.fieldOf("element_name").forGetter(Element::getName),
             ResourceLocation.CODEC.fieldOf("effect_icon").forGetter(Element::getIcon),
-            CONCENTRATION_CODEC.fieldOf("blood_drug_concentration").forGetter(Element::getConcentration),
-            TEMPERATURE_RANGE_CODEC.fieldOf("temperature_range").forGetter(Element::getTemperatureRange)
+            FloatRange.CODEC.fieldOf("blood_drug_concentration").forGetter(Element::getConcentration),
+            FloatRange.CODEC.fieldOf("temperature_range").forGetter(Element::getTemperatureRange)
     ).apply(elementInstance, Element::new));
     public final ResourceLocation id;
     public final String name;
-    public final CodecRange concentration;
-    private final CodecRange temperatureRange;
+    public final FloatRange concentration;
+    private final FloatRange temperatureRange;
     private ResourceLocation icon;
 
-    public Element(ResourceLocation effectId, String name, @Nullable ResourceLocation icon, CodecRange concentration, CodecRange temperatureRange) {
+    public Element(ResourceLocation effectId, String name, @Nullable ResourceLocation icon, FloatRange concentration, FloatRange temperatureRange) {
         this.id = effectId;
         this.name = name;
         this.icon = icon;
         this.concentration = concentration;
         this.temperatureRange = temperatureRange;
-
     }
 
     public ResourceLocation getEffectId() {
@@ -58,11 +49,11 @@ public class Element {
         return icon;
     }
 
-    public CodecRange getConcentration() {
+    public FloatRange getConcentration() {
         return concentration;
     }
 
-    public CodecRange getTemperatureRange() {
+    public FloatRange getTemperatureRange() {
         return temperatureRange;
     }
 

@@ -1,45 +1,34 @@
 package enderdragon.magic_and_taboo.client.gui;
 
 import enderdragon.magic_and_taboo.MagicAndTabooMod;
+import enderdragon.magic_and_taboo.capability.IPurenessStorage;
 import enderdragon.magic_and_taboo.init.MATCapabilities;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.player.LocalPlayer;
-import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.client.gui.overlay.ForgeGui;
 import net.minecraftforge.client.gui.overlay.IGuiOverlay;
 
 public class SacrificialDaggerOverlay implements IGuiOverlay {
-//    private static final ResourceLocation TEXTURE = MagicAndTabooMod.makeId("textures/gui/container/work_hub.png");
-
     private static final ResourceLocation TEXTURE = MagicAndTabooMod.makeId("textures/gui/sacrificial_dagger.png");
 
     @Override
-    public void render(ForgeGui gui, GuiGraphics guiGraphics, float partialTick, int screenWidth, int screenHeight) {
-        float imageX = screenWidth / 1.9F, imageY = screenHeight / 1.9F;
-        Minecraft mc = Minecraft.getInstance();
-        LocalPlayer player = mc.player;
-        var level = mc.level;
-        if (player == null || level == null) return;
-        ItemStack itemStack = player.getMainHandItem();
-        if (itemStack.isEmpty()) return;
-        MultiBufferSource.BufferSource buffer = mc.renderBuffers().bufferSource();
+    public void render(ForgeGui gui, GuiGraphics graphics, float partialTick, int screenWidth, int screenHeight) {
+        var mc = Minecraft.getInstance();
+        var player = mc.player;
+        if (player == null) return;
+        var stack = player.getMainHandItem();
+        if (stack.isEmpty()) return;
+        var pureness = stack.getCapability(MATCapabilities.PURENESS).orElse(IPurenessStorage.EMPTY);
+        if (pureness == IPurenessStorage.EMPTY) return;
         var font = mc.font;
-        var matrix = guiGraphics.pose().last().pose();
-        itemStack.getCapability(MATCapabilities.PURENESS).ifPresent(itemHandler -> {
-            var pureness = itemHandler.getPureness();
-            var a = itemHandler.getFormattedPureness();
-            Component text = Component.translatable("tooltip.magic_and_taboo.blood_bottle_pureness", a);
-            float textW = font.width(text), textH = font.lineHeight;
-            float textX = (screenWidth - textW) / 2.0F, textY = (screenHeight - textH) / 2.0F;
+        var text = Component.translatable("tooltip.magic_and_taboo.blood_bottle_pureness", pureness.getFormattedPureness());
+        int textX = (screenWidth - font.width(text)) / 2, textY = (screenHeight - font.lineHeight) / 2;
+        float imageX = screenWidth / 1.9F, imageY = screenHeight / 1.9F;
 //            renderImage(imageX, imageY, pureness, guiGraphics);
-            font.drawInBatch(text, textX, textY * 1.15F, -1, true, matrix, buffer, Font.DisplayMode.NORMAL, 0, 15728880);
-            buffer.endBatch();
-        });
+        graphics.drawString(font, text, textX, (int) (textY * 1.15F), -1, true);
+
     }
 
     public void renderImage(float x, float y, int pureness, GuiGraphics guiGraphics) {
