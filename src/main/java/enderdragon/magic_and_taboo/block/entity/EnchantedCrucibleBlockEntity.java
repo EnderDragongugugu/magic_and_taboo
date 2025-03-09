@@ -5,18 +5,15 @@ import enderdragon.magic_and_taboo.init.MATBlockEntities;
 import enderdragon.magic_and_taboo.registry.AlchemyElement;
 import enderdragon.magic_and_taboo.registry.Element;
 import enderdragon.magic_and_taboo.util.ContainerUtil;
-import it.unimi.dsi.fastutil.objects.Object2FloatMap;
 import it.unimi.dsi.fastutil.objects.Object2FloatOpenHashMap;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.Holder;
 import net.minecraft.core.NonNullList;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
-import net.minecraft.network.protocol.game.ClientboundSetActionBarTextPacket;
-import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.util.Mth;
 import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
@@ -32,29 +29,42 @@ import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.capability.IFluidHandler;
-import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.Map;
 
 /**
  * @see net.minecraftforge.fluids.capability.templates.FluidTank
  * @see net.minecraftforge.fluids.capability.FluidHandlerBlockEntity
  */
 public class EnchantedCrucibleBlockEntity extends BlockEntity implements IFluidHandler {
-    public static void tickServer(Level level, BlockPos pos, BlockState state, EnchantedCrucibleBlockEntity crucible) {
-        cookTick(level, pos, state, crucible);
-        heating(level, pos, state, crucible);
+    public static void tickCommon(Level level, BlockPos pos, BlockState state, EnchantedCrucibleBlockEntity crucible) {
+        ++crucible.tick;
+        var registry = level.registryAccess();
+        // cooking start
+        for (int i = crucible.stacks.size() - 1; i >= 0; --i) {
+            var stack = crucible.stacks.get(i);
+            if (stack.isEmpty()) continue;
+            var alchemyElement = AlchemyElement.fromItem(registry, stack.getItem());
+            var time = alchemyElement == null ? 300 : alchemyElement.time();
+            if (crucible.cookingTime[i] < time) {
+                crucible.cookingTime[i] = Math.max(crucible.cookingTime[i] + 1, 0);
+            }
+        }
+        // cooking end
+        // heating start
+        if (crucible.temperature < 100 && !crucible.fluid.isEmpty() && crucible.tick % 10 == 0) {
+            crucible.temperature = Math.max(crucible.temperature + 1, 0);
+        }
+        // heating end
     }
 
     public static void tickClient(Level level, BlockPos pos, BlockState state, EnchantedCrucibleBlockEntity crucible) {
+        tickCommon(level, pos, state, crucible);
         var info = crucible.getRenderingInfo();
         info.fluid = crucible.getFluidStack();
         info.fluidColor = info.fluid.getFluid().isSame(Fluids.WATER)
                 ? level.getBiome(pos).get().getWaterColor()
                 : 0xFFFFFF;
-        ++info.tick;
     }
 
     public static final int MAX_SIZE = 8;
@@ -64,6 +74,7 @@ public class EnchantedCrucibleBlockEntity extends BlockEntity implements IFluidH
     private final int[] cookingTime = new int[MAX_SIZE];
     private int temperature = 0;
     protected @NotNull FluidStack fluid = FluidStack.EMPTY;
+    public int tick;
     /**
      * Should only be used for rendering
      */
@@ -89,87 +100,47 @@ public class EnchantedCrucibleBlockEntity extends BlockEntity implements IFluidH
         return temperature;
     }
 
-    public static void heating(Level level, BlockPos pos, BlockState state, EnchantedCrucibleBlockEntity crucible) {
-        boolean flag = false;
-        if (crucible.temperature < 100 && !crucible.fluid.isEmpty() && level.getGameTime() % 10 == 0) {
-            flag = true;
-            crucible.temperature = Mth.clamp(crucible.temperature + 1, 0, 100);
-
-        }
-        if (flag) {
-            crucible.setChanged();
-        }
-    }
-
-    public void test(ItemStack hand, Player player) {
+    public void test(Level level, ItemStack stack, Player player) {
         int amount = this.fluid.getAmount();
         if (amount % 250 == 0) {
-            spawnMagicP(hand, player);
+            spawnMagicP(level.registryAccess(), stack, player);
             this.fluid.setAmount(amount - 250);
+            this.setChanged();
         }
         if (amount <= 250) {
             stacks.clear();
         }
     }
 
-    public void spawnMagicP(ItemStack hand, Player player) {
-        if (!hand.is(Items.GLASS_BOTTLE)) return;
-        var bottle = new ItemStack(Items.HONEY_BOTTLE);
-        Map<Holder<Element>, Float> map = getAllElements(level);
+    public void spawnMagicP(RegistryAccess registry, ItemStack stack, Player player) {
+        if (!stack.is(Items.GLASS_BOTTLE)) return;
         var tag = new CompoundTag();
         var elements = new CompoundTag();
-        map.forEach((elementHolder, aFloat) -> {
-            elements.putFloat(elementHolder.get().getName(), aFloat);
-        });
-        tag.put("elements", elements);
+        var lookup = registry.registryOrThrow(Element.RESOURCE_KEY);
+        for (var entry : this.getAllElements(registry).object2FloatEntrySet()) {
+            elements.putFloat(String.valueOf(lookup.getId(entry.getKey())), entry.getFloatValue());
+        }
+        tag.put("Elements", elements);
+        var bottle = new ItemStack(Items.HONEY_BOTTLE);
         bottle.setTag(tag);
         ContainerUtil.addItem(player, bottle);
     }
 
-    public Map<Holder<Element>, Float> getItemStackElements(@Nullable AlchemyElement alchemyElement, int index) {
-        Object2FloatMap<Holder<Element>> map = new Object2FloatOpenHashMap<>();
-        if (alchemyElement == null) return map;
-        var t = temperature;
-        alchemyElement.elementMap().forEach((elementHolder, aFloat) -> {
-            var element = elementHolder.get();
-            var range = element.getTemperatureRange();
-            if (t >= range.min() && t <= range.max()) {
-                map.put(elementHolder, aFloat);
-            }
-        });
-        return map;
-    }
-
-    public Map<Holder<Element>, Float> getAllElements(Level level) {
-        Object2FloatMap<Holder<Element>> map = new Object2FloatOpenHashMap<>();
-        for (int i = 0; i < stacks.size(); ++i) {
-            var itemStack = stacks.get(i);
-            if (!itemStack.isEmpty()) {
-                var alchemyElement = getAlchemyElement(level, itemStack);
-                var elementsMap = getItemStackElements(alchemyElement, i);
-                elementsMap.forEach((elementHolder, aFloat) ->
-                        map.merge(elementHolder, aFloat, Float::sum)
-                );
+    public Object2FloatOpenHashMap<Element> getAllElements(RegistryAccess registry) {
+        var map = new Object2FloatOpenHashMap<Element>();
+        for (var stack : this.stacks) {
+            if (stack.isEmpty()) continue;
+            var alchemyElement = AlchemyElement.fromItem(registry, stack.getItem());
+            if (alchemyElement == null) continue;
+            int temperature = this.temperature;
+            for (var entry : alchemyElement.elementMap().object2FloatEntrySet()) {
+                var element = entry.getKey().get();
+                if (element.temperature().test(temperature)) {
+                    map.addTo(element, entry.getFloatValue());
+                }
             }
         }
         return map;
-    }
-
-
-    public static void cookTick(Level level, BlockPos pos, BlockState state, EnchantedCrucibleBlockEntity crucible) {
-        boolean flag = false;
-        for (int i = 0; i < crucible.stacks.size(); ++i) {
-            var itemStack = crucible.stacks.get(i);
-            var alchemyElement = getAlchemyElement(level, itemStack);
-            var time = alchemyElement == null ? 300 : alchemyElement.time();
-            if (crucible.cookingTime[i] < time && !itemStack.isEmpty()) {
-                flag = true;
-                crucible.cookingTime[i] = Mth.clamp(crucible.cookingTime[i] + 1, 0, time);
-            }
-        }
-        if (flag) {
-            crucible.setChanged();
-        }
     }
 
     public void load(CompoundTag tag) {
@@ -177,59 +148,60 @@ public class EnchantedCrucibleBlockEntity extends BlockEntity implements IFluidH
         if (tag.contains("Fluid")) {
             this.fluid = FluidStack.loadFluidStackFromNBT(tag.getCompound("Fluid"));
         }
-        ContainerHelper.loadAllItems(tag, stacks);
-        if (tag.contains("cooking_total_times", 11)) {
-            int[] cookingTotalTimes = tag.getIntArray("cooking_total_times");
-            System.arraycopy(cookingTotalTimes, 0, this.cookingTime, 0, Math.min(this.cookingTime.length, cookingTotalTimes.length));
+        if (tag.contains("Items")) {
+            this.stacks.clear();
+            ContainerHelper.loadAllItems(tag, this.stacks);
         }
-        if (tag.contains("temperature", 11)) {
-            temperature = tag.getInt("temperature");
+        if (tag.contains("CookingProgress", 11)) {
+            int[] progresses = tag.getIntArray("CookingProgress");
+            System.arraycopy(progresses, 0, this.cookingTime, 0, Math.min(this.cookingTime.length, progresses.length));
+        }
+        if (tag.contains("Temperature", Tag.TAG_ANY_NUMERIC)) {
+            temperature = tag.getInt("Temperature");
         }
     }
 
     protected void saveAdditional(CompoundTag tag) {
         super.saveAdditional(tag);
         ContainerHelper.saveAllItems(tag, stacks, true);
-        tag.putIntArray("cooking_total_times", this.cookingTime);
-        tag.putInt("temperature", this.temperature);
+        tag.putIntArray("CookingProgress", this.cookingTime);
+        tag.putInt("Temperature", this.temperature);
         tag.put("Fluid", this.fluid.writeToNBT(new CompoundTag()));
     }
 
-    public boolean place(ItemStack stack, Player player) {
-        var alchemyElement = getAlchemyElement(level, stack);
-        for (int i = 0; i < stacks.size(); ++i) {
-            var itemStack = stacks.get(i);
-            if (itemStack.isEmpty() && alchemyElement != null) {
-                cookingTime[i] = 0;
-                this.stacks.set(i, stack.split(1));
-                setChanged();
-                return true;
+    public boolean place(RegistryAccess registry, ItemStack stack, Player player) {
+        if (!stack.isEmpty()) {
+            var alchemyElement = AlchemyElement.fromItem(registry, stack.getItem());
+            if (alchemyElement != null) {
+                var stacks = this.stacks;
+                for (int i = 0; i < stacks.size(); ++i) {
+                    var content = stacks.get(i);
+                    if (content.isEmpty()) {
+                        cookingTime[i] = 0;
+                        this.stacks.set(i, stack.split(1));
+                        this.setChanged();
+                        return true;
+                    }
+                }
             }
-        }
-        if (player instanceof ServerPlayer serverPlayer && !stack.isEmpty()) {
-            serverPlayer.connection.send(new ClientboundSetActionBarTextPacket(Component.translatable("text.warn.place", stack.getHoverName())));
+            player.displayClientMessage(Component.translatable("text.warn.place", stack.getHoverName()), true);
         }
         return false;
     }
 
-    @Nullable
-    public static AlchemyElement getAlchemyElement(Level level, ItemStack itemStack) {
-        var key = ForgeRegistries.ITEMS.getKey(itemStack.getItem());
-        return level.registryAccess().registryOrThrow(AlchemyElement.RESOURCE_KEY).getOptional(key).orElse(null);
-    }
-
-    public boolean remove(Player player) {
-        if (temperature >= 100) return false;
-        for (int i = stacks.size() - 1; i >= 0; i--) {
-            var itemStack = stacks.get(i);
-            var alchemyElement = getAlchemyElement(level, itemStack);
+    public boolean remove(RegistryAccess registry, Player player) {
+        if (this.level == null || temperature >= 100) return false;
+        var stacks = this.stacks;
+        for (int i = stacks.size() - 1; i >= 0; --i) {
+            var stack = stacks.get(i);
+            if (stack.isEmpty()) continue;
+            var alchemyElement = AlchemyElement.fromItem(registry, stack.getItem());
             var time = alchemyElement == null ? 300 : alchemyElement.time();
-            if (!itemStack.isEmpty() && cookingTime[i] < time) {
-                ItemStack removed = stacks.get(i);
+            if (cookingTime[i] < time) {
                 stacks.set(i, ItemStack.EMPTY);
                 cookingTime[i] = 0;
-                setChanged();
-                ContainerUtil.addItem(player, removed);
+                ContainerUtil.addItem(player, stack);
+                this.setChanged();
                 return true;
             }
         }
@@ -253,8 +225,8 @@ public class EnchantedCrucibleBlockEntity extends BlockEntity implements IFluidH
 
     @Override
     public CompoundTag getUpdateTag() {
-        CompoundTag tag = new CompoundTag();
-        saveAdditional(tag);
+        var tag = new CompoundTag();
+        this.saveAdditional(tag);
         return tag;
     }
 

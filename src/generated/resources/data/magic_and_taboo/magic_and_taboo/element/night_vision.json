@@ -3,9 +3,9 @@
     "max": 100.0,
     "min": 30.0
   },
-  "effect_icon": "magic_and_taboo:textures/mob_effect/element_eye.png",
-  "effect_id": "minecraft:night_vision",
-  "element_name": "element.magic_and_taboo.element_eye",
+  "effect": "minecraft:night_vision",
+  "icon": "magic_and_taboo:textures/mob_effect/element_eye.png",
+  "name": "element.magic_and_taboo.element_eye",
   "temperature_range": {
     "max": 100.0,
     "min": 0.0

@@ -97,8 +97,8 @@ public class MATItems {
     public static final RegistryObject<WorkHubBlockItem> WORK_HUB = BLOCKS.register(REGISTRY, "work_hub", () ->
             new WorkHubBlockItem(MATBlocks.WORK_HUB.get(), new Properties())
     );
-    public static final RegistryObject<BlockItem> ENCHANTED_CRUCIBLE = BLOCKS.register(REGISTRY, "enchanted_crucible", () ->
-            new BlockItem(MATBlocks.ENCHANTED_CRUCIBLE.get(), new Properties())
+    public static final RegistryObject<EnchantedCrucibleBlockItem> ENCHANTED_CRUCIBLE = BLOCKS.register(REGISTRY, "enchanted_crucible", () ->
+            new EnchantedCrucibleBlockItem(MATBlocks.ENCHANTED_CRUCIBLE.get(), new Properties())
     );
     public static final RegistryObject<BlockItem> FIR_LEAVES = BLOCKS.register(REGISTRY, "fir_leaves", () ->
             new BlockItem(MATBlocks.FIR_LEAVES.get(), new Properties())

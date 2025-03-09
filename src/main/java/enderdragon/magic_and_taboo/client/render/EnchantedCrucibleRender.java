@@ -58,23 +58,27 @@ public class EnchantedCrucibleRender implements BlockEntityRenderer<EnchantedCru
         matrices.scale(-0.025F, -0.025F, 0.025F);
         var font = this.font;
         float left = (float) (-font.width(text) / 2);
-        var matrix = matrices.last().pose();
-        font.drawInBatch(text, left, 0, 0x20FFFFFF, false, matrix, buffers, Font.DisplayMode.SEE_THROUGH, (int) (Minecraft.getInstance().options.getBackgroundOpacity(0.25F) * 255.0F) << 24, light);
-        font.drawInBatch(text, left, 0, -1, false, matrix, buffers, Font.DisplayMode.NORMAL, 0, light);
+        {
+            var matrix = matrices.last().pose();
+            font.drawInBatch(text, left, 0, 0x20FFFFFF, false, matrix, buffers, Font.DisplayMode.SEE_THROUGH, (int) (Minecraft.getInstance().options.getBackgroundOpacity(0.25F) * 255.0F) << 24, light);
+            font.drawInBatch(text, left, 0, -1, false, matrix, buffers, Font.DisplayMode.NORMAL, 0, light);
+        }
         matrices.popPose();
         matrices.pushPose();
         matrices.translate(0.5F, 1.5F, 0.5F);
         matrices.mulPose(orientation);
         matrices.mulPose(Axis.YP.rotationDegrees(180.0F));
         matrices.scale(-0.2F, -0.2F, 0.2F);
-        VertexConsumer buffer = buffers.getBuffer(RENDER_TYPE);
-        PoseStack.Pose pose = matrices.last();
-        Matrix4f matrix4f = pose.pose();
-        Matrix3f matrix3f = pose.normal();
-        vertex(buffer, matrix4f, matrix3f, -0.5F, -0.25F, 255, 255, 255, 0, 0, light);
-        vertex(buffer, matrix4f, matrix3f, 0.5F, -0.25F, 255, 255, 255, 1, 0, light);
-        vertex(buffer, matrix4f, matrix3f, 0.5F, 0.75F, 255, 255, 255, 1, 1, light);
-        vertex(buffer, matrix4f, matrix3f, -0.5F, 0.75F, 255, 255, 255, 0, 1, light);
+        {
+            var buffer = buffers.getBuffer(RENDER_TYPE);
+            var pose = matrices.last();
+            var matrix = pose.pose();
+            var normal = pose.normal();
+            vertex(buffer, matrix, normal, -0.5F, -0.25F, 0, 0, light);
+            vertex(buffer, matrix, normal, 0.5F, -0.25F, 1, 0, light);
+            vertex(buffer, matrix, normal, 0.5F, 0.75F, 1, 1, light);
+            vertex(buffer, matrix, normal, -0.5F, 0.75F, 0, 1, light);
+        }
         matrices.popPose();
     }
 
@@ -100,8 +104,8 @@ public class EnchantedCrucibleRender implements BlockEntityRenderer<EnchantedCru
         var stacks = crucible.getStacks();
         var list = crucible.getCookingTime();
         var registry = level.registryAccess().registryOrThrow(AlchemyElement.RESOURCE_KEY);
-        int tick = crucible.getRenderingInfo().tick;
-        float rotationAngle = tick % 360.0F;
+        int tick = crucible.tick;
+        float extraRot = tick % 360.0F;
         float extraOffset = 2.0F + 0.00225F * height;
         for (int i = 0; i < stacks.size(); i++) {
             var stack = stacks.get(i);
@@ -110,8 +114,7 @@ public class EnchantedCrucibleRender implements BlockEntityRenderer<EnchantedCru
             if (list[i] < time) {
                 matrices.pushPose();
                 matrices.translate(0.5F, 0.0F, 0.5F);
-                matrices.mulPose(Axis.YP.rotationDegrees(45.0F * (i + 1)));
-                matrices.mulPose(Axis.YP.rotationDegrees(rotationAngle));
+                matrices.mulPose(Axis.YP.rotationDegrees(45.0F * i + extraRot));
                 matrices.scale(0.175F, 0.175F, 0.175F);
                 matrices.translate(0.7F, extraOffset + Mth.sin((tick + i * 5) / 10.0F) * 0.1F, 0.9F);
                 this.itemRenderer.renderStatic(stack, ItemDisplayContext.FIXED, pPackedLight, pPackedOverlay, matrices, buffers, level, 0);
@@ -120,9 +123,9 @@ public class EnchantedCrucibleRender implements BlockEntityRenderer<EnchantedCru
         }
     }
 
-    private static void vertex(VertexConsumer buffer, Matrix4f matrix, Matrix3f normal, float x, float y, int r, int g, int b, float u, float v, int light) {
+    private static void vertex(VertexConsumer buffer, Matrix4f matrix, Matrix3f normal, float x, float y, float u, float v, int light) {
         buffer.vertex(matrix, x, y, 0.0F)
-                .color(r, g, b, 255)
+                .color(255, 255, 255, 255)
                 .uv(u, v)
                 .overlayCoords(OverlayTexture.NO_OVERLAY)
                 .uv2(light)

@@ -3,9 +3,9 @@
     "max": 50.0,
     "min": 10.0
   },
-  "effect_icon": "minecraft:textures/mob_effect/nausea.png",
-  "effect_id": "minecraft:nausea",
-  "element_name": "element.magic_and_taboo.element_nausea",
+  "effect": "minecraft:nausea",
+  "icon": "minecraft:textures/mob_effect/nausea.png",
+  "name": "element.magic_and_taboo.element_nausea",
   "temperature_range": {
     "max": 100.0,
     "min": 0.0

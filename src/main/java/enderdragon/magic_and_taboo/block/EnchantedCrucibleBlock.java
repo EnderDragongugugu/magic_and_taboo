@@ -14,14 +14,15 @@ import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
-import net.minecraft.world.level.block.*;
+import net.minecraft.world.level.block.BaseEntityBlock;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.RenderShape;
+import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
-import net.minecraft.world.level.material.FluidState;
-import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.shapes.BooleanOp;
@@ -31,21 +32,17 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.Nullable;
 
 import static net.minecraft.world.level.block.HorizontalDirectionalBlock.FACING;
-import static net.minecraft.world.level.block.state.properties.BlockStateProperties.WATERLOGGED;
 
 /**
  * @see net.minecraft.world.level.block.AbstractCauldronBlock
  */
-public class EnchantedCrucibleBlock extends BaseEntityBlock implements SimpleWaterloggedBlock {
+public class EnchantedCrucibleBlock extends BaseEntityBlock {
     private static final VoxelShape INSIDE = box(2.0D, 4.0D, 2.0D, 14.0D, 15.0D, 14.0D);
     private static final VoxelShape AABB = Shapes.join(box(0.0D, 0.0D, 0.0D, 16.0D, 15.0D, 16.0D), INSIDE, BooleanOp.ONLY_FIRST);
 
-    public EnchantedCrucibleBlock(Properties pProperties) {
-        super(pProperties);
-        this.registerDefaultState(this.stateDefinition.any()
-                .setValue(FACING, Direction.NORTH)
-                .setValue(WATERLOGGED, false)
-        );
+    public EnchantedCrucibleBlock(Properties props) {
+        super(props);
+        this.registerDefaultState(this.stateDefinition.any().setValue(FACING, Direction.NORTH));
     }
 
     @Nullable
@@ -53,7 +50,7 @@ public class EnchantedCrucibleBlock extends BaseEntityBlock implements SimpleWat
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type) {
         return level.isClientSide
                 ? createTickerHelper(type, MATBlockEntities.ENCHANTED_CRUCIBLE.get(), EnchantedCrucibleBlockEntity::tickClient)
-                : createTickerHelper(type, MATBlockEntities.ENCHANTED_CRUCIBLE.get(), EnchantedCrucibleBlockEntity::tickServer);
+                : createTickerHelper(type, MATBlockEntities.ENCHANTED_CRUCIBLE.get(), EnchantedCrucibleBlockEntity::tickCommon);
     }
 
     @SuppressWarnings("deprecation")
@@ -63,13 +60,14 @@ public class EnchantedCrucibleBlock extends BaseEntityBlock implements SimpleWat
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     public VoxelShape getInteractionShape(BlockState state, BlockGetter level, BlockPos pos) {
         return INSIDE;
     }
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-        super.createBlockStateDefinition(builder.add(FACING, WATERLOGGED));
+        super.createBlockStateDefinition(builder.add(FACING));
     }
 
     @Override
@@ -80,27 +78,7 @@ public class EnchantedCrucibleBlock extends BaseEntityBlock implements SimpleWat
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext context) {
         return this.defaultBlockState()
-                .setValue(WATERLOGGED, context.getLevel().getFluidState(context.getClickedPos()).getType() == Fluids.WATER)
                 .setValue(FACING, context.getHorizontalDirection().getOpposite());
-    }
-
-    @SuppressWarnings("deprecation")
-    @Override
-    public FluidState getFluidState(BlockState state) {
-        return state.getValue(WATERLOGGED) ? Fluids.WATER.getSource(false) : super.getFluidState(state);
-    }
-
-    @SuppressWarnings("deprecation")
-    @Override
-    public BlockState updateShape(BlockState state, Direction facing, BlockState facingState, LevelAccessor level, BlockPos pos, BlockPos facingPos) {
-        if (state.getValue(WATERLOGGED)) {
-            level.scheduleTick(pos, Fluids.WATER, Fluids.WATER.getTickDelay(level));
-        }
-//        LOGGER.info("test" + level.getBlockState(pos).getBlock().getDescriptionId());
-//        LOGGER.info("test" + facingState.getBlock().getDescriptionId());
-
-
-        return super.updateShape(state, facing, facingState, level, pos, facingPos);
     }
 
     @Override
@@ -122,7 +100,8 @@ public class EnchantedCrucibleBlock extends BaseEntityBlock implements SimpleWat
     }
 
     @Override
-    public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult) {
+    @SuppressWarnings("deprecation")
+    public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
         if (level.getBlockEntity(pos) instanceof EnchantedCrucibleBlockEntity crucible) {
             if (level.isClientSide) return InteractionResult.CONSUME;
             ItemStack stack = player.getItemInHand(hand);
@@ -130,11 +109,11 @@ public class EnchantedCrucibleBlock extends BaseEntityBlock implements SimpleWat
                 crucible.putFluid(stack, player, hand);
                 return InteractionResult.SUCCESS;
             } else if (stack.is(Items.GLASS_BOTTLE)) {
-                crucible.test(stack, player);
+                crucible.test(level, stack, player);
                 return InteractionResult.SUCCESS;
-            } else if (player.isShiftKeyDown() && crucible.remove(player)) {
+            } else if (player.isShiftKeyDown() && crucible.remove(level.registryAccess(), player)) {
                 return InteractionResult.SUCCESS;
-            } else if (crucible.place(player.getAbilities().instabuild ? stack.copy() : stack, player)) {
+            } else if (crucible.place(level.registryAccess(), player.getAbilities().instabuild ? stack.copy() : stack, player)) {
                 return InteractionResult.SUCCESS;
             }
             return InteractionResult.CONSUME;
@@ -148,19 +127,13 @@ public class EnchantedCrucibleBlock extends BaseEntityBlock implements SimpleWat
     }
 
     @Override
-    public void onRemove(BlockState pState, Level pLevel, BlockPos pPos, BlockState pNewState, boolean pMovedByPiston) {
-        if (!pState.is(pNewState.getBlock())) {
-            BlockEntity blockentity = pLevel.getBlockEntity(pPos);
-            if (blockentity instanceof EnchantedCrucibleBlockEntity) {
-                Containers.dropContents(pLevel, pPos, ((EnchantedCrucibleBlockEntity) blockentity).getStacks());
+    @SuppressWarnings("deprecation")
+    public void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean movedByPiston) {
+        if (!state.is(newState.getBlock())) {
+            if (level.getBlockEntity(pos) instanceof EnchantedCrucibleBlockEntity crucible) {
+                Containers.dropContents(level, pos, crucible.getStacks());
             }
-
-            super.onRemove(pState, pLevel, pPos, pNewState, pMovedByPiston);
+            super.onRemove(state, level, pos, newState, movedByPiston);
         }
-    }
-
-    @Override
-    public void playerWillDestroy(Level pLevel, BlockPos pPos, BlockState pState, Player pPlayer) {
-        super.playerWillDestroy(pLevel, pPos, pState, pPlayer);
     }
 }

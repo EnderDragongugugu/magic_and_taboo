@@ -3,9 +3,9 @@
     "max": 20.0,
     "min": 1.0
   },
-  "effect_icon": "magic_and_taboo:textures/mob_effect/mercury_toxins.png",
-  "effect_id": "magic_and_taboo:mercury_toxins",
-  "element_name": "element.magic_and_taboo.element_mercury",
+  "effect": "magic_and_taboo:mercury_toxins",
+  "icon": "magic_and_taboo:textures/mob_effect/mercury_toxins.png",
+  "name": "element.magic_and_taboo.element_mercury",
   "temperature_range": {
     "max": 100.0,
     "min": 0.0
