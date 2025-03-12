@@ -149,4 +149,6 @@ public class MATItems {
     public static final RegistryObject<Item> PLANT_EXTRACT_BUCKET = ITEMS.register(REGISTRY, "plant_extract_bucket", () ->
             new BucketItem(MATFluids.HONEY, new Properties().stacksTo(1))
     );
+    public static final RegistryObject<MagicPotion> MAGIC_POTION = ITEMS.register(REGISTRY, "magic_potion", () ->
+            new MagicPotion(new Properties().stacksTo(4)));
 }

@@ -4,8 +4,12 @@
     "min": 10.0
   },
   "effect": "minecraft:nausea",
+  "fusion_element": {
+    "magic_and_taboo:nausea": 3.0
+  },
   "icon": "minecraft:textures/mob_effect/nausea.png",
   "name": "element.magic_and_taboo.element_nausea",
+  "resistance_element": {},
   "temperature_range": {
     "max": 100.0,
     "min": 0.0

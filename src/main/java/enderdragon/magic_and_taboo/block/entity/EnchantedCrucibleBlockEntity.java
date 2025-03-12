@@ -2,6 +2,8 @@ package enderdragon.magic_and_taboo.block.entity;
 
 import enderdragon.magic_and_taboo.client.render.EnchantedCrucibleInfo;
 import enderdragon.magic_and_taboo.init.MATBlockEntities;
+import enderdragon.magic_and_taboo.init.MATCapabilities;
+import enderdragon.magic_and_taboo.init.MATItems;
 import enderdragon.magic_and_taboo.registry.AlchemyElement;
 import enderdragon.magic_and_taboo.registry.Element;
 import enderdragon.magic_and_taboo.util.ContainerUtil;
@@ -58,6 +60,27 @@ public class EnchantedCrucibleBlockEntity extends BlockEntity implements IFluidH
         // heating end
     }
 
+    public Object2FloatOpenHashMap<Element> recipe() {
+        if (level == null) return new Object2FloatOpenHashMap<>();
+        var registry = level.registryAccess();
+        var allElements = getAllElements(registry);
+        for (var entry : allElements.object2FloatEntrySet()) {
+            var element = entry.getKey();
+            for (var entry1 : element.resistanceElementMap().object2FloatEntrySet()) {
+                if (allElements.containsKey(entry1.getKey().get())) {
+                    allElements.addTo(element, -1 * entry1.getFloatValue());
+                }
+            }
+            float currentValue = allElements.getFloat(element);
+            for (var entry2 : element.fusionElementMap().object2FloatEntrySet()) {
+                if (allElements.containsKey(entry2.getKey().get())) {
+                    allElements.addTo(element, currentValue * entry2.getFloatValue());
+                }
+            }
+        }
+        return allElements;
+    }
+
     public static void tickClient(Level level, BlockPos pos, BlockState state, EnchantedCrucibleBlockEntity crucible) {
         tickCommon(level, pos, state, crucible);
         var info = crucible.getRenderingInfo();
@@ -103,7 +126,7 @@ public class EnchantedCrucibleBlockEntity extends BlockEntity implements IFluidH
     public void test(Level level, ItemStack stack, Player player) {
         int amount = this.fluid.getAmount();
         if (amount % 250 == 0) {
-            spawnMagicP(level.registryAccess(), stack, player);
+            spawnMagicPotion(level.registryAccess(), stack, player);
             this.fluid.setAmount(amount - 250);
             this.setChanged();
         }
@@ -112,17 +135,21 @@ public class EnchantedCrucibleBlockEntity extends BlockEntity implements IFluidH
         }
     }
 
-    public void spawnMagicP(RegistryAccess registry, ItemStack stack, Player player) {
+    public void spawnMagicPotion(RegistryAccess registry, ItemStack stack, Player player) {
         if (!stack.is(Items.GLASS_BOTTLE)) return;
-        var tag = new CompoundTag();
-        var elements = new CompoundTag();
-        var lookup = registry.registryOrThrow(Element.RESOURCE_KEY);
-        for (var entry : this.getAllElements(registry).object2FloatEntrySet()) {
-            elements.putFloat(String.valueOf(lookup.getId(entry.getKey())), entry.getFloatValue());
-        }
-        tag.put("Elements", elements);
-        var bottle = new ItemStack(Items.HONEY_BOTTLE);
-        bottle.setTag(tag);
+        var bottle = new ItemStack(MATItems.MAGIC_POTION.get());
+
+//        var tag = new CompoundTag();
+//        var elements = new CompoundTag();
+//        var lookup = registry.registryOrThrow(Element.RESOURCE_KEY);
+//        for (var entry : this.recipe().object2FloatEntrySet()) {
+//            elements.putFloat(String.valueOf(lookup.getId(entry.getKey())), entry.getFloatValue());
+//        }
+//        tag.put("Elements", elements);
+        bottle.getCapability(MATCapabilities.MAGIC_POTION_DATA).ifPresent(data -> {
+            data.setElementMap(this.recipe());
+        });
+//        bottle.setTag(tag);
         ContainerUtil.addItem(player, bottle);
     }
 

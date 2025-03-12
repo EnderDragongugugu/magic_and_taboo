@@ -34,19 +34,6 @@ public record AlchemyElement(Object2FloatMap<Holder<Element>> elementMap, int ti
         return registry.registryOrThrow(AlchemyElement.RESOURCE_KEY).get(ForgeRegistries.ITEMS.getKey(item));
     }
 
-    public static class Builder {
-        public final Object2FloatMap<Holder<Element>> elements = new Object2FloatOpenHashMap<>();
-
-        public Builder put(Holder<Element> element, float count) {
-            this.elements.put(element, count);
-            return this;
-        }
-
-        public AlchemyElement build(int time) {
-            return new AlchemyElement(Object2FloatMaps.unmodifiable(this.elements), time);
-        }
-    }
-
     public static Object2FloatMap<Holder<Element>> of(Map<Holder<Element>, Float> element) {
         var copy = element == null ? new Object2FloatOpenHashMap<Holder<Element>>() : new Object2FloatOpenHashMap<>(element);
         copy.defaultReturnValue(1.0F);

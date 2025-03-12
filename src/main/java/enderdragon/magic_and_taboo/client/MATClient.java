@@ -3,16 +3,15 @@ package enderdragon.magic_and_taboo.client;
 import com.mojang.datafixers.util.Either;
 import enderdragon.magic_and_taboo.MagicAndTabooMod;
 import enderdragon.magic_and_taboo.capability.IPurenessStorage;
+import enderdragon.magic_and_taboo.capability.MagicPotionData;
 import enderdragon.magic_and_taboo.capability.WorkHubResult;
 import enderdragon.magic_and_taboo.client.gui.*;
 import enderdragon.magic_and_taboo.client.model.WorkHubToolModel;
 import enderdragon.magic_and_taboo.client.render.EnchantedCrucibleRender;
 import enderdragon.magic_and_taboo.client.render.WorkHubRender;
-import enderdragon.magic_and_taboo.init.MATBlockEntities;
-import enderdragon.magic_and_taboo.init.MATBlocks;
-import enderdragon.magic_and_taboo.init.MATItems;
-import enderdragon.magic_and_taboo.init.MATMenuTypes;
+import enderdragon.magic_and_taboo.init.*;
 import enderdragon.magic_and_taboo.registry.AlchemyElement;
+import enderdragon.magic_and_taboo.util.RegistryAccessor;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.client.renderer.Sheets;
@@ -21,9 +20,11 @@ import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.CreativeModeTabs;
+import net.minecraft.world.item.alchemy.PotionUtils;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.*;
 import net.minecraftforge.client.gui.overlay.VanillaGuiOverlay;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -54,6 +55,19 @@ public class MATClient {
             Sheets.addWoodType(MATBlocks.FIR_WOOD_TYPE);
             MenuScreens.register(MATMenuTypes.WORK_HUB.get(), WorkHubScreen::new);
         });
+        MinecraftForge.EVENT_BUS.addListener(new RegistryAccessor.ClientHook());
+    }
+
+    @SubscribeEvent
+    public static void registerItemColors(RegisterColorHandlersEvent.Item event) {
+        event.register((pStack, pTintIndex) -> {
+            if (pTintIndex > 0) {
+                var cap = pStack.getCapability(MATCapabilities.MAGIC_POTION_DATA).orElse(new MagicPotionData());
+                if (cap.getEffectInstances().size() < 1) return -1;
+                return PotionUtils.getColor(cap.getEffectInstances());
+            }
+            return -1;
+        }, MATItems.MAGIC_POTION.get());
     }
 
     @SubscribeEvent
