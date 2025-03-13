@@ -2,6 +2,7 @@ package enderdragon.magic_and_taboo.block;
 
 import enderdragon.magic_and_taboo.block.entity.EnchantedCrucibleBlockEntity;
 import enderdragon.magic_and_taboo.init.MATBlockEntities;
+import enderdragon.magic_and_taboo.tag.MATItemTags;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.Containers;
@@ -108,7 +109,7 @@ public class EnchantedCrucibleBlock extends BaseEntityBlock {
             if (crucible.getFluidStack().isEmpty()) {
                 crucible.putFluid(stack, player, hand);
                 return InteractionResult.SUCCESS;
-            } else if (stack.is(Items.GLASS_BOTTLE)) {
+            } else if (stack.is(MATItemTags.MAGIC_POTION_BOTTLE)) {
                 crucible.test(level, stack, player);
                 return InteractionResult.SUCCESS;
             } else if (player.isShiftKeyDown() && crucible.remove(level.registryAccess(), player)) {

@@ -64,7 +64,7 @@ public class MATClient {
                 stack.getCapability(MATCapabilities.MAGIC_POTION)
                         .orElse(IMagicPotion.EMPTY)
                         .getEffectInstances()
-        ), MATItems.MAGIC_POTION.get());
+        ), MATItems.POTION_BOTTLE.get(), MATItems.POTION_BOTTLE_GLOW.get(), MATItems.POTION_BOTTLE_RED.get(), MATItems.POTION_SYRINGE.get());
     }
 
     @SubscribeEvent

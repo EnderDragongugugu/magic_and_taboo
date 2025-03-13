@@ -8,6 +8,7 @@ import it.unimi.dsi.fastutil.objects.Object2FloatMaps;
 import it.unimi.dsi.fastutil.objects.Object2FloatOpenHashMap;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.util.Mth;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
@@ -75,12 +76,28 @@ public class MagicPotion implements ICapabilityProvider, IMagicPotion, INBTSeria
     }
 
     @Override
+    public MobEffectInstance getEffectInstance(Element element, float value) {
+        var maxLevel = element.maxLevel();
+        var maxTime = element.maxTime();
+        var maxConcentration = element.concentration().max();
+        var minConcentration = element.concentration().min();
+        int level = (int) Math.ceil(
+                (value - minConcentration) / ((maxConcentration - minConcentration) / maxLevel)
+        );
+        level = Math.max(0, Math.min(level, maxLevel));
+        var normalized = (value - minConcentration) / (maxConcentration - minConcentration);
+        var time = Mth.clamp(maxTime * (1.0F - 0.8F * normalized), 30 * 20, maxTime);
+
+        return new MobEffectInstance(element.effect(), (int) (time), level);
+    }
+
+    @Override
     public Collection<MobEffectInstance> getEffectInstances() {
         Collection<MobEffectInstance> set = new HashSet<>();
         if (this.elements == null) return set;
         for (var entry : this.elements.object2FloatEntrySet()) {
             var element = entry.getKey();
-            var effectInstance = new MobEffectInstance(element.effect());
+            var effectInstance = getEffectInstance(element, entry.getFloatValue());
             set.add(effectInstance);
         }
         return set;

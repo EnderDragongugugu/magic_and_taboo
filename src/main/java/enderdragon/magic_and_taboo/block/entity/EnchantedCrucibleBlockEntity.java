@@ -5,6 +5,7 @@ import enderdragon.magic_and_taboo.client.render.EnchantedCrucibleInfo;
 import enderdragon.magic_and_taboo.init.MATBlockEntities;
 import enderdragon.magic_and_taboo.init.MATCapabilities;
 import enderdragon.magic_and_taboo.init.MATItems;
+import enderdragon.magic_and_taboo.item.MagicPotionItem;
 import enderdragon.magic_and_taboo.registry.AlchemyElement;
 import enderdragon.magic_and_taboo.registry.Element;
 import enderdragon.magic_and_taboo.util.ContainerUtil;
@@ -20,7 +21,6 @@ import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
@@ -105,8 +105,8 @@ public class EnchantedCrucibleBlockEntity extends BlockEntity implements IFluidH
     public void test(Level level, ItemStack stack, Player player) {
         int amount = this.fluid.getAmount();
         if (amount % 250 == 0) {
-            if (!stack.is(Items.GLASS_BOTTLE)) return;
-            var bottle = new ItemStack(MATItems.MAGIC_POTION.get());
+            var item = getPotionBottle(stack);
+            var bottle = new ItemStack(item);
             this.fillPotion(level.registryAccess(), bottle.getCapability(MATCapabilities.MAGIC_POTION).orElse(IMagicPotion.EMPTY));
             ContainerUtil.addItem(player, bottle);
             this.fluid.setAmount(amount - 250);
@@ -115,6 +115,13 @@ public class EnchantedCrucibleBlockEntity extends BlockEntity implements IFluidH
         if (amount <= 250) {
             stacks.clear();
         }
+    }
+
+    public MagicPotionItem getPotionBottle(ItemStack stack) {
+        if (stack.is(MATItems.GLASS_POTION_BOTTLE_RED.get())) return MATItems.POTION_BOTTLE_RED.get();
+        if (stack.is(MATItems.GLASS_POTION_BOTTLE_GLOW.get())) return MATItems.POTION_BOTTLE_GLOW.get();
+        if (stack.is(MATItems.GLASS_POTION_SYRINGE.get())) return MATItems.POTION_SYRINGE.get();
+        return MATItems.POTION_BOTTLE.get();
     }
 
     public void fillPotion(RegistryAccess registry, IMagicPotion potion) {

@@ -5,6 +5,8 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
 import enderdragon.magic_and_taboo.block.entity.EnchantedCrucibleBlockEntity;
 import enderdragon.magic_and_taboo.registry.AlchemyElement;
+import enderdragon.magic_and_taboo.registry.Element;
+import enderdragon.magic_and_taboo.util.RegistryAccessor;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -51,34 +53,44 @@ public class EnchantedCrucibleRender implements BlockEntityRenderer<EnchantedCru
         if (!(Minecraft.getInstance().hitResult instanceof BlockHitResult hit && hit.getBlockPos().equals(crucible.getBlockPos())))
             return;
         var orientation = this.entityRenderer.cameraOrientation();
-        String text = "笨龙";
-        matrices.pushPose();
-        matrices.translate(0.5F, 1.25F, 0.5F);
-        matrices.mulPose(orientation);
-        matrices.scale(-0.025F, -0.025F, 0.025F);
-        var font = this.font;
-        float left = (float) (-font.width(text) / 2);
-        {
-            var matrix = matrices.last().pose();
-            font.drawInBatch(text, left, 0, 0x20FFFFFF, false, matrix, buffers, Font.DisplayMode.SEE_THROUGH, (int) (Minecraft.getInstance().options.getBackgroundOpacity(0.25F) * 255.0F) << 24, light);
-            font.drawInBatch(text, left, 0, -1, false, matrix, buffers, Font.DisplayMode.NORMAL, 0, light);
-        }
-        matrices.popPose();
+//        String text = "笨龙";
+//        matrices.pushPose();
+//        matrices.translate(0.5F, 1.25F, 0.5F);
+//        matrices.mulPose(orientation);
+//        matrices.scale(-0.025F, -0.025F, 0.025F);
+//        var font = this.font;
+//        float left = (float) (-font.width(text) / 2);
+//        {
+//            var matrix = matrices.last().pose();
+//            font.drawInBatch(text, left, 0, 0x20FFFFFF, false, matrix, buffers, Font.DisplayMode.SEE_THROUGH, (int) (Minecraft.getInstance().options.getBackgroundOpacity(0.25F) * 255.0F) << 24, light);
+//            font.drawInBatch(text, left, 0, -1, false, matrix, buffers, Font.DisplayMode.NORMAL, 0, light);
+//        }
+//        matrices.popPose();
         matrices.pushPose();
         matrices.translate(0.5F, 1.5F, 0.5F);
         matrices.mulPose(orientation);
         matrices.mulPose(Axis.YP.rotationDegrees(180.0F));
         matrices.scale(-0.2F, -0.2F, 0.2F);
-        {
-            var buffer = buffers.getBuffer(RENDER_TYPE);
-            var pose = matrices.last();
-            var matrix = pose.pose();
-            var normal = pose.normal();
-            vertex(buffer, matrix, normal, -0.5F, -0.25F, 0, 0, light);
-            vertex(buffer, matrix, normal, 0.5F, -0.25F, 1, 0, light);
-            vertex(buffer, matrix, normal, 0.5F, 0.75F, 1, 1, light);
-            vertex(buffer, matrix, normal, -0.5F, 0.75F, 0, 1, light);
+        var data = Element.fromStacks(RegistryAccessor.access(), crucible.getStacks(), crucible.getTemperature());
+        var i = 0;
+        for (var entry : data.object2FloatEntrySet()) {
+            matrices.pushPose();
+            matrices.translate(-(data.size() - 1.0F) * 0.5F + i, 0.0F, 0.0F);
+            {
+                var type = RenderType.itemEntityTranslucentCull(entry.getKey().icon());
+                var buffer = buffers.getBuffer(type);
+                var pose = matrices.last();
+                var matrix = pose.pose();
+                var normal = pose.normal();
+                vertex(buffer, matrix, normal, -0.5F, -0.25F, 0, 0, light);
+                vertex(buffer, matrix, normal, 0.5F, -0.25F, 1, 0, light);
+                vertex(buffer, matrix, normal, 0.5F, 0.75F, 1, 1, light);
+                vertex(buffer, matrix, normal, -0.5F, 0.75F, 0, 1, light);
+            }
+            matrices.popPose();
+            i++;
         }
+
         matrices.popPose();
     }
 

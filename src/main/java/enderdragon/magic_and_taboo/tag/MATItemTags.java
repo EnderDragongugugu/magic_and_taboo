@@ -14,6 +14,7 @@ public class MATItemTags {
     public static final TagKey<Item> GILDED_MARBLE = matTag("gilded_marble");
     public static final TagKey<Item> MORTARS = matTag("mortars");
     public static final TagKey<Item> RAW_MEAT = cTag("foods/raw_meat");
+    public static final TagKey<Item> MAGIC_POTION_BOTTLE = matTag("glass_potion_bottle");
 
     static TagKey<Item> matTag(String name) {
         return TagKey.create(Registries.ITEM, makeId(name));

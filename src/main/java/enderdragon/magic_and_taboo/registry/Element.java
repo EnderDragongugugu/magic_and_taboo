@@ -26,6 +26,8 @@ public record Element(
         ResourceLocation icon,
         FloatRange concentration,
         FloatRange temperature,
+        int maxTime,
+        int maxLevel,
         Object2FloatMap<Holder<Element>> resistanceElementMap,
         Object2FloatMap<Holder<Element>> fusionElementMap
 ) {
@@ -36,6 +38,8 @@ public record Element(
             ResourceLocation.CODEC.fieldOf("icon").forGetter(Element::icon),
             FloatRange.CODEC.fieldOf("blood_drug_concentration").forGetter(Element::concentration),
             FloatRange.CODEC.fieldOf("temperature_range").forGetter(Element::temperature),
+            Codec.INT.fieldOf("max_time").forGetter(Element::maxTime),
+            Codec.INT.fieldOf("max_level").forGetter(Element::maxLevel),
             Codec.unboundedMap(RegistryFixedCodec.create(Element.RESOURCE_KEY), Codec.FLOAT)
                     .xmap(FloatMaps::unmodifiableCopy, Function.identity())
                     .fieldOf("resistance_element").forGetter(Element::resistanceElementMap),

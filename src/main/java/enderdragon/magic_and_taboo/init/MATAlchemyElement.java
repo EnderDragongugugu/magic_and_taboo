@@ -18,6 +18,7 @@ public class MATAlchemyElement {
         var mercury = registry.getOrThrow(MATElements.MERCURY);
         var confusion = registry.getOrThrow(MATElements.NAUSEA);
         var night_vision = registry.getOrThrow(MATElements.NIGHT_VISION);
+        var glowing = registry.getOrThrow(MATElements.GLOWING);
         new Builder()
                 .put(confusion, 8.5F)
                 .register(context, MATItems.GROUND_MEAT.getId(), 300);
@@ -25,8 +26,11 @@ public class MATAlchemyElement {
                 .put(mercury, 10.0F)
                 .register(context, MATItems.MERCURY_SLAG.getId(), 300);
         new Builder()
-                .put(mercury, 1.0F)
-                .register(context, ForgeRegistries.ITEMS.getKey(Items.ARROW), 300);
+                .put(glowing, 5.0F)
+                .register(context, ForgeRegistries.ITEMS.getKey(Items.GLOW_BERRIES), 300);
+        new Builder()
+                .put(night_vision, 4.0F)
+                .register(context, ForgeRegistries.ITEMS.getKey(Items.GOLDEN_CARROT), 300);
     }
 
     public static class Builder {

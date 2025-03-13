@@ -51,6 +51,14 @@
   "item.magic_and_taboo.mercury_slag": "水银碎渣",
   "item.magic_and_taboo.mortar": "研钵",
   "item.magic_and_taboo.sacrificial_dagger": "献祭匕首",
+  "item.magic_and_taboo.potion_bottle": "药剂瓶",
+  "item.magic_and_taboo.potion_bottle_red": "药剂瓶 朱",
+  "item.magic_and_taboo.potion_bottle_glow": "药剂瓶 萤",
+  "item.magic_and_taboo.potion_syringe": "药剂注射器",
+  "item.magic_and_taboo.glass_potion_bottle": "玻璃瓶",
+  "item.magic_and_taboo.glass_potion_bottle_red": "玻璃瓶 朱",
+  "item.magic_and_taboo.glass_potion_bottle_glow": "玻璃瓶 萤",
+  "item.magic_and_taboo.glass_potion_syringe": "玻璃注射器",
   "itemGroup.magic_and_taboo.blocks": "魔法与禁忌: 方块",
   "itemGroup.magic_and_taboo.items": "魔法与禁忌: 物品",
   "tooltip.magic_and_taboo.blood_bottle_entity_name": "当前装有§4%s§f的血液",
@@ -64,5 +72,6 @@
   "element.magic_and_taboo.element_mercury": "跑银",
   "element.magic_and_taboo.element_eye": "枭眼",
   "element.magic_and_taboo.element_nausea": "恶心",
+  "element.magic_and_taboo.glowing": "荧光",
   "text.warn.place": "坩埚似乎在抗拒%s"
 }

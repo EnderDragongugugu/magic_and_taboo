@@ -8,6 +8,8 @@
     "magic_and_taboo:nausea": 3.0
   },
   "icon": "minecraft:textures/mob_effect/nausea.png",
+  "max_level": 4,
+  "max_time": 9600,
   "name": "element.magic_and_taboo.element_nausea",
   "resistance_element": {},
   "temperature_range": {

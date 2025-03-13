@@ -17,6 +17,9 @@ public class MATElements {
     public static final ResourceKey<Element> MERCURY = makeKey(Element.RESOURCE_KEY, "mercury");
     public static final ResourceKey<Element> NAUSEA = makeKey(Element.RESOURCE_KEY, "nausea");
     public static final ResourceKey<Element> NIGHT_VISION = makeKey(Element.RESOURCE_KEY, "night_vision");
+    public static final ResourceKey<Element> GLOWING = makeKey(Element.RESOURCE_KEY, "glowing");
+    public static final int MAX_TIME = 20 * 60 * 8;
+    public static final int MAX_LEVEL = 4;
 
     static ResourceLocation makeIcon(ResourceLocation identifier) {
         return identifier.withPath("textures/mob_effect/" + identifier.getPath() + ".png");
@@ -33,6 +36,8 @@ public class MATElements {
                 makeIcon(MATEffects.MERCURY_TOXINS.getId()),
                 new FloatRange(1.0F, 20.0F),
                 new FloatRange(0.0F, 100.0F),
+                MAX_TIME,
+                MAX_LEVEL,
                 FloatMaps.unmodifiableCopy(null),
                 new FloatMaps.Builder<Holder<Element>>().put(nausea, 1.15F).build()
         ));
@@ -43,6 +48,8 @@ public class MATElements {
                 makeIcon(ForgeRegistries.MOB_EFFECTS.getKey(MobEffects.CONFUSION)),
                 new FloatRange(10.0F, 50.0F),
                 new FloatRange(0.0F, 100.0F),
+                MAX_TIME,
+                MAX_LEVEL,
                 FloatMaps.unmodifiableCopy(null),
                 new FloatMaps.Builder<Holder<Element>>().put(nausea, 3.0F).build()
         ));
@@ -52,6 +59,19 @@ public class MATElements {
                 makeId("textures/mob_effect/element_eye.png"),
                 new FloatRange(30.0F, 100.0F),
                 new FloatRange(0.0F, 100.0F),
+                MAX_TIME,
+                MAX_LEVEL,
+                FloatMaps.unmodifiableCopy(null),
+                FloatMaps.unmodifiableCopy(null)
+        ));
+        context.register(GLOWING, new Element(
+                MobEffects.GLOWING,
+                "element.magic_and_taboo.glowing",
+                makeIcon(ForgeRegistries.MOB_EFFECTS.getKey(MobEffects.GLOWING)),
+                new FloatRange(30.0F, 100.0F),
+                new FloatRange(0.0F, 100.0F),
+                MAX_TIME,
+                MAX_LEVEL,
                 FloatMaps.unmodifiableCopy(null),
                 FloatMaps.unmodifiableCopy(null)
         ));

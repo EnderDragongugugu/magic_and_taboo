@@ -52,5 +52,10 @@ public class MATItemTagProvider extends ItemTagsProvider {
                 .add(Items.MUTTON)
                 .add(Items.PORKCHOP)
                 .add(Items.RABBIT);
+        this.tag(MATItemTags.MAGIC_POTION_BOTTLE)
+                .add(MATItems.GLASS_POTION_BOTTLE.get())
+                .add(MATItems.GLASS_POTION_BOTTLE_RED.get())
+                .add(MATItems.GLASS_POTION_BOTTLE_GLOW.get())
+                .add(MATItems.GLASS_POTION_SYRINGE.get());
     }
 }

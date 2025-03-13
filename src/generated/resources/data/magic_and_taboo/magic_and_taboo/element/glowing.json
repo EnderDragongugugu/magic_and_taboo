@@ -3,12 +3,12 @@
     "max": 100.0,
     "min": 30.0
   },
-  "effect": "minecraft:night_vision",
+  "effect": "minecraft:glowing",
   "fusion_element": {},
-  "icon": "magic_and_taboo:textures/mob_effect/element_eye.png",
+  "icon": "minecraft:textures/mob_effect/glowing.png",
   "max_level": 4,
   "max_time": 9600,
-  "name": "element.magic_and_taboo.element_eye",
+  "name": "element.magic_and_taboo.glowing",
   "resistance_element": {},
   "temperature_range": {
     "max": 100.0,

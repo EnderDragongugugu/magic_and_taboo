@@ -71,7 +71,22 @@ public class MATItemModelProvider extends ItemModelProvider {
                         .parent(handheld)
                         .texture("layer0", makeId("item/bloody_sacrificial_dagger"))
                 );
-        this.withExistingParent(MATItems.MAGIC_POTION.getId().getPath(), "item/potion");
+        bottleItem(MATItems.POTION_BOTTLE);
+        bottleItem(MATItems.POTION_BOTTLE_RED);
+        bottleItem(MATItems.POTION_BOTTLE_GLOW);
+        bottleItem(MATItems.POTION_SYRINGE);
+        this.getBuilder(MATItems.GLASS_POTION_BOTTLE.getId().getPath())
+                .parent(new ModelFile.UncheckedModelFile("item/generated"))
+                .texture("layer0", MATItems.POTION_BOTTLE.getId().withPrefix("item/"));
+        this.getBuilder(MATItems.GLASS_POTION_BOTTLE_RED.getId().getPath())
+                .parent(new ModelFile.UncheckedModelFile("item/generated"))
+                .texture("layer0", MATItems.POTION_BOTTLE_RED.getId().withPrefix("item/"));
+        this.getBuilder(MATItems.GLASS_POTION_BOTTLE_GLOW.getId().getPath())
+                .parent(new ModelFile.UncheckedModelFile("item/generated"))
+                .texture("layer0", MATItems.POTION_BOTTLE_GLOW.getId().withPrefix("item/"));
+        this.getBuilder(MATItems.GLASS_POTION_SYRINGE.getId().getPath())
+                .parent(new ModelFile.UncheckedModelFile("item/generated"))
+                .texture("layer0", MATItems.POTION_SYRINGE.getId().withPrefix("item/"));
     }
 
     public ItemModelBuilder handheldItem(RegistryObject<? extends Item> item) {
@@ -80,6 +95,15 @@ public class MATItemModelProvider extends ItemModelProvider {
                 .parent(new ModelFile.UncheckedModelFile("item/handheld"))
                 .texture("layer0", id.withPrefix("item/"));
     }
+
+    public ItemModelBuilder bottleItem(RegistryObject<? extends Item> item) {
+        var id = item.getId();
+        return this.getBuilder(id.getPath())
+                .parent(new ModelFile.UncheckedModelFile("item/generated"))
+                .texture("layer0", id.withPrefix("item/") + "_overlay")
+                .texture("layer1", id.withPrefix("item/"));
+    }
+
 
     public ItemModelBuilder basicItem(RegistryObject<? extends Block> block) {
         var id = block.getId();
