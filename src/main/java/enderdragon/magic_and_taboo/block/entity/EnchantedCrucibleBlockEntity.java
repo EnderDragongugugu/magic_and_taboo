@@ -1,5 +1,6 @@
 package enderdragon.magic_and_taboo.block.entity;
 
+import enderdragon.magic_and_taboo.capability.IMagicPotion;
 import enderdragon.magic_and_taboo.client.render.EnchantedCrucibleInfo;
 import enderdragon.magic_and_taboo.init.MATBlockEntities;
 import enderdragon.magic_and_taboo.init.MATCapabilities;
@@ -7,7 +8,6 @@ import enderdragon.magic_and_taboo.init.MATItems;
 import enderdragon.magic_and_taboo.registry.AlchemyElement;
 import enderdragon.magic_and_taboo.registry.Element;
 import enderdragon.magic_and_taboo.util.ContainerUtil;
-import it.unimi.dsi.fastutil.objects.Object2FloatOpenHashMap;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.NonNullList;
@@ -60,33 +60,12 @@ public class EnchantedCrucibleBlockEntity extends BlockEntity implements IFluidH
         // heating end
     }
 
-    public Object2FloatOpenHashMap<Element> recipe() {
-        if (level == null) return new Object2FloatOpenHashMap<>();
-        var registry = level.registryAccess();
-        var allElements = getAllElements(registry);
-        for (var entry : allElements.object2FloatEntrySet()) {
-            var element = entry.getKey();
-            for (var entry1 : element.resistanceElementMap().object2FloatEntrySet()) {
-                if (allElements.containsKey(entry1.getKey().get())) {
-                    allElements.addTo(element, -1 * entry1.getFloatValue());
-                }
-            }
-            float currentValue = allElements.getFloat(element);
-            for (var entry2 : element.fusionElementMap().object2FloatEntrySet()) {
-                if (allElements.containsKey(entry2.getKey().get())) {
-                    allElements.addTo(element, currentValue * entry2.getFloatValue());
-                }
-            }
-        }
-        return allElements;
-    }
-
     public static void tickClient(Level level, BlockPos pos, BlockState state, EnchantedCrucibleBlockEntity crucible) {
         tickCommon(level, pos, state, crucible);
         var info = crucible.getRenderingInfo();
         info.fluid = crucible.getFluidStack();
         info.fluidColor = info.fluid.getFluid().isSame(Fluids.WATER)
-                ? level.getBiome(pos).get().getWaterColor()
+                ? level.getBiome(pos).value().getWaterColor()
                 : 0xFFFFFF;
     }
 
@@ -126,7 +105,10 @@ public class EnchantedCrucibleBlockEntity extends BlockEntity implements IFluidH
     public void test(Level level, ItemStack stack, Player player) {
         int amount = this.fluid.getAmount();
         if (amount % 250 == 0) {
-            spawnMagicPotion(level.registryAccess(), stack, player);
+            if (!stack.is(Items.GLASS_BOTTLE)) return;
+            var bottle = new ItemStack(MATItems.MAGIC_POTION.get());
+            this.fillPotion(level.registryAccess(), bottle.getCapability(MATCapabilities.MAGIC_POTION).orElse(IMagicPotion.EMPTY));
+            ContainerUtil.addItem(player, bottle);
             this.fluid.setAmount(amount - 250);
             this.setChanged();
         }
@@ -135,39 +117,24 @@ public class EnchantedCrucibleBlockEntity extends BlockEntity implements IFluidH
         }
     }
 
-    public void spawnMagicPotion(RegistryAccess registry, ItemStack stack, Player player) {
-        if (!stack.is(Items.GLASS_BOTTLE)) return;
-        var bottle = new ItemStack(MATItems.MAGIC_POTION.get());
-
-//        var tag = new CompoundTag();
-//        var elements = new CompoundTag();
-//        var lookup = registry.registryOrThrow(Element.RESOURCE_KEY);
-//        for (var entry : this.recipe().object2FloatEntrySet()) {
-//            elements.putFloat(String.valueOf(lookup.getId(entry.getKey())), entry.getFloatValue());
-//        }
-//        tag.put("Elements", elements);
-        bottle.getCapability(MATCapabilities.MAGIC_POTION_DATA).ifPresent(data -> {
-            data.setElementMap(this.recipe());
-        });
-//        bottle.setTag(tag);
-        ContainerUtil.addItem(player, bottle);
-    }
-
-    public Object2FloatOpenHashMap<Element> getAllElements(RegistryAccess registry) {
-        var map = new Object2FloatOpenHashMap<Element>();
-        for (var stack : this.stacks) {
-            if (stack.isEmpty()) continue;
-            var alchemyElement = AlchemyElement.fromItem(registry, stack.getItem());
-            if (alchemyElement == null) continue;
-            int temperature = this.temperature;
-            for (var entry : alchemyElement.elementMap().object2FloatEntrySet()) {
-                var element = entry.getKey().get();
-                if (element.temperature().test(temperature)) {
-                    map.addTo(element, entry.getFloatValue());
+    public void fillPotion(RegistryAccess registry, IMagicPotion potion) {
+        var data = Element.fromStacks(registry, this.stacks, this.temperature);
+        for (var entry : data.object2FloatEntrySet()) {
+            var element = entry.getKey();
+            float conflict = 0.0F, bonus = 1.0F;
+            for (var inner : element.resistanceElementMap().object2FloatEntrySet()) {
+                if (data.containsKey(inner.getKey().value())) {
+                    conflict += inner.getFloatValue();
                 }
             }
+            for (var inner : element.resistanceElementMap().object2FloatEntrySet()) {
+                if (data.containsKey(inner.getKey().value())) {
+                    bonus += inner.getFloatValue();
+                }
+            }
+            entry.setValue((entry.getFloatValue() - conflict) * bonus);
         }
-        return map;
+        potion.setElements(data);
     }
 
     public void load(CompoundTag tag) {

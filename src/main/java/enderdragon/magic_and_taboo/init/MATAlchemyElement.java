@@ -2,37 +2,47 @@ package enderdragon.magic_and_taboo.init;
 
 import enderdragon.magic_and_taboo.registry.AlchemyElement;
 import enderdragon.magic_and_taboo.registry.Element;
-import enderdragon.magic_and_taboo.util.ElementUtil;
+import it.unimi.dsi.fastutil.objects.Object2FloatMap;
+import it.unimi.dsi.fastutil.objects.Object2FloatMaps;
+import it.unimi.dsi.fastutil.objects.Object2FloatOpenHashMap;
+import net.minecraft.core.Holder;
 import net.minecraft.data.worldgen.BootstapContext;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Items;
 import net.minecraftforge.registries.ForgeRegistries;
 
 public class MATAlchemyElement {
     public static void bootstrap(BootstapContext<AlchemyElement> context) {
         var registry = context.lookup(Element.RESOURCE_KEY);
-        var map = ElementUtil.getElements(registry);
-        var mercury = map.get("mercury");
-        var confusion = map.get("nausea");
-        var night_vision = map.get("night_vision");
-        context.register(
-                ResourceKey.create(AlchemyElement.RESOURCE_KEY, MATItems.GROUND_MEAT.getId()),
-                new ElementUtil.Builder()
-                        .put(confusion, 8.5F)
-                        .build(300)
-        );
-        context.register(
-                ResourceKey.create(AlchemyElement.RESOURCE_KEY, MATItems.MERCURY_SLAG.getId()),
-                new ElementUtil.Builder()
-                        .put(mercury, 10.0F)
-                        .build(300)
-        );
-        //noinspection DataFlowIssue
-        context.register(
-                ResourceKey.create(AlchemyElement.RESOURCE_KEY, ForgeRegistries.ITEMS.getKey(Items.ARROW)),
-                new ElementUtil.Builder()
-                        .put(mercury, 1.0F)
-                        .build(300)
-        );
+        var mercury = registry.getOrThrow(MATElements.MERCURY);
+        var confusion = registry.getOrThrow(MATElements.NAUSEA);
+        var night_vision = registry.getOrThrow(MATElements.NIGHT_VISION);
+        new Builder()
+                .put(confusion, 8.5F)
+                .register(context, MATItems.GROUND_MEAT.getId(), 300);
+        new Builder()
+                .put(mercury, 10.0F)
+                .register(context, MATItems.MERCURY_SLAG.getId(), 300);
+        new Builder()
+                .put(mercury, 1.0F)
+                .register(context, ForgeRegistries.ITEMS.getKey(Items.ARROW), 300);
+    }
+
+    public static class Builder {
+        public final Object2FloatMap<Holder<Element>> elements = new Object2FloatOpenHashMap<>();
+
+        public Builder put(Holder<Element> element, float count) {
+            this.elements.put(element, count);
+            return this;
+        }
+
+        public AlchemyElement build(int time) {
+            return new AlchemyElement(Object2FloatMaps.unmodifiable(this.elements), time);
+        }
+
+        public void register(BootstapContext<AlchemyElement> context, ResourceLocation identifier, int time) {
+            context.register(ResourceKey.create(AlchemyElement.RESOURCE_KEY, identifier), this.build(time));
+        }
     }
 }

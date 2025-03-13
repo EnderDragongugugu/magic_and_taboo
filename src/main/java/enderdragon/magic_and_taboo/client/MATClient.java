@@ -2,8 +2,8 @@ package enderdragon.magic_and_taboo.client;
 
 import com.mojang.datafixers.util.Either;
 import enderdragon.magic_and_taboo.MagicAndTabooMod;
+import enderdragon.magic_and_taboo.capability.IMagicPotion;
 import enderdragon.magic_and_taboo.capability.IPurenessStorage;
-import enderdragon.magic_and_taboo.capability.MagicPotionData;
 import enderdragon.magic_and_taboo.capability.WorkHubResult;
 import enderdragon.magic_and_taboo.client.gui.*;
 import enderdragon.magic_and_taboo.client.model.WorkHubToolModel;
@@ -55,19 +55,16 @@ public class MATClient {
             Sheets.addWoodType(MATBlocks.FIR_WOOD_TYPE);
             MenuScreens.register(MATMenuTypes.WORK_HUB.get(), WorkHubScreen::new);
         });
-        MinecraftForge.EVENT_BUS.addListener(new RegistryAccessor.ClientHook());
+        MinecraftForge.EVENT_BUS.addListener(RegistryAccessor::hookClient);
     }
 
     @SubscribeEvent
     public static void registerItemColors(RegisterColorHandlersEvent.Item event) {
-        event.register((pStack, pTintIndex) -> {
-            if (pTintIndex > 0) {
-                var cap = pStack.getCapability(MATCapabilities.MAGIC_POTION_DATA).orElse(new MagicPotionData());
-                if (cap.getEffectInstances().size() < 1) return -1;
-                return PotionUtils.getColor(cap.getEffectInstances());
-            }
-            return -1;
-        }, MATItems.MAGIC_POTION.get());
+        event.register((stack, index) -> index > 0 ? -1 : PotionUtils.getColor(
+                stack.getCapability(MATCapabilities.MAGIC_POTION)
+                        .orElse(IMagicPotion.EMPTY)
+                        .getEffectInstances()
+        ), MATItems.MAGIC_POTION.get());
     }
 
     @SubscribeEvent

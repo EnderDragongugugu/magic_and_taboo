@@ -54,6 +54,7 @@ public interface IPurenessStorage {
         @Override
         public void setSource(@Nullable EntityType<?> source) {}
 
+        @Nullable
         @Override
         public EntityType<?> getSource() {return null;}
 

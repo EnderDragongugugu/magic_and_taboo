@@ -2,7 +2,7 @@ package enderdragon.magic_and_taboo.item.equipment;
 
 import enderdragon.magic_and_taboo.capability.IPurenessStorage;
 import enderdragon.magic_and_taboo.capability.PurenessStorage;
-import enderdragon.magic_and_taboo.item.BloodBottle;
+import enderdragon.magic_and_taboo.item.BloodBottleItem;
 import enderdragon.magic_and_taboo.util.ContainerUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
@@ -27,23 +27,22 @@ import java.util.List;
 import static enderdragon.magic_and_taboo.init.MATCapabilities.PURENESS;
 
 @ParametersAreNonnullByDefault
-public class SacrificialDagger extends SwordItem {
-    public SacrificialDagger(Tier tier, int damageModifier, float speedModifier, Properties props) {
+public class SacrificialDaggerItem extends SwordItem {
+    public SacrificialDaggerItem(Tier tier, int damageModifier, float speedModifier, Properties props) {
         super(tier, damageModifier, speedModifier, props);
     }
 
     public static void onLivingDeath(LivingDeathEvent event) {
         if (event.getSource().getEntity() instanceof Player player) {
             var stack = player.getMainHandItem();
-            if (!(stack.getItem() instanceof SacrificialDagger)) return;
+            if (!(stack.getItem() instanceof SacrificialDaggerItem)) return;
             var target = event.getEntity();
             var storage = stack.getCapability(PURENESS).orElse(IPurenessStorage.EMPTY);
             if (!storage.isValid()) {
-                BloodBottle.tryLootBlood(player, target);
+                BloodBottleItem.tryLootBlood(player, target);
             }
         }
     }
-
 
     @Override
     public boolean isFoil(ItemStack stack) {
@@ -55,7 +54,7 @@ public class SacrificialDagger extends SwordItem {
         Inventory inventory = player.getInventory();
         var stack = player.getItemInHand(hand);
         if (level.isClientSide) {
-            return inventory.hasAnyMatching(BloodBottle.IS_VALID)
+            return inventory.hasAnyMatching(BloodBottleItem.IS_VALID)
                     ? InteractionResultHolder.consume(stack)
                     : InteractionResultHolder.fail(stack);
         }
@@ -68,7 +67,7 @@ public class SacrificialDagger extends SwordItem {
             }
             return InteractionResultHolder.consume(stack);
         }
-        if (BloodBottle.tryTransferTo(player, storage)) {
+        if (BloodBottleItem.tryTransferTo(player, storage)) {
             ContainerUtil.forcedSync((ServerPlayer) player, hand, stack);
             return InteractionResultHolder.consume(stack);
         }
@@ -118,5 +117,5 @@ public class SacrificialDagger extends SwordItem {
     public @Nullable ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundTag nbt) {
         return new PurenessStorage(2400, Items.AIR, true);
     }
-    
+
 }

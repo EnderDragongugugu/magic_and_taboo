@@ -10,5 +10,5 @@ import net.minecraftforge.registries.RegistryObject;
 
 public class MATEffects {
     public static final DeferredRegister<MobEffect> REGISTRY = DeferredRegister.create(ForgeRegistries.MOB_EFFECTS, MagicAndTabooMod.MOD_ID);
-    public static RegistryObject<MobEffect> MERCURY_TOXINS = REGISTRY.register("mercury_toxins", MercuryToxinsEffect::new);
+    public static final RegistryObject<MobEffect> MERCURY_TOXINS = REGISTRY.register("mercury_toxins", MercuryToxinsEffect::new);
 }

@@ -1,7 +1,7 @@
 package enderdragon.magic_and_taboo;
 
 import enderdragon.magic_and_taboo.init.*;
-import enderdragon.magic_and_taboo.item.equipment.SacrificialDagger;
+import enderdragon.magic_and_taboo.item.equipment.SacrificialDaggerItem;
 import enderdragon.magic_and_taboo.registry.AlchemyElement;
 import enderdragon.magic_and_taboo.registry.Element;
 import enderdragon.magic_and_taboo.util.BlockEntityTypeEx;
@@ -46,8 +46,8 @@ public class MagicAndTabooMod {
         modBus.addListener(MagicAndTabooMod::onComplete);
         modBus.addListener(MagicAndTabooMod::registerDataPackRegistry);
         var forgeBus = MinecraftForge.EVENT_BUS;
-        forgeBus.addListener(SacrificialDagger::onLivingDeath);
-        forgeBus.addListener(new RegistryAccessor.ServerHook());
+        forgeBus.addListener(SacrificialDaggerItem::onLivingDeath);
+        forgeBus.addListener(RegistryAccessor::hookServer);
     }
 
     public static void onComplete(FMLLoadCompleteEvent event) {

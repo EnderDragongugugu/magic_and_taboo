@@ -1,0 +1,5 @@
+<root>
+    <item name='net.minecraft.core.Holder T get()'>
+        <annotation name='java.lang.Deprecated'/>
+    </item>
+</root>

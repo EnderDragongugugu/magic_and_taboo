@@ -18,8 +18,8 @@ import static enderdragon.magic_and_taboo.MagicAndTabooMod.makeId;
 @OnlyIn(Dist.CLIENT)
 public class WorkHubRender implements BlockEntityRenderer<WorkHubBlockEntity> {
     private static final RenderType TEXTURE = RenderType.entityCutout(makeId("textures/entity/blocks/work_hub_tool.png"));
-    protected ItemRenderer itemRenderer;
-    protected WorkHubToolModel model;
+    protected final ItemRenderer itemRenderer;
+    protected final WorkHubToolModel model;
 
     public WorkHubRender(BlockEntityRendererProvider.Context context) {
         this.itemRenderer = context.getItemRenderer();

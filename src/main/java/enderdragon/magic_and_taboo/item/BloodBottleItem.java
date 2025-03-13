@@ -23,14 +23,14 @@ import java.util.function.Predicate;
 
 import static enderdragon.magic_and_taboo.init.MATCapabilities.PURENESS;
 
-public class BloodBottle extends Item {
+public class BloodBottleItem extends Item {
     public static final Predicate<ItemStack> IS_VALID = stack -> {
         if (stack.getItem() != MATItems.BLOOD_BOTTLE.get()) return false;
         var storage = stack.getCapability(PURENESS).orElse(IPurenessStorage.EMPTY);
         return storage.isValid() && storage.getPureness() > 0;
     };
 
-    public BloodBottle(Properties props) {
+    public BloodBottleItem(Properties props) {
         super(props);
     }
 

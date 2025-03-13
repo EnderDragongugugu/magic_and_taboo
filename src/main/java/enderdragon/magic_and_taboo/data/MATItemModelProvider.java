@@ -71,10 +71,7 @@ public class MATItemModelProvider extends ItemModelProvider {
                         .parent(handheld)
                         .texture("layer0", makeId("item/bloody_sacrificial_dagger"))
                 );
-        this.getBuilder("magic_potion")
-                .parent(new ModelFile.UncheckedModelFile("item/generated"))
-                .texture("layer0", new ResourceLocation("item/potion"))
-                .texture("layer1", new ResourceLocation("item/potion_overlay"));
+        this.withExistingParent(MATItems.MAGIC_POTION.getId().getPath(), "item/potion");
     }
 
     public ItemModelBuilder handheldItem(RegistryObject<? extends Item> item) {

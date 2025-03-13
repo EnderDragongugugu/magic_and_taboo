@@ -72,6 +72,7 @@ public class PurenessStorage implements IPurenessStorage, ICapabilityProvider, I
         this.source = source;
     }
 
+    @Nullable
     @Override
     public EntityType<?> getSource() {
         return this.source;

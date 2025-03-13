@@ -2,7 +2,7 @@ package enderdragon.magic_and_taboo.init;
 
 import enderdragon.magic_and_taboo.MagicAndTabooMod;
 import enderdragon.magic_and_taboo.item.*;
-import enderdragon.magic_and_taboo.item.equipment.SacrificialDagger;
+import enderdragon.magic_and_taboo.item.equipment.SacrificialDaggerItem;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.food.FoodProperties;
@@ -103,11 +103,11 @@ public class MATItems {
     public static final RegistryObject<BlockItem> FIR_LEAVES = BLOCKS.register(REGISTRY, "fir_leaves", () ->
             new BlockItem(MATBlocks.FIR_LEAVES.get(), new Properties())
     );
-    public static final RegistryObject<SacrificialDagger> SACRIFICIAL_DAGGER = ITEMS.register(REGISTRY, "sacrificial_dagger", () ->
-            new SacrificialDagger(Tiers.IRON, 3, -2.4F, new Properties())
+    public static final RegistryObject<SacrificialDaggerItem> SACRIFICIAL_DAGGER = ITEMS.register(REGISTRY, "sacrificial_dagger", () ->
+            new SacrificialDaggerItem(Tiers.IRON, 3, -2.4F, new Properties())
     );
-    public static final RegistryObject<BloodBottle> BLOOD_BOTTLE = REGISTRY.register("blood_bottle", () ->
-            new BloodBottle(new Properties().stacksTo(1))
+    public static final RegistryObject<BloodBottleItem> BLOOD_BOTTLE = REGISTRY.register("blood_bottle", () ->
+            new BloodBottleItem(new Properties().stacksTo(1))
     );
     public static final RegistryObject<FuelBlockItem> FIR_SAPLING = ITEMS.register(REGISTRY, "fir_sapling", () ->
             new FuelBlockItem(MATBlocks.FIR_SAPLING, 100, new Properties())
@@ -149,6 +149,7 @@ public class MATItems {
     public static final RegistryObject<Item> PLANT_EXTRACT_BUCKET = ITEMS.register(REGISTRY, "plant_extract_bucket", () ->
             new BucketItem(MATFluids.HONEY, new Properties().stacksTo(1))
     );
-    public static final RegistryObject<MagicPotion> MAGIC_POTION = ITEMS.register(REGISTRY, "magic_potion", () ->
-            new MagicPotion(new Properties().stacksTo(4)));
+    public static final RegistryObject<MagicPotionItem> MAGIC_POTION = ITEMS.register(REGISTRY, "magic_potion", () ->
+            new MagicPotionItem(new Properties().stacksTo(4))
+    );
 }
