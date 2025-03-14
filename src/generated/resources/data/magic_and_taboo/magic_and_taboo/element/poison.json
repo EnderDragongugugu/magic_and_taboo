@@ -3,14 +3,15 @@
     "max": 100.0,
     "min": 30.0
   },
-  "effect": "minecraft:glowing",
+  "effect": "minecraft:poison",
   "fusion_element": {
-    "magic_and_taboo:night_vision": 1.5
+    "magic_and_taboo:mercury": 0.6,
+    "magic_and_taboo:nausea": 0.5
   },
-  "icon": "minecraft:textures/mob_effect/glowing.png",
+  "icon": "minecraft:textures/mob_effect/poison.png",
   "max_level": 4,
   "max_time": 7200,
-  "name": "element.magic_and_taboo.glowing",
+  "name": "element.magic_and_taboo.poison",
   "resistance_element": {},
   "temperature_range": {
     "max": 100.0,

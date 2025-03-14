@@ -7,9 +7,11 @@
   "fusion_element": {},
   "icon": "magic_and_taboo:textures/mob_effect/element_eye.png",
   "max_level": 4,
-  "max_time": 9600,
+  "max_time": 7200,
   "name": "element.magic_and_taboo.element_eye",
-  "resistance_element": {},
+  "resistance_element": {
+    "magic_and_taboo:nausea": 10.0
+  },
   "temperature_range": {
     "max": 100.0,
     "min": 0.0

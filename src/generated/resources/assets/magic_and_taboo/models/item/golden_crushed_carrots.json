@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "magic_and_taboo:item/golden_crushed_carrots"
+  }
+}

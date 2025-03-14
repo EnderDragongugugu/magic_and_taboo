@@ -73,5 +73,10 @@
   "element.magic_and_taboo.element_eye": "枭眼",
   "element.magic_and_taboo.element_nausea": "恶心",
   "element.magic_and_taboo.glowing": "荧光",
+  "element.magic_and_taboo.poison": "剧毒",
+  "item.magic_and_taboo.crushed_carrots": "胡萝卜 碎",
+  "item.magic_and_taboo.carrots_paste": "胡萝卜 糊",
+  "item.magic_and_taboo.golden_crushed_carrots": "金胡萝卜 碎",
+  "item.magic_and_taboo.honey_crushed_carrots": "蜂蜜 胡萝卜 糊",
   "text.warn.place": "坩埚似乎在抗拒%s"
 }

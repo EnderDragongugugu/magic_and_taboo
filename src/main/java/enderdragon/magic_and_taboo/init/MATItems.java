@@ -128,7 +128,6 @@ public class MATItems {
             .durability(32)
     ));
     public static final RegistryObject<Item> MERCURY_SLAG = ITEMS.register(REGISTRY, "mercury_slag", () -> new Item(new Properties().food(new FoodProperties.Builder()
-            .meat()
             .alwaysEat()
             .nutrition(-5)
             .saturationMod(-0.6F)
@@ -143,6 +142,30 @@ public class MATItems {
             .effect(() -> (new MobEffectInstance(MobEffects.CONFUSION, 30 * 20)), 1)
             .build()
     )));
+    public static final RegistryObject<Item> CRUSHED_CARROTS = ITEMS.register(REGISTRY, "crushed_carrots", () -> new Item(new Properties().food(new FoodProperties.Builder()
+            .alwaysEat()
+            .nutrition(1)
+            .saturationMod(0.5F)
+            .build()
+    )));
+    public static final RegistryObject<Item> CARROTS_PASTE = ITEMS.register(REGISTRY, "carrots_paste", () -> new Item(new Properties().food(new FoodProperties.Builder()
+            .alwaysEat()
+            .nutrition(1)
+            .saturationMod(0.5F)
+            .build()
+    )));
+    public static final RegistryObject<Item> GOLDEN_CRUSHED_CARROTS = ITEMS.register(REGISTRY, "golden_crushed_carrots", () -> new Item(new Properties().food(new FoodProperties.Builder()
+            .alwaysEat()
+            .nutrition(1)
+            .saturationMod(0.5F)
+            .build()
+    )));
+    public static final RegistryObject<Item> HONEY_CRUSHED_CARROTS = ITEMS.register(REGISTRY, "honey_crushed_carrots", () -> new Item(new Properties().food(new FoodProperties.Builder()
+            .alwaysEat()
+            .nutrition(1)
+            .saturationMod(0.5F)
+            .build()
+    )));
     public static final RegistryObject<Item> HONEY_BUCKET = ITEMS.register(REGISTRY, "honey_bucket", () ->
             new BucketItem(MATFluids.HONEY, new Properties().stacksTo(1))
     );
@@ -153,10 +176,10 @@ public class MATItems {
             new MagicPotionItem(new Properties().stacksTo(4))
     );
     public static final RegistryObject<MagicPotionItem> POTION_BOTTLE_RED = ITEMS.register(REGISTRY, "potion_bottle_red", () ->
-            new MagicPotionItem(new Properties().stacksTo(4))
+            new PotionBottleRedItem(new Properties().stacksTo(4))
     );
     public static final RegistryObject<MagicPotionItem> POTION_BOTTLE_GLOW = ITEMS.register(REGISTRY, "potion_bottle_glow", () ->
-            new MagicPotionItem(new Properties().stacksTo(4))
+            new PotionBottleGlowItem(new Properties().stacksTo(4))
     );
     public static final RegistryObject<MagicPotionItem> POTION_SYRINGE = ITEMS.register(REGISTRY, "potion_syringe", () ->
             new MagicPotionItem(new Properties().stacksTo(4))

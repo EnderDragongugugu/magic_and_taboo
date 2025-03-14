@@ -19,6 +19,7 @@ public class MATAlchemyElement {
         var confusion = registry.getOrThrow(MATElements.NAUSEA);
         var night_vision = registry.getOrThrow(MATElements.NIGHT_VISION);
         var glowing = registry.getOrThrow(MATElements.GLOWING);
+        var poison = registry.getOrThrow(MATElements.POISON);
         new Builder()
                 .put(confusion, 8.5F)
                 .register(context, MATItems.GROUND_MEAT.getId(), 300);
@@ -31,6 +32,18 @@ public class MATAlchemyElement {
         new Builder()
                 .put(night_vision, 4.0F)
                 .register(context, ForgeRegistries.ITEMS.getKey(Items.GOLDEN_CARROT), 300);
+        new Builder()
+                .put(mercury, 5.0F)
+                .put(poison, 1.0F)
+                .register(context, ForgeRegistries.ITEMS.getKey(MATItems.MERCURY_ORE.get()), 600);
+        new Builder()
+                .put(glowing, 10.0F)
+                .put(poison, 4.0F)
+                .register(context, ForgeRegistries.ITEMS.getKey(Items.GLOWSTONE), 600);
+        new Builder()
+                .put(glowing, 12.0F)
+                .put(poison, 1.0F)
+                .register(context, ForgeRegistries.ITEMS.getKey(Items.GLOWSTONE_DUST), 300);
     }
 
     public static class Builder {

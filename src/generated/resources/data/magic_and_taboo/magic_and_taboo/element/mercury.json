@@ -5,11 +5,12 @@
   },
   "effect": "magic_and_taboo:mercury_toxins",
   "fusion_element": {
-    "magic_and_taboo:nausea": 1.15
+    "magic_and_taboo:nausea": 1.15,
+    "magic_and_taboo:poison": 0.1
   },
   "icon": "magic_and_taboo:textures/mob_effect/mercury_toxins.png",
   "max_level": 4,
-  "max_time": 9600,
+  "max_time": 7200,
   "name": "element.magic_and_taboo.element_mercury",
   "resistance_element": {},
   "temperature_range": {

@@ -5,11 +5,12 @@
   },
   "effect": "minecraft:nausea",
   "fusion_element": {
-    "magic_and_taboo:nausea": 3.0
+    "magic_and_taboo:nausea": 3.0,
+    "magic_and_taboo:poison": 0.5
   },
   "icon": "minecraft:textures/mob_effect/nausea.png",
   "max_level": 4,
-  "max_time": 9600,
+  "max_time": 7200,
   "name": "element.magic_and_taboo.element_nausea",
   "resistance_element": {},
   "temperature_range": {

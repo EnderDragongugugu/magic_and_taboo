@@ -15,7 +15,6 @@ public interface IMagicPotion {
 
     void setElements(Object2FloatMap<Element> elements);
 
-    MobEffectInstance getEffectInstance(Element element, float value);
 
     Collection<MobEffectInstance> getEffectInstances();
 
@@ -28,11 +27,7 @@ public interface IMagicPotion {
         @Override
         public void setElements(Object2FloatMap<Element> elements) {
         }
-
-        @Override
-        public MobEffectInstance getEffectInstance(Element element, float value) {
-            return new MobEffectInstance(element.effect());
-        }
+        
 
         @Override
         public Collection<MobEffectInstance> getEffectInstances() {

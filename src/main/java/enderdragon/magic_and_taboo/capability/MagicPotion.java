@@ -75,21 +75,26 @@ public class MagicPotion implements ICapabilityProvider, IMagicPotion, INBTSeria
         this.elements = elements;
     }
 
-    @Override
-    public MobEffectInstance getEffectInstance(Element element, float value) {
+    public static MobEffectInstance getEffectInstance(Element element, float value) {
         var maxLevel = element.maxLevel();
         var maxTime = element.maxTime();
         var maxConcentration = element.concentration().max();
         var minConcentration = element.concentration().min();
+        var f = Mth.clamp(value, minConcentration, maxConcentration);
         int level = (int) Math.ceil(
-                (value - minConcentration) / ((maxConcentration - minConcentration) / maxLevel)
+                (f - minConcentration) / ((maxConcentration - minConcentration) / maxLevel)
         );
         level = Math.max(0, Math.min(level, maxLevel));
-        var normalized = (value - minConcentration) / (maxConcentration - minConcentration);
-        var time = Mth.clamp(maxTime * (1.0F - 0.8F * normalized), 30 * 20, maxTime);
-
+        var normalized = (f - minConcentration) / (maxConcentration - minConcentration);
+        var time = 0.0F;
+        if (maxConcentration / 2 > value) {
+            time = value / maxConcentration * maxTime;
+        } else {
+            time = Mth.clamp(maxTime * (1.0F - 0.6F * normalized), 30 * 20, maxTime);
+        }
         return new MobEffectInstance(element.effect(), (int) (time), level);
     }
+
 
     @Override
     public Collection<MobEffectInstance> getEffectInstances() {

@@ -18,7 +18,9 @@ public class MATElements {
     public static final ResourceKey<Element> NAUSEA = makeKey(Element.RESOURCE_KEY, "nausea");
     public static final ResourceKey<Element> NIGHT_VISION = makeKey(Element.RESOURCE_KEY, "night_vision");
     public static final ResourceKey<Element> GLOWING = makeKey(Element.RESOURCE_KEY, "glowing");
-    public static final int MAX_TIME = 20 * 60 * 8;
+    public static final ResourceKey<Element> POISON = makeKey(Element.RESOURCE_KEY, "poison");
+
+    public static final int MAX_TIME = 20 * 60 * 6;
     public static final int MAX_LEVEL = 4;
 
     static ResourceLocation makeIcon(ResourceLocation identifier) {
@@ -30,6 +32,7 @@ public class MATElements {
         var mercury = registry.getOrThrow(MERCURY);
         var nausea = registry.getOrThrow(NAUSEA);
         var night_vision = registry.getOrThrow(NIGHT_VISION);
+        var poison = registry.getOrThrow(POISON);
         context.register(MERCURY, new Element(
                 MATEffects.MERCURY_TOXINS.get(),
                 "element.magic_and_taboo.element_mercury",
@@ -39,7 +42,10 @@ public class MATElements {
                 MAX_TIME,
                 MAX_LEVEL,
                 FloatMaps.unmodifiableCopy(null),
-                new FloatMaps.Builder<Holder<Element>>().put(nausea, 1.15F).build()
+                new FloatMaps.Builder<Holder<Element>>()
+                        .put(nausea, 1.15F)
+                        .put(poison, 0.1F)
+                        .build()
         ));
         //noinspection DataFlowIssue
         context.register(NAUSEA, new Element(
@@ -51,7 +57,10 @@ public class MATElements {
                 MAX_TIME,
                 MAX_LEVEL,
                 FloatMaps.unmodifiableCopy(null),
-                new FloatMaps.Builder<Holder<Element>>().put(nausea, 3.0F).build()
+                new FloatMaps.Builder<Holder<Element>>()
+                        .put(nausea, 3.0F)
+                        .put(poison, 0.5F)
+                        .build()
         ));
         context.register(NIGHT_VISION, new Element(
                 MobEffects.NIGHT_VISION,
@@ -61,7 +70,9 @@ public class MATElements {
                 new FloatRange(0.0F, 100.0F),
                 MAX_TIME,
                 MAX_LEVEL,
-                FloatMaps.unmodifiableCopy(null),
+                new FloatMaps.Builder<Holder<Element>>()
+                        .put(nausea, 10.0F)
+                        .build(),
                 FloatMaps.unmodifiableCopy(null)
         ));
         context.register(GLOWING, new Element(
@@ -73,7 +84,21 @@ public class MATElements {
                 MAX_TIME,
                 MAX_LEVEL,
                 FloatMaps.unmodifiableCopy(null),
-                FloatMaps.unmodifiableCopy(null)
+                new FloatMaps.Builder<Holder<Element>>().put(night_vision, 1.5F).build()
+        ));
+        context.register(POISON, new Element(
+                MobEffects.POISON,
+                "element.magic_and_taboo.poison",
+                makeIcon(ForgeRegistries.MOB_EFFECTS.getKey(MobEffects.POISON)),
+                new FloatRange(30.0F, 100.0F),
+                new FloatRange(0.0F, 100.0F),
+                MAX_TIME,
+                MAX_LEVEL,
+                FloatMaps.unmodifiableCopy(null),
+                new FloatMaps.Builder<Holder<Element>>()
+                        .put(nausea, 0.5F)
+                        .put(mercury, 0.6F)
+                        .build()
         ));
     }
 }
