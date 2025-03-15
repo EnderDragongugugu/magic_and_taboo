@@ -6,7 +6,6 @@ import it.unimi.dsi.fastutil.objects.Object2FloatMaps;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraftforge.common.capabilities.AutoRegisterCapability;
 
-import java.util.Collection;
 import java.util.List;
 
 @AutoRegisterCapability
@@ -16,7 +15,7 @@ public interface IMagicPotion {
     void setElements(Object2FloatMap<Element> elements);
 
 
-    Collection<MobEffectInstance> getEffectInstances();
+    List<MobEffectInstance> getEffectInstances();
 
     IMagicPotion EMPTY = new IMagicPotion() {
         @Override
@@ -25,12 +24,10 @@ public interface IMagicPotion {
         }
 
         @Override
-        public void setElements(Object2FloatMap<Element> elements) {
-        }
-        
+        public void setElements(Object2FloatMap<Element> elements) {}
 
         @Override
-        public Collection<MobEffectInstance> getEffectInstances() {
+        public List<MobEffectInstance> getEffectInstances() {
             return List.of();
         }
     };

@@ -1,0 +1,5 @@
+<root>
+    <item name='net.minecraftforge.client.model.generators.ItemModelProvider net.minecraftforge.client.model.generators.ItemModelBuilder basicItem(net.minecraft.resources.ResourceLocation)'>
+        <annotation name='java.lang.Deprecated'/>
+    </item>
+</root>

@@ -21,6 +21,7 @@ import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.alchemy.PotionUtils;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
@@ -64,9 +65,17 @@ public class EnchantedCrucibleBlockEntity extends BlockEntity implements IFluidH
         tickCommon(level, pos, state, crucible);
         var info = crucible.getRenderingInfo();
         info.fluid = crucible.getFluidStack();
-        info.fluidColor = info.fluid.getFluid().isSame(Fluids.WATER)
-                ? level.getBiome(pos).value().getWaterColor()
-                : 0xFFFFFF;
+        if (info.changed || info.temperature != crucible.temperature) {
+            crucible.fillPotion(level.registryAccess(), info);
+            info.fluidColor = info.fluid.getFluid().isSame(Fluids.WATER)
+                    ? info.elements.isEmpty()
+                    ? level.getBiome(pos).value().getWaterColor()
+                    : PotionUtils.getColor(info.getEffectInstances())
+                    : 0xFFFFFF;
+        } else if (!info.fluid.getFluid().isSame(Fluids.WATER)) {
+            info.fluidColor = 0xFFFFFF;
+        }
+        info.temperature = crucible.temperature;
     }
 
     public static final int MAX_SIZE = 8;
@@ -152,6 +161,9 @@ public class EnchantedCrucibleBlockEntity extends BlockEntity implements IFluidH
         if (tag.contains("Items")) {
             this.stacks.clear();
             ContainerHelper.loadAllItems(tag, this.stacks);
+            if (this.info != null) {
+                this.info.changed = true;
+            }
         }
         if (tag.contains("CookingProgress", 11)) {
             int[] progresses = tag.getIntArray("CookingProgress");
@@ -248,9 +260,7 @@ public class EnchantedCrucibleBlockEntity extends BlockEntity implements IFluidH
         return this.fluid;
     }
 
-    /**
-     * @deprecated Use {@link #getFluidStack()} instead.
-     */
+    /// @deprecated Use {@link #getFluidStack()} instead.
     @Override
     @Deprecated
     public @NotNull FluidStack getFluidInTank(int tank) {

@@ -6,7 +6,7 @@ import com.mojang.math.Axis;
 import enderdragon.magic_and_taboo.block.entity.EnchantedCrucibleBlockEntity;
 import enderdragon.magic_and_taboo.registry.AlchemyElement;
 import enderdragon.magic_and_taboo.registry.Element;
-import enderdragon.magic_and_taboo.util.RegistryAccessor;
+import it.unimi.dsi.fastutil.objects.Reference2ObjectOpenHashMap;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -28,8 +28,11 @@ import net.minecraftforge.registries.ForgeRegistries;
 import org.joml.Matrix3f;
 import org.joml.Matrix4f;
 
-public class EnchantedCrucibleRender implements BlockEntityRenderer<EnchantedCrucibleBlockEntity> {
+import java.util.function.Function;
+
+public class EnchantedCrucibleRender implements BlockEntityRenderer<EnchantedCrucibleBlockEntity>, Function<Element, RenderType> {
     private static final RenderType RENDER_TYPE = RenderType.itemEntityTranslucentCull(new ResourceLocation("textures/item/barrier.png"));
+    private static final Reference2ObjectOpenHashMap<Element, RenderType> RENDER_TYPES = new Reference2ObjectOpenHashMap<>();
     protected final ItemRenderer itemRenderer;
     protected final EntityRenderDispatcher entityRenderer;
     protected final Font font;
@@ -53,44 +56,23 @@ public class EnchantedCrucibleRender implements BlockEntityRenderer<EnchantedCru
         if (!(Minecraft.getInstance().hitResult instanceof BlockHitResult hit && hit.getBlockPos().equals(crucible.getBlockPos())))
             return;
         var orientation = this.entityRenderer.cameraOrientation();
-//        String text = "笨龙";
-//        matrices.pushPose();
-//        matrices.translate(0.5F, 1.25F, 0.5F);
-//        matrices.mulPose(orientation);
-//        matrices.scale(-0.025F, -0.025F, 0.025F);
-//        var font = this.font;
-//        float left = (float) (-font.width(text) / 2);
-//        {
-//            var matrix = matrices.last().pose();
-//            font.drawInBatch(text, left, 0, 0x20FFFFFF, false, matrix, buffers, Font.DisplayMode.SEE_THROUGH, (int) (Minecraft.getInstance().options.getBackgroundOpacity(0.25F) * 255.0F) << 24, light);
-//            font.drawInBatch(text, left, 0, -1, false, matrix, buffers, Font.DisplayMode.NORMAL, 0, light);
-//        }
-//        matrices.popPose();
         matrices.pushPose();
         matrices.translate(0.5F, 1.5F, 0.5F);
         matrices.mulPose(orientation);
         matrices.mulPose(Axis.YP.rotationDegrees(180.0F));
         matrices.scale(-0.2F, -0.2F, 0.2F);
-        var data = Element.fromStacks(RegistryAccessor.access(), crucible.getStacks(), crucible.getTemperature());
-        var i = 0;
-        for (var entry : data.object2FloatEntrySet()) {
-            matrices.pushPose();
-            matrices.translate(-(data.size() - 1.0F) * 0.5F + i, 0.0F, 0.0F);
-            {
-                var type = RenderType.itemEntityTranslucentCull(entry.getKey().icon());
-                var buffer = buffers.getBuffer(type);
-                var pose = matrices.last();
-                var matrix = pose.pose();
-                var normal = pose.normal();
-                vertex(buffer, matrix, normal, -0.5F, -0.25F, 0, 0, light);
-                vertex(buffer, matrix, normal, 0.5F, -0.25F, 1, 0, light);
-                vertex(buffer, matrix, normal, 0.5F, 0.75F, 1, 1, light);
-                vertex(buffer, matrix, normal, -0.5F, 0.75F, 0, 1, light);
-            }
-            matrices.popPose();
-            i++;
+        matrices.translate(0.5F - 0.5F * info.elements.size(), 0.0F, 0.0F);
+        var pose = matrices.last();
+        var matrix = pose.pose();
+        var normal = pose.normal();
+        for (var entry : info.elements.object2FloatEntrySet()) {
+            var buffer = buffers.getBuffer(RENDER_TYPES.computeIfAbsent(entry.getKey(), this));
+            vertex(buffer, matrix, normal, -0.5F, -0.25F, 0, 0);
+            vertex(buffer, matrix, normal, 0.5F, -0.25F, 1, 0);
+            vertex(buffer, matrix, normal, 0.5F, 0.75F, 1, 1);
+            vertex(buffer, matrix, normal, -0.5F, 0.75F, 0, 1);
+            matrix.translate(1.0F, 0.0F, 0.0F);
         }
-
         matrices.popPose();
     }
 
@@ -135,13 +117,18 @@ public class EnchantedCrucibleRender implements BlockEntityRenderer<EnchantedCru
         }
     }
 
-    private static void vertex(VertexConsumer buffer, Matrix4f matrix, Matrix3f normal, float x, float y, float u, float v, int light) {
+    private static void vertex(VertexConsumer buffer, Matrix4f matrix, Matrix3f normal, float x, float y, float u, float v) {
         buffer.vertex(matrix, x, y, 0.0F)
                 .color(255, 255, 255, 255)
                 .uv(u, v)
                 .overlayCoords(OverlayTexture.NO_OVERLAY)
-                .uv2(light)
+                .uv2(15728880)
                 .normal(normal, 0.0F, 1.0F, 0.0F)
                 .endVertex();
+    }
+
+    @Override
+    public RenderType apply(Element element) {
+        return RenderType.itemEntityTranslucentCull(element.icon());
     }
 }

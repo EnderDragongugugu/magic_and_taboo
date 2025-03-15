@@ -15,7 +15,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.items.wrapper.EmptyHandler;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
@@ -69,7 +68,7 @@ public class WorkHubBlockItem extends BlockItem {
     }
 
     @Override
-    public @NotNull Optional<TooltipComponent> getTooltipImage(ItemStack stack) {
+    public Optional<TooltipComponent> getTooltipImage(ItemStack stack) {
         return stack.getCapability(ForgeCapabilities.ITEM_HANDLER)
                 .<TooltipComponent>cast() // 泛型擦除魅力时刻
                 .filter(TooltipComponent.class::isInstance);

@@ -15,7 +15,6 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -102,7 +101,7 @@ public class BloodBottleItem extends Item {
     }
 
     @Override
-    public @NotNull Component getName(ItemStack stack) {
+    public Component getName(ItemStack stack) {
         var source = stack.getCapability(PURENESS).orElse(IPurenessStorage.EMPTY).getSource();
         return source == null ? super.getName(stack) : Component.translatable("item.magic_and_taboo.blood_bottle.has_entity", source.getDescription());
     }

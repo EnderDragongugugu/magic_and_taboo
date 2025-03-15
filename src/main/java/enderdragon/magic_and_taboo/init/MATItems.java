@@ -15,6 +15,8 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
+import java.util.function.Supplier;
+
 import static enderdragon.magic_and_taboo.init.MATItemGroups.BLOCKS;
 import static enderdragon.magic_and_taboo.init.MATItemGroups.ITEMS;
 
@@ -184,8 +186,16 @@ public class MATItems {
     public static final RegistryObject<MagicPotionItem> POTION_SYRINGE = ITEMS.register(REGISTRY, "potion_syringe", () ->
             new MagicPotionItem(new Properties().stacksTo(4))
     );
-    public static final RegistryObject<Item> GLASS_POTION_BOTTLE = ITEMS.register(REGISTRY, "glass_potion_bottle", () -> new Item(new Properties()));
-    public static final RegistryObject<Item> GLASS_POTION_BOTTLE_RED = ITEMS.register(REGISTRY, "glass_potion_bottle_red", () -> new Item(new Properties()));
-    public static final RegistryObject<Item> GLASS_POTION_BOTTLE_GLOW = ITEMS.register(REGISTRY, "glass_potion_bottle_glow", () -> new Item(new Properties()));
-    public static final RegistryObject<Item> GLASS_POTION_SYRINGE = ITEMS.register(REGISTRY, "glass_potion_syringe", () -> new Item(new Properties()));
+    public static final RegistryObject<Item> GLASS_POTION_BOTTLE;
+    public static final RegistryObject<Item> GLASS_POTION_BOTTLE_RED;
+    public static final RegistryObject<Item> GLASS_POTION_BOTTLE_GLOW;
+    public static final RegistryObject<Item> GLASS_POTION_SYRINGE;
+
+    static {
+        Supplier<Item> supplier = () -> new Item(new Properties());
+        GLASS_POTION_BOTTLE = ITEMS.register(REGISTRY, "glass_potion_bottle", supplier);
+        GLASS_POTION_BOTTLE_RED = ITEMS.register(REGISTRY, "glass_potion_bottle_red", supplier);
+        GLASS_POTION_BOTTLE_GLOW = ITEMS.register(REGISTRY, "glass_potion_bottle_glow", supplier);
+        GLASS_POTION_SYRINGE = ITEMS.register(REGISTRY, "glass_potion_syringe", supplier);
+    }
 }

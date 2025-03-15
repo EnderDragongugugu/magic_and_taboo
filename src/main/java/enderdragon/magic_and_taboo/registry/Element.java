@@ -13,7 +13,9 @@ import net.minecraft.core.RegistryAccess;
 import net.minecraft.resources.RegistryFixedCodec;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
 import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.registries.ForgeRegistries;
 
@@ -32,7 +34,7 @@ public record Element(
         Object2FloatMap<Holder<Element>> fusionElementMap
 ) {
     public static final ResourceKey<Registry<Element>> RESOURCE_KEY = ResourceKey.createRegistryKey(MagicAndTabooMod.makeId("element"));
-    public static final Codec<Element> CODEC = RecordCodecBuilder.create(elementInstance -> elementInstance.group(
+    public static final Codec<Element> CODEC = RecordCodecBuilder.create(instance -> instance.group(
             ForgeRegistries.MOB_EFFECTS.getCodec().fieldOf("effect").forGetter(Element::effect),
             Codec.STRING.fieldOf("name").forGetter(Element::translationKey),
             ResourceLocation.CODEC.fieldOf("icon").forGetter(Element::icon),
@@ -46,7 +48,7 @@ public record Element(
             Codec.unboundedMap(RegistryFixedCodec.create(Element.RESOURCE_KEY), Codec.FLOAT)
                     .xmap(FloatMaps::unmodifiableCopy, Function.identity())
                     .fieldOf("fusion_element").forGetter(Element::fusionElementMap)
-    ).apply(elementInstance, Element::new));
+    ).apply(instance, Element::new));
 
     public static Object2FloatOpenHashMap<Element> fromStacks(RegistryAccess registry, Collection<ItemStack> stacks, int temperature) {
         var elements = new Object2FloatOpenHashMap<Element>();
@@ -62,5 +64,18 @@ public record Element(
             }
         }
         return elements;
+    }
+
+    public MobEffectInstance getEffect(float concentration, float timeFactor, int baseLevel) {
+        int maxTime = this.maxTime;
+        float normalized = this.concentration.normalize(concentration);
+        float time;
+        if (this.concentration.max() > concentration * 2) {
+            time = concentration / this.concentration.max() * maxTime;
+        } else {
+            time = Mth.clamp(maxTime * (1.0F - 0.6F * normalized), 600, maxTime);
+        }
+        return new MobEffectInstance(this.effect, (int) (time * timeFactor), Math.max(0, baseLevel + Mth.ceil(normalized * this.maxLevel)));
+
     }
 }

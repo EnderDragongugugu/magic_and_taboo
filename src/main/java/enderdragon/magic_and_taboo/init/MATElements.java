@@ -9,6 +9,7 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraftforge.registries.ForgeRegistries;
+import org.jetbrains.annotations.Nullable;
 
 import static enderdragon.magic_and_taboo.MagicAndTabooMod.makeId;
 import static enderdragon.magic_and_taboo.MagicAndTabooMod.makeKey;
@@ -23,7 +24,8 @@ public class MATElements {
     public static final int MAX_TIME = 20 * 60 * 6;
     public static final int MAX_LEVEL = 4;
 
-    static ResourceLocation makeIcon(ResourceLocation identifier) {
+    static ResourceLocation makeIcon(@Nullable ResourceLocation identifier) {
+        assert identifier != null; // to silence the checker
         return identifier.withPath("textures/mob_effect/" + identifier.getPath() + ".png");
     }
 
@@ -47,7 +49,6 @@ public class MATElements {
                         .put(poison, 0.1F)
                         .build()
         ));
-        //noinspection DataFlowIssue
         context.register(NAUSEA, new Element(
                 MobEffects.CONFUSION,
                 "element.magic_and_taboo.element_nausea",

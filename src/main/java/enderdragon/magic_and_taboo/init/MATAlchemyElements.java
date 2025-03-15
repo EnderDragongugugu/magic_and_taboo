@@ -12,7 +12,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Items;
 import net.minecraftforge.registries.ForgeRegistries;
 
-public class MATAlchemyElement {
+public class MATAlchemyElements {
     public static void bootstrap(BootstapContext<AlchemyElement> context) {
         var registry = context.lookup(Element.RESOURCE_KEY);
         var mercury = registry.getOrThrow(MATElements.MERCURY);
@@ -35,7 +35,7 @@ public class MATAlchemyElement {
         new Builder()
                 .put(mercury, 5.0F)
                 .put(poison, 1.0F)
-                .register(context, ForgeRegistries.ITEMS.getKey(MATItems.MERCURY_ORE.get()), 600);
+                .register(context, MATItems.MERCURY_ORE.getId(), 600);
         new Builder()
                 .put(glowing, 10.0F)
                 .put(poison, 4.0F)

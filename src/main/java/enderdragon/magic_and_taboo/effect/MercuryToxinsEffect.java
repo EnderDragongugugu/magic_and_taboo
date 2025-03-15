@@ -6,7 +6,7 @@ import net.minecraft.world.entity.LivingEntity;
 
 public class MercuryToxinsEffect extends MobEffect {
     public MercuryToxinsEffect() {
-        super(MobEffectCategory.BENEFICIAL, 114514);
+        super(MobEffectCategory.HARMFUL, 114514);
     }
 
     @Override

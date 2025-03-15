@@ -6,9 +6,9 @@ import enderdragon.magic_and_taboo.util.RegistryAccessor;
 import it.unimi.dsi.fastutil.objects.Object2FloatMap;
 import it.unimi.dsi.fastutil.objects.Object2FloatMaps;
 import it.unimi.dsi.fastutil.objects.Object2FloatOpenHashMap;
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.util.Mth;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
@@ -17,13 +17,20 @@ import net.minecraftforge.common.util.LazyOptional;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Collection;
-import java.util.HashSet;
+import java.util.List;
 
 public class MagicPotion implements ICapabilityProvider, IMagicPotion, INBTSerializable<CompoundTag> {
     public final LazyOptional<IMagicPotion> holder = LazyOptional.of(() -> this);
     private Object2FloatMap<Element> access;
+    private ObjectArrayList<MobEffectInstance> effects;
     protected Object2FloatMap<Element> elements;
+    protected final float timeFactor;
+    protected final int baseLevel;
+
+    public MagicPotion(float timeFactor, int baseLevel) {
+        this.timeFactor = timeFactor;
+        this.baseLevel = baseLevel;
+    }
 
     @Override
     public @NotNull <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side) {
@@ -72,39 +79,20 @@ public class MagicPotion implements ICapabilityProvider, IMagicPotion, INBTSeria
     @Override
     public void setElements(Object2FloatMap<Element> elements) {
         this.access = null;
+        this.effects = null;
         this.elements = elements;
     }
 
-    public static MobEffectInstance getEffectInstance(Element element, float value) {
-        var maxLevel = element.maxLevel();
-        var maxTime = element.maxTime();
-        var maxConcentration = element.concentration().max();
-        var minConcentration = element.concentration().min();
-        var f = Mth.clamp(value, minConcentration, maxConcentration);
-        int level = (int) Math.ceil(
-                (f - minConcentration) / ((maxConcentration - minConcentration) / maxLevel)
-        );
-        level = Math.max(0, Math.min(level, maxLevel));
-        var normalized = (f - minConcentration) / (maxConcentration - minConcentration);
-        var time = 0.0F;
-        if (maxConcentration / 2 > value) {
-            time = value / maxConcentration * maxTime;
-        } else {
-            time = Mth.clamp(maxTime * (1.0F - 0.6F * normalized), 30 * 20, maxTime);
-        }
-        return new MobEffectInstance(element.effect(), (int) (time), level);
-    }
-
-
     @Override
-    public Collection<MobEffectInstance> getEffectInstances() {
-        Collection<MobEffectInstance> set = new HashSet<>();
-        if (this.elements == null) return set;
-        for (var entry : this.elements.object2FloatEntrySet()) {
-            var element = entry.getKey();
-            var effectInstance = getEffectInstance(element, entry.getFloatValue());
-            set.add(effectInstance);
+    public List<MobEffectInstance> getEffectInstances() {
+        if (this.effects == null) {
+            if (this.elements == null) return List.of();
+            var effects = new ObjectArrayList<MobEffectInstance>(this.elements.size());
+            for (var entry : this.elements.object2FloatEntrySet()) {
+                effects.add(entry.getKey().getEffect(entry.getFloatValue(), this.timeFactor, this.baseLevel));
+            }
+            this.effects = effects;
         }
-        return set;
+        return this.effects;
     }
 }

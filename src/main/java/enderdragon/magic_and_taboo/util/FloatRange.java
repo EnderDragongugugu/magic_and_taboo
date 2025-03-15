@@ -21,4 +21,12 @@ public record FloatRange(float min, float max) implements FloatPredicate {
     public boolean test(float value) {
         return value >= this.min && value <= this.max;
     }
+
+    public float normalize(float value) {
+        return value <= this.min
+                ? 0
+                : value >= this.max
+                ? 1
+                : (value - this.min) / (this.max - this.min);
+    }
 }

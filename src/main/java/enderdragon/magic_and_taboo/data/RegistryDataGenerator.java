@@ -1,7 +1,7 @@
 package enderdragon.magic_and_taboo.data;
 
 import enderdragon.magic_and_taboo.MagicAndTabooMod;
-import enderdragon.magic_and_taboo.init.MATAlchemyElement;
+import enderdragon.magic_and_taboo.init.MATAlchemyElements;
 import enderdragon.magic_and_taboo.init.MATElements;
 import enderdragon.magic_and_taboo.registry.AlchemyElement;
 import enderdragon.magic_and_taboo.registry.Element;
@@ -15,7 +15,7 @@ import java.util.concurrent.CompletableFuture;
 
 public class RegistryDataGenerator extends DatapackBuiltinEntriesProvider {
     private static final RegistrySetBuilder BUILDER = new RegistrySetBuilder()
-            .add(AlchemyElement.RESOURCE_KEY, MATAlchemyElement::bootstrap)
+            .add(AlchemyElement.RESOURCE_KEY, MATAlchemyElements::bootstrap)
             .add(Element.RESOURCE_KEY, MATElements::bootstrap);
 
     public RegistryDataGenerator(PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {

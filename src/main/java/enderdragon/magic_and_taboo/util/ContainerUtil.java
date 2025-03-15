@@ -80,7 +80,7 @@ public class ContainerUtil {
         }
     }
 
-    public static boolean canMerge(ItemStack oldItemStack, ItemStack newItemStack) {
-        return oldItemStack.isEmpty() || (newItemStack.is(oldItemStack.getItem()) && newItemStack.getCount() + oldItemStack.getCount() <= oldItemStack.getMaxStackSize());
+    public static boolean canMerge(ItemStack old, ItemStack neo) {
+        return old.isEmpty() || (neo.is(old.getItem()) && neo.getCount() + old.getCount() <= old.getMaxStackSize());
     }
 }
