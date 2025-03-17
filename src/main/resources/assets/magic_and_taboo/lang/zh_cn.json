@@ -105,5 +105,6 @@
   "tooltip.magic_and_taboo.sacrificial_dagger_warn": "它似乎在渴望鲜血",
   "tooltip.magic_and_taboo.work_hub_item": "存有: ",
   "tooltip.magic_and_taboo.work_hub_item_empty": "里面什么都没有!",
-  "tooltip.magic_and_taboo.work_hub_item_show": "存有: %s, 共 %d 个"
+  "tooltip.magic_and_taboo.work_hub_item_show": "存有: %s, 共 %d 个",
+  "text.magic_and_taboo.enchanted_crucible_temperature": "温度: %s°"
 }

@@ -9,7 +9,7 @@ modLoader = "javafml" #mandatory
 loaderVersion = "${loader_version_range}" #mandatory This is typically bumped every Minecraft version by Forge. See our download page for lists of versions.
 # The license for you mod. This is mandatory metadata and allows for easier comprehension of your redistributive properties.
 # Review your options at https://choosealicense.com/. All rights reserved is the default copyright stance, and is thus the default here.
-license = "MIT License"
+license = "All Rights Reserved"
 # A URL to refer people to when problems occur with this mod
 #issueTrackerURL="https://change.me.to.your.issue.tracker.example.invalid/" #optional
 # A list of mods - how many allowed here is determined by the individual mod loader
@@ -17,7 +17,7 @@ license = "MIT License"
 # The modid of the mod
 modId = "magic_and_taboo" #mandatory
 # The version number of the mod
-version = "0.0.1" #mandatory
+version = "0.0.2-beta" #mandatory
 # A display name for the mod
 displayName = "Magic And Taboo" #mandatory
 # A URL to query for updates for this mod. See the JSON update specification https://docs.minecraftforge.net/en/latest/misc/updatechecker/
@@ -29,7 +29,7 @@ displayName = "Magic And Taboo" #mandatory
 # A text field displayed in the mod UI
 #credits="" #optional
 # A text field displayed in the mod UI
-authors = "enderdragon" #optional
+authors = "Magic and Taboo Team" #optional
 # Display Test controls the display for your mod in the server connection screen
 # MATCH_VERSION means that your mod will cause a red X if the versions on client and server differ. This is the default behaviour and should be what you choose if you have server and client elements to your mod.
 # IGNORE_SERVER_VERSION means that your mod will not cause a red X if it's present on the server but not on the client. This is what you should use if you're a server only mod.
@@ -39,7 +39,7 @@ authors = "enderdragon" #optional
 #displayTest="MATCH_VERSION" # MATCH_VERSION is the default if nothing is specified (#optional)
 
 # The description text for the mod (multi line!) (#mandatory)
-description = "no"
+description = "0.0.2-beta test!"
 # A dependency - use the . to indicate dependency for a specific modid. Dependencies are optional.
 [[dependencies.magic_and_taboo]] #optional
 # the modid of the dependency

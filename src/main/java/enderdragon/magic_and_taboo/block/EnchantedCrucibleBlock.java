@@ -135,7 +135,10 @@ public class EnchantedCrucibleBlock extends BaseEntityBlock {
         if (level.getBlockEntity(pos) instanceof EnchantedCrucibleBlockEntity crucible) {
             if (level.isClientSide) return InteractionResult.CONSUME;
             ItemStack stack = player.getItemInHand(hand);
-            if (crucible.getFluidStack().isEmpty() && stack.is(Items.WATER_BUCKET)) {
+            if (stack.is(Items.ICE)) {
+                crucible.cooling(stack);
+                return InteractionResult.SUCCESS;
+            } else if (crucible.getFluidStack().isEmpty() && stack.is(Items.WATER_BUCKET)) {
                 crucible.putFluid(stack, player, hand);
                 level.playSound((Player) null, pos, SoundEvents.BUCKET_EMPTY, SoundSource.BLOCKS, 1.0F, 1.0F);
                 return InteractionResult.SUCCESS;

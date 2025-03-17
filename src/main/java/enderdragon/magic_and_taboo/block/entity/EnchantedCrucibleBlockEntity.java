@@ -41,9 +41,16 @@ import org.jetbrains.annotations.Nullable;
  */
 public class EnchantedCrucibleBlockEntity extends BlockEntity implements IFluidHandler {
     public static void tickCommon(Level level, BlockPos pos, BlockState state, EnchantedCrucibleBlockEntity crucible) {
-        if (!state.getValue(EnchantedCrucibleBlock.WORKING)) return;
         ++crucible.tick;
         var registry = level.registryAccess();
+        // cooling start
+        if (!state.getValue(EnchantedCrucibleBlock.WORKING)) {
+            if (crucible.temperature > 0 && !crucible.fluid.isEmpty() && crucible.tick % 50 == 0) {
+                crucible.temperature = Math.max(crucible.temperature - 1, 0);
+            }
+            return;
+        }
+        // cooling end
         // cooking start
         for (int i = crucible.stacks.size() - 1; i >= 0; --i) {
             var stack = crucible.stacks.get(i);
@@ -110,6 +117,14 @@ public class EnchantedCrucibleBlockEntity extends BlockEntity implements IFluidH
 
     public int getTemperature() {
         return temperature;
+    }
+
+    public void cooling(ItemStack stack) {
+        if (temperature >= 5) {
+            temperature -= 5;
+            stack.shrink(1);
+        }
+        setChanged();
     }
 
     public void test(Level level, GlassMagicPotionBottleItem stack, Player player) {
