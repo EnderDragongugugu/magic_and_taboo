@@ -109,18 +109,24 @@ public class EnchantedCrucibleBlock extends BaseEntityBlock {
     }
 
     @Override
-    public void neighborChanged(BlockState pState, Level pLevel, BlockPos pPos, Block pNeighborBlock, BlockPos pNeighborPos, boolean pMovedByPiston) {
-        setWorking(pLevel, pPos);
+    @SuppressWarnings("deprecation")
+    public void neighborChanged(BlockState state, Level level, BlockPos pos, Block neighbor, BlockPos NeighborPos, boolean movedByPiston) {
+        updateWorkingState(level, pos, state);
     }
 
     @Override
-    public void onPlace(BlockState pState, Level pLevel, BlockPos pPos, BlockState pOldState, boolean pMovedByPiston) {
-        setWorking(pLevel, pPos);
+    @SuppressWarnings("deprecation")
+    public void onPlace(BlockState state, Level level, BlockPos pos, BlockState oldState, boolean movedByPiston) {
+        if (!oldState.is(state.getBlock())) {
+            updateWorkingState(level, pos, state);
+        }
     }
 
-    public void setWorking(Level level, BlockPos pos) {
-        var belowBlockStack = level.getBlockState(pos.below()).getBlock().defaultBlockState();
-        level.setBlock(pos, level.getBlockState(pos).setValue(WORKING, belowBlockStack.is(MATBlockTags.HEATERS)), Block.UPDATE_ALL);
+    public void updateWorkingState(Level level, BlockPos pos, BlockState state) {
+        boolean working = level.getBlockState(pos.below()).is(MATBlockTags.HEATERS);
+        if (working != state.getValue(WORKING)) {
+            level.setBlock(pos, state.setValue(WORKING, working), Block.UPDATE_ALL);
+        }
     }
 
     @Override
@@ -152,18 +158,22 @@ public class EnchantedCrucibleBlock extends BaseEntityBlock {
     public void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean movedByPiston) {
         if (!state.is(newState.getBlock())) {
             if (level.getBlockEntity(pos) instanceof EnchantedCrucibleBlockEntity crucible) {
-                var stack = crucible.getStacks();
-                for (int i = 0; i < stack.size(); i++) {
-                    var itemStack = stack.get(i);
-                    var time = crucible.getCookingTime()[i];
-                    var alchemyElement = AlchemyElement.fromItem(level.registryAccess(), itemStack.getItem());
-                    if (!itemStack.isEmpty() && time < alchemyElement.time()) {
-                        Containers.dropItemStack(level, pos.getX(), pos.getY(), pos.getZ(), itemStack);
+                var progress = crucible.getCookingTime();
+                var stacks = crucible.getStacks();
+                if (progress.length >= stacks.size()) {
+                    var registry = level.registryAccess();
+                    var iterator = stacks.listIterator();
+                    while (iterator.hasNext()) {
+                        var stack = iterator.next();
+                        if (stack.isEmpty()) continue;
+                        var element = AlchemyElement.fromItem(registry, stack.getItem());
+                        if (element != null && progress[iterator.previousIndex()] < element.time()) {
+                            Containers.dropItemStack(level, pos.getX(), pos.getY(), pos.getZ(), stack);
+                        }
                     }
                 }
             }
             super.onRemove(state, level, pos, newState, movedByPiston);
         }
     }
-
 }

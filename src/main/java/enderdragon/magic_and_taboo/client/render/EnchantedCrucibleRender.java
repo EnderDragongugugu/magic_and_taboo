@@ -96,21 +96,24 @@ public class EnchantedCrucibleRender implements BlockEntityRenderer<EnchantedCru
         var level = Minecraft.getInstance().level;
         if (level == null) return;
         var stacks = crucible.getStacks();
-        var list = crucible.getCookingTime();
+        var progress = crucible.getCookingTime();
+        if (progress.length < stacks.size()) return;
         var registry = level.registryAccess().registryOrThrow(AlchemyElement.RESOURCE_KEY);
         int tick = crucible.tick;
         float extraRot = tick % 360.0F;
         float extraOffset = 2.0F + 0.00225F * height;
-        for (int i = 0; i < stacks.size(); i++) {
-            var stack = stacks.get(i);
+        var iterator = stacks.listIterator();
+        while (iterator.hasNext()) {
+            int index = iterator.nextIndex();
+            var stack = iterator.next();
             if (stack.isEmpty()) continue;
             int time = registry.getOptional(ForgeRegistries.ITEMS.getKey(stack.getItem())).map(AlchemyElement::time).orElse(300);
-            if (list[i] < time) {
+            if (progress[index] < time) {
                 matrices.pushPose();
                 matrices.translate(0.5F, 0.0F, 0.5F);
-                matrices.mulPose(Axis.YP.rotationDegrees(45.0F * i + extraRot));
+                matrices.mulPose(Axis.YP.rotationDegrees(45.0F * index + extraRot));
                 matrices.scale(0.175F, 0.175F, 0.175F);
-                matrices.translate(0.7F, extraOffset + Mth.sin((tick + i * 5) / 10.0F) * 0.1F, 0.9F);
+                matrices.translate(0.7F, extraOffset + Mth.sin((tick + index * 5) / 10.0F) * 0.1F, 0.9F);
                 this.itemRenderer.renderStatic(stack, ItemDisplayContext.FIXED, pPackedLight, pPackedOverlay, matrices, buffers, level, 0);
                 matrices.popPose();
             }

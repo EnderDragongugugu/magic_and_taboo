@@ -101,7 +101,7 @@ public class EnchantedCrucibleBlockEntity extends BlockEntity implements IFluidH
     }
 
     public NonNullList<ItemStack> getStacks() {
-        return stacks;
+        return this.stacks;
     }
 
     public int[] getCookingTime() {
@@ -114,8 +114,8 @@ public class EnchantedCrucibleBlockEntity extends BlockEntity implements IFluidH
 
     public void test(Level level, GlassMagicPotionBottleItem stack, Player player) {
         int amount = this.fluid.getAmount();
-        if (amount % 250 == 0) {
-            var bottle = stack.getPotionBottle();
+        if (amount >= 250) {
+            var bottle = new ItemStack(stack.getFilled());
             this.fillPotion(level.registryAccess(), bottle.getCapability(MATCapabilities.MAGIC_POTION).orElse(IMagicPotion.EMPTY));
             ContainerUtil.addItem(player, bottle);
             this.fluid.setAmount(amount - 250);

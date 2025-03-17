@@ -1,19 +1,18 @@
 package enderdragon.magic_and_taboo.item;
 
-import enderdragon.magic_and_taboo.util.IMagicPotionBottleType;
+import enderdragon.magic_and_taboo.util.IMagicPotionBottle;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
 
-public class GlassMagicPotionBottleItem extends Item implements IMagicPotionBottleType {
-    Item item;
+public class GlassMagicPotionBottleItem extends Item implements IMagicPotionBottle {
+    public final Item filled;
 
-    public GlassMagicPotionBottleItem(Properties pProperties, Item item) {
-        super(pProperties);
-        this.item = item;
+    public GlassMagicPotionBottleItem(Properties props, Item filled) {
+        super(props);
+        this.filled = filled;
     }
 
     @Override
-    public ItemStack getPotionBottle() {
-        return new ItemStack(item);
+    public Item getFilled() {
+        return this.filled;
     }
 }

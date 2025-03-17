@@ -16,7 +16,7 @@ public class PotionBottleGlowItem extends MagicPotionItem {
 
     @Override
     public ItemStack finishUsingItem(ItemStack stack, Level level, LivingEntity entity) {
-        return consumeStack(stack, entity, MATItems.GLASS_POTION_BOTTLE_GLOW.get());
+        return consumeStack(stack, entity, MATItems.GLASS_POTION_BOTTLE_GLOW);
     }
 
     @Override

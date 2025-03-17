@@ -29,7 +29,7 @@ public class EnchantedCrucibleInfo implements IMagicPotion {
     }
 
     @Override
-    public boolean canDeath() {
+    public boolean isFatal() {
         return false;
     }
 

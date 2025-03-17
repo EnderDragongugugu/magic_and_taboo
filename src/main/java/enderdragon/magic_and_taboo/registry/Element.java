@@ -19,7 +19,7 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.registries.ForgeRegistries;
 
-import java.util.Collection;
+import java.util.List;
 import java.util.function.Function;
 
 public record Element(
@@ -50,20 +50,21 @@ public record Element(
                     .fieldOf("fusion_element").forGetter(Element::fusionElementMap)
     ).apply(instance, Element::new));
 
-    public static Object2FloatOpenHashMap<Element> fromStacks(RegistryAccess registry, Collection<ItemStack> stacks, int[] cookingTime, int temperature) {
+    public static Object2FloatOpenHashMap<Element> fromStacks(RegistryAccess registry, List<ItemStack> stacks, int[] cookingTime, int temperature) {
+        if (cookingTime.length < stacks.size()) throw new IndexOutOfBoundsException();
         var elements = new Object2FloatOpenHashMap<Element>();
-        int i = 0;
-        for (var stack : stacks) {
+        var iterator = stacks.listIterator();
+        while (iterator.hasNext()) {
+            var stack = iterator.next();
             if (stack.isEmpty()) continue;
             var instance = AlchemyElement.fromItem(registry, stack.getItem());
             if (instance == null) continue;
             for (var entry : instance.elementMap().object2FloatEntrySet()) {
                 var element = entry.getKey().value();
-                if (element.temperature().test(temperature) && cookingTime[i] >= instance.time()) {
+                if (element.temperature().test(temperature) && cookingTime[iterator.previousIndex()] >= instance.time()) {
                     elements.addTo(element, entry.getFloatValue());
                 }
             }
-            i++;
         }
         return elements;
     }

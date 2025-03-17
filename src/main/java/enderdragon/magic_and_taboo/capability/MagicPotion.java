@@ -84,7 +84,7 @@ public class MagicPotion implements ICapabilityProvider, IMagicPotion, INBTSeria
     }
 
     @Override
-    public boolean canDeath() {
+    public boolean isFatal() {
         for (var entry : this.elements.object2FloatEntrySet()) {
             if (entry.getFloatValue() >= entry.getKey().concentration().max()) {
                 return true;

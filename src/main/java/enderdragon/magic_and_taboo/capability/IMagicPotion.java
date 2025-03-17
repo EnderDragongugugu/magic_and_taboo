@@ -14,8 +14,7 @@ public interface IMagicPotion {
 
     void setElements(Object2FloatMap<Element> elements);
 
-    boolean canDeath();
-
+    boolean isFatal();
 
     List<MobEffectInstance> getEffectInstances();
 
@@ -30,7 +29,7 @@ public interface IMagicPotion {
         }
 
         @Override
-        public boolean canDeath() {
+        public boolean isFatal() {
             return false;
         }
 
