@@ -50,18 +50,20 @@ public record Element(
                     .fieldOf("fusion_element").forGetter(Element::fusionElementMap)
     ).apply(instance, Element::new));
 
-    public static Object2FloatOpenHashMap<Element> fromStacks(RegistryAccess registry, Collection<ItemStack> stacks, int temperature) {
+    public static Object2FloatOpenHashMap<Element> fromStacks(RegistryAccess registry, Collection<ItemStack> stacks, int[] cookingTime, int temperature) {
         var elements = new Object2FloatOpenHashMap<Element>();
+        int i = 0;
         for (var stack : stacks) {
             if (stack.isEmpty()) continue;
             var instance = AlchemyElement.fromItem(registry, stack.getItem());
             if (instance == null) continue;
             for (var entry : instance.elementMap().object2FloatEntrySet()) {
                 var element = entry.getKey().value();
-                if (element.temperature().test(temperature)) {
+                if (element.temperature().test(temperature) && cookingTime[i] >= instance.time()) {
                     elements.addTo(element, entry.getFloatValue());
                 }
             }
+            i++;
         }
         return elements;
     }

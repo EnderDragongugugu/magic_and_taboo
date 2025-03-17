@@ -84,12 +84,25 @@ public class MagicPotion implements ICapabilityProvider, IMagicPotion, INBTSeria
     }
 
     @Override
+    public boolean canDeath() {
+        for (var entry : this.elements.object2FloatEntrySet()) {
+            if (entry.getFloatValue() >= entry.getKey().concentration().max()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Override
     public List<MobEffectInstance> getEffectInstances() {
         if (this.effects == null) {
             if (this.elements == null) return List.of();
             var effects = new ObjectArrayList<MobEffectInstance>(this.elements.size());
             for (var entry : this.elements.object2FloatEntrySet()) {
-                effects.add(entry.getKey().getEffect(entry.getFloatValue(), this.timeFactor, this.baseLevel));
+                var element = entry.getKey();
+                if (element.concentration().min() <= entry.getFloatValue()) {
+                    effects.add(element.getEffect(entry.getFloatValue(), this.timeFactor, this.baseLevel));
+                }
             }
             this.effects = effects;
         }

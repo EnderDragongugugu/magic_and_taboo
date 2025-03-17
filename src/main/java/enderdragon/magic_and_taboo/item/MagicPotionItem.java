@@ -23,10 +23,9 @@ import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
-import java.util.function.Supplier;
 
 public class MagicPotionItem extends Item {
-    public static ItemStack consumeStack(ItemStack stack, LivingEntity entity, Supplier<Item> container) {
+    public static ItemStack consumeStack(ItemStack stack, LivingEntity entity, Item container) {
         Player player = null;
         if (entity instanceof ServerPlayer $player) {
             player = $player;
@@ -36,11 +35,15 @@ public class MagicPotionItem extends Item {
         }
         IMagicPotion potion = stack.getCapability(MATCapabilities.MAGIC_POTION, null).orElse(IMagicPotion.EMPTY);
         if (!entity.level().isClientSide) {
-            for (var effect : potion.getEffectInstances()) {
-                if (effect.getEffect().isInstantenous()) {
-                    effect.getEffect().applyInstantenousEffect(player, player, entity, effect.getAmplifier(), 1.0D);
-                } else {
-                    entity.addEffect(new MobEffectInstance(effect));
+            if (potion.canDeath()) {
+                entity.kill();
+            } else {
+                for (var effect : potion.getEffectInstances()) {
+                    if (effect.getEffect().isInstantenous()) {
+                        effect.getEffect().applyInstantenousEffect(player, player, entity, effect.getAmplifier(), 1.0D);
+                    } else {
+                        entity.addEffect(new MobEffectInstance(effect));
+                    }
                 }
             }
         }
@@ -48,8 +51,8 @@ public class MagicPotionItem extends Item {
             player.awardStat(Stats.ITEM_USED.get(stack.getItem()));
             if (!player.getAbilities().instabuild) {
                 stack.shrink(1);
-                if (stack.isEmpty()) return new ItemStack(container.get());
-                ContainerUtil.addItem(player, new ItemStack(container.get()));
+                if (stack.isEmpty()) return new ItemStack(container);
+                ContainerUtil.addItem(player, new ItemStack(container));
             }
         }
         entity.gameEvent(GameEvent.DRINK);
@@ -72,7 +75,7 @@ public class MagicPotionItem extends Item {
 
     @Override
     public ItemStack finishUsingItem(ItemStack stack, Level level, LivingEntity entity) {
-        return consumeStack(stack, entity, MATItems.GLASS_POTION_BOTTLE);
+        return consumeStack(stack, entity, MATItems.GLASS_POTION_BOTTLE.get());
     }
 
     public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {

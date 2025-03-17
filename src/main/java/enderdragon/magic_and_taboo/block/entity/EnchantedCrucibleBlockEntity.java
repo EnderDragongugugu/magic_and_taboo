@@ -1,11 +1,11 @@
 package enderdragon.magic_and_taboo.block.entity;
 
+import enderdragon.magic_and_taboo.block.EnchantedCrucibleBlock;
 import enderdragon.magic_and_taboo.capability.IMagicPotion;
 import enderdragon.magic_and_taboo.client.render.EnchantedCrucibleInfo;
 import enderdragon.magic_and_taboo.init.MATBlockEntities;
 import enderdragon.magic_and_taboo.init.MATCapabilities;
-import enderdragon.magic_and_taboo.init.MATItems;
-import enderdragon.magic_and_taboo.item.MagicPotionItem;
+import enderdragon.magic_and_taboo.item.GlassMagicPotionBottleItem;
 import enderdragon.magic_and_taboo.registry.AlchemyElement;
 import enderdragon.magic_and_taboo.registry.Element;
 import enderdragon.magic_and_taboo.util.ContainerUtil;
@@ -41,6 +41,7 @@ import org.jetbrains.annotations.Nullable;
  */
 public class EnchantedCrucibleBlockEntity extends BlockEntity implements IFluidHandler {
     public static void tickCommon(Level level, BlockPos pos, BlockState state, EnchantedCrucibleBlockEntity crucible) {
+        if (!state.getValue(EnchantedCrucibleBlock.WORKING)) return;
         ++crucible.tick;
         var registry = level.registryAccess();
         // cooking start
@@ -111,11 +112,10 @@ public class EnchantedCrucibleBlockEntity extends BlockEntity implements IFluidH
         return temperature;
     }
 
-    public void test(Level level, ItemStack stack, Player player) {
+    public void test(Level level, GlassMagicPotionBottleItem stack, Player player) {
         int amount = this.fluid.getAmount();
         if (amount % 250 == 0) {
-            var item = getPotionBottle(stack);
-            var bottle = new ItemStack(item);
+            var bottle = stack.getPotionBottle();
             this.fillPotion(level.registryAccess(), bottle.getCapability(MATCapabilities.MAGIC_POTION).orElse(IMagicPotion.EMPTY));
             ContainerUtil.addItem(player, bottle);
             this.fluid.setAmount(amount - 250);
@@ -126,15 +126,8 @@ public class EnchantedCrucibleBlockEntity extends BlockEntity implements IFluidH
         }
     }
 
-    public MagicPotionItem getPotionBottle(ItemStack stack) {
-        if (stack.is(MATItems.GLASS_POTION_BOTTLE_RED.get())) return MATItems.POTION_BOTTLE_RED.get();
-        if (stack.is(MATItems.GLASS_POTION_BOTTLE_GLOW.get())) return MATItems.POTION_BOTTLE_GLOW.get();
-        if (stack.is(MATItems.GLASS_POTION_SYRINGE.get())) return MATItems.POTION_SYRINGE.get();
-        return MATItems.POTION_BOTTLE.get();
-    }
-
     public void fillPotion(RegistryAccess registry, IMagicPotion potion) {
-        var data = Element.fromStacks(registry, this.stacks, this.temperature);
+        var data = Element.fromStacks(registry, this.stacks, cookingTime, this.temperature);
         for (var entry : data.object2FloatEntrySet()) {
             var element = entry.getKey();
             float conflict = 0.0F, bonus = 1.0F;

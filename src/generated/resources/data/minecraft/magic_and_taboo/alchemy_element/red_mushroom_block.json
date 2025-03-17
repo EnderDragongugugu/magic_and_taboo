@@ -1,0 +1,10 @@
+{
+  "alchemy_element": {
+    "magic_and_taboo:haste": 0.5,
+    "magic_and_taboo:jump_boost": 0.5,
+    "magic_and_taboo:night_vision": 0.5,
+    "magic_and_taboo:regeneration": 0.5,
+    "magic_and_taboo:speed": 0.5
+  },
+  "max_time": 300
+}

@@ -1,0 +1,23 @@
+{
+  "type": "magic_and_taboo:work_hub",
+  "blaze_burner": {
+    "item": "magic_and_taboo:blaze_burner"
+  },
+  "experience": 10,
+  "ingredients": [
+    {
+      "item": "minecraft:glass"
+    },
+    {
+      "item": "minecraft:glass"
+    },
+    {
+      "item": "minecraft:glass"
+    }
+  ],
+  "require_mortar": false,
+  "result": {
+    "item": "magic_and_taboo:glass_potion_bottle"
+  },
+  "work_time": 300
+}

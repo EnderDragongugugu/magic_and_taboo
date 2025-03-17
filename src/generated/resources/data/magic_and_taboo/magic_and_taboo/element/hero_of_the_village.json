@@ -1,0 +1,17 @@
+{
+  "blood_drug_concentration": {
+    "max": 100.0,
+    "min": 30.0
+  },
+  "effect": "minecraft:hero_of_the_village",
+  "fusion_element": {},
+  "icon": "minecraft:textures/mob_effect/hero_of_the_village.png",
+  "max_level": 4,
+  "max_time": 7200,
+  "name": "element.magic_and_taboo.hero_of_the_village",
+  "resistance_element": {},
+  "temperature_range": {
+    "max": 100.0,
+    "min": 0.0
+  }
+}

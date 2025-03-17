@@ -83,6 +83,12 @@ public class MATRecipeProvider extends RecipeProvider {
                 .pattern("Z Z")
                 .unlockedBy("has_material", has(Blocks.CRAFTING_TABLE))
                 .save(writer, getSimpleRecipeName(MATBlocks.WORK_HUB.get()));
+        ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, MATBlocks.FIR_SAPLING.get(), 1)
+                .define('Y', Blocks.SPRUCE_SAPLING)
+                .define('Z', Items.WATER_BUCKET)
+                .pattern("ZYZ")
+                .unlockedBy("has_material", has(Blocks.SPRUCE_SAPLING))
+                .save(writer, getSimpleRecipeName(MATBlocks.FIR_SAPLING.get()));
         stonecutterResultFromBase(writer, RecipeCategory.BUILDING_BLOCKS, MATBlocks.GILDED_MARBLE_SLAB.get(), MATBlocks.GILDED_MARBLE.get(), 2);
         stonecutterResultFromBase(writer, RecipeCategory.BUILDING_BLOCKS, MATBlocks.GILDED_MARBLE_STAIRS.get(), MATBlocks.GILDED_MARBLE.get());
         stonecutterResultFromBase(writer, RecipeCategory.DECORATIONS, MATBlocks.GILDED_MARBLE_WALL.get(), MATBlocks.GILDED_MARBLE.get());
@@ -144,6 +150,39 @@ public class MATRecipeProvider extends RecipeProvider {
                 .requires(Items.BLAZE_POWDER)
                 .withContainer(MATItems.BLAZE_BURNER.get())
                 .unlockedBy("has_material", has(MATItems.BLAZE_BURNER.get()))
+                .save(writer);
+//        药剂瓶
+        new WorkHubRecipeBuilder(false, 300, 10, MATItems.GLASS_POTION_BOTTLE.get(), 1)
+                .requires(Blocks.GLASS)
+                .requires(Blocks.GLASS)
+                .requires(Blocks.GLASS)
+                .withBlazeBurner(MATItems.BLAZE_BURNER.get())
+                .unlockedBy("has_material", has(Items.GLASS))
+                .save(writer);
+//        glow 药剂瓶
+        new WorkHubRecipeBuilder(false, 300, 10, MATItems.GLASS_POTION_BOTTLE_GLOW.get(), 1)
+                .requires(Blocks.GLOWSTONE)
+                .requires(Items.GLOWSTONE_DUST)
+                .requires(Items.GLOWSTONE_DUST)
+                .withBlazeBurner(MATItems.BLAZE_BURNER.get())
+                .withContainer(MATItems.GLASS_POTION_BOTTLE.get())
+                .unlockedBy("has_material", has(MATItems.GLASS_POTION_BOTTLE_GLOW.get()))
+                .save(writer);
+//        red 药剂瓶
+        new WorkHubRecipeBuilder(false, 300, 10, MATItems.GLASS_POTION_BOTTLE_RED.get(), 1)
+                .requires(Blocks.REDSTONE_BLOCK)
+                .requires(Items.REDSTONE)
+                .requires(Items.REDSTONE)
+                .withBlazeBurner(MATItems.BLAZE_BURNER.get())
+                .withContainer(MATItems.GLASS_POTION_BOTTLE.get())
+                .unlockedBy("has_material", has(MATItems.GLASS_POTION_BOTTLE_GLOW.get()))
+                .save(writer);
+//        蜂蜜桶
+        new WorkHubRecipeBuilder(true, 100, 10, MATItems.HONEY_BUCKET.get(), 1)
+                .requires(Blocks.HONEY_BLOCK)
+                .withBlazeBurner(MATItems.BLAZE_BURNER.get())
+                .withContainer(MATItems.GLASS_POTION_BOTTLE.get())
+                .unlockedBy("has_material", has(MATItems.HONEY_BUCKET.get()))
                 .save(writer);
     }
 }

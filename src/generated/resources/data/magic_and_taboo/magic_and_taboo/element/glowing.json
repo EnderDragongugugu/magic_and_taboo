@@ -1,19 +1,21 @@
 {
   "blood_drug_concentration": {
-    "max": 100.0,
-    "min": 30.0
+    "max": 110.0,
+    "min": 40.0
   },
   "effect": "minecraft:glowing",
   "fusion_element": {
     "magic_and_taboo:night_vision": 1.5
   },
   "icon": "minecraft:textures/mob_effect/glowing.png",
-  "max_level": 4,
+  "max_level": 0,
   "max_time": 7200,
   "name": "element.magic_and_taboo.glowing",
-  "resistance_element": {},
+  "resistance_element": {
+    "magic_and_taboo:invisibility": 110.0
+  },
   "temperature_range": {
     "max": 100.0,
-    "min": 0.0
+    "min": 50.0
   }
 }

@@ -29,6 +29,11 @@ public class EnchantedCrucibleInfo implements IMagicPotion {
     }
 
     @Override
+    public boolean canDeath() {
+        return false;
+    }
+
+    @Override
     public @NotNull List<MobEffectInstance> getEffectInstances() {
         var effects = new ObjectArrayList<MobEffectInstance>(this.elements.size());
         for (var entry : this.elements.object2FloatEntrySet()) {

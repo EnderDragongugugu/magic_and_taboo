@@ -1,0 +1,20 @@
+{
+  "type": "magic_and_taboo:work_hub",
+  "blaze_burner": {
+    "item": "magic_and_taboo:blaze_burner"
+  },
+  "container": {
+    "item": "magic_and_taboo:glass_potion_bottle"
+  },
+  "experience": 10,
+  "ingredients": [
+    {
+      "item": "minecraft:honey_block"
+    }
+  ],
+  "require_mortar": true,
+  "result": {
+    "item": "magic_and_taboo:honey_bucket"
+  },
+  "work_time": 100
+}

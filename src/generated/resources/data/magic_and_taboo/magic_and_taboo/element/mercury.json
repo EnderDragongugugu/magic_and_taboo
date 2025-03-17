@@ -1,6 +1,6 @@
 {
   "blood_drug_concentration": {
-    "max": 20.0,
+    "max": 50.0,
     "min": 1.0
   },
   "effect": "magic_and_taboo:mercury_toxins",
@@ -9,12 +9,17 @@
     "magic_and_taboo:poison": 0.1
   },
   "icon": "magic_and_taboo:textures/mob_effect/mercury_toxins.png",
-  "max_level": 4,
-  "max_time": 7200,
+  "max_level": 3,
+  "max_time": 6000,
   "name": "element.magic_and_taboo.element_mercury",
-  "resistance_element": {},
+  "resistance_element": {
+    "magic_and_taboo:fire_resistance": 5.5,
+    "magic_and_taboo:regeneration": 20.0,
+    "magic_and_taboo:resistance": 10.5,
+    "magic_and_taboo:strength": 15.5
+  },
   "temperature_range": {
-    "max": 100.0,
+    "max": 75.0,
     "min": 0.0
   }
 }

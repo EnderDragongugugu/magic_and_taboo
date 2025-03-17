@@ -1,0 +1,17 @@
+{
+  "blood_drug_concentration": {
+    "max": 100.0,
+    "min": 30.0
+  },
+  "effect": "minecraft:absorption",
+  "fusion_element": {},
+  "icon": "minecraft:textures/mob_effect/absorption.png",
+  "max_level": 4,
+  "max_time": 7200,
+  "name": "element.magic_and_taboo.absorption",
+  "resistance_element": {},
+  "temperature_range": {
+    "max": 100.0,
+    "min": 0.0
+  }
+}

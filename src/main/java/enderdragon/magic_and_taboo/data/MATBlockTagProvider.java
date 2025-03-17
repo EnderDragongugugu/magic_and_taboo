@@ -50,6 +50,13 @@ public class MATBlockTagProvider extends BlockTagsProvider {
         this.tag(WALLS)
                 .add(GILDED_MARBLE_WALL.get())
                 .add(POLISHED_GILDED_MARBLE_WALL.get());
-        this.tag(HEATERS).add(Blocks.FIRE);
+        this.tag(HEATERS)
+                .add(Blocks.FIRE)
+                .add(Blocks.MAGMA_BLOCK)
+                .add(Blocks.LAVA_CAULDRON)
+                .add(Blocks.SOUL_FIRE)
+                .add(Blocks.CAMPFIRE)
+                .add(Blocks.SOUL_CAMPFIRE)
+        ;
     }
 }

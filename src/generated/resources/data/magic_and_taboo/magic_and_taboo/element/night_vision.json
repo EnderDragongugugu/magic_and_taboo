@@ -1,19 +1,27 @@
 {
   "blood_drug_concentration": {
-    "max": 100.0,
-    "min": 30.0
+    "max": 120.0,
+    "min": 60.0
   },
   "effect": "minecraft:night_vision",
-  "fusion_element": {},
+  "fusion_element": {
+    "magic_and_taboo:invisibility": 1.75,
+    "magic_and_taboo:jump_boost": 0.75,
+    "magic_and_taboo:speed": 1.0
+  },
   "icon": "magic_and_taboo:textures/mob_effect/element_eye.png",
-  "max_level": 4,
+  "max_level": 0,
   "max_time": 7200,
   "name": "element.magic_and_taboo.element_eye",
   "resistance_element": {
-    "magic_and_taboo:nausea": 10.0
+    "magic_and_taboo:blindness": 30.0,
+    "magic_and_taboo:darkness": 30.0,
+    "magic_and_taboo:nausea": 10.0,
+    "magic_and_taboo:slowness": 5.5,
+    "magic_and_taboo:weakness": 10.0
   },
   "temperature_range": {
     "max": 100.0,
-    "min": 0.0
+    "min": 5.0
   }
 }

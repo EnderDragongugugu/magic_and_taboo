@@ -1,0 +1,26 @@
+{
+  "type": "magic_and_taboo:work_hub",
+  "blaze_burner": {
+    "item": "magic_and_taboo:blaze_burner"
+  },
+  "container": {
+    "item": "magic_and_taboo:glass_potion_bottle"
+  },
+  "experience": 10,
+  "ingredients": [
+    {
+      "item": "minecraft:glowstone"
+    },
+    {
+      "item": "minecraft:glowstone_dust"
+    },
+    {
+      "item": "minecraft:glowstone_dust"
+    }
+  ],
+  "require_mortar": false,
+  "result": {
+    "item": "magic_and_taboo:glass_potion_bottle_glow"
+  },
+  "work_time": 300
+}

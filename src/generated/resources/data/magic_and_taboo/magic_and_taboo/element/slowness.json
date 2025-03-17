@@ -1,0 +1,26 @@
+{
+  "blood_drug_concentration": {
+    "max": 200.0,
+    "min": 30.0
+  },
+  "effect": "minecraft:slowness",
+  "fusion_element": {
+    "magic_and_taboo:mining_fatigue": 1.5,
+    "magic_and_taboo:weakness": 0.5
+  },
+  "icon": "minecraft:textures/mob_effect/slowness.png",
+  "max_level": 4,
+  "max_time": 4800,
+  "name": "element.magic_and_taboo.slowness",
+  "resistance_element": {
+    "magic_and_taboo:haste": 150.5,
+    "magic_and_taboo:health_boost": 175.5,
+    "magic_and_taboo:jump_boost": 100.5,
+    "magic_and_taboo:speed": 150.0,
+    "magic_and_taboo:strength": 200.0
+  },
+  "temperature_range": {
+    "max": 100.0,
+    "min": 0.0
+  }
+}

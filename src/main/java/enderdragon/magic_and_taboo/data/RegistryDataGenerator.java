@@ -15,8 +15,8 @@ import java.util.concurrent.CompletableFuture;
 
 public class RegistryDataGenerator extends DatapackBuiltinEntriesProvider {
     private static final RegistrySetBuilder BUILDER = new RegistrySetBuilder()
-            .add(AlchemyElement.RESOURCE_KEY, MATAlchemyElements::bootstrap)
-            .add(Element.RESOURCE_KEY, MATElements::bootstrap);
+            .add(Element.RESOURCE_KEY, MATElements::bootstrap)
+            .add(AlchemyElement.RESOURCE_KEY, MATAlchemyElements::bootstrap);
 
     public RegistryDataGenerator(PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
         super(output, registries, BUILDER, Set.of("minecraft", MagicAndTabooMod.MOD_ID));

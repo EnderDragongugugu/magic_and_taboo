@@ -1,0 +1,26 @@
+{
+  "blood_drug_concentration": {
+    "max": 130.0,
+    "min": 30.0
+  },
+  "effect": "minecraft:strength",
+  "fusion_element": {
+    "magic_and_taboo:haste": 0.5,
+    "magic_and_taboo:health_boost": 1.0,
+    "magic_and_taboo:regeneration": 1.5
+  },
+  "icon": "minecraft:textures/mob_effect/strength.png",
+  "max_level": 4,
+  "max_time": 7200,
+  "name": "element.magic_and_taboo.strength",
+  "resistance_element": {
+    "magic_and_taboo:blindness": 20.0,
+    "magic_and_taboo:darkness": 25.5,
+    "magic_and_taboo:mining_fatigue": 40.5,
+    "magic_and_taboo:weakness": 50.5
+  },
+  "temperature_range": {
+    "max": 100.0,
+    "min": 20.0
+  }
+}

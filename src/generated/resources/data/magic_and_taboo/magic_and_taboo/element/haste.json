@@ -1,0 +1,30 @@
+{
+  "blood_drug_concentration": {
+    "max": 200.0,
+    "min": 30.0
+  },
+  "effect": "minecraft:haste",
+  "fusion_element": {
+    "magic_and_taboo:jump_boost": 0.5,
+    "magic_and_taboo:speed": 1.5,
+    "magic_and_taboo:strength": 0.5
+  },
+  "icon": "minecraft:textures/mob_effect/haste.png",
+  "max_level": 4,
+  "max_time": 7200,
+  "name": "element.magic_and_taboo.haste",
+  "resistance_element": {
+    "magic_and_taboo:blindness": 25.5,
+    "magic_and_taboo:darkness": 16.5,
+    "magic_and_taboo:mercury": 25.0,
+    "magic_and_taboo:mining_fatigue": 30.0,
+    "magic_and_taboo:nausea": 20.0,
+    "magic_and_taboo:slowness": 150.0,
+    "magic_and_taboo:weakness": 100.5,
+    "magic_and_taboo:wither": 200.0
+  },
+  "temperature_range": {
+    "max": 100.0,
+    "min": 0.0
+  }
+}

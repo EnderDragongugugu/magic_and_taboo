@@ -1,17 +1,32 @@
 {
   "variants": {
-    "facing=east": {
+    "facing=east,working=false": {
       "model": "magic_and_taboo:block/enchanted_crucible",
       "y": 270
     },
-    "facing=north": {
+    "facing=east,working=true": {
+      "model": "magic_and_taboo:block/enchanted_crucible",
+      "y": 270
+    },
+    "facing=north,working=false": {
       "model": "magic_and_taboo:block/enchanted_crucible",
       "y": 180
     },
-    "facing=south": {
+    "facing=north,working=true": {
+      "model": "magic_and_taboo:block/enchanted_crucible",
+      "y": 180
+    },
+    "facing=south,working=false": {
       "model": "magic_and_taboo:block/enchanted_crucible"
     },
-    "facing=west": {
+    "facing=south,working=true": {
+      "model": "magic_and_taboo:block/enchanted_crucible"
+    },
+    "facing=west,working=false": {
+      "model": "magic_and_taboo:block/enchanted_crucible",
+      "y": 90
+    },
+    "facing=west,working=true": {
       "model": "magic_and_taboo:block/enchanted_crucible",
       "y": 90
     }

@@ -1,0 +1,17 @@
+{
+  "blood_drug_concentration": {
+    "max": 100.0,
+    "min": 30.0
+  },
+  "effect": "minecraft:health_boost",
+  "fusion_element": {},
+  "icon": "minecraft:textures/mob_effect/health_boost.png",
+  "max_level": 4,
+  "max_time": 7200,
+  "name": "element.magic_and_taboo.health_boost",
+  "resistance_element": {},
+  "temperature_range": {
+    "max": 100.0,
+    "min": 0.0
+  }
+}

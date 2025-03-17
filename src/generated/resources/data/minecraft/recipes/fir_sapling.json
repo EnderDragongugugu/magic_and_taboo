@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "Y": {
+      "item": "minecraft:spruce_sapling"
+    },
+    "Z": {
+      "item": "minecraft:water_bucket"
+    }
+  },
+  "pattern": [
+    "ZYZ"
+  ],
+  "result": {
+    "item": "magic_and_taboo:fir_sapling"
+  },
+  "show_notification": true
+}

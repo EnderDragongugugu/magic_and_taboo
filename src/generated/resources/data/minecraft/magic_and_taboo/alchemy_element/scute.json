@@ -1,0 +1,8 @@
+{
+  "alchemy_element": {
+    "magic_and_taboo:absorption": 1.5,
+    "magic_and_taboo:resistance": 1.0,
+    "magic_and_taboo:slowness": 2.0
+  },
+  "max_time": 300
+}
