@@ -42,15 +42,15 @@ import org.jetbrains.annotations.Nullable;
 public class EnchantedCrucibleBlockEntity extends BlockEntity implements IFluidHandler {
     public static void tickCommon(Level level, BlockPos pos, BlockState state, EnchantedCrucibleBlockEntity crucible) {
         ++crucible.tick;
-        var registry = level.registryAccess();
         // cooling start
         if (!state.getValue(EnchantedCrucibleBlock.WORKING)) {
             if (crucible.temperature > 0 && !crucible.fluid.isEmpty() && crucible.tick % 50 == 0) {
-                crucible.temperature = Math.max(crucible.temperature - 1, 0);
+                --crucible.temperature;
             }
             return;
         }
         // cooling end
+        var registry = level.registryAccess();
         // cooking start
         for (int i = crucible.stacks.size() - 1; i >= 0; --i) {
             var stack = crucible.stacks.get(i);
@@ -74,6 +74,7 @@ public class EnchantedCrucibleBlockEntity extends BlockEntity implements IFluidH
         var info = crucible.getRenderingInfo();
         info.fluid = crucible.getFluidStack();
         if (info.changed || info.temperature != crucible.temperature) {
+            info.tip = null;
             crucible.fillPotion(level.registryAccess(), info);
             info.fluidColor = info.fluid.getFluid().isSame(Fluids.WATER)
                     ? info.elements.isEmpty()
@@ -94,9 +95,7 @@ public class EnchantedCrucibleBlockEntity extends BlockEntity implements IFluidH
     private int temperature = 0;
     protected @NotNull FluidStack fluid = FluidStack.EMPTY;
     public int tick;
-    /**
-     * Should only be used for rendering
-     */
+    /// Should only be used for rendering
     private EnchantedCrucibleInfo info;
 
     public EnchantedCrucibleBlockEntity(BlockPos pos, BlockState state) {
@@ -119,12 +118,11 @@ public class EnchantedCrucibleBlockEntity extends BlockEntity implements IFluidH
         return temperature;
     }
 
-    public void cooling(ItemStack stack) {
-        if (temperature >= 5) {
-            temperature -= 5;
-            stack.shrink(1);
-        }
-        setChanged();
+    public boolean cooling() {
+        if (this.temperature < 5) return false;
+        this.temperature -= 5;
+        this.setChanged();
+        return true;
     }
 
     public void test(Level level, GlassMagicPotionBottleItem stack, Player player) {

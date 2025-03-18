@@ -5,6 +5,7 @@ import enderdragon.magic_and_taboo.init.MATBlockEntities;
 import enderdragon.magic_and_taboo.item.GlassMagicPotionBottleItem;
 import enderdragon.magic_and_taboo.registry.AlchemyElement;
 import enderdragon.magic_and_taboo.tag.MATBlockTags;
+import enderdragon.magic_and_taboo.tag.MATItemTags;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.sounds.SoundEvents;
@@ -134,24 +135,26 @@ public class EnchantedCrucibleBlock extends BaseEntityBlock {
     public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
         if (level.getBlockEntity(pos) instanceof EnchantedCrucibleBlockEntity crucible) {
             if (level.isClientSide) return InteractionResult.CONSUME;
+            var registry = level.registryAccess();
+            if (player.isShiftKeyDown() && crucible.remove(registry, player)) return InteractionResult.SUCCESS;
             ItemStack stack = player.getItemInHand(hand);
-            if (stack.is(Items.ICE)) {
-                crucible.cooling(stack);
-                return InteractionResult.SUCCESS;
-            } else if (crucible.getFluidStack().isEmpty() && stack.is(Items.WATER_BUCKET)) {
-                crucible.putFluid(stack, player, hand);
-                level.playSound((Player) null, pos, SoundEvents.BUCKET_EMPTY, SoundSource.BLOCKS, 1.0F, 1.0F);
-                return InteractionResult.SUCCESS;
-            } else if (stack.getItem() instanceof GlassMagicPotionBottleItem glassMagicPotionBottleItem) {
-                crucible.test(level, glassMagicPotionBottleItem, player);
-                level.playSound((Player) null, pos, SoundEvents.BOTTLE_FILL, SoundSource.BLOCKS, 1.0F, 1.0F);
-                return InteractionResult.SUCCESS;
-            } else if (player.isShiftKeyDown() && crucible.remove(level.registryAccess(), player)) {
-                return InteractionResult.SUCCESS;
-            } else if (crucible.place(level.registryAccess(), player.getAbilities().instabuild ? stack.copy() : stack, player)) {
-                return InteractionResult.SUCCESS;
+            if (!stack.isEmpty()) {
+                if (stack.is(MATItemTags.COOLANT) && crucible.cooling()) {
+                    stack.shrink(1);
+                    return InteractionResult.SUCCESS;
+                } else if (stack.getItem() == Items.WATER_BUCKET && crucible.getFluidStack().isEmpty()) {
+                    crucible.putFluid(stack, player, hand);
+                    level.playSound(null, pos, SoundEvents.BUCKET_EMPTY, SoundSource.BLOCKS, 1.0F, 1.0F);
+                    return InteractionResult.SUCCESS;
+                } else if (stack.getItem() instanceof GlassMagicPotionBottleItem bottle) {
+                    crucible.test(level, bottle, player);
+                    level.playSound(null, pos, SoundEvents.BOTTLE_FILL, SoundSource.BLOCKS, 1.0F, 1.0F);
+                    return InteractionResult.SUCCESS;
+                } else if (crucible.place(registry, player.getAbilities().instabuild ? stack.copy() : stack, player)) {
+                    return InteractionResult.SUCCESS;
+                }
+                return InteractionResult.CONSUME;
             }
-            return InteractionResult.CONSUME;
         }
         return InteractionResult.PASS;
     }

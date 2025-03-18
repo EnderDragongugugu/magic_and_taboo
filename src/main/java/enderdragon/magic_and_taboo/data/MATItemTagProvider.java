@@ -57,5 +57,9 @@ public class MATItemTagProvider extends ItemTagsProvider {
                 .add(MATItems.GLASS_POTION_BOTTLE_RED.get())
                 .add(MATItems.GLASS_POTION_BOTTLE_GLOW.get())
                 .add(MATItems.GLASS_POTION_SYRINGE.get());
+        this.tag(MATItemTags.COOLANT)
+                .add(Items.ICE)
+                .add(Items.BLUE_ICE)
+                .add(Items.PACKED_ICE);
     }
 }

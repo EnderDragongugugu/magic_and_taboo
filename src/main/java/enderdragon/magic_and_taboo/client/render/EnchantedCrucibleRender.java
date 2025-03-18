@@ -57,21 +57,22 @@ public class EnchantedCrucibleRender implements BlockEntityRenderer<EnchantedCru
         if (!(Minecraft.getInstance().hitResult instanceof BlockHitResult hit && hit.getBlockPos().equals(crucible.getBlockPos())))
             return;
         var orientation = this.entityRenderer.cameraOrientation();
-
-        Component text = Component.translatable("text.magic_and_taboo.enchanted_crucible_temperature", crucible.getTemperature());
         matrices.pushPose();
         matrices.translate(0.5F, 1.25F, 0.5F);
         matrices.mulPose(orientation);
         matrices.scale(-0.025F, -0.025F, 0.025F);
         var font = this.font;
-        float left = (float) (-font.width(text) / 2);
+        if (info.tip == null) {
+            info.tip = Component.translatable("text.magic_and_taboo.enchanted_crucible_temperature", crucible.getTemperature());
+        }
+        var tip = info.tip;
+        float left = (float) (-font.width(tip) / 2);
         {
             var matrix = matrices.last().pose();
-            font.drawInBatch(text, left, 0, 0x20FFFFFF, false, matrix, buffers, Font.DisplayMode.SEE_THROUGH, (int) (Minecraft.getInstance().options.getBackgroundOpacity(0.25F) * 255.0F) << 24, light);
-            font.drawInBatch(text, left, 0, -1, false, matrix, buffers, Font.DisplayMode.NORMAL, 0, light);
+            font.drawInBatch(tip, left, 0, 0x20FFFFFF, false, matrix, buffers, Font.DisplayMode.SEE_THROUGH, (int) (Minecraft.getInstance().options.getBackgroundOpacity(0.25F) * 255.0F) << 24, light);
+            font.drawInBatch(tip, left, 0, -1, false, matrix, buffers, Font.DisplayMode.NORMAL, 0, light);
         }
         matrices.popPose();
-
         matrices.pushPose();
         matrices.translate(0.5F, 1.5F, 0.5F);
         matrices.mulPose(orientation);

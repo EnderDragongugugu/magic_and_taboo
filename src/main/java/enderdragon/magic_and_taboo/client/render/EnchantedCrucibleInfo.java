@@ -5,10 +5,13 @@ import enderdragon.magic_and_taboo.registry.Element;
 import it.unimi.dsi.fastutil.objects.Object2FloatMap;
 import it.unimi.dsi.fastutil.objects.Object2FloatMaps;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraftforge.fluids.FluidStack;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
+import javax.annotation.Nonnull;
 import java.util.List;
 
 public class EnchantedCrucibleInfo implements IMagicPotion {
@@ -16,7 +19,8 @@ public class EnchantedCrucibleInfo implements IMagicPotion {
     public FluidStack fluid = FluidStack.EMPTY;
     public int fluidColor = 0xFFFFFF;
     public int temperature;
-    public Object2FloatMap<Element> elements = Object2FloatMaps.emptyMap();
+    public @Nullable Component tip = null;
+    public @Nonnull Object2FloatMap<Element> elements = Object2FloatMaps.emptyMap();
 
     @Override
     public @NotNull Object2FloatMap<Element> getElements() {
