@@ -28,6 +28,7 @@ public class MATItemModelProvider extends ItemModelProvider {
         var firPlanks = makeId("block/fir/fir_planks");
         var polishedMarble = makeId("block/polished_gilded_marble");
         this.basicItem(MATItems.GROUND_MEAT);
+//        this.basicItem(MATItems.OCCULT_CODEX);
         this.basicItem(MATItems.CRUSHED_CARROTS);
         this.basicItem(MATItems.CARROTS_PASTE);
         this.basicItem(MATItems.GOLDEN_CRUSHED_CARROTS);
@@ -39,6 +40,7 @@ public class MATItemModelProvider extends ItemModelProvider {
         this.basicItem(MATItems.BLAZE_BURNER);
         this.basicItem(MATItems.BLAZE_BLAST_BURNER);
         this.basicItem(MATItems.BLOOD_BOTTLE);
+        this.basicBlockItem(MATBlocks.CONDENSER);
         this.basicBlockItem(MATBlocks.FIR_FENCE_GATE);
         this.basicBlockItem(MATBlocks.FIR_WOOD);
         this.basicBlockItem(MATBlocks.STRIPPED_FIR_WOOD);

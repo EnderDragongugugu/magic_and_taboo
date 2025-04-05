@@ -1,8 +1,7 @@
-package enderdragon.magic_and_taboo.item.equipment;
+package enderdragon.magic_and_taboo.item;
 
 import enderdragon.magic_and_taboo.capability.IPurenessStorage;
 import enderdragon.magic_and_taboo.capability.PurenessStorage;
-import enderdragon.magic_and_taboo.item.BloodBottleItem;
 import enderdragon.magic_and_taboo.util.ContainerUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;

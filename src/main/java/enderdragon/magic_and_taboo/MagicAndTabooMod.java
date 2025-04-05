@@ -1,7 +1,9 @@
 package enderdragon.magic_and_taboo;
 
+import enderdragon.magic_and_taboo.effect.HemolysisEffect;
 import enderdragon.magic_and_taboo.init.*;
-import enderdragon.magic_and_taboo.item.equipment.SacrificialDaggerItem;
+import enderdragon.magic_and_taboo.item.SacrificialDaggerItem;
+import enderdragon.magic_and_taboo.network.NetworkHandler;
 import enderdragon.magic_and_taboo.registry.AlchemyElement;
 import enderdragon.magic_and_taboo.registry.Element;
 import enderdragon.magic_and_taboo.util.BlockEntityTypeEx;
@@ -12,6 +14,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLLoadCompleteEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.DataPackRegistryEvent;
@@ -44,9 +47,11 @@ public class MagicAndTabooMod {
         MATFluids.FLUIDS.register(modBus);
         MATFluids.FLUID_TYPES.register(modBus);
         modBus.addListener(MagicAndTabooMod::onComplete);
+        modBus.addListener(MagicAndTabooMod::onCommonSetup);
         modBus.addListener(MagicAndTabooMod::registerDataPackRegistry);
         var forgeBus = MinecraftForge.EVENT_BUS;
         forgeBus.addListener(SacrificialDaggerItem::onLivingDeath);
+        forgeBus.addListener(HemolysisEffect::livingHurtEvent);
         forgeBus.addListener(RegistryAccessor::hookServer);
     }
 
@@ -61,6 +66,10 @@ public class MagicAndTabooMod {
                     MATBlocks.FIR_WALL_HANGING_SIGN.get()
             );
         });
+    }
+
+    public static void onCommonSetup(FMLCommonSetupEvent event) {
+        NetworkHandler.register();
     }
 
     public static void registerDataPackRegistry(DataPackRegistryEvent.NewRegistry event) {

@@ -2,6 +2,7 @@ package enderdragon.magic_and_taboo.block;
 
 import com.mojang.blaze3d.shaders.FogShape;
 import com.mojang.blaze3d.systems.RenderSystem;
+import enderdragon.magic_and_taboo.MagicAndTabooMod;
 import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
@@ -21,8 +22,8 @@ import org.joml.Vector3f;
 import javax.annotation.Nullable;
 import java.util.function.Consumer;
 
-public abstract class HoneyFluid extends ForgeFlowingFluid {
-    protected HoneyFluid(Properties props) {
+public abstract class PlantExtractFluid extends ForgeFlowingFluid {
+    protected PlantExtractFluid(Properties props) {
         super(props);
     }
 
@@ -31,7 +32,7 @@ public abstract class HoneyFluid extends ForgeFlowingFluid {
         return ParticleTypes.DRIPPING_HONEY;
     }
 
-    public static class Flowing extends HoneyFluid {
+    public static class Flowing extends PlantExtractFluid {
         public Flowing(Properties props) {
             super(props);
         }
@@ -53,7 +54,7 @@ public abstract class HoneyFluid extends ForgeFlowingFluid {
         }
     }
 
-    public static class Source extends HoneyFluid {
+    public static class Source extends PlantExtractFluid {
         public Source(Properties props) {
             super(props);
         }
@@ -70,16 +71,16 @@ public abstract class HoneyFluid extends ForgeFlowingFluid {
 
     }
 
-    public static class HoneyType extends FluidType {
-        public HoneyType(Properties properties) {
+    public static class PlantExtractType extends FluidType {
+        public PlantExtractType(Properties properties) {
             super(properties);
         }
 
         @Override
         public void initializeClient(Consumer<IClientFluidTypeExtensions> consumer) {
             consumer.accept(new IClientFluidTypeExtensions() {
-                private static final ResourceLocation TEXTURE = new ResourceLocation("block/honey_block_side");
-                private static final ResourceLocation OVERLAY = new ResourceLocation("block/honey_block_bottom");
+                private static final ResourceLocation TEXTURE = MagicAndTabooMod.makeId("block/fir/fir_leaves");
+                private static final ResourceLocation OVERLAY = MagicAndTabooMod.makeId("block/fir/fir_leaves");
 
                 @Override
                 public ResourceLocation getStillTexture() {
@@ -123,3 +124,4 @@ public abstract class HoneyFluid extends ForgeFlowingFluid {
         }
     }
 }
+

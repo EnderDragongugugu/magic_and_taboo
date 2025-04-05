@@ -40,6 +40,7 @@ public class MATBlockLootProvider extends BlockLootSubProvider {
         this.add(FIR_DOOR.get(), this::createDoorTable);
         this.dropPottedContents(POTTED_FIR_SAPLING.get());
         this.dropSelf(WORK_HUB.get());
+        this.dropSelf(CONDENSER.get());
     }
 
     @Override

@@ -15,7 +15,6 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
@@ -142,7 +141,7 @@ public class EnchantedCrucibleBlock extends BaseEntityBlock {
                 if (stack.is(MATItemTags.COOLANT) && crucible.cooling()) {
                     stack.shrink(1);
                     return InteractionResult.SUCCESS;
-                } else if (stack.getItem() == Items.WATER_BUCKET && crucible.getFluidStack().isEmpty()) {
+                } else if (stack.is(MATItemTags.SOLUTION) && crucible.getFluidStack().isEmpty()) {
                     crucible.putFluid(stack, player, hand);
                     level.playSound(null, pos, SoundEvents.BUCKET_EMPTY, SoundSource.BLOCKS, 1.0F, 1.0F);
                     return InteractionResult.SUCCESS;

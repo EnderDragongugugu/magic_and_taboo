@@ -21,6 +21,7 @@ import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.alchemy.PotionUtils;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -40,6 +41,8 @@ import org.jetbrains.annotations.Nullable;
  * @see net.minecraftforge.fluids.capability.FluidHandlerBlockEntity
  */
 public class EnchantedCrucibleBlockEntity extends BlockEntity implements IFluidHandler {
+    public static final ItemStack BUCKET = new ItemStack(Items.BUCKET);
+
     public static void tickCommon(Level level, BlockPos pos, BlockState state, EnchantedCrucibleBlockEntity crucible) {
         ++crucible.tick;
         // cooling start
@@ -229,10 +232,8 @@ public class EnchantedCrucibleBlockEntity extends BlockEntity implements IFluidH
 
     public void putFluid(ItemStack itemStack, Player player, InteractionHand hand) {
         boolean result = FluidUtil.interactWithFluidHandler(player, hand, this);
-        if (result) {
-//            if (!player.isCreative()) {
-//                player.setItemInHand(hand, result.getResult());
-//            }
+        if (!result && !player.isCreative()) {
+            player.setItemInHand(hand, BUCKET);
         }
         setChanged();
     }

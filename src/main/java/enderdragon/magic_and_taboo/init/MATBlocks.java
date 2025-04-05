@@ -51,7 +51,25 @@ public class MATBlocks {
             .strength(2.0F)
             .noOcclusion()
     ));
+    public static final RegistryObject<CondenserBlock> CONDENSER = REGISTRY.register("condenser", () -> new CondenserBlock(Properties.of()
+            .mapColor(MapColor.WOOD) // ?
+            .instrument(NoteBlockInstrument.BASS)
+            .ignitedByLava()
+            .mapColor(MapColor.STONE)
+            .requiresCorrectToolForDrops()
+            .strength(2.0F)
+            .noOcclusion()
+    ));
     public static final RegistryObject<HoneyBlock> HONEY = REGISTRY.register("honey", () -> new HoneyBlock(MATFluids.FLOWING_HONEY, Properties.of()
+            .pushReaction(PushReaction.DESTROY)
+            .sound(SoundType.EMPTY)
+            .strength(100.0F)
+            .noCollission()
+            .noLootTable()
+            .replaceable()
+            .liquid()
+    ));
+    public static final RegistryObject<PlantExtractBlock> PLANT_EXTRACT = REGISTRY.register("plant_extract", () -> new PlantExtractBlock(MATFluids.FLOWING_PLANT_EXTRACT, Properties.of()
             .pushReaction(PushReaction.DESTROY)
             .sound(SoundType.EMPTY)
             .strength(100.0F)

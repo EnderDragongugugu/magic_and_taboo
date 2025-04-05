@@ -2,7 +2,6 @@ package enderdragon.magic_and_taboo.init;
 
 import enderdragon.magic_and_taboo.MagicAndTabooMod;
 import enderdragon.magic_and_taboo.item.*;
-import enderdragon.magic_and_taboo.item.equipment.SacrificialDaggerItem;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.food.FoodProperties;
@@ -90,12 +89,16 @@ public class MATItems {
     public static final RegistryObject<BlockItem> POLISHED_GILDED_MARBLE_BUTTON = BLOCKS.register(REGISTRY, "polished_gilded_marble_button", () ->
             new BlockItem(MATBlocks.POLISHED_GILDED_MARBLE_BUTTON.get(), new Properties())
     );
+    public static final RegistryObject<BlockItem> CONDENSER = BLOCKS.register(REGISTRY, "condenser", () ->
+            new BlockItem(MATBlocks.CONDENSER.get(), new Properties())
+    );
     public static final RegistryObject<BlockItem> MERCURY_ORE = BLOCKS.register(REGISTRY, "mercury_ore", () ->
             new BlockItem(MATBlocks.MERCURY_ORE.get(), new Properties())
     );
     public static final RegistryObject<WorkHubBlockItem> WORK_HUB = BLOCKS.register(REGISTRY, "work_hub", () ->
             new WorkHubBlockItem(MATBlocks.WORK_HUB.get(), new Properties())
     );
+
     public static final RegistryObject<EnchantedCrucibleBlockItem> ENCHANTED_CRUCIBLE = BLOCKS.register(REGISTRY, "enchanted_crucible", () ->
             new EnchantedCrucibleBlockItem(MATBlocks.ENCHANTED_CRUCIBLE.get(), new Properties())
     );
@@ -154,7 +157,10 @@ public class MATItems {
             new BucketItem(MATFluids.HONEY, new Properties().stacksTo(1))
     );
     public static final RegistryObject<BucketItem> PLANT_EXTRACT_BUCKET = POTION.register(REGISTRY, "plant_extract_bucket", () ->
-            new BucketItem(MATFluids.HONEY, new Properties().stacksTo(1))
+            new BucketItem(MATFluids.PLANT_EXTRACT, new Properties().stacksTo(1))
+    );
+    public static final RegistryObject<OccultCodexItem> OCCULT_CODEX = ITEMS.register(REGISTRY, "occult_codex", () ->
+            new OccultCodexItem(new Properties().stacksTo(1))
     );
     public static final RegistryObject<Item> MERCURY_SLAG = POTION.register(REGISTRY, "mercury_slag", () -> new Item(new Properties().food(new FoodProperties.Builder()
             .alwaysEat()
