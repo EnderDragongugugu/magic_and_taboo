@@ -2,7 +2,7 @@ package enderdragon.magic_and_taboo.block.entity;
 
 import enderdragon.magic_and_taboo.block.EnchantedCrucibleBlock;
 import enderdragon.magic_and_taboo.capability.IMagicPotion;
-import enderdragon.magic_and_taboo.client.render.EnchantedCrucibleInfo;
+import enderdragon.magic_and_taboo.client.renderer.EnchantedCrucibleInfo;
 import enderdragon.magic_and_taboo.init.MATBlockEntities;
 import enderdragon.magic_and_taboo.init.MATCapabilities;
 import enderdragon.magic_and_taboo.item.GlassMagicPotionBottleItem;
@@ -21,7 +21,6 @@ import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.item.alchemy.PotionUtils;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -41,7 +40,6 @@ import org.jetbrains.annotations.Nullable;
  * @see net.minecraftforge.fluids.capability.FluidHandlerBlockEntity
  */
 public class EnchantedCrucibleBlockEntity extends BlockEntity implements IFluidHandler {
-    public static final ItemStack BUCKET = new ItemStack(Items.BUCKET);
 
     public static void tickCommon(Level level, BlockPos pos, BlockState state, EnchantedCrucibleBlockEntity crucible) {
         ++crucible.tick;
@@ -230,12 +228,10 @@ public class EnchantedCrucibleBlockEntity extends BlockEntity implements IFluidH
         return false;
     }
 
-    public void putFluid(ItemStack itemStack, Player player, InteractionHand hand) {
-        boolean result = FluidUtil.interactWithFluidHandler(player, hand, this);
-        if (!result && !player.isCreative()) {
-            player.setItemInHand(hand, BUCKET);
-        }
+    public boolean putFluid(Player player, InteractionHand hand) {
+        if (!FluidUtil.interactWithFluidHandler(player, hand, this)) return false;
         setChanged();
+        return true;
     }
 
     @Override
@@ -281,12 +277,12 @@ public class EnchantedCrucibleBlockEntity extends BlockEntity implements IFluidH
 
     @Override
     public boolean isFluidValid(int tank, @NotNull FluidStack stack) {
-        return true;
+        return !stack.getFluid().isSame(Fluids.LAVA);
     }
 
     @Override
     public int fill(FluidStack resource, FluidAction action) {
-        if (resource.isEmpty()) return 0;
+        if (resource.isEmpty() || !this.isFluidValid(0, resource)) return 0;
         final var fluid = this.fluid;
         if (action.simulate()) {
             return fluid.isEmpty()
@@ -298,7 +294,7 @@ public class EnchantedCrucibleBlockEntity extends BlockEntity implements IFluidH
         if (fluid.isEmpty()) {
             this.fluid = new FluidStack(resource, Math.min(CAPACITY, resource.getAmount()));
             this.setChanged();
-            return fluid.getAmount();
+            return this.fluid.getAmount();
         }
         if (!fluid.isFluidEqual(resource)) return 0;
         int filled = CAPACITY - fluid.getAmount();

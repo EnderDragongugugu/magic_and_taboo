@@ -61,10 +61,5 @@ public class MATItemTagProvider extends ItemTagsProvider {
                 .add(Items.ICE)
                 .add(Items.BLUE_ICE)
                 .add(Items.PACKED_ICE);
-        this.tag((MATItemTags.SOLUTION))
-                .add(MATItems.PLANT_EXTRACT_BUCKET.get())
-                .add(MATItems.HONEY_BUCKET.get())
-                .add(Items.WATER_BUCKET);
-
     }
 }

@@ -34,6 +34,7 @@ import net.minecraft.world.phys.shapes.BooleanOp;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import org.jetbrains.annotations.Nullable;
 
 import static net.minecraft.world.level.block.HorizontalDirectionalBlock.FACING;
@@ -141,9 +142,10 @@ public class EnchantedCrucibleBlock extends BaseEntityBlock {
                 if (stack.is(MATItemTags.COOLANT) && crucible.cooling()) {
                     stack.shrink(1);
                     return InteractionResult.SUCCESS;
-                } else if (stack.is(MATItemTags.SOLUTION) && crucible.getFluidStack().isEmpty()) {
-                    crucible.putFluid(stack, player, hand);
-                    level.playSound(null, pos, SoundEvents.BUCKET_EMPTY, SoundSource.BLOCKS, 1.0F, 1.0F);
+                } else if (crucible.getFluidStack().isEmpty() &&
+                        stack.getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM).isPresent() &&
+                        crucible.putFluid(player, hand)
+                ) {
                     return InteractionResult.SUCCESS;
                 } else if (stack.getItem() instanceof GlassMagicPotionBottleItem bottle) {
                     crucible.test(level, bottle, player);

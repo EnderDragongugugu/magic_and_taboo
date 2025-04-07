@@ -1,4 +1,4 @@
-package enderdragon.magic_and_taboo.client.render;
+package enderdragon.magic_and_taboo.client.renderer;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;

@@ -1,8 +1,6 @@
 package enderdragon.magic_and_taboo.item;
 
-import enderdragon.magic_and_taboo.network.NetworkHandler;
-import enderdragon.magic_and_taboo.network.OccultCodexGUIPacket;
-import net.minecraft.server.level.ServerPlayer;
+import enderdragon.magic_and_taboo.client.ClientUtil;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.player.Player;
@@ -11,16 +9,15 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 
 public class OccultCodexItem extends Item {
-    public OccultCodexItem(Properties pProperties) {
-        super(pProperties);
+    public OccultCodexItem(Properties props) {
+        super(props);
     }
 
     @Override
-    public InteractionResultHolder<ItemStack> use(Level pLevel, Player pPlayer, InteractionHand pUsedHand) {
-        var stack = pPlayer.getItemInHand(pUsedHand);
-        if (pPlayer instanceof ServerPlayer player) {
-            NetworkHandler.sendToPlayer(player, new OccultCodexGUIPacket());
+    public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
+        if (player.isLocalPlayer()) {
+            ClientUtil.openOccultCodexScreen();
         }
-        return InteractionResultHolder.success(stack);
+        return InteractionResultHolder.success(player.getItemInHand(hand));
     }
 }

@@ -1,4 +1,4 @@
-package enderdragon.magic_and_taboo.client.render;
+package enderdragon.magic_and_taboo.client.renderer;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
@@ -17,7 +17,6 @@ import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
 import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.FastColor;
 import net.minecraft.util.Mth;
 import net.minecraft.world.inventory.InventoryMenu;
@@ -31,9 +30,10 @@ import org.joml.Matrix4f;
 
 import java.util.function.Function;
 
-public class EnchantedCrucibleRender implements BlockEntityRenderer<EnchantedCrucibleBlockEntity>, Function<Element, RenderType> {
-    private static final RenderType RENDER_TYPE = RenderType.itemEntityTranslucentCull(new ResourceLocation("textures/item/barrier.png"));
+public class EnchantedCrucibleRender implements BlockEntityRenderer<EnchantedCrucibleBlockEntity> {
     private static final Reference2ObjectOpenHashMap<Element, RenderType> RENDER_TYPES = new Reference2ObjectOpenHashMap<>();
+    private static final Function<Element, RenderType> RENDER_TYPE_FACTORY = element ->
+            RenderType.itemEntityTranslucentCull(element.icon());
     protected final ItemRenderer itemRenderer;
     protected final EntityRenderDispatcher entityRenderer;
     protected final Font font;
@@ -83,7 +83,7 @@ public class EnchantedCrucibleRender implements BlockEntityRenderer<EnchantedCru
         var matrix = pose.pose();
         var normal = pose.normal();
         for (var entry : info.elements.object2FloatEntrySet()) {
-            var buffer = buffers.getBuffer(RENDER_TYPES.computeIfAbsent(entry.getKey(), this));
+            var buffer = buffers.getBuffer(RENDER_TYPES.computeIfAbsent(entry.getKey(), RENDER_TYPE_FACTORY));
             vertex(buffer, matrix, normal, -0.5F, -0.25F, 0, 0);
             vertex(buffer, matrix, normal, 0.5F, -0.25F, 1, 0);
             vertex(buffer, matrix, normal, 0.5F, 0.75F, 1, 1);
@@ -145,10 +145,5 @@ public class EnchantedCrucibleRender implements BlockEntityRenderer<EnchantedCru
                 .uv2(15728880)
                 .normal(normal, 0.0F, 1.0F, 0.0F)
                 .endVertex();
-    }
-
-    @Override
-    public RenderType apply(Element element) {
-        return RenderType.itemEntityTranslucentCull(element.icon());
     }
 }

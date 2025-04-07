@@ -1,4 +1,4 @@
-package enderdragon.magic_and_taboo.client.render;
+package enderdragon.magic_and_taboo.client.renderer;
 
 import enderdragon.magic_and_taboo.capability.IMagicPotion;
 import enderdragon.magic_and_taboo.registry.Element;

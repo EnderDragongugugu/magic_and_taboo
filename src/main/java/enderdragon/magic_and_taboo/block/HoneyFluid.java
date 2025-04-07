@@ -2,6 +2,8 @@ package enderdragon.magic_and_taboo.block;
 
 import com.mojang.blaze3d.shaders.FogShape;
 import com.mojang.blaze3d.systems.RenderSystem;
+import enderdragon.magic_and_taboo.init.MATBlocks;
+import enderdragon.magic_and_taboo.init.MATItems;
 import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
@@ -21,7 +23,17 @@ import org.joml.Vector3f;
 import javax.annotation.Nullable;
 import java.util.function.Consumer;
 
+import static enderdragon.magic_and_taboo.init.MATFluids.*;
+
 public abstract class HoneyFluid extends ForgeFlowingFluid {
+    public static final Properties PROPERTIES = new Properties(HONEY_FLUID_TYPE, HONEY, FLOWING_HONEY)
+            .block(MATBlocks.HONEY)
+            .bucket(MATItems.HONEY_BUCKET)
+            .explosionResistance(100.0F)
+            .slopeFindDistance(2)
+            .levelDecreasePerBlock(2)
+            .tickRate(30);
+
     protected HoneyFluid(Properties props) {
         super(props);
     }
@@ -70,9 +82,9 @@ public abstract class HoneyFluid extends ForgeFlowingFluid {
 
     }
 
-    public static class HoneyType extends FluidType {
-        public HoneyType(Properties properties) {
-            super(properties);
+    public static class Type extends FluidType {
+        public Type(Properties props) {
+            super(props);
         }
 
         @Override

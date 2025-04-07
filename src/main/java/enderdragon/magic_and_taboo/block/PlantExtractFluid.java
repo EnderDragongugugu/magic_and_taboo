@@ -3,6 +3,8 @@ package enderdragon.magic_and_taboo.block;
 import com.mojang.blaze3d.shaders.FogShape;
 import com.mojang.blaze3d.systems.RenderSystem;
 import enderdragon.magic_and_taboo.MagicAndTabooMod;
+import enderdragon.magic_and_taboo.init.MATBlocks;
+import enderdragon.magic_and_taboo.init.MATItems;
 import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
@@ -22,7 +24,17 @@ import org.joml.Vector3f;
 import javax.annotation.Nullable;
 import java.util.function.Consumer;
 
+import static enderdragon.magic_and_taboo.init.MATFluids.*;
+
 public abstract class PlantExtractFluid extends ForgeFlowingFluid {
+    public static final Properties PROPERTIES = new Properties(PLANT_EXTRACT_FLUID_TYPE, PLANT_EXTRACT, FLOWING_PLANT_EXTRACT)
+            .block(MATBlocks.PLANT_EXTRACT)
+            .bucket(MATItems.PLANT_EXTRACT_BUCKET)
+            .explosionResistance(100.0F)
+            .slopeFindDistance(2)
+            .levelDecreasePerBlock(1)
+            .tickRate(10);
+
     protected PlantExtractFluid(Properties props) {
         super(props);
     }
@@ -71,9 +83,9 @@ public abstract class PlantExtractFluid extends ForgeFlowingFluid {
 
     }
 
-    public static class PlantExtractType extends FluidType {
-        public PlantExtractType(Properties properties) {
-            super(properties);
+    public static class Type extends FluidType {
+        public Type(Properties props) {
+            super(props);
         }
 
         @Override
