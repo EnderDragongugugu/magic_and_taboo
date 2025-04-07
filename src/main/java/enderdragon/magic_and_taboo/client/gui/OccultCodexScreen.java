@@ -9,6 +9,8 @@ import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.Nullable;
 
 import javax.annotation.Nonnull;
+import java.util.List;
+import java.util.Optional;
 
 public class OccultCodexScreen extends Screen implements IBook {
     private double scrollX = 0, scrollY = 0;
@@ -93,14 +95,14 @@ public class OccultCodexScreen extends Screen implements IBook {
         }
 
         if (hoveredNode != null) {
-            renderTooltip(graphics, hoveredNode.label, mouseX, mouseY);
+            renderTooltip(graphics, hoveredNode.text(), mouseX, mouseY);
         }
 
         super.render(graphics, mouseX, mouseY, partialTicks);
     }
 
-    private void renderTooltip(GuiGraphics graphics, String text, int mouseX, int mouseY) {
-        graphics.renderTooltip(font, Component.nullToEmpty(text), mouseX, mouseY);
+    private void renderTooltip(GuiGraphics graphics, List<Component> text, int mouseX, int mouseY) {
+        graphics.renderTooltip(font, text, Optional.empty(), mouseX, mouseY);
     }
 
     @Override
