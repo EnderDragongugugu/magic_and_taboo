@@ -1,6 +1,7 @@
 package enderdragon.magic_and_taboo.client.book;
 
 import com.google.common.collect.ImmutableList;
+import net.minecraft.advancements.FrameType;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.function.UnaryOperator;
@@ -30,12 +31,12 @@ public class Page {
             this.onClose = onClose;
         }
 
-        public Builder child(UnaryOperator<Node.Builder<Builder>> action) {
-            return this.child(this, action);
+        public Builder child(FrameType type, UnaryOperator<Node.Builder<Builder>> action) {
+            return this.child(this, type, action);
         }
 
-        public <T extends IBuilder> Builder child(T parent, UnaryOperator<Node.Builder<T>> action) {
-            this.nodes.add(action.apply(new Node.Builder<>(this, parent)).asNode());
+        public <T extends IBuilder> Builder child(T parent, FrameType type, UnaryOperator<Node.Builder<T>> action) {
+            this.nodes.add(action.apply(new Node.Builder<>(this, parent, type)).asNode());
             return this;
         }
 
