@@ -23,19 +23,19 @@ public class Page {
         this.lines = builder.build();
     }
 
-    public static class Builder implements IBuilder {
+    public static class NodeBuilder implements INodeBuilder {
         public final IListener onClose;
         private final ImmutableList.Builder<Node> nodes = ImmutableList.builder();
 
-        public Builder(IListener onClose) {
+        public NodeBuilder(IListener onClose) {
             this.onClose = onClose;
         }
 
-        public Builder child(FrameType type, UnaryOperator<Node.Builder<Builder>> action) {
+        public NodeBuilder child(FrameType type, UnaryOperator<Node.Builder<NodeBuilder>> action) {
             return this.child(this, type, action);
         }
 
-        public <T extends IBuilder> Builder child(T parent, FrameType type, UnaryOperator<Node.Builder<T>> action) {
+        public <T extends INodeBuilder> NodeBuilder child(T parent, FrameType type, UnaryOperator<Node.Builder<T>> action) {
             this.nodes.add(action.apply(new Node.Builder<>(this, parent, type)).asNode());
             return this;
         }

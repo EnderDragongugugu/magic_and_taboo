@@ -1,6 +1,8 @@
 package enderdragon.magic_and_taboo.client.gui;
 
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.PoseStack;
+import enderdragon.magic_and_taboo.MagicAndTabooMod;
 import enderdragon.magic_and_taboo.client.book.IBook;
 import enderdragon.magic_and_taboo.client.book.Line;
 import enderdragon.magic_and_taboo.client.book.Node;
@@ -10,6 +12,7 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
 import org.jetbrains.annotations.Nullable;
 
 import javax.annotation.Nonnull;
@@ -17,11 +20,13 @@ import java.util.List;
 import java.util.Optional;
 
 public class OccultCodexScreen extends Screen implements IBook {
+    private static final int WIDTH = 283;
+    private static final int HEIGHT = 182;
     private double scrollX = 0, scrollY = 0;
     private boolean isDragging = false;
     private boolean clickable;
-    private static final ResourceLocation WINDOW_TEXTURE = new ResourceLocation("textures/gui/advancements/window.png");
-    private static final ResourceLocation TABS_TEXTURE = new ResourceLocation("textures/gui/advancements/tabs.png");
+    private static final ResourceLocation BACKGROUND = MagicAndTabooMod.makeId("textures/block/fir/fir_planks.png");
+    private static final ResourceLocation BACKGROUND_1 = MagicAndTabooMod.makeId("textures/gui/book/frame_full.png");
     private ReferenceOpenHashSet<Page> cache = new ReferenceOpenHashSet<>();
     private @Nonnull Page page;
 
@@ -83,12 +88,23 @@ public class OccultCodexScreen extends Screen implements IBook {
     @Override
     public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
         this.renderBackground(graphics);
+        var pose = graphics.pose();
         RenderSystem.enableBlend();
 
         int startX = (int) scrollX;
         int startY = (int) scrollY;
+//        test
+        int x = (this.width - WIDTH) / 2;
+        int y = (this.height - HEIGHT) / 2;
 
-        graphics.drawString(this.font, title, startX + 10, startY + 10, 0xFFFFFF, false);
+        pose.pushPose();
+        pose.translate(0, 0, 200);
+        graphics.blit(BACKGROUND_1, x, y, 0, 0, 283, 182, 283, 182);
+        pose.popPose();
+
+        graphics.enableScissor(x + 8, y + 8, x + 283 - 8, y + 182 - 8);
+
+        renderBackground(graphics, pose, x, y);
 
         for (Line line : this.page.lines) {
             line.render(graphics, startX, startY);
@@ -102,13 +118,36 @@ public class OccultCodexScreen extends Screen implements IBook {
                 hoveredNode = node;
             }
         }
+        graphics.disableScissor();
 
         if (hoveredNode != null) {
+            pose.pushPose();
+            pose.translate(0, 0, 4000.0F);
+            RenderSystem.enableDepthTest();
             renderTooltip(graphics, hoveredNode.getTooltip(), mouseX, mouseY);
+            RenderSystem.disableDepthTest();
+            pose.popPose();
         }
 
         super.render(graphics, mouseX, mouseY, partialTicks);
     }
+
+    private void renderBackground(GuiGraphics graphics, PoseStack pose, int x, int y) {
+        pose.pushPose();
+        pose.translate((float) x + 8, (float) y + 8, 0.0F);
+        int i = Mth.floor(this.scrollX);
+        int j = Mth.floor(this.scrollY);
+        int k = i % 16;
+        int l = j % 16;
+
+        for (int i1 = -1; i1 <= 15; ++i1) {
+            for (int j1 = -1; j1 <= 8; ++j1) {
+                graphics.blit(BACKGROUND, k + 16 * i1, l + 16 * j1, 0.0F, 0.0F, 16, 16, 16, 16);
+            }
+        }
+        pose.popPose();
+    }
+
 
     private void renderTooltip(GuiGraphics graphics, List<Component> text, int mouseX, int mouseY) {
         graphics.renderTooltip(font, text, Optional.empty(), mouseX, mouseY);

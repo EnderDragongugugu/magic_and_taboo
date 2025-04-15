@@ -36,7 +36,6 @@ public class EventHandler {
                 var endPos = end.pos;
                 if (startPos.equals(endPos) || !player.mayInteract(level, endPos)) return;
                 var endState = end.state;
-                if (endState.isAir()) return; // ¿
                 event.setCanceled(true);
                 spawnLoot(level, player, endState, endPos, Vec3.atCenterOf(startPos));
                 var tool = player.getMainHandItem();

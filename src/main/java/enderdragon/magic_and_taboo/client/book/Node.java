@@ -82,9 +82,9 @@ public class Node {
         }
     }
 
-    public static class Builder<T extends IBuilder> implements IBuilder {
+    public static class Builder<T extends INodeBuilder> implements INodeBuilder {
         public static final Supplier<ItemStack> NO_ICON = () -> ItemStack.EMPTY;
-        public final @Nonnull Page.Builder builder;
+        public final @Nonnull Page.NodeBuilder builder;
         public final @Nonnull T parent;
         public final @Nonnull FrameType type;
         private Node node;
@@ -97,7 +97,7 @@ public class Node {
         private int width = 20;
         private int height = 20;
 
-        public Builder(@Nonnull Page.Builder builder, @Nonnull T parent, @Nonnull FrameType type) {
+        public Builder(@Nonnull Page.NodeBuilder builder, @Nonnull T parent, @Nonnull FrameType type) {
             this.builder = builder;
             this.parent = parent;
             this.type = type;

@@ -14,10 +14,15 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 import static enderdragon.magic_and_taboo.MagicAndTabooMod.makeId;
+import static net.minecraft.client.renderer.entity.EnderDragonRenderer.CRYSTAL_BEAM_LOCATION;
 
 @OnlyIn(Dist.CLIENT)
 public class WorkHubRender implements BlockEntityRenderer<WorkHubBlockEntity> {
     private static final RenderType TEXTURE = RenderType.entityCutout(makeId("textures/entity/blocks/work_hub_tool.png"));
+
+    private static final float HALF_SQRT_3 = (float) (Math.sqrt(3.0D) / 2.0D);
+    private static final RenderType BEAM = RenderType.entitySmoothCutout(CRYSTAL_BEAM_LOCATION);
+
     protected final ItemRenderer itemRenderer;
     protected final WorkHubToolModel model;
 
