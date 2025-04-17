@@ -1,4 +1,4 @@
-package enderdragon.magic_and_taboo.client.book;
+package enderdragon.magic_and_taboo.client.book.graph;
 
 import net.minecraft.client.gui.GuiGraphics;
 
