@@ -2,6 +2,7 @@ package enderdragon.magic_and_taboo;
 
 import enderdragon.magic_and_taboo.effect.HemolysisEffect;
 import enderdragon.magic_and_taboo.init.*;
+import enderdragon.magic_and_taboo.item.OccultCodexItem;
 import enderdragon.magic_and_taboo.item.SacrificialDaggerItem;
 import enderdragon.magic_and_taboo.network.NetworkHandler;
 import enderdragon.magic_and_taboo.registry.AlchemyElement;
@@ -53,6 +54,7 @@ public class MagicAndTabooMod {
         forgeBus.addListener(SacrificialDaggerItem::onLivingDeath);
         forgeBus.addListener(HemolysisEffect::livingHurtEvent);
         forgeBus.addListener(RegistryAccessor::hookServer);
+        forgeBus.addListener(OccultCodexItem::onPlayerLogin);
     }
 
     public static void onComplete(FMLLoadCompleteEvent event) {

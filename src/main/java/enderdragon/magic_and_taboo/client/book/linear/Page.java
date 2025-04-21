@@ -6,6 +6,6 @@ public record Page(
         ImmutableList<IChunk> left,
         ImmutableList<IChunk> right
 ) {
-    public static final int PAGE_WIDTH = 100;
+    public static final int PAGE_WIDTH = 118;
     public static final int PAGE_HEIGHT = 150;
 }

@@ -11,6 +11,7 @@ import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.screens.inventory.PageButton;
 import net.minecraft.resources.ResourceLocation;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -20,9 +21,10 @@ public class LinearChapter implements IChapter {
     private static final ResourceLocation BACKGROUND = MagicAndTabooMod.makeId("textures/gui/book/book.png");
     private static final int FRAME_WIDTH = 271;
     private static final int FRAME_HEIGHT = 179;
-    private static final int LEFT_START = 20;
-    private static final int RIGHT_START = 150;
+    private static final int LEFT_START = 15;
+    private static final int RIGHT_START = 140;
     public final ImmutableList<IChunk> chunks;
+    public static Collection<AbstractWidget> widgets = new ArrayList<>();
     private final ObjectArrayList<Page> pages = new ObjectArrayList<>();
     private int page;
     private PageButton prevButton;
@@ -30,6 +32,15 @@ public class LinearChapter implements IChapter {
 
     public LinearChapter(ImmutableList.Builder<IChunk> chunks) {
         this.chunks = chunks.build();
+    }
+
+    public boolean setPage(int page) {
+        if (page <= this.page) {
+            this.page = page;
+            this.updateButtonVisibility();
+            return true;
+        }
+        return false;
     }
 
     public void nextPage() {
@@ -51,9 +62,9 @@ public class LinearChapter implements IChapter {
         this.nextButton.visible = this.page < this.pages.size() - 1;
     }
 
-    public static void renderImpl(List<IChunk> chunks, GuiGraphics graphics, Font font, int left, int top, float partialTicks) {
+    public static void renderImpl(LinearChapter chapter, List<IChunk> chunks, GuiGraphics graphics, Font font, int left, int top, int mouseX, int mouseY, float partialTicks) {
         for (var chunk : chunks) {
-            top = chunk.render(graphics, font, left, top, partialTicks);
+            top = chunk.render(chapter, graphics, font, left, top, mouseX, mouseY, partialTicks);
         }
     }
 
@@ -64,12 +75,13 @@ public class LinearChapter implements IChapter {
         if (this.page < 0 || this.page >= this.pages.size()) return;
         top += 15;
         var page = this.pages.get(this.page);
-        renderImpl(page.left(), graphics, font, left + LEFT_START, top, partialTicks);
-        renderImpl(page.right(), graphics, font, left + RIGHT_START, top, partialTicks);
+        renderImpl(this, page.left(), graphics, font, left + LEFT_START, top, mouseX, mouseY, partialTicks);
+        renderImpl(this, page.right(), graphics, font, left + RIGHT_START, top, mouseX, mouseY, partialTicks);
     }
 
     @Override
     public Collection<AbstractWidget> init(Font font, int width, int height) {
+        Collection<AbstractWidget> buttons = new ArrayList<>();
         this.pages.clear();
         this.page = 0;
         var sides = new ObjectArrayFIFOQueue<ImmutableList<IChunk>>();
@@ -77,6 +89,10 @@ public class LinearChapter implements IChapter {
         int left = (width - FRAME_WIDTH) / 2, top = (height - FRAME_HEIGHT) / 2, totalHeight = 0, measuredHeight;
         for (var chunk : this.chunks) {
             chunk.reload();
+            var widget = chunk.getWidget(font, left, top + 15);
+            if (widget != null) {
+                widgets.addAll(widget);
+            }
             measuredHeight = chunk.measureHeight(font);
             if (measuredHeight <= 0) {
                 if (totalHeight != 0) {
@@ -110,6 +126,9 @@ public class LinearChapter implements IChapter {
         this.prevButton = new PageButton(left - 2, top + 174, false, ignored -> this.prevPage(), true);
         this.nextButton = new PageButton(left + 269 - 17 + 3, top + 174, true, ignored -> this.nextPage(), true);
         this.updateButtonVisibility();
-        return List.of(this.prevButton, this.nextButton);
+        buttons.add(this.prevButton);
+        buttons.add(this.nextButton);
+        buttons.addAll(widgets);
+        return buttons;
     }
 }

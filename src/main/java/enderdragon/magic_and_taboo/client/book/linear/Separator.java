@@ -12,7 +12,7 @@ public record Separator(int distance) implements IChunk {
     }
 
     @Override
-    public int render(GuiGraphics graphics, Font font, int x, int y, float partialTicks) {
+    public int render(LinearChapter chapter, GuiGraphics graphics, Font font, int x, int y, int mouseX, int mouseY, float partialTicks) {
         return this.distance;
     }
 }

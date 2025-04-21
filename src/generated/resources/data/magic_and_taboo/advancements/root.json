@@ -5,7 +5,7 @@
         "items": [
           {
             "items": [
-              "magic_and_taboo:blaze_burner"
+              "magic_and_taboo:occult_codex"
             ]
           }
         ]
@@ -22,8 +22,7 @@
     "frame": "task",
     "hidden": false,
     "icon": {
-      "item": "magic_and_taboo:blaze_burner",
-      "nbt": "{Damage:0}"
+      "item": "magic_and_taboo:occult_codex"
     },
     "show_toast": true,
     "title": {

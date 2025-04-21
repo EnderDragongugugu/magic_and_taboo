@@ -17,7 +17,7 @@ public class MATAdvancementGenerator implements ForgeAdvancementProvider.Advance
     @Override
     public void generate(HolderLookup.Provider registries, Consumer<Advancement> saver, ExistingFileHelper existingFileHelper) {
         Advancement root = Advancement.Builder.advancement().display(
-                        MATItems.BLAZE_BURNER.get(),
+                        MATItems.OCCULT_CODEX.get(),
                         Component.translatable("advancement.magic_and_taboo.root"),
                         Component.translatable("advancement.magic_and_taboo.root.desc"),
                         MagicAndTabooMod.makeId("textures/block/fir/fir_planks.png"),
@@ -25,10 +25,10 @@ public class MATAdvancementGenerator implements ForgeAdvancementProvider.Advance
                         true,
                         false,
                         false)
-                .addCriterion("has_item", InventoryChangeTrigger.TriggerInstance.hasItems(MATItems.BLAZE_BURNER.get()))
+                .addCriterion("has_item", InventoryChangeTrigger.TriggerInstance.hasItems(MATItems.OCCULT_CODEX.get()))
                 .save(saver, "magic_and_taboo:root");
         Advancement.Builder.advancement().parent(root).display(
-                        MATItems.BLAZE_BURNER.get(),
+                        MATItems.OCCULT_CODEX.get(),
                         Component.translatable("advancement.magic_and_taboo.root"),
                         Component.translatable("advancement.magic_and_taboo.root.desc"),
                         null,
