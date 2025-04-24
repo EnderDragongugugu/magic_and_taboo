@@ -1,7 +1,7 @@
 package enderdragon.magic_and_taboo.client.book.graph;
 
 import com.google.common.collect.ImmutableList;
-import enderdragon.magic_and_taboo.client.book.IListener;
+import enderdragon.magic_and_taboo.client.book.Listener;
 import net.minecraft.advancements.FrameType;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
@@ -10,14 +10,14 @@ import javax.annotation.Nonnull;
 import java.util.function.Supplier;
 import java.util.function.UnaryOperator;
 
-public class NodeBuilder<T extends IBuilder> implements IBuilder {
+public class NodeBuilder<T extends Builder> implements Builder {
     public static final Supplier<ItemStack> NO_ICON = () -> ItemStack.EMPTY;
     public final ImmutableList.Builder<Component> tooltip = ImmutableList.builder();
     public final @Nonnull GraphBuilder builder;
     public final @Nonnull T parent;
     public final @Nonnull FrameType type;
     private Node node;
-    private IListener onClick = IListener.NONE;
+    private Listener onClick = Listener.NONE;
     private Supplier<ItemStack> icon = NO_ICON;
     private int x;
     private int y;
@@ -54,7 +54,7 @@ public class NodeBuilder<T extends IBuilder> implements IBuilder {
         return this;
     }
 
-    public NodeBuilder<T> clicked(IListener callback) {
+    public NodeBuilder<T> clicked(Listener callback) {
         if (this.node == null) {
             this.onClick = callback;
         }

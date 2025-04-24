@@ -1,7 +1,7 @@
 package enderdragon.magic_and_taboo.item;
 
-import enderdragon.magic_and_taboo.capability.IPurenessStorage;
 import enderdragon.magic_and_taboo.capability.PurenessStorage;
+import enderdragon.magic_and_taboo.capability.PurenessStorageImpl;
 import enderdragon.magic_and_taboo.util.ContainerUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
@@ -36,7 +36,7 @@ public class SacrificialDaggerItem extends SwordItem {
             var stack = player.getMainHandItem();
             if (!(stack.getItem() instanceof SacrificialDaggerItem)) return;
             var target = event.getEntity();
-            var storage = stack.getCapability(PURENESS).orElse(IPurenessStorage.EMPTY);
+            var storage = stack.getCapability(PURENESS).orElse(PurenessStorage.EMPTY);
             if (!storage.isValid()) {
                 BloodBottleItem.tryLootBlood(player, target);
             }
@@ -45,7 +45,7 @@ public class SacrificialDaggerItem extends SwordItem {
 
     @Override
     public boolean isFoil(ItemStack stack) {
-        return stack.isEnchanted() || stack.getCapability(PURENESS).orElse(IPurenessStorage.EMPTY).isValid();
+        return stack.isEnchanted() || stack.getCapability(PURENESS).orElse(PurenessStorage.EMPTY).isValid();
     }
 
     @Override
@@ -57,7 +57,7 @@ public class SacrificialDaggerItem extends SwordItem {
                     ? InteractionResultHolder.consume(stack)
                     : InteractionResultHolder.fail(stack);
         }
-        var storage = stack.getCapability(PURENESS).orElse(IPurenessStorage.EMPTY);
+        var storage = stack.getCapability(PURENESS).orElse(PurenessStorage.EMPTY);
         if (storage.isValid()) {
             var blood = storage.takeFilledContainer();
             if (!blood.isEmpty()) {
@@ -80,12 +80,12 @@ public class SacrificialDaggerItem extends SwordItem {
 
     @Override
     public void inventoryTick(ItemStack stack, Level level, Entity entity, int slot, boolean isSelected) {
-        stack.getCapability(PURENESS).orElse(IPurenessStorage.EMPTY).extractPureness(1);
+        stack.getCapability(PURENESS).orElse(PurenessStorage.EMPTY).extractPureness(1);
     }
 
     @Override
     public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltips, TooltipFlag flag) {
-        var storage = stack.getCapability(PURENESS).orElse(IPurenessStorage.EMPTY);
+        var storage = stack.getCapability(PURENESS).orElse(PurenessStorage.EMPTY);
         var source = storage.getSource();
         if (source != null) {
             tooltips.add(Component.translatable(
@@ -102,7 +102,7 @@ public class SacrificialDaggerItem extends SwordItem {
 
     @Override
     public boolean hurtEnemy(ItemStack stack, LivingEntity target, LivingEntity attacker) {
-        var storage = stack.getCapability(PURENESS).orElse(IPurenessStorage.EMPTY);
+        var storage = stack.getCapability(PURENESS).orElse(PurenessStorage.EMPTY);
         if (storage.isValid()) {
             if (target.getType() == storage.getSource() && storage.getPureness() > 0) {
                 target.invulnerableTime = 0;//解除受击后伤害免疫
@@ -114,7 +114,7 @@ public class SacrificialDaggerItem extends SwordItem {
 
     @Override
     public @Nullable ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundTag nbt) {
-        return new PurenessStorage(2400, Items.AIR, true);
+        return new PurenessStorageImpl(2400, Items.AIR, true);
     }
 
 }

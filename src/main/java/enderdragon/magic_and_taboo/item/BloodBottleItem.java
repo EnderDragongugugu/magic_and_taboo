@@ -1,7 +1,7 @@
 package enderdragon.magic_and_taboo.item;
 
-import enderdragon.magic_and_taboo.capability.IPurenessStorage;
 import enderdragon.magic_and_taboo.capability.PurenessStorage;
+import enderdragon.magic_and_taboo.capability.PurenessStorageImpl;
 import enderdragon.magic_and_taboo.init.MATItems;
 import enderdragon.magic_and_taboo.util.ContainerUtil;
 import net.minecraft.ChatFormatting;
@@ -25,7 +25,7 @@ import static enderdragon.magic_and_taboo.init.MATCapabilities.PURENESS;
 public class BloodBottleItem extends Item {
     public static final Predicate<ItemStack> IS_VALID = stack -> {
         if (stack.getItem() != MATItems.BLOOD_BOTTLE.get()) return false;
-        var storage = stack.getCapability(PURENESS).orElse(IPurenessStorage.EMPTY);
+        var storage = stack.getCapability(PURENESS).orElse(PurenessStorage.EMPTY);
         return storage.isValid() && storage.getPureness() > 0;
     };
 
@@ -41,7 +41,7 @@ public class BloodBottleItem extends Item {
         float maxHealth = target.getMaxHealth();
         if (health <= 0.2 * maxHealth) {
             var blood = new ItemStack(MATItems.BLOOD_BOTTLE.get());
-            var storage = blood.getCapability(PURENESS).orElse(IPurenessStorage.EMPTY);
+            var storage = blood.getCapability(PURENESS).orElse(PurenessStorage.EMPTY);
             storage.setSource(target.getType());
             storage.setPureness(2400);
             target.spawnAtLocation(blood, 0.25F);
@@ -49,14 +49,14 @@ public class BloodBottleItem extends Item {
         }
     }
 
-    public static boolean tryTransferTo(Player player, IPurenessStorage storage) {
+    public static boolean tryTransferTo(Player player, PurenessStorage storage) {
         var blood = MATItems.BLOOD_BOTTLE.get();
         var inventory = player.getInventory();
         var list = inventory.offhand;
         do {
             for (ItemStack stack : list) {
                 if (stack.getItem() != blood) continue;
-                var source = stack.getCapability(PURENESS).orElse(IPurenessStorage.EMPTY);
+                var source = stack.getCapability(PURENESS).orElse(PurenessStorage.EMPTY);
                 if (source.isValid() && source.getPureness() > 0 && storage.transferForm(source)) {
                     stack.shrink(1);
                     var container = storage.tryReplaceContainer(Items.GLASS_BOTTLE);
@@ -74,12 +74,12 @@ public class BloodBottleItem extends Item {
 
     @Override
     public boolean isBarVisible(ItemStack stack) {
-        return stack.getCapability(PURENESS).orElse(IPurenessStorage.EMPTY).isValid();
+        return stack.getCapability(PURENESS).orElse(PurenessStorage.EMPTY).isValid();
     }
 
     @Override
     public int getBarWidth(ItemStack stack) {
-        return Math.round(stack.getCapability(PURENESS).orElse(IPurenessStorage.EMPTY).getPercent() * 13);
+        return Math.round(stack.getCapability(PURENESS).orElse(PurenessStorage.EMPTY).getPercent() * 13);
     }
 
     @Override
@@ -89,7 +89,7 @@ public class BloodBottleItem extends Item {
 
     @Override
     public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltips, TooltipFlag flag) {
-        var storage = stack.getCapability(PURENESS).orElse(IPurenessStorage.EMPTY);
+        var storage = stack.getCapability(PURENESS).orElse(PurenessStorage.EMPTY);
         var source = storage.getSource();
         if (source != null) {
             tooltips.add(Component.translatable(
@@ -102,12 +102,12 @@ public class BloodBottleItem extends Item {
 
     @Override
     public Component getName(ItemStack stack) {
-        var source = stack.getCapability(PURENESS).orElse(IPurenessStorage.EMPTY).getSource();
+        var source = stack.getCapability(PURENESS).orElse(PurenessStorage.EMPTY).getSource();
         return source == null ? super.getName(stack) : Component.translatable("item.magic_and_taboo.blood_bottle.has_entity", source.getDescription());
     }
 
     @Override
     public @Nullable ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundTag nbt) {
-        return new PurenessStorage(2400, Items.GLASS_BOTTLE, false);
+        return new PurenessStorageImpl(2400, Items.GLASS_BOTTLE, false);
     }
 }

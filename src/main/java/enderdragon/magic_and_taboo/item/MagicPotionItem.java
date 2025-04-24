@@ -1,7 +1,7 @@
 package enderdragon.magic_and_taboo.item;
 
-import enderdragon.magic_and_taboo.capability.IMagicPotion;
 import enderdragon.magic_and_taboo.capability.MagicPotion;
+import enderdragon.magic_and_taboo.capability.MagicPotionImpl;
 import enderdragon.magic_and_taboo.init.MATCapabilities;
 import enderdragon.magic_and_taboo.init.MATItems;
 import enderdragon.magic_and_taboo.util.ContainerUtil;
@@ -34,7 +34,7 @@ public class MagicPotionItem extends Item {
         } else if (entity instanceof Player) {
             player = (Player) entity;
         }
-        IMagicPotion potion = stack.getCapability(MATCapabilities.MAGIC_POTION, null).orElse(IMagicPotion.EMPTY);
+        MagicPotion potion = stack.getCapability(MATCapabilities.MAGIC_POTION, null).orElse(MagicPotion.EMPTY);
         if (!entity.level().isClientSide) {
             if (potion.isFatal()) {
                 entity.kill();
@@ -85,13 +85,13 @@ public class MagicPotionItem extends Item {
 
     @Override
     public @Nullable ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundTag nbt) {
-        return new MagicPotion(1.0F, 0);
+        return new MagicPotionImpl(1.0F, 0);
     }
 
     @Override
     public void appendHoverText(ItemStack stack, @Nullable Level pLevel, List<Component> tooltips, TooltipFlag flag) {
         PotionUtils.addPotionTooltip(
-                stack.getCapability(MATCapabilities.MAGIC_POTION).orElse(IMagicPotion.EMPTY).getEffectInstances(),
+                stack.getCapability(MATCapabilities.MAGIC_POTION).orElse(MagicPotion.EMPTY).getEffectInstances(),
                 tooltips,
                 1.0F
         );

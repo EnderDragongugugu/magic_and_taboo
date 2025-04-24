@@ -6,14 +6,14 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.function.UnaryOperator;
 
-public class GraphBuilder implements IBuilder {
+public class GraphBuilder implements Builder {
     private final ImmutableList.Builder<Node> nodes = ImmutableList.builder();
 
     public GraphBuilder child(FrameType type, UnaryOperator<NodeBuilder<GraphBuilder>> action) {
         return this.child(this, type, action);
     }
 
-    public <T extends IBuilder> GraphBuilder child(T parent, FrameType type, UnaryOperator<NodeBuilder<T>> action) {
+    public <T extends Builder> GraphBuilder child(T parent, FrameType type, UnaryOperator<NodeBuilder<T>> action) {
         this.nodes.add(action.apply(new NodeBuilder<>(this, parent, type)).asNode());
         return this;
     }

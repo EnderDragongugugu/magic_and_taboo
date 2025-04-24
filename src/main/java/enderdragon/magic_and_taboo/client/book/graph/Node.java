@@ -1,7 +1,7 @@
 package enderdragon.magic_and_taboo.client.book.graph;
 
 import com.google.common.collect.ImmutableList;
-import enderdragon.magic_and_taboo.client.book.IListener;
+import enderdragon.magic_and_taboo.client.book.Listener;
 import net.minecraft.advancements.FrameType;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
@@ -16,13 +16,19 @@ import java.util.function.Supplier;
 
 public class Node {
     private static final ResourceLocation WIDGETS_LOCATION = new ResourceLocation("textures/gui/advancements/widgets.png");
+
+    public static boolean isMouseOver(Node node, double mouseX, double mouseY, int offsetX, int offsetY) {
+        final int x = offsetX + node.x, y = offsetY + node.y;
+        return mouseX >= x - node.halfWidth && mouseX <= x + node.halfWidth && mouseY >= y - node.halfHeight && mouseY <= y + node.halfHeight;
+    }
+
     public final Node parent;
     public final FrameType type;
     public final int halfWidth;
     public final int halfHeight;
     public final int x;
     public final int y;
-    public final IListener onClick;
+    public final Listener onClick;
     private final Supplier<ItemStack> iconSupplier;
     private final ImmutableList<Component> tooltip;
     private @Nonnull ItemStack icon = ItemStack.EMPTY;
@@ -33,7 +39,7 @@ public class Node {
             ImmutableList.Builder<Component> tooltip,
             int x,
             int y,
-            IListener onClick,
+            Listener onClick,
             Supplier<ItemStack> icon
     ) {
         this.parent = parent;
@@ -49,13 +55,6 @@ public class Node {
 
     public void reload() {
         this.icon = this.iconSupplier.get();
-    }
-
-    public boolean isHovered(int offsetX, int offsetY, double mouseX, double mouseY) {
-        int x = offsetX + this.x;
-        int y = offsetY + this.y;
-        return mouseX >= x - this.halfWidth && mouseX <= x + this.halfWidth &&
-                mouseY >= y - this.halfHeight && mouseY <= y + this.halfHeight;
     }
 
     public @NotNull List<Component> getTooltip() {

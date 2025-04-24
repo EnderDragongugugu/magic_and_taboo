@@ -17,38 +17,42 @@ public class MATAdvancementGenerator implements ForgeAdvancementProvider.Advance
     @Override
     public void generate(HolderLookup.Provider registries, Consumer<Advancement> saver, ExistingFileHelper existingFileHelper) {
         Advancement root = Advancement.Builder.advancement().display(
-                        MATItems.OCCULT_CODEX.get(),
-                        Component.translatable("advancement.magic_and_taboo.root"),
-                        Component.translatable("advancement.magic_and_taboo.root.desc"),
-                        MagicAndTabooMod.makeId("textures/block/fir/fir_planks.png"),
-                        FrameType.TASK,
-                        true,
-                        false,
-                        false)
-                .addCriterion("has_item", InventoryChangeTrigger.TriggerInstance.hasItems(MATItems.OCCULT_CODEX.get()))
-                .save(saver, "magic_and_taboo:root");
+                MATItems.OCCULT_CODEX.get(),
+                Component.translatable("advancement.magic_and_taboo.root"),
+                Component.translatable("advancement.magic_and_taboo.root.desc"),
+                MagicAndTabooMod.makeId("textures/block/fir/fir_planks.png"),
+                FrameType.TASK,
+                true,
+                false,
+                false
+        ).addCriterion(
+                "has_item",
+                InventoryChangeTrigger.TriggerInstance.hasItems(MATItems.OCCULT_CODEX.get())
+        ).save(saver, "magic_and_taboo:root");
+
         Advancement.Builder.advancement().parent(root).display(
-                        MATItems.OCCULT_CODEX.get(),
-                        Component.translatable("advancement.magic_and_taboo.root"),
-                        Component.translatable("advancement.magic_and_taboo.root.desc"),
-                        null,
-                        FrameType.TASK,
-                        true,
-                        false,
-                        false)
-                .addCriterion("dummy", new ImpossibleTrigger.TriggerInstance())
-//                .addCriterion("test", InventoryChangeTrigger.TriggerInstance.hasItems(MATItems.BLAZE_BURNER.get()))
-                .save(saver, "magic_and_taboo:test");
+                MATItems.OCCULT_CODEX.get(),
+                Component.translatable("advancement.magic_and_taboo.root"),
+                Component.translatable("advancement.magic_and_taboo.root.desc"),
+                null,
+                FrameType.TASK,
+                true,
+                false,
+                false
+        ).addCriterion(
+                "dummy",
+                new ImpossibleTrigger.TriggerInstance()
+        ).save(saver, "magic_and_taboo:test");
+
         Advancement.Builder.advancement().parent(root).display(
-                        MATItems.BLAZE_BURNER.get(),
-                        Component.translatable("advancement.magic_and_taboo.root"),
-                        Component.translatable("advancement.magic_and_taboo.root.desc"),
-                        null,
-                        FrameType.TASK,
-                        true,
-                        true,
-                        false)
-//                .addCriterion("test", InventoryChangeTrigger.TriggerInstance.hasItems(MATItems.BLAZE_BURNER.get()))
-                .save(saver, "magic_and_taboo:test_1");
+                MATItems.BLAZE_BURNER.get(),
+                Component.translatable("advancement.magic_and_taboo.root"),
+                Component.translatable("advancement.magic_and_taboo.root.desc"),
+                null,
+                FrameType.TASK,
+                true,
+                true,
+                false
+        ).save(saver, "magic_and_taboo:test_1");
     }
 }

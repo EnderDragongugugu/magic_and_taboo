@@ -1,6 +1,6 @@
 package enderdragon.magic_and_taboo.client.renderer;
 
-import enderdragon.magic_and_taboo.capability.IMagicPotion;
+import enderdragon.magic_and_taboo.capability.MagicPotion;
 import enderdragon.magic_and_taboo.registry.Element;
 import it.unimi.dsi.fastutil.objects.Object2FloatMap;
 import it.unimi.dsi.fastutil.objects.Object2FloatMaps;
@@ -14,7 +14,7 @@ import org.jetbrains.annotations.Nullable;
 import javax.annotation.Nonnull;
 import java.util.List;
 
-public class EnchantedCrucibleInfo implements IMagicPotion {
+public class EnchantedCrucibleInfo implements MagicPotion {
     public boolean changed = true;
     public FluidStack fluid = FluidStack.EMPTY;
     public int fluidColor = 0xFFFFFF;

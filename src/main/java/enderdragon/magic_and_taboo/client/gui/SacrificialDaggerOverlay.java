@@ -1,7 +1,7 @@
 package enderdragon.magic_and_taboo.client.gui;
 
 import enderdragon.magic_and_taboo.MagicAndTabooMod;
-import enderdragon.magic_and_taboo.capability.IPurenessStorage;
+import enderdragon.magic_and_taboo.capability.PurenessStorage;
 import enderdragon.magic_and_taboo.init.MATCapabilities;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
@@ -20,8 +20,8 @@ public class SacrificialDaggerOverlay implements IGuiOverlay {
         if (player == null) return;
         var stack = player.getMainHandItem();
         if (stack.isEmpty()) return;
-        var pureness = stack.getCapability(MATCapabilities.PURENESS).orElse(IPurenessStorage.EMPTY);
-        if (pureness == IPurenessStorage.EMPTY) return;
+        var pureness = stack.getCapability(MATCapabilities.PURENESS).orElse(PurenessStorage.EMPTY);
+        if (pureness == PurenessStorage.EMPTY) return;
         var font = mc.font;
         var text = Component.translatable("tooltip.magic_and_taboo.blood_bottle_pureness", pureness.getFormattedPureness());
         int textX = (screenWidth - font.width(text)) / 2, textY = (screenHeight - font.lineHeight) / 2;

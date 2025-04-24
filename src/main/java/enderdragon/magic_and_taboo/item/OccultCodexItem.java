@@ -2,6 +2,7 @@ package enderdragon.magic_and_taboo.item;
 
 import enderdragon.magic_and_taboo.client.ClientUtil;
 import enderdragon.magic_and_taboo.init.MATItems;
+import enderdragon.magic_and_taboo.util.ContainerUtil;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.player.Player;
@@ -27,11 +28,9 @@ public class OccultCodexItem extends Item {
 
     public static void onPlayerLogin(PlayerEvent.PlayerLoggedInEvent event) {
         var player = event.getEntity();
-        var persistentData = player.getPersistentData();
-        if (!persistentData.getBoolean(INIT_BOOK)) {
-            var book = new ItemStack(MATItems.OCCULT_CODEX.get());
-            player.addItem(book);
-            persistentData.putBoolean(INIT_BOOK, true);
-        }
+        var data = player.getPersistentData();
+        if (data.getBoolean(INIT_BOOK)) return;
+        ContainerUtil.addItem(player, new ItemStack(MATItems.OCCULT_CODEX.get()));
+        data.putBoolean(INIT_BOOK, true);
     }
 }

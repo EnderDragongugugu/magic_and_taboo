@@ -10,6 +10,7 @@ import it.unimi.dsi.fastutil.objects.Object2FloatOpenHashMap;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
 import net.minecraft.core.RegistryAccess;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.RegistryFixedCodec;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
@@ -79,6 +80,9 @@ public record Element(
             time = Mth.clamp(maxTime * (1.0F - 0.6F * normalized), 600, maxTime);
         }
         return new MobEffectInstance(this.effect, (int) (time * timeFactor), Math.max(0, baseLevel + Mth.ceil(normalized * this.maxLevel)));
+    }
 
+    public Component getDisplayName() {
+        return Component.translatable(this.translationKey);
     }
 }

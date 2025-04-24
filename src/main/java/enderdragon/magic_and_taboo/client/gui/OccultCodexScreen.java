@@ -1,31 +1,33 @@
 package enderdragon.magic_and_taboo.client.gui;
 
-import enderdragon.magic_and_taboo.client.book.IBook;
-import enderdragon.magic_and_taboo.client.book.IChapter;
+import enderdragon.magic_and_taboo.client.book.Book;
+import enderdragon.magic_and_taboo.client.book.Chapter;
 import it.unimi.dsi.fastutil.objects.Reference2ObjectOpenHashMap;
+import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.CommonComponents;
+import net.minecraft.network.chat.Style;
 import org.jetbrains.annotations.Nullable;
 
 import javax.annotation.Nonnull;
 import java.util.Collection;
 import java.util.Stack;
 
-public class OccultCodexScreen extends Screen implements IBook {
-    private final Reference2ObjectOpenHashMap<IChapter, Collection<AbstractWidget>> cache = new Reference2ObjectOpenHashMap<>();
-    private final Stack<IChapter> hidden = new Stack<>();
-    private @Nonnull IChapter chapter;
+public class OccultCodexScreen extends Screen implements Book {
+    private final Reference2ObjectOpenHashMap<Chapter, Collection<AbstractWidget>> cache = new Reference2ObjectOpenHashMap<>();
+    private final Stack<Chapter> hidden = new Stack<>();
+    private @Nonnull Chapter chapter;
 
-    public OccultCodexScreen(@Nonnull IChapter chapter) {
+    public OccultCodexScreen(@Nonnull Chapter chapter) {
         super(CommonComponents.EMPTY);
         this.chapter = chapter;
     }
 
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
-        return this.chapter.onMouseDown(mouseX, mouseY, button) || super.mouseClicked(mouseX, mouseY, button);
+        return this.chapter.onMouseDown(this, mouseX, mouseY, button) || super.mouseClicked(mouseX, mouseY, button);
     }
 
     @Override
@@ -62,16 +64,28 @@ public class OccultCodexScreen extends Screen implements IBook {
     }
 
     @Override
-    public void turnTo(@Nullable IChapter chapter) {
+    public void turnTo(@Nullable Chapter chapter, boolean isOverlay) {
         if (chapter == null) {
             super.onClose();
-        } else {
-            this.hidden.push(this.chapter);
-            this.openImpl(chapter);
+            return;
         }
+        if (isOverlay) {
+            this.hidden.push(this.chapter);
+        }
+        this.openImpl(chapter);
     }
 
-    private void openImpl(@Nonnull IChapter chapter) {
+    @Override
+    public Font getFont() {
+        return this.font;
+    }
+
+    @Override
+    public boolean onClickComponent(@Nullable Style style) {
+        return this.handleComponentClicked(style);
+    }
+
+    private void openImpl(@Nonnull Chapter chapter) {
         var widgets = this.cache.get(this.chapter);
         if (widgets != null) {
             for (var widget : widgets) {

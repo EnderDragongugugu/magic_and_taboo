@@ -3,16 +3,33 @@ package enderdragon.magic_and_taboo.client.book.linear;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 
-public record Separator(int distance) implements IChunk {
-    public static final Separator NEXT_PAGE = new Separator(0);
+public class Separator extends Chunk {
+    public static final Separator NEXT_PAGE = new Separator();
+
+    public static Separator of(int distance) {
+        return distance < 0 ? NEXT_PAGE : new Fixed(distance);
+    }
+
+    protected Separator() {}
 
     @Override
-    public int measureHeight(Font font) {
-        return this.distance;
+    public int measure(Font font, int space) {
+        return space;
     }
 
     @Override
-    public int render(LinearChapter chapter, GuiGraphics graphics, Font font, int x, int y, int mouseX, int mouseY, float partialTicks) {
-        return this.distance;
+    public void render(GuiGraphics graphics, Font font, int mouseX, int mouseY, float partialTicks) {}
+
+    public static class Fixed extends Separator {
+        public final int distance;
+
+        public Fixed(int distance) {
+            this.distance = distance;
+        }
+
+        @Override
+        public int measure(Font font, int space) {
+            return this.distance;
+        }
     }
 }

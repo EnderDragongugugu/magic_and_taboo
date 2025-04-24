@@ -6,7 +6,7 @@ import net.minecraft.client.gui.components.AbstractWidget;
 
 import java.util.Collection;
 
-public interface IChapter {
+public interface Chapter {
     void render(
             GuiGraphics graphics,
             Font font,
@@ -23,11 +23,11 @@ public interface IChapter {
         return false;
     }
 
-    default boolean onMouseDown(double x, double y, int button) {
+    default boolean onMouseDown(Book book, double x, double y, int button) {
         return false;
     }
 
-    default boolean onMouseUp(IBook book, double x, double y, int button) {
+    default boolean onMouseUp(Book book, double x, double y, int button) {
         return false;
     }
 }

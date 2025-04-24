@@ -117,7 +117,7 @@ public class AlchemyElementTooltip implements ClientTooltipComponent {
 
         public Widget(Element element, float amount) {
             this.icon = element.icon();
-            this.name = Component.translatable(element.translationKey());
+            this.name = element.getDisplayName();
             this.amount = Float.toString(amount);
         }
     }

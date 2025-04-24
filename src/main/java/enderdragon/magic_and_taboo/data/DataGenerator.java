@@ -3,6 +3,7 @@ package enderdragon.magic_and_taboo.data;
 import enderdragon.magic_and_taboo.MagicAndTabooMod;
 import net.minecraft.data.loot.LootTableProvider;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
+import net.minecraftforge.common.data.ForgeAdvancementProvider;
 import net.minecraftforge.data.event.GatherDataEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -33,7 +34,7 @@ public class DataGenerator {
         generator.addProvider(true, new LootTableProvider(output, Set.of(), List.of(
                 new LootTableProvider.SubProviderEntry(MATBlockLootProvider::new, LootContextParamSets.BLOCK)
         )));
-        generator.addProvider(true, new MATAdvancementProvider(output, registry, helper));
+        generator.addProvider(true, new ForgeAdvancementProvider(output, registry, helper, List.of(new MATAdvancementGenerator())));
         generator.addProvider(true, new RegistryDataGenerator(output, registry));
     }
 }

@@ -1,6 +1,6 @@
 package enderdragon.magic_and_taboo.item;
 
-import enderdragon.magic_and_taboo.capability.MagicPotion;
+import enderdragon.magic_and_taboo.capability.MagicPotionImpl;
 import enderdragon.magic_and_taboo.init.MATItems;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.LivingEntity;
@@ -21,6 +21,6 @@ public class PotionBottleRedItem extends MagicPotionItem {
 
     @Override
     public @Nullable ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundTag nbt) {
-        return new MagicPotion(2.0F, -1);
+        return new MagicPotionImpl(2.0F, -1);
     }
 }

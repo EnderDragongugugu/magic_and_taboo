@@ -1,7 +1,7 @@
 package enderdragon.magic_and_taboo.block.entity;
 
 import enderdragon.magic_and_taboo.block.EnchantedCrucibleBlock;
-import enderdragon.magic_and_taboo.capability.IMagicPotion;
+import enderdragon.magic_and_taboo.capability.MagicPotion;
 import enderdragon.magic_and_taboo.client.renderer.EnchantedCrucibleInfo;
 import enderdragon.magic_and_taboo.init.MATBlockEntities;
 import enderdragon.magic_and_taboo.init.MATCapabilities;
@@ -130,7 +130,7 @@ public class EnchantedCrucibleBlockEntity extends BlockEntity implements IFluidH
         int amount = this.fluid.getAmount();
         if (amount >= 250) {
             var bottle = new ItemStack(stack.getFilled());
-            this.fillPotion(level.registryAccess(), bottle.getCapability(MATCapabilities.MAGIC_POTION).orElse(IMagicPotion.EMPTY));
+            this.fillPotion(level.registryAccess(), bottle.getCapability(MATCapabilities.MAGIC_POTION).orElse(MagicPotion.EMPTY));
             ContainerUtil.addItem(player, bottle);
             this.fluid.setAmount(amount - 250);
             this.setChanged();
@@ -140,7 +140,7 @@ public class EnchantedCrucibleBlockEntity extends BlockEntity implements IFluidH
         }
     }
 
-    public void fillPotion(RegistryAccess registry, IMagicPotion potion) {
+    public void fillPotion(RegistryAccess registry, MagicPotion potion) {
         var data = Element.fromStacks(registry, this.stacks, cookingTime, this.temperature);
         for (var entry : data.object2FloatEntrySet()) {
             var element = entry.getKey();

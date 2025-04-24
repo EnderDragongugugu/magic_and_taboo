@@ -2,7 +2,7 @@ package enderdragon.magic_and_taboo.client.book.graph;
 
 import javax.annotation.Nullable;
 
-public interface IBuilder {
+public interface Builder {
     @Nullable
     Node asNode();
 }

@@ -3,8 +3,8 @@ package enderdragon.magic_and_taboo.client.book.graph;
 import com.google.common.collect.ImmutableList;
 import com.mojang.blaze3d.systems.RenderSystem;
 import enderdragon.magic_and_taboo.MagicAndTabooMod;
-import enderdragon.magic_and_taboo.client.book.IBook;
-import enderdragon.magic_and_taboo.client.book.IChapter;
+import enderdragon.magic_and_taboo.client.book.Book;
+import enderdragon.magic_and_taboo.client.book.Chapter;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
@@ -15,7 +15,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Optional;
 
-public class GraphChapter implements IChapter {
+public class GraphChapter implements Chapter {
     private static final ResourceLocation BACKGROUND = MagicAndTabooMod.makeId("textures/block/fir/fir_planks.png");
     private static final ResourceLocation PAGE_FRAME = MagicAndTabooMod.makeId("textures/gui/book/frame_full.png");
     private static final int WIDTH = 283;
@@ -85,7 +85,7 @@ public class GraphChapter implements IChapter {
 
         for (Node node : this.nodes) {
             node.render(graphics, font, startX, startY);
-            if (node.isHovered(startX, startY, mouseX, mouseY)) {
+            if (Node.isMouseOver(node, mouseX, mouseY, startX, startY)) {
                 hovered = node;
             }
         }
@@ -110,7 +110,7 @@ public class GraphChapter implements IChapter {
     }
 
     @Override
-    public boolean onMouseDown(double x, double y, int button) {
+    public boolean onMouseDown(Book book, double x, double y, int button) {
         if (button != 0) return false;
         this.dragging = true;
         this.clickable = true;
@@ -118,13 +118,13 @@ public class GraphChapter implements IChapter {
     }
 
     @Override
-    public boolean onMouseUp(IBook book, double x, double y, int button) {
+    public boolean onMouseUp(Book book, double x, double y, int button) {
         if (button != 0) return false;
         this.dragging = false;
         if (this.clickable) {
             int offsetX = (int) this.scrollX, offsetY = (int) this.scrollY;
             for (Node node : this.nodes) {
-                if (node.isHovered(offsetX, offsetY, x, y)) {
+                if (Node.isMouseOver(node, x, y, offsetX, offsetY)) {
                     node.onClick.trigger(book);
                     return true;
                 }

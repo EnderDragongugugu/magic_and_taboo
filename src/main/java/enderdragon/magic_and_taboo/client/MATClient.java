@@ -2,8 +2,8 @@ package enderdragon.magic_and_taboo.client;
 
 import com.mojang.datafixers.util.Either;
 import enderdragon.magic_and_taboo.MagicAndTabooMod;
-import enderdragon.magic_and_taboo.capability.IMagicPotion;
-import enderdragon.magic_and_taboo.capability.IPurenessStorage;
+import enderdragon.magic_and_taboo.capability.MagicPotion;
+import enderdragon.magic_and_taboo.capability.PurenessStorage;
 import enderdragon.magic_and_taboo.capability.WorkHubResult;
 import enderdragon.magic_and_taboo.client.gui.*;
 import enderdragon.magic_and_taboo.client.model.WorkHubToolModel;
@@ -62,7 +62,7 @@ public class MATClient {
     public static void registerItemColors(RegisterColorHandlersEvent.Item event) {
         event.register((stack, index) -> index > 0 ? -1 : PotionUtils.getColor(
                 stack.getCapability(MATCapabilities.MAGIC_POTION)
-                        .orElse(IMagicPotion.EMPTY)
+                        .orElse(MagicPotion.EMPTY)
                         .getEffectInstances()
         ), MATItems.POTION_BOTTLE.get(), MATItems.POTION_BOTTLE_GLOW.get(), MATItems.POTION_BOTTLE_RED.get(), MATItems.POTION_SYRINGE.get());
     }
@@ -82,7 +82,7 @@ public class MATClient {
     @SubscribeEvent
     public static void modelBake(ModelEvent.ModifyBakingResult event) {
         var bloody = new ResourceLocation("bloody");
-        ClampedItemPropertyFunction isBloody = (stack, $, entity, i) -> stack.getCapability(PURENESS).orElse(IPurenessStorage.EMPTY).isValid() ? 1.0F : 0.0F;
+        ClampedItemPropertyFunction isBloody = (stack, $, entity, i) -> stack.getCapability(PURENESS).orElse(PurenessStorage.EMPTY).isValid() ? 1.0F : 0.0F;
         ItemProperties.register(MATItems.SACRIFICIAL_DAGGER.get(), bloody, isBloody);
     }
 
