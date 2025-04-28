@@ -2,6 +2,7 @@ package enderdragon.magic_and_taboo.init;
 
 import enderdragon.magic_and_taboo.MagicAndTabooMod;
 import enderdragon.magic_and_taboo.block.entity.EnchantedCrucibleBlockEntity;
+import enderdragon.magic_and_taboo.block.entity.MagicPerfusionPedestalBlockEntity;
 import enderdragon.magic_and_taboo.block.entity.WorkHubBlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraftforge.registries.DeferredRegister;
@@ -15,5 +16,8 @@ public class MATBlockEntities {
     );
     public static final RegistryObject<BlockEntityType<EnchantedCrucibleBlockEntity>> ENCHANTED_CRUCIBLE = REGISTRY.register("enchanted_crucible", () ->
             BlockEntityType.Builder.of(EnchantedCrucibleBlockEntity::new, MATBlocks.ENCHANTED_CRUCIBLE.get()).build(null)
+    );
+    public static final RegistryObject<BlockEntityType<MagicPerfusionPedestalBlockEntity>> MAGIC_PERFUSION_PEDESTAL = REGISTRY.register("magic_perfusion_pedestal", () ->
+            BlockEntityType.Builder.of(MagicPerfusionPedestalBlockEntity::new, MATBlocks.MAGIC_PERFUSION_PEDESTAL.get()).build(null)
     );
 }

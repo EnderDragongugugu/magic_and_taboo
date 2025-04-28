@@ -70,6 +70,7 @@ public class OccultCodexChapters {
                     .add(Component.translatable("text.occult_codex.node.potion_1.content_1"))
             ))
             .add(new ElementChunk())
+            .addAll(ElementChunk.renderImage())
     );
 
     public static final LinearChapter DEVELOPERS = collect(LinearChapter::new, chunks -> chunks

@@ -32,6 +32,12 @@ public class LinearChapter implements Chapter {
         this.chunks = chunks.build();
     }
 
+    public void setPage(int index) {
+        this.page = index;
+        this.updateButtonVisibility();
+
+    }
+
     public void nextPage() {
         if (++this.page >= this.pages.size()) {
             this.page = 0;

@@ -8,6 +8,7 @@ import enderdragon.magic_and_taboo.capability.WorkHubResult;
 import enderdragon.magic_and_taboo.client.gui.*;
 import enderdragon.magic_and_taboo.client.model.WorkHubToolModel;
 import enderdragon.magic_and_taboo.client.renderer.EnchantedCrucibleRender;
+import enderdragon.magic_and_taboo.client.renderer.MagicPerfusionPedestalRender;
 import enderdragon.magic_and_taboo.client.renderer.WorkHubRender;
 import enderdragon.magic_and_taboo.init.*;
 import enderdragon.magic_and_taboo.registry.AlchemyElement;
@@ -76,6 +77,7 @@ public class MATClient {
     @SubscribeEvent
     public static void onRegisterRenderers(EntityRenderersEvent.RegisterRenderers event) {
         event.registerBlockEntityRenderer(MATBlockEntities.ENCHANTED_CRUCIBLE.get(), EnchantedCrucibleRender::new);
+        event.registerBlockEntityRenderer(MATBlockEntities.MAGIC_PERFUSION_PEDESTAL.get(), MagicPerfusionPedestalRender::new);
         event.registerBlockEntityRenderer(MATBlockEntities.WORK_HUB.get(), WorkHubRender::new);
     }
 

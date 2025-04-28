@@ -17,6 +17,11 @@ public interface Chapter {
             float partialTicks
     );
 
+    default void setPage(int index) {
+    }
+
+    ;
+
     Collection<AbstractWidget> init(Font font, int width, int height);
 
     default boolean onDrag(double deltaX, double deltaY, int button) {

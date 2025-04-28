@@ -33,6 +33,7 @@ public class MATBlockStateProvider extends BlockStateProvider {
                 0
         );
         this.simpleBlock(MATBlocks.CONDENSER.get(), new ModelFile.UncheckedModelFile(MATBlocks.CONDENSER.getId().withPrefix("block/")));
+        this.simpleBlock(MATBlocks.MAGIC_PERFUSION_PEDESTAL.get(), new ModelFile.UncheckedModelFile(MATBlocks.MAGIC_PERFUSION_PEDESTAL.getId().withPrefix("block/")));
         this.simpleBlock(MATBlocks.HONEY.get(), this.models().getBuilder(MATBlocks.HONEY.getId().getPath())
                 .texture("particle", new ResourceLocation("block/honey_block_side"))
         );

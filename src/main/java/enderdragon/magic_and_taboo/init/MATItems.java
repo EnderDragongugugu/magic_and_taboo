@@ -92,6 +92,9 @@ public class MATItems {
     public static final RegistryObject<BlockItem> CONDENSER = BLOCKS.register(REGISTRY, "condenser", () ->
             new BlockItem(MATBlocks.CONDENSER.get(), new Properties())
     );
+    public static final RegistryObject<BlockItem> MAGIC_PERFUSION_PEDESTAL = BLOCKS.register(REGISTRY, "magic_perfusion_pedestal", () ->
+            new BlockItem(MATBlocks.MAGIC_PERFUSION_PEDESTAL.get(), new Properties())
+    );
     public static final RegistryObject<BlockItem> MERCURY_ORE = BLOCKS.register(REGISTRY, "mercury_ore", () ->
             new BlockItem(MATBlocks.MERCURY_ORE.get(), new Properties())
     );

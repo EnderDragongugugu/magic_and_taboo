@@ -51,6 +51,15 @@ public class MATBlocks {
             .strength(2.0F)
             .noOcclusion()
     ));
+    public static final RegistryObject<MagicPerfusionPedestalBlock> MAGIC_PERFUSION_PEDESTAL = REGISTRY.register("magic_perfusion_pedestal", () -> new MagicPerfusionPedestalBlock(Properties.of()
+            .mapColor(MapColor.WOOD) // ?
+            .instrument(NoteBlockInstrument.BASS)
+            .ignitedByLava()
+            .mapColor(MapColor.STONE)
+            .requiresCorrectToolForDrops()
+            .strength(2.0F)
+            .noOcclusion()
+    ));
     public static final RegistryObject<CondenserBlock> CONDENSER = REGISTRY.register("condenser", () -> new CondenserBlock(Properties.of()
             .mapColor(MapColor.WOOD) // ?
             .instrument(NoteBlockInstrument.BASS)

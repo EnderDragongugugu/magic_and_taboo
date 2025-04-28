@@ -64,15 +64,16 @@ public class OccultCodexScreen extends Screen implements Book {
     }
 
     @Override
-    public void turnTo(@Nullable Chapter chapter, boolean isOverlay) {
+    public Chapter turnTo(@Nullable Chapter chapter, boolean isOverlay) {
         if (chapter == null) {
             super.onClose();
-            return;
+            return null;
         }
         if (isOverlay) {
             this.hidden.push(this.chapter);
         }
         this.openImpl(chapter);
+        return chapter;
     }
 
     @Override
