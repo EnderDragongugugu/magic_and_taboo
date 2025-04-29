@@ -1,4 +1,4 @@
-package enderdragon.magic_and_taboo.client.book.linear;
+package enderdragon.magic_and_taboo.client.book.page;
 
 import enderdragon.magic_and_taboo.client.book.Book;
 import net.minecraft.client.gui.Font;

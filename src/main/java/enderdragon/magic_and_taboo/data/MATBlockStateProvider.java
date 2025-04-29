@@ -17,23 +17,19 @@ public class MATBlockStateProvider extends BlockStateProvider {
         super(output, MOD_ID, helper);
     }
 
+    static ModelFile.UncheckedModelFile customModel(RegistryObject<? extends Block> block) {
+        return new ModelFile.UncheckedModelFile(block.getId().withPrefix("block/"));
+    }
+
     @Override
     protected void registerStatesAndModels() {
         this.simpleBlockWithItem(MATBlocks.MERCURY_ORE);
         this.registerFirWood();
         this.registerGildedMarble();
-        this.horizontalBlock(
-                MATBlocks.WORK_HUB.get(),
-                new ModelFile.UncheckedModelFile(MATBlocks.WORK_HUB.getId().withPrefix("block/")),
-                0
-        );
-        this.horizontalBlock(
-                MATBlocks.ENCHANTED_CRUCIBLE.get(),
-                new ModelFile.UncheckedModelFile(MATBlocks.ENCHANTED_CRUCIBLE.getId().withPrefix("block/")),
-                0
-        );
-        this.simpleBlock(MATBlocks.CONDENSER.get(), new ModelFile.UncheckedModelFile(MATBlocks.CONDENSER.getId().withPrefix("block/")));
-        this.simpleBlock(MATBlocks.MAGIC_PERFUSION_PEDESTAL.get(), new ModelFile.UncheckedModelFile(MATBlocks.MAGIC_PERFUSION_PEDESTAL.getId().withPrefix("block/")));
+        this.horizontalBlock(MATBlocks.WORK_HUB.get(), customModel(MATBlocks.WORK_HUB), 0);
+        this.horizontalBlock(MATBlocks.ENCHANTED_CRUCIBLE.get(), customModel(MATBlocks.ENCHANTED_CRUCIBLE), 0);
+        this.simpleBlock(MATBlocks.CONDENSER.get(), customModel(MATBlocks.CONDENSER));
+        this.simpleBlock(MATBlocks.MAGIC_PERFUSION_PEDESTAL.get(), customModel(MATBlocks.MAGIC_PERFUSION_PEDESTAL));
         this.simpleBlock(MATBlocks.HONEY.get(), this.models().getBuilder(MATBlocks.HONEY.getId().getPath())
                 .texture("particle", new ResourceLocation("block/honey_block_side"))
         );

@@ -241,9 +241,7 @@ public class EnchantedCrucibleBlockEntity extends BlockEntity implements IFluidH
 
     @Override
     public CompoundTag getUpdateTag() {
-        var tag = new CompoundTag();
-        this.saveAdditional(tag);
-        return tag;
+        return this.saveWithoutMetadata();
     }
 
     @Override

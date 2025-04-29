@@ -7,7 +7,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 public interface Book {
-    Chapter turnTo(@Nullable Chapter chapter, boolean isOverlay);
+    void turnTo(@Nullable Chapter chapter, boolean isOverlay);
 
     Font getFont();
 

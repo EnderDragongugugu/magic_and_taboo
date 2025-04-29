@@ -1,6 +1,5 @@
-package enderdragon.magic_and_taboo.client.book.linear;
+package enderdragon.magic_and_taboo.client.book.page;
 
-import com.google.common.collect.ImmutableList;
 import enderdragon.magic_and_taboo.client.book.Book;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.minecraft.client.gui.Font;
@@ -11,18 +10,28 @@ import net.minecraft.util.FormattedCharSequence;
 import net.minecraft.util.Mth;
 
 import javax.annotation.Nullable;
+import java.util.Collections;
+import java.util.List;
 
 import static enderdragon.magic_and_taboo.client.ClientUtil.isMouseOver;
-import static enderdragon.magic_and_taboo.client.book.linear.LinearChapter.PAGE_WIDTH;
+import static enderdragon.magic_and_taboo.client.book.page.PageChapter.PAGE_WIDTH;
 
 public class TextChunk extends Chunk {
+    public static TextChunk of(Component... texts) {
+        return new TextChunk(List.of(texts));
+    }
+
+    public static TextChunk of(String translationKey) {
+        return new TextChunk(Collections.singletonList(Component.translatable(translationKey)));
+    }
+
     private final ObjectArrayList<FormattedCharSequence> lines = new ObjectArrayList<>();
     /// make it private because {@link Component} might be mutable
-    private final ImmutableList<Component> texts;
+    private final List<Component> texts;
     private int height;
 
-    public TextChunk(ImmutableList.Builder<Component> texts) {
-        this.texts = texts.build();
+    protected TextChunk(List<Component> texts) {
+        this.texts = texts;
     }
 
     public @Nullable Style getComponentStyleAt(Font font, double x, double y) {

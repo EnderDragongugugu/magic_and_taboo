@@ -1,0 +1,5 @@
+<root>
+    <item name='net.minecraftforge.registries.RegistryObject net.minecraft.resources.ResourceLocation getId()'>
+        <annotation name='org.jetbrains.annotations.NotNull'/>
+    </item>
+</root>

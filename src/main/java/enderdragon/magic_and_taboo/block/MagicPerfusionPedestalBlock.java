@@ -22,14 +22,14 @@ public class MagicPerfusionPedestalBlock extends BaseEntityBlock {
     }
 
     @Override
-    public RenderShape getRenderShape(BlockState pState) {
+    public RenderShape getRenderShape(BlockState state) {
         return RenderShape.MODEL;
     }
 
     @Nullable
     @Override
-    public BlockEntity newBlockEntity(BlockPos pPos, BlockState pState) {
-        return MATBlockEntities.MAGIC_PERFUSION_PEDESTAL.get().create(pPos, pState);
+    public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
+        return new MagicPerfusionPedestalBlockEntity(pos, state);
     }
 
     @Nullable
@@ -41,14 +41,11 @@ public class MagicPerfusionPedestalBlock extends BaseEntityBlock {
     }
 
     @Override
-    public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand pHand, BlockHitResult pHit) {
+    public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
         if (level.getBlockEntity(pos) instanceof MagicPerfusionPedestalBlockEntity pedestal) {
             if (level.isClientSide) return InteractionResult.CONSUME;
-            if (pedestal.pushItem(player)) {
+            if (pedestal.tryPlaceItem(player.getItemInHand(hand)) || player.isShiftKeyDown() && pedestal.tryTakeItem(player))
                 return InteractionResult.SUCCESS;
-            } else if (player.isShiftKeyDown() && pedestal.removeItem(player)) {
-                return InteractionResult.SUCCESS;
-            }
             return InteractionResult.CONSUME;
         }
         return InteractionResult.PASS;

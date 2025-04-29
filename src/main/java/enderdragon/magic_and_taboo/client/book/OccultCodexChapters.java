@@ -2,8 +2,10 @@ package enderdragon.magic_and_taboo.client.book;
 
 import enderdragon.magic_and_taboo.client.book.graph.GraphBuilder;
 import enderdragon.magic_and_taboo.client.book.graph.GraphChapter;
-import enderdragon.magic_and_taboo.client.book.linear.*;
+import enderdragon.magic_and_taboo.client.book.page.*;
 import enderdragon.magic_and_taboo.init.MATItems;
+import enderdragon.magic_and_taboo.registry.Element;
+import enderdragon.magic_and_taboo.util.RegistryAccessor;
 import net.minecraft.ChatFormatting;
 import net.minecraft.advancements.FrameType;
 import net.minecraft.network.chat.ClickEvent;
@@ -12,7 +14,9 @@ import net.minecraft.network.chat.HoverEvent;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 
-import static enderdragon.magic_and_taboo.util.CollectionUtil.collect;
+import java.util.List;
+
+import static enderdragon.magic_and_taboo.client.book.page.ElementCatalog.ICON_SIZE;
 
 public class OccultCodexChapters {
     public static final GraphChapter ENTRY = new GraphBuilder()
@@ -39,6 +43,7 @@ public class OccultCodexChapters {
                     .posited(0, -50)
                     .clicked(book -> book.turnTo(OccultCodexChapters.ELEMENTS, true))
             ).build();
+
     public static final GraphChapter PROLOGUE = new GraphBuilder()
             .child(FrameType.TASK, root -> root
                     .withIcon(() -> new ItemStack(Items.DRAGON_EGG))
@@ -53,66 +58,70 @@ public class OccultCodexChapters {
                     .clicked(book -> book.turnTo(OccultCodexChapters.STORY, true))
             ).build();
 
-    public static final LinearChapter STORY = collect(LinearChapter::new, chunk -> chunk
-            .add(TitleChunk.of("text.occult_codex.node.prologue_2.content.title"))
-            .add(collect(TextChunk::new, lines -> lines
-                    .add(Component.translatable("text.occult_codex.node.prologue_2.content"))
-            ))
+    public static final PageChapter STORY = ContentChapter.of(
+            TitleChunk.of("text.occult_codex.node.prologue_2.content.title"),
+            TextChunk.of("text.occult_codex.node.prologue_2.content")
     );
 
-    public static final LinearChapter ELEMENTS = collect(LinearChapter::new, chunk -> chunk
-            .add(TitleChunk.of("text.occult_codex.node.potion_1.content.title"))
-            .add(collect(TextChunk::new, lines -> lines
-                    .add(Component.translatable("text.occult_codex.node.potion_1.content"))
-            ))
-            .add(Separator.NEXT_PAGE)
-            .add(collect(TextChunk::new, lines -> lines
-                    .add(Component.translatable("text.occult_codex.node.potion_1.content_1"))
-            ))
-            .add(new ElementChunk())
-            .addAll(ElementChunk.renderImage())
-    );
+    public static final IndexedChapter<Element> ELEMENTS = new IndexedChapter<>(new ElementCatalog(
+            Component.translatable("text.occult_codex.node.potion_1.content_1")
+    ), List.of(
+            TitleChunk.of("text.occult_codex.node.potion_1.content.title"),
+            TextChunk.of("text.occult_codex.node.potion_1.content")
+    ), () -> {
+        var access = RegistryAccessor.access();
+        return access == null ? null : access.registryOrThrow(Element.RESOURCE_KEY);
+    }, element -> List.of(
+            ImageChunk.squared(element.icon(), 0, 0, ICON_SIZE, 4),
+            TextChunk.of(
+                    Component.translatable("text.occult_codex.node.potion_1.content_1.name", element.getDisplayName()),
+                    Component.translatable("text.occult_codex.node.potion_1.content_1.max_level", element.maxLevel()),
+                    Component.translatable("text.occult_codex.node.potion_1.content_1.max_time", element.maxTime()),
+                    element.concentration().format("text.occult_codex.node.potion_1.content_1.concentration"),
+                    element.temperature().format("text.occult_codex.node.potion_1.content_1.temperature_range")
+            )
+    ));
 
-    public static final LinearChapter DEVELOPERS = collect(LinearChapter::new, chunks -> chunks
-            .add(TitleChunk.of("text.occult_codex.node.prologue_2.content.title"))
-            .add(collect(TextChunk::new, lines -> lines
-                    .add(Component.translatable("book.magic_and_taboo.occult_codex.owner.label"))
-                    .add(Component.literal("EnderDragon").withStyle(style -> style.withClickEvent(
+    public static final PageChapter DEVELOPERS = ContentChapter.of(
+            TitleChunk.of("text.occult_codex.node.prologue_2.content.title"),
+            TextChunk.of(
+                    Component.translatable("book.magic_and_taboo.occult_codex.owner.label"),
+                    Component.literal("EnderDragon").withStyle(style -> style.withClickEvent(
                             new ClickEvent(ClickEvent.Action.OPEN_URL, "https://github.com/EnderDragongugugu")
-                    ).applyFormat(ChatFormatting.GOLD)))
-            ))
-            .add(collect(TextChunk::new, lines -> lines
-                    .add(Component.translatable("book.magic_and_taboo.occult_codex.collaborative_dev.label"))
-                    .add(Component.literal("2190303755").withStyle(style -> style.withClickEvent(
+                    ).applyFormat(ChatFormatting.GOLD))
+            ),
+            TextChunk.of(
+                    Component.translatable("book.magic_and_taboo.occult_codex.collaborative_dev.label"),
+                    Component.literal("2190303755").withStyle(style -> style.withClickEvent(
                             new ClickEvent(ClickEvent.Action.OPEN_URL, "https://github.com/2190303755")
-                    ).applyFormat(ChatFormatting.GOLD)))
-            ))
-            .add(collect(TextChunk::new, lines -> lines
-                    .add(Component.translatable("book.magic_and_taboo.occult_codex.artist.label"))
-                    .add(Component.literal("bltsbb").withStyle(style -> style.withClickEvent(
+                    ).applyFormat(ChatFormatting.GOLD))
+            ),
+            TextChunk.of(
+                    Component.translatable("book.magic_and_taboo.occult_codex.artist.label"),
+                    Component.literal("bltsbb").withStyle(style -> style.withClickEvent(
                             new ClickEvent(ClickEvent.Action.OPEN_URL, "https://github.com/bltsbb")
-                    ).applyFormat(ChatFormatting.GOLD)))
-                    .add(Component.literal("这条大龙很灵性").withStyle(ChatFormatting.GOLD))
-            ))
-            .add(collect(TextChunk::new, lines -> lines
-                    .add(Component.translatable("book.magic_and_taboo.occult_codex.lpaicen.label"))
-                    .add(Component.literal("LPaicen").withStyle(style -> style.withClickEvent(
+                    ).applyFormat(ChatFormatting.GOLD)),
+                    Component.literal("这条大龙很灵性").withStyle(ChatFormatting.GOLD)
+            ),
+            TextChunk.of(
+                    Component.translatable("book.magic_and_taboo.occult_codex.lpaicen.label"),
+                    Component.literal("LPaicen").withStyle(style -> style.withClickEvent(
                             new ClickEvent(ClickEvent.Action.OPEN_URL, "https://github.com/LPaicen")
                     ).withHoverEvent(
                             new HoverEvent(HoverEvent.Action.SHOW_TEXT, Component.literal("\\ LPaicen /"))
-                    ).applyFormat(ChatFormatting.GOLD)))
-            ))
-            .add(collect(TextChunk::new, lines -> lines
-                    .add(Component.translatable("book.magic_and_taboo.occult_codex.art_contributer.label"))
-                    .add(Component.literal("两个大脑同时坠毁").withStyle(ChatFormatting.GOLD))
-            ))
-            .add(Separator.NEXT_PAGE)
-            .add(collect(TextChunk::new, lines -> lines
-                    .add(Component.literal("\\ LPaicen!!! /").withStyle(ChatFormatting.DARK_RED))
-            ))
-            .add(Separator.NEXT_PAGE)
-            .add(collect(TextChunk::new, lines -> lines
-                    .add(Component.literal("\\ LPaicen!!!!! /").withStyle(ChatFormatting.DARK_RED))
-            ))
+                    ).applyFormat(ChatFormatting.GOLD))
+            ),
+            TextChunk.of(
+                    Component.translatable("book.magic_and_taboo.occult_codex.art_contributer.label"),
+                    Component.literal("两个大脑同时坠毁").withStyle(ChatFormatting.GOLD)
+            ),
+            Separator.NEXT_PAGE,
+            TextChunk.of(
+                    Component.literal("\\ LPaicen!!! /").withStyle(ChatFormatting.DARK_RED)
+            ),
+            Separator.NEXT_PAGE,
+            TextChunk.of(
+                    Component.literal("\\ LPaicen!!!!! /").withStyle(ChatFormatting.DARK_RED)
+            )
     );
 }

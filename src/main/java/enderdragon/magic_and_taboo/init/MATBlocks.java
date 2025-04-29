@@ -1,7 +1,7 @@
 package enderdragon.magic_and_taboo.init;
 
-import enderdragon.magic_and_taboo.block.HoneyBlock;
 import enderdragon.magic_and_taboo.block.*;
+import enderdragon.magic_and_taboo.block.HoneyBlock;
 import enderdragon.magic_and_taboo.block.grower.FirTreeGrower;
 import net.minecraft.core.Direction.Axis;
 import net.minecraft.util.valueproviders.UniformInt;

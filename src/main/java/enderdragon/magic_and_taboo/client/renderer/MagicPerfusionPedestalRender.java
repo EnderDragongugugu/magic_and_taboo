@@ -18,17 +18,17 @@ public class MagicPerfusionPedestalRender implements BlockEntityRenderer<MagicPe
     }
 
     @Override
-    public void render(MagicPerfusionPedestalBlockEntity pedestal, float partialTicks, PoseStack poseStack, MultiBufferSource buffer, int pPackedLight, int pPackedOverlay) {
-        var stack = pedestal.getItem();
+    public void render(MagicPerfusionPedestalBlockEntity pedestal, float partialTicks, PoseStack matrices, MultiBufferSource buffer, int light, int overlay) {
+        var stack = pedestal.getStack();
         if (stack.isEmpty()) return;
         int tick = pedestal.tick;
-        poseStack.pushPose();
-        poseStack.translate(0.5F, 1.25F + Mth.sin((tick + 2.5F) / 15.0F) * 0.075F, 0.5F);
+        matrices.pushPose();
+        matrices.translate(0.5F, 1.25F + Mth.sin((tick + 2.5F) / 15.0F) * 0.075F, 0.5F);
         float rotation = (tick + partialTicks) * 2.0f;
-        poseStack.mulPose(Axis.YP.rotationDegrees(rotation));
+        matrices.mulPose(Axis.YP.rotationDegrees(rotation));
         float scale = 0.35F;
-        poseStack.scale(scale, scale, scale);
-        this.itemRenderer.renderStatic(stack, ItemDisplayContext.FIXED, pPackedLight, pPackedOverlay, poseStack, buffer, pedestal.getLevel(), 0);
-        poseStack.popPose();
+        matrices.scale(scale, scale, scale);
+        this.itemRenderer.renderStatic(stack, ItemDisplayContext.FIXED, light, overlay, matrices, buffer, pedestal.getLevel(), 0);
+        matrices.popPose();
     }
 }

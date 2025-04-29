@@ -1,4 +1,4 @@
-package enderdragon.magic_and_taboo.client.book.linear;
+package enderdragon.magic_and_taboo.client.book.page;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.gui.Font;
@@ -7,10 +7,10 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 
 import static enderdragon.magic_and_taboo.MagicAndTabooMod.makeId;
-import static enderdragon.magic_and_taboo.client.book.linear.LinearChapter.PAGE_WIDTH;
+import static enderdragon.magic_and_taboo.client.book.page.PageChapter.PAGE_WIDTH;
 
 public class TitleChunk extends Chunk {
-    private static final ResourceLocation SEPARATOR = makeId("textures/gui/book/book.png");
+    public static final ResourceLocation SEPARATOR = makeId("textures/gui/book/book.png");
 
     public static TitleChunk of(String translationKey) {
         return new TitleChunk(Component.translatable(translationKey));
