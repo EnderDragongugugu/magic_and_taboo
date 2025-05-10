@@ -2,6 +2,7 @@ package enderdragon.magic_and_taboo.init;
 
 import enderdragon.magic_and_taboo.MagicAndTabooMod;
 import enderdragon.magic_and_taboo.block.entity.EnchantedCrucibleBlockEntity;
+import enderdragon.magic_and_taboo.block.entity.GoldGrainedMarblePedestalBlockEntity;
 import enderdragon.magic_and_taboo.block.entity.MagicPerfusionPedestalBlockEntity;
 import enderdragon.magic_and_taboo.block.entity.WorkHubBlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -19,5 +20,8 @@ public class MATBlockEntities {
     );
     public static final RegistryObject<BlockEntityType<MagicPerfusionPedestalBlockEntity>> MAGIC_PERFUSION_PEDESTAL = REGISTRY.register("magic_perfusion_pedestal", () ->
             BlockEntityType.Builder.of(MagicPerfusionPedestalBlockEntity::new, MATBlocks.MAGIC_PERFUSION_PEDESTAL.get()).build(null)
+    );
+    public static final RegistryObject<BlockEntityType<GoldGrainedMarblePedestalBlockEntity>> GOLD_GRAINED_MARBLE_PEDESTAL = REGISTRY.register("gold_grained_marble_pedestal", () ->
+            BlockEntityType.Builder.of(GoldGrainedMarblePedestalBlockEntity::new, MATBlocks.GOLD_GRAINED_MARBLE_PEDESTAL.get()).build(null)
     );
 }

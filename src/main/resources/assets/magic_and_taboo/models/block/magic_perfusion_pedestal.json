@@ -715,6 +715,7 @@
     },
     {
       "name": "rune",
+      "when": { "is_intact": true }, 
       "from": [
         13,
         3,
@@ -793,6 +794,7 @@
     },
     {
       "name": "rune",
+      "when": { "is_intact": true }, 
       "from": [
         4.5,
         3,
@@ -871,6 +873,7 @@
     },
     {
       "name": "rune",
+      "when": { "is_intact": true }, 
       "from": [
         4.5,
         3,
@@ -949,6 +952,7 @@
     },
     {
       "name": "rune",
+      "when": { "is_intact": true }, 
       "from": [
         2,
         3,

@@ -1,7 +1,7 @@
 package enderdragon.magic_and_taboo.init;
 
-import enderdragon.magic_and_taboo.block.*;
 import enderdragon.magic_and_taboo.block.HoneyBlock;
+import enderdragon.magic_and_taboo.block.*;
 import enderdragon.magic_and_taboo.block.grower.FirTreeGrower;
 import net.minecraft.core.Direction.Axis;
 import net.minecraft.util.valueproviders.UniformInt;
@@ -52,6 +52,15 @@ public class MATBlocks {
             .noOcclusion()
     ));
     public static final RegistryObject<MagicPerfusionPedestalBlock> MAGIC_PERFUSION_PEDESTAL = REGISTRY.register("magic_perfusion_pedestal", () -> new MagicPerfusionPedestalBlock(Properties.of()
+            .mapColor(MapColor.WOOD) // ?
+            .instrument(NoteBlockInstrument.BASS)
+            .ignitedByLava()
+            .mapColor(MapColor.STONE)
+            .requiresCorrectToolForDrops()
+            .strength(2.0F)
+            .noOcclusion()
+    ));
+    public static final RegistryObject<GoldGrainedMarblePedestalBlock> GOLD_GRAINED_MARBLE_PEDESTAL = REGISTRY.register("gold_grained_marble_pedestal", () -> new GoldGrainedMarblePedestalBlock(Properties.of()
             .mapColor(MapColor.WOOD) // ?
             .instrument(NoteBlockInstrument.BASS)
             .ignitedByLava()
