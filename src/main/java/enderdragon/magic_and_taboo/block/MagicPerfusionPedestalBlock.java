@@ -2,6 +2,7 @@ package enderdragon.magic_and_taboo.block;
 
 import enderdragon.magic_and_taboo.block.entity.MagicPerfusionPedestalBlockEntity;
 import enderdragon.magic_and_taboo.init.MATBlockEntities;
+import enderdragon.magic_and_taboo.init.MATBlocks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.InteractionHand;
@@ -26,6 +27,17 @@ import org.jetbrains.annotations.Nullable;
 import static net.minecraft.world.level.block.HorizontalDirectionalBlock.FACING;
 
 public class MagicPerfusionPedestalBlock extends BaseEntityBlock {
+    private int tick;
+    private static final BlockPos[] POS_LIST = {
+            new BlockPos(3, 0, 1),
+            new BlockPos(3, 0, -1),
+            new BlockPos(-3, 0, 1),
+            new BlockPos(-3, 0, -1),
+            new BlockPos(1, 0, 3),
+            new BlockPos(-1, 0, 3),
+            new BlockPos(-1, 0, -3),
+            new BlockPos(1, 0, -3)
+    };
     public static final BooleanProperty IS_INTACT = BooleanProperty.create("is_intact");
 
     public MagicPerfusionPedestalBlock(Properties pProperties) {
@@ -34,6 +46,17 @@ public class MagicPerfusionPedestalBlock extends BaseEntityBlock {
                 .setValue(FACING, Direction.NORTH)
                 .setValue(IS_INTACT, false)
         );
+    }
+
+    public static boolean isStructureValid(Level level, BlockPos startPos) {
+        for (var pos : POS_LIST) {
+            var a = startPos.offset(pos);
+            var state = level.getBlockState(a);
+            if (!state.is(MATBlocks.GOLD_GRAINED_MARBLE_PEDESTAL.get())) {
+                return false;
+            }
+        }
+        return true;
     }
 
     @Override
