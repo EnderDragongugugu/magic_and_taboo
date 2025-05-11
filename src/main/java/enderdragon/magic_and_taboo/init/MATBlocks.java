@@ -1,7 +1,7 @@
 package enderdragon.magic_and_taboo.init;
 
-import enderdragon.magic_and_taboo.block.HoneyBlock;
 import enderdragon.magic_and_taboo.block.*;
+import enderdragon.magic_and_taboo.block.HoneyBlock;
 import enderdragon.magic_and_taboo.block.grower.FirTreeGrower;
 import net.minecraft.core.Direction.Axis;
 import net.minecraft.util.valueproviders.UniformInt;
@@ -42,41 +42,17 @@ public class MATBlocks {
             .sound(SoundType.WOOD)
             .ignitedByLava()
     ));
-    public static final RegistryObject<EnchantedCrucibleBlock> ENCHANTED_CRUCIBLE = REGISTRY.register("enchanted_crucible", () -> new EnchantedCrucibleBlock(Properties.of()
-            .mapColor(MapColor.WOOD) // ?
-            .instrument(NoteBlockInstrument.BASS)
-            .ignitedByLava()
-            .mapColor(MapColor.STONE)
-            .requiresCorrectToolForDrops()
-            .strength(2.0F)
-            .noOcclusion()
+    public static final RegistryObject<EnchantedCrucibleBlock> ENCHANTED_CRUCIBLE = REGISTRY.register("enchanted_crucible", () -> new EnchantedCrucibleBlock(
+            placeholder()
     ));
-    public static final RegistryObject<MagicPerfusionPedestalBlock> MAGIC_PERFUSION_PEDESTAL = REGISTRY.register("magic_perfusion_pedestal", () -> new MagicPerfusionPedestalBlock(Properties.of()
-            .mapColor(MapColor.WOOD) // ?
-            .instrument(NoteBlockInstrument.BASS)
-            .ignitedByLava()
-            .mapColor(MapColor.STONE)
-            .requiresCorrectToolForDrops()
-            .strength(2.0F)
-            .noOcclusion()
+    public static final RegistryObject<MagicPerfusionPedestalBlock> MAGIC_PERFUSION_PEDESTAL = REGISTRY.register("magic_perfusion_pedestal", () -> new MagicPerfusionPedestalBlock(
+            placeholder()
     ));
-    public static final RegistryObject<GoldGrainedMarblePedestalBlock> GOLD_GRAINED_MARBLE_PEDESTAL = REGISTRY.register("gold_grained_marble_pedestal", () -> new GoldGrainedMarblePedestalBlock(Properties.of()
-            .mapColor(MapColor.WOOD) // ?
-            .instrument(NoteBlockInstrument.BASS)
-            .ignitedByLava()
-            .mapColor(MapColor.STONE)
-            .requiresCorrectToolForDrops()
-            .strength(2.0F)
-            .noOcclusion()
+    public static final RegistryObject<GoldGrainedMarblePedestalBlock> GOLD_GRAINED_MARBLE_PEDESTAL = REGISTRY.register("gold_grained_marble_pedestal", () -> new GoldGrainedMarblePedestalBlock(
+            placeholder()
     ));
-    public static final RegistryObject<CondenserBlock> CONDENSER = REGISTRY.register("condenser", () -> new CondenserBlock(Properties.of()
-            .mapColor(MapColor.WOOD) // ?
-            .instrument(NoteBlockInstrument.BASS)
-            .ignitedByLava()
-            .mapColor(MapColor.STONE)
-            .requiresCorrectToolForDrops()
-            .strength(2.0F)
-            .noOcclusion()
+    public static final RegistryObject<CondenserBlock> CONDENSER = REGISTRY.register("condenser", () -> new CondenserBlock(
+            placeholder()
     ));
     public static final RegistryObject<HoneyBlock> HONEY = REGISTRY.register("honey", () -> new HoneyBlock(MATFluids.FLOWING_HONEY, Properties.of()
             .pushReaction(PushReaction.DESTROY)
@@ -262,4 +238,15 @@ public class MATBlocks {
         POLISHED_GILDED_MARBLE_WALL = REGISTRY.register("polished_gilded_marble_wall", () -> new WallBlock(gildedMarble(color, 1.0F).forceSolidOn()));
     }
 
+    @Deprecated
+    static Properties placeholder() {
+        return Properties.of()
+                .mapColor(MapColor.WOOD) // ?
+                .instrument(NoteBlockInstrument.BASS)
+                .ignitedByLava()
+                .mapColor(MapColor.STONE)
+                .requiresCorrectToolForDrops()
+                .strength(2.0F)
+                .noOcclusion();
+    }
 }

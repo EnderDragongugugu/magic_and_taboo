@@ -1,24 +1,33 @@
 package enderdragon.magic_and_taboo.block.entity;
 
+import enderdragon.magic_and_taboo.init.MATBlockEntities;
 import enderdragon.magic_and_taboo.util.ContainerUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 
 import javax.annotation.Nonnull;
 
-public abstract class AbstractPedestalBlockEntity extends BlockEntity {
+public class PedestalBlockEntity extends BlockEntity {
+    public static void tick(Level level, BlockPos pos, BlockState state, PedestalBlockEntity pedestal) {
+        ++pedestal.ticks;
+    }
+
     protected @Nonnull ItemStack stack = ItemStack.EMPTY;
-    public int tick;
+    public int ticks;
 
+    public PedestalBlockEntity(BlockPos pos, BlockState state) {
+        this(MATBlockEntities.PEDESTAL.get(), pos, state);
+    }
 
-    public AbstractPedestalBlockEntity(BlockEntityType<?> pType, BlockPos pPos, BlockState pBlockState) {
-        super(pType, pPos, pBlockState);
+    public PedestalBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
+        super(type, pos, state);
     }
 
     public ItemStack getStack() {

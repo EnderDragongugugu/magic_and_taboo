@@ -6,22 +6,18 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 
-public class MagicPerfusionPedestalBlockEntity extends AbstractPedestalBlockEntity {
+public class MagicPerfusionPedestalBlockEntity extends PedestalBlockEntity {
 
     public MagicPerfusionPedestalBlockEntity(BlockPos pPos, BlockState pBlockState) {
         super(MATBlockEntities.MAGIC_PERFUSION_PEDESTAL.get(), pPos, pBlockState);
     }
 
-    public static void tickServer(Level level, BlockPos pos, BlockState state, MagicPerfusionPedestalBlockEntity pedestal) {
-        ++pedestal.tick;
-        if (pedestal.tick % 80 == 0) {
+    public static void tick(Level level, BlockPos pos, BlockState state, MagicPerfusionPedestalBlockEntity pedestal) {
+        ++pedestal.ticks;
+        if (pedestal.ticks % 80 == 0) {
             if (MagicPerfusionPedestalBlock.isStructureValid(level, pos)) {
                 System.out.println("结构正常");
             }
         }
-    }
-
-    public static void tickClient(Level level, BlockPos pos, BlockState state, MagicPerfusionPedestalBlockEntity pedestal) {
-        tickServer(level, pos, state, pedestal);
     }
 }
