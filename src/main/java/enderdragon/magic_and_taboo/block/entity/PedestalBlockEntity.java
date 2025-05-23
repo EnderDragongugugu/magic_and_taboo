@@ -34,6 +34,11 @@ public class PedestalBlockEntity extends BlockEntity {
         return this.stack;
     }
 
+    public void remove() {
+        this.stack = ItemStack.EMPTY;
+        this.setChanged();
+    }
+
     public boolean tryPlaceItem(ItemStack stack) {
         if (this.stack.isEmpty()) {
             this.stack = stack.split(1);
@@ -46,8 +51,7 @@ public class PedestalBlockEntity extends BlockEntity {
     public boolean tryTakeItem(Player player) {
         if (this.stack.isEmpty()) return false;
         ContainerUtil.addItem(player, this.stack);
-        this.stack = ItemStack.EMPTY;
-        this.setChanged();
+        remove();
         return true;
     }
 

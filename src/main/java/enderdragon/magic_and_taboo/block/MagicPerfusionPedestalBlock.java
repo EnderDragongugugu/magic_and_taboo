@@ -1,14 +1,17 @@
 package enderdragon.magic_and_taboo.block;
 
 import enderdragon.magic_and_taboo.block.entity.MagicPerfusionPedestalBlockEntity;
+import enderdragon.magic_and_taboo.block.entity.PedestalBlockEntity;
 import enderdragon.magic_and_taboo.init.MATBlockEntities;
 import enderdragon.magic_and_taboo.init.MATBlocks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.NonNullList;
 import net.minecraft.core.Vec3i;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
@@ -25,10 +28,13 @@ import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.phys.BlockHitResult;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static net.minecraft.world.level.block.HorizontalDirectionalBlock.FACING;
 
 public class MagicPerfusionPedestalBlock extends BaseEntityBlock {
-    private static final Vec3i[] POS_LIST = {
+    public static final Vec3i[] POS_LIST = {
             new Vec3i(3, 0, 1),
             new Vec3i(3, 0, -1),
             new Vec3i(-3, 0, 1),
@@ -56,6 +62,27 @@ public class MagicPerfusionPedestalBlock extends BaseEntityBlock {
         }
         return true;
     }
+
+    public static NonNullList<ItemStack> getItemStacks(NonNullList<ItemStack> list, Level level, BlockPos center) {
+        for (var pos : POS_LIST) {
+            if (level.getBlockEntity(center.offset(pos)) instanceof PedestalBlockEntity pedestal) {
+                var itemStack = pedestal.getStack();
+                list.add(itemStack);
+            }
+        }
+        return list;
+    }
+
+    public static List<PedestalBlockEntity> getPedestal(Level level, BlockPos center) {
+        List<PedestalBlockEntity> list = new ArrayList<>();
+        for (var pos : POS_LIST) {
+            if (level.getBlockEntity(center.offset(pos)) instanceof PedestalBlockEntity pedestal) {
+                list.add(pedestal);
+            }
+        }
+        return list;
+    }
+
 
     @SuppressWarnings("deprecation")
     @Override

@@ -97,16 +97,14 @@ public class EnchantedCrucibleRender implements BlockEntityRenderer<EnchantedCru
         var matrix = matrices.last().pose();
         var fluid = Minecraft.getInstance().getTextureAtlas(InventoryMenu.BLOCK_ATLAS).apply(IClientFluidTypeExtensions.of(stack.getFluid()).getStillTexture(stack));
         float size = 0.18F;
-        float maxV = (fluid.getV1() - fluid.getV0()) * size;
-        float minV = (fluid.getV1() - fluid.getV0()) * (1 - size);
         var r = FastColor.ARGB32.red(color);
         var g = FastColor.ARGB32.green(color);
         var b = FastColor.ARGB32.blue(color);
         var a = 255;
-        buffer.vertex(matrix, size, 0, 1 - size).color(r, g, b, a).uv(fluid.getU0(), fluid.getV0() + maxV).uv2(light).overlayCoords(overlay).normal(1, 1, 1).endVertex();
-        buffer.vertex(matrix, 1 - size, 0, 1 - size).color(r, g, b, a).uv(fluid.getU1(), fluid.getV0() + maxV).uv2(light).overlayCoords(overlay).normal(1, 1, 1).endVertex();
-        buffer.vertex(matrix, 1 - size, 0, size).color(r, g, b, a).uv(fluid.getU1(), fluid.getV0() + minV).uv2(light).overlayCoords(overlay).normal(1, 1, 1).endVertex();
-        buffer.vertex(matrix, size, 0, size).color(r, g, b, a).uv(fluid.getU0(), fluid.getV0() + minV).uv2(light).overlayCoords(overlay).normal(1, 1, 1).endVertex();
+        buffer.vertex(matrix, size, 0, 1 - size).color(r, g, b, a).uv(fluid.getU0(), fluid.getV0()).uv2(light).overlayCoords(overlay).normal(1, 1, 1).endVertex();
+        buffer.vertex(matrix, 1 - size, 0, 1 - size).color(r, g, b, a).uv(fluid.getU1(), fluid.getV0()).uv2(light).overlayCoords(overlay).normal(1, 1, 1).endVertex();
+        buffer.vertex(matrix, 1 - size, 0, size).color(r, g, b, a).uv(fluid.getU1(), fluid.getV1()).uv2(light).overlayCoords(overlay).normal(1, 1, 1).endVertex();
+        buffer.vertex(matrix, size, 0, size).color(r, g, b, a).uv(fluid.getU0(), fluid.getV1()).uv2(light).overlayCoords(overlay).normal(1, 1, 1).endVertex();
     }
 
     private void renderItemStacks(EnchantedCrucibleBlockEntity crucible, float height, PoseStack matrices, MultiBufferSource buffers, int pPackedLight, int pPackedOverlay) {
