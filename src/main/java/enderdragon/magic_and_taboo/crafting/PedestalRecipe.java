@@ -5,7 +5,6 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import enderdragon.magic_and_taboo.block.MagicPerfusionPedestalBlock;
 import enderdragon.magic_and_taboo.block.entity.MagicPerfusionPedestalBlockEntity;
-import enderdragon.magic_and_taboo.block.entity.WorkHubBlockEntity;
 import enderdragon.magic_and_taboo.init.MATRecipeTypes;
 import enderdragon.magic_and_taboo.init.MATSerializers;
 import enderdragon.magic_and_taboo.util.IngredientUtil;
@@ -95,8 +94,8 @@ public record PedestalRecipe(
         public PedestalRecipe fromJson(ResourceLocation id, JsonObject recipe) {
             final ImmutableList<Ingredient> ingredients = IngredientUtil.parse(GsonHelper.getAsJsonArray(recipe, "ingredients"));
             if (ingredients.isEmpty()) throw new JsonParseException("No ingredients for pedestal recipe");
-            if (ingredients.size() > WorkHubBlockEntity.MAX_SIZE)
-                throw new JsonParseException("ingredients too many, the max is " + MagicPerfusionPedestalBlock.POS_LIST.length);
+            if (ingredients.size() > MagicPerfusionPedestalBlock.POS_LIST.size())
+                throw new JsonParseException("ingredients too many, the max is " + MagicPerfusionPedestalBlock.POS_LIST.size());
             return new PedestalRecipe(
                     id,
                     ingredients,

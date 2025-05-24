@@ -1,108 +1,88 @@
 package enderdragon.magic_and_taboo.block.entity;
 
-import enderdragon.magic_and_taboo.block.MagicPerfusionPedestalBlock;
+import com.google.common.collect.Iterables;
 import enderdragon.magic_and_taboo.init.MATBlockEntities;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.NonNullList;
 import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
+import org.jetbrains.annotations.Nullable;
 
-import static enderdragon.magic_and_taboo.block.MagicPerfusionPedestalBlock.POS_LIST;
+import static enderdragon.magic_and_taboo.block.MagicPerfusionPedestalBlock.*;
 
 public class MagicPerfusionPedestalBlockEntity extends PedestalBlockEntity implements Container {
-    protected boolean isStructureValid = false;
+    protected boolean isValid = false;
 
-    protected BlockPos pos;
-
-    public MagicPerfusionPedestalBlockEntity(BlockPos pPos, BlockState pBlockState) {
-        super(MATBlockEntities.MAGIC_PERFUSION_PEDESTAL.get(), pPos, pBlockState);
-        this.pos = pPos;
+    public MagicPerfusionPedestalBlockEntity(BlockPos pos, BlockState state) {
+        super(MATBlockEntities.MAGIC_PERFUSION_PEDESTAL.get(), pos, state);
     }
 
     public static void tick(Level level, BlockPos pos, BlockState state, MagicPerfusionPedestalBlockEntity pedestal) {
         ++pedestal.ticks;
         if (pedestal.ticks % 80 == 0) {
-            if (MagicPerfusionPedestalBlock.isStructureValid(level, pos)) {
-                pedestal.isStructureValid = true;
-            }
+            pedestal.isValid = isStructureValid(level, pos);
         }
     }
 
-    public NonNullList<ItemStack> getItems() {
-        NonNullList<ItemStack> itemStacks = NonNullList.withSize(POS_LIST.length, ItemStack.EMPTY);
-        itemStacks.add(super.getStack());
-        if (this.isStructureValid) {
-            return MagicPerfusionPedestalBlock.getItemStacks(itemStacks, this.level, pos);
-        }
-        return itemStacks;
+    public @Nullable PedestalBlockEntity getPedestal(int slot) {
+        if (this.level == null) return null;
+        return slot == 0 ? this : getSurroundingPedestal(this.level, this.worldPosition, slot - 1);
     }
 
     @Override
     public int getContainerSize() {
-        if (this.isStructureValid) {
-            return 1 + POS_LIST.length;
-        }
-        return 1;
+        return this.isValid ? 1 + POS_LIST.size() : 1;
     }
 
     @Override
     public boolean isEmpty() {
-        return getItems().isEmpty();
+        return this.getStack().isEmpty() && (!this.isValid || this.level == null || Iterables.all(getSurroundingStacks(this.level, this.worldPosition), ItemStack::isEmpty));
     }
 
     @Override
-    public ItemStack getItem(int pSlot) {
-        return getItems().get(pSlot);
+    public ItemStack getItem(int slot) {
+        var pedestal = this.getPedestal(slot);
+        return pedestal == null ? ItemStack.EMPTY : pedestal.getStack();
     }
 
     @Override
-    public ItemStack removeItem(int pSlot, int pAmount) {
-        var itemStack = removeItemNoUpdate(pSlot);
-        super.setChanged();
-        return itemStack;
+    public ItemStack removeItem(int slot, int amount) {
+        if (amount <= 0) return ItemStack.EMPTY;
+        var pedestal = this.getPedestal(slot);
+        if (pedestal == null) return ItemStack.EMPTY;
+        var stack = pedestal.getStack();
+        return stack.isEmpty() ? ItemStack.EMPTY : stack.split(amount);
     }
 
     @Override
-    public ItemStack removeItemNoUpdate(int pSlot) {
-        var itemStack = ItemStack.EMPTY;
-        for (int i = 0; i < POS_LIST.length; i++) {
-            var blockEntity = level.getBlockEntity(this.pos.offset(POS_LIST[i]));
-            if (blockEntity instanceof PedestalBlockEntity pedestal && i == pSlot) {
-                itemStack = pedestal.getStack();
-                pedestal.remove();
-            }
-        }
-        return itemStack;
+    public ItemStack removeItemNoUpdate(int slot) {
+        var pedestal = this.getPedestal(slot);
+        if (pedestal == null) return ItemStack.EMPTY;
+        var stack = pedestal.getStack();
+        pedestal.removeStack();
+        return stack;
     }
 
     @Override
-    public void setItem(int pSlot, ItemStack pStack) {
-        for (int i = 0; i < POS_LIST.length; i++) {
-            var blockEntity = level.getBlockEntity(this.pos.offset(POS_LIST[i]));
-            if (blockEntity instanceof PedestalBlockEntity pedestal && i == pSlot) {
-                pedestal.tryPlaceItem(pStack);
-                super.setChanged();
-            }
-        }
+    public void setItem(int slot, ItemStack stack) {
+        var pedestal = this.getPedestal(slot);
+        if (pedestal == null) return;
+        pedestal.tryPlaceItem(stack);
+        this.setChanged();
     }
 
     @Override
-    public boolean stillValid(Player pPlayer) {
-        return Container.stillValidBlockEntity(this, pPlayer);
+    public boolean stillValid(Player player) {
+        return Container.stillValidBlockEntity(this, player);
     }
 
     @Override
     public void clearContent() {
-        if (this.isStructureValid) {
-            for (var pos : POS_LIST) {
-                if (level.getBlockEntity(this.pos.offset(pos)) instanceof PedestalBlockEntity pedestal) {
-                    pedestal.remove();
-                }
-            }
-        }
-        super.remove();
+        this.removeStack();
+        var level = this.level;
+        if (level == null) return;
+        getSurroundingPedestals(level, this.worldPosition).forEach(PedestalBlockEntity::removeStack);
     }
 }
