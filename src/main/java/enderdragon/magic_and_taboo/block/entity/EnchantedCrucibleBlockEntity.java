@@ -32,6 +32,7 @@ import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.capability.IFluidHandler;
+import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -74,6 +75,7 @@ public class EnchantedCrucibleBlockEntity extends BlockEntity implements IFluidH
         tickCommon(level, pos, state, crucible);
         var info = crucible.getRenderingInfo();
         info.fluid = crucible.getFluidStack();
+
         if (info.changed || info.temperature != crucible.temperature) {
             info.tip = null;
             crucible.fillPotion(level.registryAccess(), info);
@@ -157,7 +159,9 @@ public class EnchantedCrucibleBlockEntity extends BlockEntity implements IFluidH
             }
             entry.setValue((entry.getFloatValue() - conflict) * bonus);
         }
+        var resourceLocation = ForgeRegistries.FLUIDS.getKey(fluid.getFluid());
         potion.setElements(data);
+        potion.setSolventType(resourceLocation.toString());
     }
 
     public void load(CompoundTag tag) {

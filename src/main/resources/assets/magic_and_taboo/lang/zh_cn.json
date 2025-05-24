@@ -27,6 +27,7 @@
   "block.magic_and_taboo.gilded_marble_wall": "金纹大理石墙",
   "block.magic_and_taboo.mercury_ore": "水银矿石",
   "block.magic_and_taboo.plant_extract": "植物萃取液",
+  "block.magic_and_taboo.honey": "蜂蜜",
   "block.magic_and_taboo.polished_gilded_marble": "磨制金纹大理石",
   "block.magic_and_taboo.polished_gilded_marble_button": "磨制金纹大理石按钮",
   "block.magic_and_taboo.polished_gilded_marble_pressure_plate": "磨制金纹大理石压力板",
@@ -83,6 +84,8 @@
   "item.magic_and_taboo.crushed_carrots": "胡萝卜碎",
   "item.magic_and_taboo.fir_boat": "冷杉木船",
   "item.magic_and_taboo.fir_chest_boat": "冷杉木运输船",
+  "fluid_type.magic_and_taboo.plant_extract_fluid": "植物萃取液",
+  "fluid_type.magic_and_taboo.honey_fluid": "蜂蜜",
   "item.magic_and_taboo.glass_potion_bottle": "玻璃瓶",
   "item.magic_and_taboo.glass_potion_bottle_glow": "荧光玻璃瓶",
   "item.magic_and_taboo.glass_potion_bottle_red": "朱红玻璃瓶",
@@ -136,5 +139,6 @@
   "tooltip.magic_and_taboo.sacrificial_dagger_warn": "它似乎在渴望鲜血",
   "tooltip.magic_and_taboo.work_hub_item": "存有: ",
   "tooltip.magic_and_taboo.work_hub_item_empty": "里面什么都没有!",
-  "tooltip.magic_and_taboo.work_hub_item_show": "存有: %s, 共 %d 个"
+  "tooltip.magic_and_taboo.work_hub_item_show": "存有: %s, 共 %d 个",
+  "tooltip.magic_and_taboo.magic_potion.solvent": "溶剂: %s"
 }

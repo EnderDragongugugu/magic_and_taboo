@@ -7,7 +7,9 @@ import it.unimi.dsi.fastutil.objects.Object2FloatMaps;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.level.material.Fluids;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -30,6 +32,16 @@ public class EnchantedCrucibleInfo implements MagicPotion {
     @Override
     public void setElements(@NotNull Object2FloatMap<Element> elements) {
         this.elements = elements;
+    }
+
+    @Override
+    public void setSolventType(String type) {
+
+    }
+
+    @Override
+    public String getSolventType() {
+        return ForgeRegistries.FLUIDS.getKey(Fluids.WATER).toString();
     }
 
     @Override

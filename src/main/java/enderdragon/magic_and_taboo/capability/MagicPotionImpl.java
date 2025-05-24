@@ -1,8 +1,10 @@
 package enderdragon.magic_and_taboo.capability;
 
 import enderdragon.magic_and_taboo.init.MATCapabilities;
+import enderdragon.magic_and_taboo.init.SolventRegistry;
 import enderdragon.magic_and_taboo.registry.Element;
 import enderdragon.magic_and_taboo.util.RegistryAccessor;
+import enderdragon.magic_and_taboo.util.Solvent;
 import it.unimi.dsi.fastutil.objects.Object2FloatMap;
 import it.unimi.dsi.fastutil.objects.Object2FloatMaps;
 import it.unimi.dsi.fastutil.objects.Object2FloatOpenHashMap;
@@ -23,6 +25,7 @@ import java.util.List;
 public class MagicPotionImpl implements ICapabilityProvider, MagicPotion, INBTSerializable<CompoundTag> {
     public final LazyOptional<MagicPotion> holder = LazyOptional.of(() -> this);
     private Object2FloatMap<Element> access;
+    private String solvent;
     private ObjectArrayList<MobEffectInstance> effects;
     protected Object2FloatMap<Element> elements;
     protected final float timeFactor;
@@ -40,6 +43,7 @@ public class MagicPotionImpl implements ICapabilityProvider, MagicPotion, INBTSe
 
     @Override
     public CompoundTag serializeNBT() {
+        CompoundTag nbt = new CompoundTag();
         CompoundTag element = new CompoundTag();
         if (this.elements == null) return element;
         var registries = RegistryAccessor.access();
@@ -49,7 +53,9 @@ public class MagicPotionImpl implements ICapabilityProvider, MagicPotion, INBTSe
             //noinspection DataFlowIssue
             element.putFloat(lookup.getKey(entry.getKey()).toString(), entry.getFloatValue());
         }
-        return element;
+        nbt.putString("Solvent", this.solvent);
+        nbt.put("Elements", element);
+        return nbt;
     }
 
     @Override
@@ -57,13 +63,15 @@ public class MagicPotionImpl implements ICapabilityProvider, MagicPotion, INBTSe
         var map = new Object2FloatOpenHashMap<Element>();
         var registries = RegistryAccessor.access();
         if (registries == null) return;
+        var elements = nbt.getCompound("Elements");
         var lookup = registries.registryOrThrow(Element.RESOURCE_KEY);
         for (var entry : lookup.entrySet()) {
-            float value = nbt.getFloat(entry.getKey().location().toString());
+            float value = elements.getFloat(entry.getKey().location().toString());
             if (value <= 0.0F) continue;
             map.put(entry.getValue(), value);
         }
         this.setElements(map);
+        this.solvent = nbt.getString("Solvent");
     }
 
     @Override
@@ -85,6 +93,16 @@ public class MagicPotionImpl implements ICapabilityProvider, MagicPotion, INBTSe
     }
 
     @Override
+    public void setSolventType(String type) {
+        this.solvent = type;
+    }
+
+    @Override
+    public String getSolventType() {
+        return this.solvent;
+    }
+
+    @Override
     public boolean isFatal() {
         for (var entry : this.elements.object2FloatEntrySet()) {
             if (entry.getFloatValue() >= entry.getKey().concentration().max()) {
@@ -98,14 +116,25 @@ public class MagicPotionImpl implements ICapabilityProvider, MagicPotion, INBTSe
     public List<MobEffectInstance> getEffectInstances() {
         if (this.effects == null) {
             if (this.elements == null) return Collections.emptyList();
-            var effects = new ObjectArrayList<MobEffectInstance>(this.elements.size());
-            for (var entry : this.elements.object2FloatEntrySet()) {
-                var element = entry.getKey();
-                if (element.concentration().min() <= entry.getFloatValue()) {
-                    effects.add(element.getEffect(entry.getFloatValue(), this.timeFactor, this.baseLevel));
-                }
+//            var effects = new ObjectArrayList<MobEffectInstance>(this.elements.size());
+//            for (var entry : this.elements.object2FloatEntrySet()) {
+//                var element = entry.getKey();
+//                if (element.concentration().min() <= entry.getFloatValue()) {
+//                    effects.add(element.getEffect(entry.getFloatValue(), this.timeFactor, this.baseLevel));
+//                }
+//            }
+//            var solvent = new Solvent(elements);
+//            if (true) {
+//                this.effects = solvent.getEffectInstances(this.timeFactor, this.baseLevel);
+//            }
+//            var s = SolventRegistry.create("water", elements);
+//            this.effects = SolventRegistry.create("water", elements).getEffectInstances(this.timeFactor, this.baseLevel);
+            var s = SolventRegistry.get(this.solvent);
+            if (s != null) {
+                return s.getEffectInstances(elements, this.timeFactor, this.baseLevel);
+            } else {
+                return new Solvent().getEffectInstances(elements, this.timeFactor, this.baseLevel);
             }
-            this.effects = effects;
         }
         return this.effects;
     }

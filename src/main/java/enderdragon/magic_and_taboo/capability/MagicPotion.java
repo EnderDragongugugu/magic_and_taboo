@@ -11,15 +11,22 @@ import java.util.List;
 
 @AutoRegisterCapability
 public interface MagicPotion {
+
     Object2FloatMap<Element> getElements();
 
     void setElements(Object2FloatMap<Element> elements);
+
+    void setSolventType(String type);
+
+    String getSolventType();
+
 
     boolean isFatal();
 
     List<MobEffectInstance> getEffectInstances();
 
     MagicPotion EMPTY = new MagicPotion() {
+
         @Override
         public Object2FloatMap<Element> getElements() {
             return Object2FloatMaps.emptyMap();
@@ -27,6 +34,16 @@ public interface MagicPotion {
 
         @Override
         public void setElements(Object2FloatMap<Element> elements) {
+        }
+
+        @Override
+        public void setSolventType(String type) {
+
+        }
+
+        @Override
+        public String getSolventType() {
+            return null;
         }
 
         @Override
