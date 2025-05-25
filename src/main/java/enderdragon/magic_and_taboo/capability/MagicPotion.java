@@ -16,8 +16,23 @@ public interface MagicPotion {
 
     Object2FloatMap<Element> getElements();
 
+<<<<<<< Updated upstream
     /// @return {@code null} if the type is {@link net.minecraftforge.common.ForgeMod#EMPTY_TYPE}
     @Nullable FluidType getSolvent();
+=======
+<<<<<<< HEAD
+    int getColor();
+
+    void setElements(Object2FloatMap<Element> elements);
+
+    void setSolventType(String type);
+
+    String getSolventType();
+=======
+    /// @return {@code null} if the type is {@link net.minecraftforge.common.ForgeMod#EMPTY_TYPE}
+    @Nullable FluidType getSolvent();
+>>>>>>> b8efb8187c805fb72d3179702d879cf804ddbc8b
+>>>>>>> Stashed changes
 
     void setContent(@Nullable FluidType solvent, Object2FloatMap<Element> elements);
 
@@ -33,7 +48,21 @@ public interface MagicPotion {
         }
 
         @Override
+<<<<<<< Updated upstream
         public void setContent(@Nullable FluidType solvent, Object2FloatMap<Element> elements) {}
+=======
+<<<<<<< HEAD
+        public int getColor() {
+            return 3694022;
+        }
+
+        @Override
+        public void setElements(Object2FloatMap<Element> elements) {
+        }
+=======
+        public void setContent(@Nullable FluidType solvent, Object2FloatMap<Element> elements) {}
+>>>>>>> b8efb8187c805fb72d3179702d879cf804ddbc8b
+>>>>>>> Stashed changes
 
         @Override
         public @Nullable FluidType getSolvent() {

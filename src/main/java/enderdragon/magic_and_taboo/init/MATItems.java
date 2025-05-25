@@ -144,7 +144,7 @@ public class MATItems {
             new PotionBottleGlowItem(new Properties().stacksTo(4))
     );
     public static final RegistryObject<MagicPotionItem> POTION_SYRINGE = POTION.register(REGISTRY, "potion_syringe", () ->
-            new MagicPotionItem(new Properties().stacksTo(4))
+            new PotionSyringeItem(new Properties().stacksTo(4))
     );
     public static final RegistryObject<GlassMagicPotionBottleItem> GLASS_POTION_BOTTLE = POTION.register(REGISTRY, "glass_potion_bottle", () ->
             new GlassMagicPotionBottleItem(new Properties(), POTION_BOTTLE.get())
