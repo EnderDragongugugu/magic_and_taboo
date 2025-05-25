@@ -6,6 +6,6 @@ import net.minecraft.world.effect.MobEffectInstance;
 
 import java.util.List;
 
-public interface IMagicPotionSolvent {
-    List<MobEffectInstance> getEffectInstances(Object2FloatMap<Element> elements, float timeFactor, int baseLevel);
+public interface MagicPotionSolvent {
+    List<MobEffectInstance> getEffects(Object2FloatMap<Element> elements, float timeFactor, int baseLevel);
 }

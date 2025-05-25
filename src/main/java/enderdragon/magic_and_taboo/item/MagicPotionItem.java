@@ -8,7 +8,6 @@ import enderdragon.magic_and_taboo.util.ContainerUtil;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.stats.Stats;
 import net.minecraft.world.InteractionHand;
@@ -21,7 +20,6 @@ import net.minecraft.world.item.alchemy.PotionUtils;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
-import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -41,7 +39,7 @@ public class MagicPotionItem extends Item {
             if (potion.isFatal()) {
                 entity.kill();
             } else {
-                for (var effect : potion.getEffectInstances()) {
+                for (var effect : potion.getEffects()) {
                     if (effect.getEffect().isInstantenous()) {
                         effect.getEffect().applyInstantenousEffect(player, player, entity, effect.getAmplifier(), 1.0D);
                     } else {
@@ -92,14 +90,13 @@ public class MagicPotionItem extends Item {
 
     @Override
     public void appendHoverText(ItemStack stack, @Nullable Level pLevel, List<Component> tooltips, TooltipFlag flag) {
-        var cap = stack.getCapability(MATCapabilities.MAGIC_POTION).orElse(MagicPotion.EMPTY);
-        if (cap.getSolventType() != null) {
-            var fluid = ForgeRegistries.FLUIDS.getValue(new ResourceLocation(cap.getSolventType()));
-            tooltips.add(Component.translatable("tooltip.magic_and_taboo.magic_potion.solvent", fluid.getFluidType().getDescription()));
-
+        var potion = stack.getCapability(MATCapabilities.MAGIC_POTION).orElse(MagicPotion.EMPTY);
+        var solvent = potion.getSolvent();
+        if (solvent != null) {
+            tooltips.add(Component.translatable("tooltip.magic_and_taboo.magic_potion.solvent", solvent.getDescription()));
         }
         PotionUtils.addPotionTooltip(
-                cap.getEffectInstances(),
+                potion.getEffects(),
                 tooltips,
                 1.0F
         );

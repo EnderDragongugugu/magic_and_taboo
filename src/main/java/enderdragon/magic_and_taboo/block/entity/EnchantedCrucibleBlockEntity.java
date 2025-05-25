@@ -32,7 +32,6 @@ import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.capability.IFluidHandler;
-import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -75,14 +74,13 @@ public class EnchantedCrucibleBlockEntity extends BlockEntity implements IFluidH
         tickCommon(level, pos, state, crucible);
         var info = crucible.getRenderingInfo();
         info.fluid = crucible.getFluidStack();
-
         if (info.changed || info.temperature != crucible.temperature) {
             info.tip = null;
             crucible.fillPotion(level.registryAccess(), info);
             info.fluidColor = info.fluid.getFluid().isSame(Fluids.WATER)
                     ? info.elements.isEmpty()
                     ? level.getBiome(pos).value().getWaterColor()
-                    : PotionUtils.getColor(info.getEffectInstances())
+                    : PotionUtils.getColor(info.getEffects())
                     : 0xFFFFFF;
         } else if (!info.fluid.getFluid().isSame(Fluids.WATER)) {
             info.fluidColor = 0xFFFFFF;
@@ -143,25 +141,23 @@ public class EnchantedCrucibleBlockEntity extends BlockEntity implements IFluidH
     }
 
     public void fillPotion(RegistryAccess registry, MagicPotion potion) {
-        var data = Element.fromStacks(registry, this.stacks, cookingTime, this.temperature);
-        for (var entry : data.object2FloatEntrySet()) {
+        var elements = Element.fromStacks(registry, this.stacks, cookingTime, this.temperature);
+        for (var entry : elements.object2FloatEntrySet()) {
             var element = entry.getKey();
             float conflict = 0.0F, bonus = 1.0F;
             for (var inner : element.resistanceElementMap().object2FloatEntrySet()) {
-                if (data.containsKey(inner.getKey().value())) {
+                if (elements.containsKey(inner.getKey().value())) {
                     conflict += inner.getFloatValue();
                 }
             }
             for (var inner : element.resistanceElementMap().object2FloatEntrySet()) {
-                if (data.containsKey(inner.getKey().value())) {
+                if (elements.containsKey(inner.getKey().value())) {
                     bonus += inner.getFloatValue();
                 }
             }
             entry.setValue((entry.getFloatValue() - conflict) * bonus);
         }
-        var resourceLocation = ForgeRegistries.FLUIDS.getKey(fluid.getFluid());
-        potion.setElements(data);
-        potion.setSolventType(resourceLocation.toString());
+        potion.setContent(this.fluid.getFluid().getFluidType(), elements);
     }
 
     public void load(CompoundTag tag) {

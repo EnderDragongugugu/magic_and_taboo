@@ -5,6 +5,8 @@ import it.unimi.dsi.fastutil.objects.Object2FloatMap;
 import it.unimi.dsi.fastutil.objects.Object2FloatMaps;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraftforge.common.capabilities.AutoRegisterCapability;
+import net.minecraftforge.fluids.FluidType;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Collections;
 import java.util.List;
@@ -14,16 +16,14 @@ public interface MagicPotion {
 
     Object2FloatMap<Element> getElements();
 
-    void setElements(Object2FloatMap<Element> elements);
+    /// @return {@code null} if the type is {@link net.minecraftforge.common.ForgeMod#EMPTY_TYPE}
+    @Nullable FluidType getSolvent();
 
-    void setSolventType(String type);
-
-    String getSolventType();
-
+    void setContent(@Nullable FluidType solvent, Object2FloatMap<Element> elements);
 
     boolean isFatal();
 
-    List<MobEffectInstance> getEffectInstances();
+    List<MobEffectInstance> getEffects();
 
     MagicPotion EMPTY = new MagicPotion() {
 
@@ -33,16 +33,10 @@ public interface MagicPotion {
         }
 
         @Override
-        public void setElements(Object2FloatMap<Element> elements) {
-        }
+        public void setContent(@Nullable FluidType solvent, Object2FloatMap<Element> elements) {}
 
         @Override
-        public void setSolventType(String type) {
-
-        }
-
-        @Override
-        public String getSolventType() {
+        public @Nullable FluidType getSolvent() {
             return null;
         }
 
@@ -52,7 +46,7 @@ public interface MagicPotion {
         }
 
         @Override
-        public List<MobEffectInstance> getEffectInstances() {
+        public List<MobEffectInstance> getEffects() {
             return Collections.emptyList();
         }
     };

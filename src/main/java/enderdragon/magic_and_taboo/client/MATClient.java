@@ -64,7 +64,7 @@ public class MATClient {
         event.register((stack, index) -> index > 0 ? -1 : PotionUtils.getColor(
                 stack.getCapability(MATCapabilities.MAGIC_POTION)
                         .orElse(MagicPotion.EMPTY)
-                        .getEffectInstances()
+                        .getEffects()
         ), MATItems.POTION_BOTTLE.get(), MATItems.POTION_BOTTLE_GLOW.get(), MATItems.POTION_BOTTLE_RED.get(), MATItems.POTION_SYRINGE.get());
     }
 

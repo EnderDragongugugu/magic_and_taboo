@@ -7,9 +7,8 @@ import it.unimi.dsi.fastutil.objects.Object2FloatMaps;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.level.material.Fluids;
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.fluids.FluidType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -21,7 +20,8 @@ public class EnchantedCrucibleInfo implements MagicPotion {
     public FluidStack fluid = FluidStack.EMPTY;
     public int fluidColor = 0xFFFFFF;
     public int temperature;
-    public @Nullable Component tip = null;
+    public @Nullable Component tip;
+    public @Nullable FluidType solvent;
     public @Nonnull Object2FloatMap<Element> elements = Object2FloatMaps.emptyMap();
 
     @Override
@@ -30,18 +30,14 @@ public class EnchantedCrucibleInfo implements MagicPotion {
     }
 
     @Override
-    public void setElements(@NotNull Object2FloatMap<Element> elements) {
+    public @Nullable FluidType getSolvent() {
+        return this.solvent;
+    }
+
+    @Override
+    public void setContent(@Nullable FluidType solvent, @NotNull Object2FloatMap<Element> elements) {
+        this.solvent = solvent;
         this.elements = elements;
-    }
-
-    @Override
-    public void setSolventType(String type) {
-
-    }
-
-    @Override
-    public String getSolventType() {
-        return ForgeRegistries.FLUIDS.getKey(Fluids.WATER).toString();
     }
 
     @Override
@@ -50,7 +46,7 @@ public class EnchantedCrucibleInfo implements MagicPotion {
     }
 
     @Override
-    public @NotNull List<MobEffectInstance> getEffectInstances() {
+    public @NotNull List<MobEffectInstance> getEffects() {
         var effects = new ObjectArrayList<MobEffectInstance>(this.elements.size());
         for (var entry : this.elements.object2FloatEntrySet()) {
             effects.add(entry.getKey().getEffect(entry.getFloatValue(), 1.0F, 0));
