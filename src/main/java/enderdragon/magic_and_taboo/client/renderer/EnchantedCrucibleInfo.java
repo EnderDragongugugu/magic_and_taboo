@@ -30,17 +30,6 @@ public class EnchantedCrucibleInfo implements MagicPotion {
     }
 
     @Override
-<<<<<<< Updated upstream
-=======
-<<<<<<< HEAD
-    public int getColor() {
-        return 3694022;
-    }
-
-    @Override
-    public void setElements(@NotNull Object2FloatMap<Element> elements) {
-=======
->>>>>>> Stashed changes
     public @Nullable FluidType getSolvent() {
         return this.solvent;
     }
@@ -48,10 +37,6 @@ public class EnchantedCrucibleInfo implements MagicPotion {
     @Override
     public void setContent(@Nullable FluidType solvent, @NotNull Object2FloatMap<Element> elements) {
         this.solvent = solvent;
-<<<<<<< Updated upstream
-=======
->>>>>>> b8efb8187c805fb72d3179702d879cf804ddbc8b
->>>>>>> Stashed changes
         this.elements = elements;
     }
 

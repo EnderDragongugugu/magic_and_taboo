@@ -3,7 +3,6 @@ package enderdragon.magic_and_taboo.client;
 import com.mojang.datafixers.util.Either;
 import enderdragon.magic_and_taboo.MagicAndTabooMod;
 import enderdragon.magic_and_taboo.capability.MagicPotion;
-import enderdragon.magic_and_taboo.capability.MagicPotionImpl;
 import enderdragon.magic_and_taboo.capability.PurenessStorage;
 import enderdragon.magic_and_taboo.capability.WorkHubResult;
 import enderdragon.magic_and_taboo.client.gui.*;
@@ -61,19 +60,13 @@ public class MATClient {
 
     @SubscribeEvent
     public static void registerItemColors(RegisterColorHandlersEvent.Item event) {
-<<<<<<< HEAD
-        event.register(((stack, index) ->
-                index > 0 ? -1 : MagicPotionImpl.getColor(stack.getCapability(MATCapabilities.MAGIC_POTION)
-                        .orElse(MagicPotion.EMPTY).getColor(), stack.getCapability(MATCapabilities.MAGIC_POTION)
-                        .orElse(MagicPotion.EMPTY).getEffectInstances())
-        ), MATItems.POTION_BOTTLE.get(), MATItems.POTION_BOTTLE_RED.get(), MATItems.POTION_BOTTLE_GLOW.get(), MATItems.POTION_SYRINGE.get());
-=======
-        event.register((stack, index) -> index > 0 ? -1 : PotionUtils.getColor(
-                stack.getCapability(MATCapabilities.MAGIC_POTION)
-                        .orElse(MagicPotion.EMPTY)
-                        .getEffects()
-        ), MATItems.POTION_BOTTLE.get(), MATItems.POTION_BOTTLE_GLOW.get(), MATItems.POTION_BOTTLE_RED.get(), MATItems.POTION_SYRINGE.get());
->>>>>>> b8efb8187c805fb72d3179702d879cf804ddbc8b
+        event.register((stack, layer) -> layer > 0 ? -1 :
+                        stack.getCapability(MATCapabilities.MAGIC_POTION).orElse(MagicPotion.EMPTY).getColor(),
+                MATItems.POTION_BOTTLE.get(),
+                MATItems.POTION_BOTTLE_RED.get(),
+                MATItems.POTION_BOTTLE_GLOW.get(),
+                MATItems.POTION_SYRINGE.get()
+        );
     }
 
     @SubscribeEvent

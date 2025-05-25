@@ -143,7 +143,7 @@ public class MATItems {
     public static final RegistryObject<PotionBottleGlowItem> POTION_BOTTLE_GLOW = POTION.register(REGISTRY, "potion_bottle_glow", () ->
             new PotionBottleGlowItem(new Properties().stacksTo(4))
     );
-    public static final RegistryObject<MagicPotionItem> POTION_SYRINGE = POTION.register(REGISTRY, "potion_syringe", () ->
+    public static final RegistryObject<PotionSyringeItem> POTION_SYRINGE = POTION.register(REGISTRY, "potion_syringe", () ->
             new PotionSyringeItem(new Properties().stacksTo(4))
     );
     public static final RegistryObject<GlassMagicPotionBottleItem> GLASS_POTION_BOTTLE = POTION.register(REGISTRY, "glass_potion_bottle", () ->

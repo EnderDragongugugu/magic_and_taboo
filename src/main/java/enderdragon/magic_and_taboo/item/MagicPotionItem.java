@@ -19,7 +19,6 @@ import net.minecraft.world.item.*;
 import net.minecraft.world.item.alchemy.PotionUtils;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.gameevent.GameEvent;
-import net.minecraft.world.level.material.Fluids;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import org.jetbrains.annotations.Nullable;
 
@@ -91,20 +90,11 @@ public class MagicPotionItem extends Item {
 
     @Override
     public void appendHoverText(ItemStack stack, @Nullable Level pLevel, List<Component> tooltips, TooltipFlag flag) {
-<<<<<<< Updated upstream
-=======
-<<<<<<< HEAD
-        var cap = stack.getCapability(MATCapabilities.MAGIC_POTION).orElse(MagicPotion.EMPTY);
-        var fluid = cap.getSolventType() == null ? Fluids.WATER : ForgeRegistries.FLUIDS.getValue(new ResourceLocation(cap.getSolventType()));
-        tooltips.add(Component.translatable("tooltip.magic_and_taboo.magic_potion.solvent", fluid.getFluidType().getDescription()));
-=======
->>>>>>> Stashed changes
         var potion = stack.getCapability(MATCapabilities.MAGIC_POTION).orElse(MagicPotion.EMPTY);
         var solvent = potion.getSolvent();
         if (solvent != null) {
             tooltips.add(Component.translatable("tooltip.magic_and_taboo.magic_potion.solvent", solvent.getDescription()));
         }
->>>>>>> b8efb8187c805fb72d3179702d879cf804ddbc8b
         PotionUtils.addPotionTooltip(
                 potion.getEffects(),
                 tooltips,
