@@ -167,6 +167,12 @@ public class MATItems {
     public static final RegistryObject<OccultCodexItem> OCCULT_CODEX = ITEMS.register(REGISTRY, "occult_codex", () ->
             new OccultCodexItem(new Properties().stacksTo(1))
     );
+    public static final RegistryObject<Item> PARCHMENT = ITEMS.register(REGISTRY, "parchment", () ->
+            new Item(new Properties())
+    );
+    public static final RegistryObject<MagicPotionParchmentItem> MAGIC_POTION_PARCHMENT = POTION.register(REGISTRY, "magic_potion_parchment", () ->
+            new MagicPotionParchmentItem(new Properties().stacksTo(1))
+    );
     public static final RegistryObject<Item> MERCURY_SLAG = POTION.register(REGISTRY, "mercury_slag", () -> new Item(new Properties().food(new FoodProperties.Builder()
             .alwaysEat()
             .nutrition(-5)

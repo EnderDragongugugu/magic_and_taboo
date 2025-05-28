@@ -78,6 +78,8 @@
   "enchantment.magic_and_taboo.mercury_toxins": "§6水银毒素",
   "item.magic_and_taboo.blaze_blast_burner": "烈焰喷灯",
   "item.magic_and_taboo.blaze_burner": "烈焰灯",
+  "item.magic_and_taboo.parchment": "羊皮纸",
+  "item.magic_and_taboo.magic_potion_parchment": "魔药配方",
   "item.magic_and_taboo.blood_bottle": "血瓶",
   "item.magic_and_taboo.blood_bottle.has_entity": "%s的血",
   "item.magic_and_taboo.carrots_paste": "胡萝卜糊",

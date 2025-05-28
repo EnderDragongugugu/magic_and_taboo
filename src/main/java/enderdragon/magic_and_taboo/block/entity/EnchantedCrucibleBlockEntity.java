@@ -5,10 +5,13 @@ import enderdragon.magic_and_taboo.capability.MagicPotion;
 import enderdragon.magic_and_taboo.client.renderer.EnchantedCrucibleInfo;
 import enderdragon.magic_and_taboo.init.MATBlockEntities;
 import enderdragon.magic_and_taboo.init.MATCapabilities;
+import enderdragon.magic_and_taboo.init.MATItems;
 import enderdragon.magic_and_taboo.item.GlassMagicPotionBottleItem;
+import enderdragon.magic_and_taboo.item.MagicPotionParchmentItem;
 import enderdragon.magic_and_taboo.registry.AlchemyElement;
 import enderdragon.magic_and_taboo.registry.Element;
 import enderdragon.magic_and_taboo.util.ContainerUtil;
+import it.unimi.dsi.fastutil.objects.Object2FloatOpenHashMap;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.NonNullList;
@@ -98,6 +101,7 @@ public class EnchantedCrucibleBlockEntity extends BlockEntity implements IFluidH
     public int tick;
     /// Should only be used for rendering
     private EnchantedCrucibleInfo info;
+    private Object2FloatOpenHashMap<Element> elements;
 
     public EnchantedCrucibleBlockEntity(BlockPos pos, BlockState state) {
         super(MATBlockEntities.ENCHANTED_CRUCIBLE.get(), pos, state);
@@ -130,6 +134,9 @@ public class EnchantedCrucibleBlockEntity extends BlockEntity implements IFluidH
         int amount = this.fluid.getAmount();
         if (amount >= 250) {
             var bottle = new ItemStack(stack.getFilled());
+            if (player.getOffhandItem().is(MATItems.PARCHMENT.get())) {
+                MagicPotionParchmentItem.writeRecipe(player, player.getOffhandItem(), this.stacks, this.temperature, this.fluid.getFluid());
+            }
             this.fillPotion(level.registryAccess(), bottle.getCapability(MATCapabilities.MAGIC_POTION).orElse(MagicPotion.EMPTY));
             ContainerUtil.addItem(player, bottle);
             this.fluid.setAmount(amount - 250);
@@ -139,6 +146,7 @@ public class EnchantedCrucibleBlockEntity extends BlockEntity implements IFluidH
             stacks.clear();
         }
     }
+
 
     public void fillPotion(RegistryAccess registry, MagicPotion potion) {
         var elements = Element.fromStacks(registry, this.stacks, cookingTime, this.temperature);
