@@ -1,6 +1,8 @@
 package enderdragon.magic_and_taboo.init;
 
 import com.mojang.logging.LogUtils;
+import enderdragon.magic_and_taboo.solvent.HoneySolvent;
+import enderdragon.magic_and_taboo.solvent.PlantExtractSolvent;
 import enderdragon.magic_and_taboo.util.MagicPotionSolvent;
 import it.unimi.dsi.fastutil.objects.Object2ObjectMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
@@ -25,8 +27,9 @@ public class MagicPotionSolvents {
     private static final Logger LOGGER = LogUtils.getLogger();
 
     public static final MagicPotionSolvent WATER = () -> 0x385DC6;
-    public static final MagicPotionSolvent HONEY = () -> 0xD28D2B;
-    public static final MagicPotionSolvent PLANT_EXTRACT = () -> 0x044923;
+
+    public static final MagicPotionSolvent HONEY = new HoneySolvent();
+    public static final MagicPotionSolvent PLANT_EXTRACT = new PlantExtractSolvent();
 
     static {
         ObjectHolderRegistry.addHandler(MagicPotionSolvents::onRegistryReady);

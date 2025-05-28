@@ -142,5 +142,6 @@
   "tooltip.magic_and_taboo.work_hub_item": "存有: ",
   "tooltip.magic_and_taboo.work_hub_item_empty": "里面什么都没有!",
   "tooltip.magic_and_taboo.work_hub_item_show": "存有: %s, 共 %d 个",
-  "tooltip.magic_and_taboo.magic_potion.solvent": "溶剂: %s"
+  "tooltip.magic_and_taboo.magic_potion.solvent": "溶剂: %s",
+  "potion.potency.6": "VII"
 }
