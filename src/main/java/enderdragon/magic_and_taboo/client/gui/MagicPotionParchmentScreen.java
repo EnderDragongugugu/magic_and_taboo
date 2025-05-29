@@ -17,10 +17,10 @@ import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.List;
 
-import static enderdragon.magic_and_taboo.block.entity.EnchantedCrucibleBlockEntity.MAX_SIZE;
+import static enderdragon.magic_and_taboo.block.entity.EnchantedCrucibleBlockEntity.MAX_RECIPE_SIZE;
 
 public class MagicPotionParchmentScreen extends Screen {
-    public static final int ITEM_COLUMNS = 4;
+    public static final int ITEM_COLUMNS = 8;
     public static final int ICON_SIZE = 16;
 
     protected final ObjectArrayList<MagicPotionParchmentScreen.ItemStackData> itemStackDataList = new ObjectArrayList<>();
@@ -42,7 +42,7 @@ public class MagicPotionParchmentScreen extends Screen {
 
         graphics.blit(PARCHMENT, x, y, 0, 0, SIZE, SIZE, SIZE, SIZE);
 
-        NonNullList<ItemStack> stacks = NonNullList.withSize(MAX_SIZE, ItemStack.EMPTY);
+        NonNullList<ItemStack> stacks = NonNullList.withSize(MAX_RECIPE_SIZE, ItemStack.EMPTY);
         ContainerHelper.loadAllItems(tag, stacks);
         itemStackSerialization(stacks, x + 58, y + 88);
         renderItemStack(graphics, mouseX, mouseY);

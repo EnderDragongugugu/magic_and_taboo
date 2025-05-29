@@ -85,8 +85,10 @@ public class MATItemModelProvider extends ItemModelProvider {
                 );
         this.bottleItems(MATItems.POTION_BOTTLE, MATItems.GLASS_POTION_BOTTLE);
         this.bottleItems(MATItems.POTION_BOTTLE_RED, MATItems.GLASS_POTION_BOTTLE_RED);
-        this.bottleItems(MATItems.POTION_BOTTLE_GLOW, MATItems.GLASS_POTION_BOTTLE_GLOW);
         this.bottleItems(MATItems.POTION_SYRINGE, MATItems.GLASS_POTION_SYRINGE);
+        this.bottleItems(MATItems.POTION_BOTTLE_GLOW, MATItems.GLASS_POTION_BOTTLE_GLOW);
+        this.bottleItems(MATItems.ALCHEMY_ELEMENT);
+
     }
 
     public ItemModelBuilder handheldItem(RegistryObject<? extends Item> item) {
@@ -120,6 +122,15 @@ public class MATItemModelProvider extends ItemModelProvider {
                 .texture("wall", texture);
     }
 
+//    public void colorItems(RegistryObject<? extends Item> filled, RegistryObject<? extends Item> container) {
+//        var id = filled.getId();
+//        var item = id.withPrefix("item/");
+//        this.getBuilder(id.getPath())
+//                .parent(GENERATED_MODEL)
+//                .texture("layer0", id.withPath(path -> "item/" + path + "_overlay"))
+//                .texture("layer1", item);
+//    }
+
     public void bottleItems(RegistryObject<? extends Item> filled, RegistryObject<? extends Item> container) {
         var id = filled.getId();
         var bottle = id.withPrefix("item/");
@@ -130,5 +141,14 @@ public class MATItemModelProvider extends ItemModelProvider {
         this.getBuilder(container.getId().getPath())
                 .parent(GENERATED_MODEL)
                 .texture("layer0", bottle);
+    }
+
+    public void bottleItems(RegistryObject<? extends Item> filled) {
+        var id = filled.getId();
+        var bottle = id.withPrefix("item/");
+        this.getBuilder(id.getPath())
+                .parent(GENERATED_MODEL)
+                .texture("layer0", id.withPath(path -> "item/" + path + "_overlay"))
+                .texture("layer1", bottle);
     }
 }

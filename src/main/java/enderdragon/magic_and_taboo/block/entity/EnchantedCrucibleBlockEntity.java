@@ -64,6 +64,13 @@ public class EnchantedCrucibleBlockEntity extends BlockEntity implements IFluidH
             if (crucible.cookingTime[i] < time) {
                 crucible.cookingTime[i] = Math.max(crucible.cookingTime[i] + 1, 0);
             }
+            if (crucible.cookingTime[i] >= time) {
+                crucible.transferToRecipeSlot(stack.copy());
+                crucible.addCookedElements(level.registryAccess(), stack);
+                crucible.stacks.set(i, ItemStack.EMPTY);
+                crucible.cookingTime[i] = 0;
+                crucible.setChanged();
+            }
         }
         // cooking end
         // heating start
@@ -79,7 +86,7 @@ public class EnchantedCrucibleBlockEntity extends BlockEntity implements IFluidH
         info.fluid = crucible.getFluidStack();
         if (info.changed || info.temperature != crucible.temperature) {
             info.tip = null;
-            crucible.fillPotion(level.registryAccess(), info);
+            crucible.fillPotion(info);
             info.fluidColor = info.fluid.getFluid().isSame(Fluids.WATER)
                     ? info.elements.isEmpty()
                     ? level.getBiome(pos).value().getWaterColor()
@@ -92,8 +99,10 @@ public class EnchantedCrucibleBlockEntity extends BlockEntity implements IFluidH
     }
 
     public static final int MAX_SIZE = 8;
+    public static final int MAX_RECIPE_SIZE = MAX_SIZE * 4;
     public static final int CAPACITY = 1000;
     private final NonNullList<ItemStack> stacks = NonNullList.withSize(MAX_SIZE, ItemStack.EMPTY);
+    private final NonNullList<ItemStack> recipeStacks = NonNullList.withSize(MAX_RECIPE_SIZE, ItemStack.EMPTY);
     private final LazyOptional<IFluidHandler> holder = LazyOptional.of(() -> this);
     private final int[] cookingTime = new int[MAX_SIZE];
     private int temperature = 0;
@@ -101,7 +110,7 @@ public class EnchantedCrucibleBlockEntity extends BlockEntity implements IFluidH
     public int tick;
     /// Should only be used for rendering
     private EnchantedCrucibleInfo info;
-    private Object2FloatOpenHashMap<Element> elements;
+    private final Object2FloatOpenHashMap<Element> elements = new Object2FloatOpenHashMap<>();
 
     public EnchantedCrucibleBlockEntity(BlockPos pos, BlockState state) {
         super(MATBlockEntities.ENCHANTED_CRUCIBLE.get(), pos, state);
@@ -130,26 +139,59 @@ public class EnchantedCrucibleBlockEntity extends BlockEntity implements IFluidH
         return true;
     }
 
+    private void addCookedElements(RegistryAccess registry, ItemStack stack) {
+        if (stack.isEmpty()) return;
+        var elements = AlchemyElement.fromItem(registry, stack.getItem());
+        for (var entry : elements.elementMap().object2FloatEntrySet()) {
+            var element = entry.getKey().value();
+            float amount = entry.getFloatValue();
+            if (element.temperature().test(this.temperature)) {
+                this.elements.addTo(element, amount);
+            }
+        }
+    }
+
+    public boolean isRecipeFull() {
+        for (ItemStack stack : recipeStacks) {
+            if (stack.isEmpty()) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    // 转移物品
+    public void transferToRecipeSlot(ItemStack stack) {
+        for (int i = 0; i < recipeStacks.size(); i++) {
+            if (recipeStacks.get(i).isEmpty()) {
+                recipeStacks.set(i, stack);
+                return;
+            }
+        }
+    }
+
+
     public void test(Level level, GlassMagicPotionBottleItem stack, Player player) {
         int amount = this.fluid.getAmount();
         if (amount >= 250) {
             var bottle = new ItemStack(stack.getFilled());
             if (player.getOffhandItem().is(MATItems.PARCHMENT.get())) {
-                MagicPotionParchmentItem.writeRecipe(player, player.getOffhandItem(), this.stacks, this.temperature, this.fluid.getFluid());
+                MagicPotionParchmentItem.writeRecipe(player, player.getOffhandItem(), this.recipeStacks, this.temperature, this.fluid.getFluid());
             }
-            this.fillPotion(level.registryAccess(), bottle.getCapability(MATCapabilities.MAGIC_POTION).orElse(MagicPotion.EMPTY));
+            this.fillPotion(bottle.getCapability(MATCapabilities.MAGIC_POTION).orElse(MagicPotion.EMPTY));
             ContainerUtil.addItem(player, bottle);
             this.fluid.setAmount(amount - 250);
             this.setChanged();
         }
         if (amount <= 250) {
             stacks.clear();
+            recipeStacks.clear();
+            elements.clear();
         }
     }
 
 
-    public void fillPotion(RegistryAccess registry, MagicPotion potion) {
-        var elements = Element.fromStacks(registry, this.stacks, cookingTime, this.temperature);
+    public void fillPotion(MagicPotion potion) {
         for (var entry : elements.object2FloatEntrySet()) {
             var element = entry.getKey();
             float conflict = 0.0F, bonus = 1.0F;
@@ -169,6 +211,7 @@ public class EnchantedCrucibleBlockEntity extends BlockEntity implements IFluidH
     }
 
     public void load(CompoundTag tag) {
+        var registry = level.registryAccess();
         super.load(tag);
         if (tag.contains("Fluid")) {
             this.fluid = FluidStack.loadFluidStackFromNBT(tag.getCompound("Fluid"));
@@ -178,6 +221,20 @@ public class EnchantedCrucibleBlockEntity extends BlockEntity implements IFluidH
             ContainerHelper.loadAllItems(tag, this.stacks);
             if (this.info != null) {
                 this.info.changed = true;
+            }
+        }
+        if (tag.contains("Recipe_Items")) {
+            this.recipeStacks.clear();
+            ContainerHelper.loadAllItems(tag.getCompound("Recipe_Items"), this.recipeStacks);
+        }
+        if (tag.contains("Elements")) {
+            this.elements.clear();
+            var elements = tag.getCompound("Elements");
+            var lookup = registry.registryOrThrow(Element.RESOURCE_KEY);
+            for (var entry : lookup.entrySet()) {
+                float value = elements.getFloat(entry.getKey().location().toString());
+                if (value <= 0.0F) continue;
+                this.elements.put(entry.getValue(), value);
             }
         }
         if (tag.contains("CookingProgress", 11)) {
@@ -190,18 +247,29 @@ public class EnchantedCrucibleBlockEntity extends BlockEntity implements IFluidH
     }
 
     protected void saveAdditional(CompoundTag tag) {
+        var registry = level.registryAccess();
         super.saveAdditional(tag);
         ContainerHelper.saveAllItems(tag, stacks, true);
+
+        CompoundTag recipeTag = new CompoundTag();
+        ContainerHelper.saveAllItems(recipeTag, recipeStacks, true);
+        tag.put("Recipe_Items", recipeTag);
+
+        CompoundTag elements = new CompoundTag();
+        var lookup = registry.registryOrThrow(Element.RESOURCE_KEY);
+        for (var entry : this.elements.object2FloatEntrySet()) {
+            elements.putFloat(lookup.getKey(entry.getKey()).toString(), entry.getFloatValue());
+        }
+        tag.put("Elements", elements);
         tag.putIntArray("CookingProgress", this.cookingTime);
         tag.putInt("Temperature", this.temperature);
         tag.put("Fluid", this.fluid.writeToNBT(new CompoundTag()));
     }
 
     public boolean place(RegistryAccess registry, ItemStack stack, Player player) {
-        if (!stack.isEmpty()) {
+        if (!stack.isEmpty() && !isRecipeFull()) {
             var alchemyElement = AlchemyElement.fromItem(registry, stack.getItem());
             if (alchemyElement != null) {
-                var stacks = this.stacks;
                 for (int i = 0; i < stacks.size(); ++i) {
                     var content = stacks.get(i);
                     if (content.isEmpty()) {
@@ -213,6 +281,8 @@ public class EnchantedCrucibleBlockEntity extends BlockEntity implements IFluidH
                 }
             }
             player.displayClientMessage(Component.translatable("text.warn.place", stack.getHoverName()), true);
+        } else if (isRecipeFull()) {
+            player.displayClientMessage(Component.translatable("text.warn.recipe_full"), true);
         }
         return false;
     }
