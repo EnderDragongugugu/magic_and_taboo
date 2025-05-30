@@ -11,6 +11,7 @@ import enderdragon.magic_and_taboo.item.MagicPotionParchmentItem;
 import enderdragon.magic_and_taboo.registry.AlchemyElement;
 import enderdragon.magic_and_taboo.registry.Element;
 import enderdragon.magic_and_taboo.util.ContainerUtil;
+import enderdragon.magic_and_taboo.util.RegistryAccessor;
 import it.unimi.dsi.fastutil.objects.Object2FloatOpenHashMap;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -66,7 +67,7 @@ public class EnchantedCrucibleBlockEntity extends BlockEntity implements IFluidH
             }
             if (crucible.cookingTime[i] >= time) {
                 crucible.transferToRecipeSlot(stack.copy());
-                crucible.addCookedElements(level.registryAccess(), stack);
+                crucible.addCookedElements(alchemyElement);
                 crucible.stacks.set(i, ItemStack.EMPTY);
                 crucible.cookingTime[i] = 0;
                 crucible.setChanged();
@@ -139,10 +140,9 @@ public class EnchantedCrucibleBlockEntity extends BlockEntity implements IFluidH
         return true;
     }
 
-    private void addCookedElements(RegistryAccess registry, ItemStack stack) {
-        if (stack.isEmpty()) return;
-        var elements = AlchemyElement.fromItem(registry, stack.getItem());
-        for (var entry : elements.elementMap().object2FloatEntrySet()) {
+    private void addCookedElements(@Nullable AlchemyElement alchemyElement) {
+        if (alchemyElement == null) return;
+        for (var entry : alchemyElement.elementMap().object2FloatEntrySet()) {
             var element = entry.getKey().value();
             float amount = entry.getFloatValue();
             if (element.temperature().test(this.temperature)) {
@@ -192,22 +192,22 @@ public class EnchantedCrucibleBlockEntity extends BlockEntity implements IFluidH
 
 
     public void fillPotion(MagicPotion potion) {
-        for (var entry : elements.object2FloatEntrySet()) {
+        for (var entry : this.elements.object2FloatEntrySet()) {
             var element = entry.getKey();
             float conflict = 0.0F, bonus = 1.0F;
             for (var inner : element.resistanceElementMap().object2FloatEntrySet()) {
-                if (elements.containsKey(inner.getKey().value())) {
+                if (this.elements.containsKey(inner.getKey().value())) {
                     conflict += inner.getFloatValue();
                 }
             }
             for (var inner : element.resistanceElementMap().object2FloatEntrySet()) {
-                if (elements.containsKey(inner.getKey().value())) {
+                if (this.elements.containsKey(inner.getKey().value())) {
                     bonus += inner.getFloatValue();
                 }
             }
             entry.setValue((entry.getFloatValue() - conflict) * bonus);
         }
-        potion.setContent(this.fluid.getFluid().getFluidType(), elements);
+        potion.setContent(this.fluid.getFluid().getFluidType(), this.elements);
     }
 
     public void load(CompoundTag tag) {
@@ -223,9 +223,9 @@ public class EnchantedCrucibleBlockEntity extends BlockEntity implements IFluidH
                 this.info.changed = true;
             }
         }
-        if (tag.contains("Recipe_Items")) {
+        if (tag.contains("RecipeItems")) {
             this.recipeStacks.clear();
-            ContainerHelper.loadAllItems(tag.getCompound("Recipe_Items"), this.recipeStacks);
+            ContainerHelper.loadAllItems(tag.getCompound("RecipeItems"), this.recipeStacks);
         }
         if (tag.contains("Elements")) {
             this.elements.clear();
@@ -247,23 +247,24 @@ public class EnchantedCrucibleBlockEntity extends BlockEntity implements IFluidH
     }
 
     protected void saveAdditional(CompoundTag tag) {
-        var registry = level.registryAccess();
         super.saveAdditional(tag);
         ContainerHelper.saveAllItems(tag, stacks, true);
 
         CompoundTag recipeTag = new CompoundTag();
         ContainerHelper.saveAllItems(recipeTag, recipeStacks, true);
-        tag.put("Recipe_Items", recipeTag);
+        tag.put("RecipeItems", recipeTag);
+        
+        tag.putIntArray("CookingProgress", this.cookingTime);
+        tag.putInt("Temperature", this.temperature);
+        tag.put("Fluid", this.fluid.writeToNBT(new CompoundTag()));
 
-        CompoundTag elements = new CompoundTag();
-        var lookup = registry.registryOrThrow(Element.RESOURCE_KEY);
+        var elements = new CompoundTag();
+        var registries = RegistryAccessor.access();
+        var lookup = registries.registryOrThrow(Element.RESOURCE_KEY);
         for (var entry : this.elements.object2FloatEntrySet()) {
             elements.putFloat(lookup.getKey(entry.getKey()).toString(), entry.getFloatValue());
         }
         tag.put("Elements", elements);
-        tag.putIntArray("CookingProgress", this.cookingTime);
-        tag.putInt("Temperature", this.temperature);
-        tag.put("Fluid", this.fluid.writeToNBT(new CompoundTag()));
     }
 
     public boolean place(RegistryAccess registry, ItemStack stack, Player player) {

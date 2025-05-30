@@ -22,15 +22,23 @@ import static enderdragon.magic_and_taboo.block.entity.EnchantedCrucibleBlockEnt
 public class MagicPotionParchmentScreen extends Screen {
     public static final int ITEM_COLUMNS = 8;
     public static final int ICON_SIZE = 16;
+    public final NonNullList<ItemStack> stacks = NonNullList.withSize(MAX_RECIPE_SIZE, ItemStack.EMPTY);
 
     protected final ObjectArrayList<MagicPotionParchmentScreen.ItemStackData> itemStackDataList = new ObjectArrayList<>();
     public static final ResourceLocation PARCHMENT = MagicAndTabooMod.makeId("textures/item/parchment.png");
     public static final int SIZE = 16 * 14;
     public CompoundTag tag;
 
+//    public final int x = (this.width - SIZE) / 2;
+//    public final int y = (this.height - SIZE) / 2;
+
     public MagicPotionParchmentScreen(CompoundTag tag) {
         super(CommonComponents.EMPTY);
         this.tag = tag;
+        init();
+//        int x = (this.width - SIZE) / 2;
+//        int y = (this.height - SIZE) / 2;
+
     }
 
     @Override
@@ -42,14 +50,20 @@ public class MagicPotionParchmentScreen extends Screen {
 
         graphics.blit(PARCHMENT, x, y, 0, 0, SIZE, SIZE, SIZE, SIZE);
 
-        NonNullList<ItemStack> stacks = NonNullList.withSize(MAX_RECIPE_SIZE, ItemStack.EMPTY);
-        ContainerHelper.loadAllItems(tag, stacks);
-        itemStackSerialization(stacks, x + 58, y + 88);
         renderItemStack(graphics, mouseX, mouseY);
 
         renderBucket(graphics, mouseX, mouseY, x + 58, y + 28);
 
         renderTemperature(graphics, mouseX, mouseY, x + 58, y + 60);
+    }
+
+    public void init() {
+        int x = (this.width - SIZE) / 2;
+        int y = (this.height - SIZE) / 2;
+        ContainerHelper.loadAllItems(tag, stacks);
+
+        itemStackSerialization(stacks, x + 58, y + 88);
+
     }
 
     public void itemStackSerialization(List<ItemStack> stacks, int x, int y) {
