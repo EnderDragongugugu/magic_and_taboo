@@ -8,7 +8,6 @@ import enderdragon.magic_and_taboo.network.NetworkHandler;
 import enderdragon.magic_and_taboo.registry.AlchemyElement;
 import enderdragon.magic_and_taboo.registry.Element;
 import enderdragon.magic_and_taboo.util.BlockEntityTypeEx;
-import enderdragon.magic_and_taboo.util.RegistryAccessor;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
@@ -40,8 +39,6 @@ public class MagicAndTabooMod {
         MATEffects.REGISTRY.register(modBus);
         MATBlocks.REGISTRY.register(modBus);
         MATItems.REGISTRY.register(modBus);
-
-
         MATItemGroups.REGISTRY.register(modBus);
         MATBlockEntities.REGISTRY.register(modBus);
         MATMenuTypes.REGISTRY.register(modBus);
@@ -49,14 +46,12 @@ public class MagicAndTabooMod {
         MATSerializers.REGISTRY.register(modBus);
         MATFluids.FLUIDS.register(modBus);
         MATFluids.FLUID_TYPES.register(modBus);
-
         modBus.addListener(MagicAndTabooMod::onComplete);
         modBus.addListener(MagicAndTabooMod::onCommonSetup);
         modBus.addListener(MagicAndTabooMod::registerDataPackRegistry);
         var forgeBus = MinecraftForge.EVENT_BUS;
         forgeBus.addListener(SacrificialDaggerItem::onLivingDeath);
         forgeBus.addListener(HemolysisEffect::livingHurtEvent);
-        forgeBus.addListener(RegistryAccessor::hookServer);
         forgeBus.addListener(OccultCodexItem::onPlayerLogin);
     }
 
@@ -70,7 +65,6 @@ public class MagicAndTabooMod {
                     MATBlocks.FIR_HANGING_SIGN.get(),
                     MATBlocks.FIR_WALL_HANGING_SIGN.get()
             );
-            MATItems.initAlchemyElementItem();
         });
     }
 

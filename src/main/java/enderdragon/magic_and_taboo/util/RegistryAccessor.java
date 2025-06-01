@@ -1,27 +1,22 @@
 package enderdragon.magic_and_taboo.util;
 
 import net.minecraft.core.RegistryAccess;
-import net.minecraftforge.client.event.ClientPlayerNetworkEvent;
-import net.minecraftforge.event.AddReloadListenerEvent;
+import net.minecraft.world.level.Level;
+import net.minecraftforge.server.ServerLifecycleHooks;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.Nullable;
+import java.util.Objects;
 
 public abstract class RegistryAccessor {
-    private static RegistryAccess INSTANCE;
-
-    @Nullable
-    public static RegistryAccess access() {
-        return INSTANCE;
+    /// get server side registries
+    public static @Nullable RegistryAccess getOptionalRegistries() {
+        var server = ServerLifecycleHooks.getCurrentServer();
+        return server == null ? null : server.registryAccess();
     }
 
-    public static void hookServer(AddReloadListenerEvent event) {
-        INSTANCE = event.getRegistryAccess();
-    }
-
-    public static void hookClient(ClientPlayerNetworkEvent.LoggingIn event) {
-        if (!event.getConnection().isMemoryConnection()) {
-            INSTANCE = event.getPlayer().level().registryAccess();
-        }
+    public static @NotNull RegistryAccess getRegistries(@Nullable Level level) {
+        return level == null ? Objects.requireNonNull(getOptionalRegistries()) : level.registryAccess();
     }
 
     private RegistryAccessor() {}

@@ -19,14 +19,15 @@ public class HoneySolvent implements MagicPotionSolvent {
     public List<MobEffectInstance> getEffects(Object2FloatMap<Element> elements, float timeFactor, int baseLevel) {
         var effects = new ObjectArrayList<MobEffectInstance>(elements.size());
         for (var entry : elements.object2FloatEntrySet()) {
-            var element = entry.getKey();
-            var max = element.fusionElementMap().entrySet().stream()
+            entry.getKey()
+                    .fusionElementMap()
+                    .object2FloatEntrySet()
+                    .stream()
                     .max(Map.Entry.comparingByValue())
-                    .map(Map.Entry::getKey);
-            max.ifPresent(elementHolder -> {
-                var e = elementHolder.get();
-                effects.add(e.getEffect(entry.getFloatValue(), timeFactor, baseLevel));
-            });
+                    .map(Map.Entry::getKey)
+                    .ifPresent(element -> effects.add(
+                            element.value().getEffect(entry.getFloatValue(), timeFactor, baseLevel)
+                    ));
         }
         return effects;
     }

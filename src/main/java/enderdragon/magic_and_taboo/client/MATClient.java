@@ -13,7 +13,6 @@ import enderdragon.magic_and_taboo.client.renderer.WorkHubRender;
 import enderdragon.magic_and_taboo.init.*;
 import enderdragon.magic_and_taboo.item.AlchemyElementItem;
 import enderdragon.magic_and_taboo.registry.AlchemyElement;
-import enderdragon.magic_and_taboo.util.RegistryAccessor;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.client.renderer.Sheets;
@@ -25,7 +24,6 @@ import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.*;
 import net.minecraftforge.client.gui.overlay.VanillaGuiOverlay;
-import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -56,7 +54,6 @@ public class MATClient {
             Sheets.addWoodType(MATBlocks.FIR_WOOD_TYPE);
             MenuScreens.register(MATMenuTypes.WORK_HUB.get(), WorkHubScreen::new);
         });
-        MinecraftForge.EVENT_BUS.addListener(RegistryAccessor::hookClient);
     }
 
     @SubscribeEvent
@@ -68,15 +65,7 @@ public class MATClient {
                 MATItems.POTION_BOTTLE_GLOW.get(),
                 MATItems.POTION_SYRINGE.get()
         );
-        event.register((stack, layer) ->
-                        layer > 0 ? -1 : AlchemyElementItem.deserializeNBT(stack) == null ? -1 : AlchemyElementItem.deserializeNBT(stack).effect().getColor(),
-                MATItems.ALCHEMY_ELEMENT.get());
-//        event.register((stack, layer) -> {
-//                    var cap = stack.getCapability(MATCapabilities.ALCHEMY_ELEMENT).orElse(enderdragon.magic_and_taboo.capability.AlchemyElement.EMPTY);
-//                    var element = cap.getElement();
-//                    return layer > 0 ? -1 : element == null ? -1 : element.effect().getColor();
-//                },
-//                MATItems.ALCHEMY_ELEMENT.get());
+        event.register(AlchemyElementItem::getColor, MATItems.ALCHEMY_ELEMENT.get());
     }
 
     @SubscribeEvent

@@ -90,6 +90,7 @@ public abstract class HoneyFluid extends ForgeFlowingFluid {
         @Override
         public void initializeClient(Consumer<IClientFluidTypeExtensions> consumer) {
             consumer.accept(new IClientFluidTypeExtensions() {
+
                 private static final ResourceLocation TEXTURE = new ResourceLocation("block/honey_block_side");
                 private static final ResourceLocation OVERLAY = new ResourceLocation("block/honey_block_bottom");
 

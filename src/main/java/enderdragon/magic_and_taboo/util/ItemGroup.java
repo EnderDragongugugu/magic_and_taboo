@@ -8,18 +8,24 @@ import net.minecraft.world.level.ItemLike;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.RegistryObject;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.function.Supplier;
 
 public class ItemGroup implements CreativeModeTab.DisplayItemsGenerator {
-    protected final ObjectArrayList<RegistryObject<? extends ItemLike>> items = new ObjectArrayList<>();
-    protected final ObjectArrayList<ItemStack> itemStacks = new ObjectArrayList<>();
-    protected final Component title;
-    public final Supplier<ItemStack> icon;
+    public static ItemGroup of() {
+        return new ItemGroup(Collections.emptyList());
+    }
 
-    public ItemGroup(DeferredRegister<CreativeModeTab> registry, String name, String title, Supplier<ItemStack> icon) {
-        this.icon = icon;
-        this.title = Component.translatable(title);
-        registry.register(name, this::makeTab);
+    public static ItemGroup of(CreativeModeTab.DisplayItemsGenerator... children) {
+        return new ItemGroup(List.of(children));
+    }
+
+    protected final ObjectArrayList<RegistryObject<? extends ItemLike>> items = new ObjectArrayList<>();
+    public final List<CreativeModeTab.DisplayItemsGenerator> children;
+
+    protected ItemGroup(List<CreativeModeTab.DisplayItemsGenerator> children) {
+        this.children = children;
     }
 
     public <T extends ItemLike> RegistryObject<T> register(DeferredRegister<? super T> registry, String name, Supplier<T> supplier) {
@@ -32,14 +38,6 @@ public class ItemGroup implements CreativeModeTab.DisplayItemsGenerator {
         this.items.add(item);
     }
 
-    public void add(ItemStack itemStack) {
-        this.itemStacks.add(itemStack);
-    }
-
-    public CreativeModeTab makeTab() {
-        return CreativeModeTab.builder().title(this.title).icon(this.icon).displayItems(this).build();
-    }
-
     @Override
     public void accept(CreativeModeTab.ItemDisplayParameters parameters, CreativeModeTab.Output output) {
         for (var item : this.items) {
@@ -47,10 +45,12 @@ public class ItemGroup implements CreativeModeTab.DisplayItemsGenerator {
                 output.accept(item.get());
             }
         }
-        for (var itemStack : this.itemStacks) {
-            if (!itemStack.isEmpty()) {
-                output.accept(itemStack);
-            }
+        for (var item : this.children) {
+            item.accept(parameters, output);
         }
+    }
+
+    public void register(DeferredRegister<CreativeModeTab> registry, String name, String title, Supplier<ItemStack> icon) {
+        registry.register(name, () -> CreativeModeTab.builder().title(Component.translatable(title)).icon(icon).displayItems(this).build());
     }
 }

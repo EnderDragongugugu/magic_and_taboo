@@ -56,7 +56,7 @@ public class MagicPotionImpl implements ICapabilityProvider, MagicPotion, INBTSe
         }
         var elements = new CompoundTag();
         if (this.elements == null) return root;
-        var registries = RegistryAccessor.access();
+        var registries = RegistryAccessor.getOptionalRegistries();
         if (registries == null) return root;
         var lookup = registries.registryOrThrow(Element.RESOURCE_KEY);
         for (var entry : this.elements.object2FloatEntrySet()) {
@@ -69,7 +69,7 @@ public class MagicPotionImpl implements ICapabilityProvider, MagicPotion, INBTSe
     @Override
     public void deserializeNBT(CompoundTag root) {
         var map = new Object2FloatOpenHashMap<Element>();
-        var registries = RegistryAccessor.access();
+        var registries = RegistryAccessor.getOptionalRegistries();
         if (registries == null) {
             this.setContent(null, map);
             return;

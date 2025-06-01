@@ -1,5 +1,6 @@
 package enderdragon.magic_and_taboo.block.entity;
 
+import com.mojang.logging.LogUtils;
 import enderdragon.magic_and_taboo.block.EnchantedCrucibleBlock;
 import enderdragon.magic_and_taboo.capability.MagicPotion;
 import enderdragon.magic_and_taboo.client.renderer.EnchantedCrucibleInfo;
@@ -11,7 +12,6 @@ import enderdragon.magic_and_taboo.item.MagicPotionParchmentItem;
 import enderdragon.magic_and_taboo.registry.AlchemyElement;
 import enderdragon.magic_and_taboo.registry.Element;
 import enderdragon.magic_and_taboo.util.ContainerUtil;
-import enderdragon.magic_and_taboo.util.RegistryAccessor;
 import it.unimi.dsi.fastutil.objects.Object2FloatOpenHashMap;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -38,13 +38,15 @@ import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.slf4j.Logger;
+
+import static enderdragon.magic_and_taboo.util.RegistryAccessor.getRegistries;
 
 /**
  * @see net.minecraftforge.fluids.capability.templates.FluidTank
  * @see net.minecraftforge.fluids.capability.FluidHandlerBlockEntity
  */
 public class EnchantedCrucibleBlockEntity extends BlockEntity implements IFluidHandler {
-
     public static void tickCommon(Level level, BlockPos pos, BlockState state, EnchantedCrucibleBlockEntity crucible) {
         ++crucible.tick;
         // cooling start
@@ -55,23 +57,25 @@ public class EnchantedCrucibleBlockEntity extends BlockEntity implements IFluidH
             return;
         }
         // cooling end
-        var registry = level.registryAccess();
         // cooking start
+        var registry = level.registryAccess();
         for (int i = crucible.stacks.size() - 1; i >= 0; --i) {
             var stack = crucible.stacks.get(i);
             if (stack.isEmpty()) continue;
-            var alchemyElement = AlchemyElement.fromItem(registry, stack.getItem());
-            var time = alchemyElement == null ? 300 : alchemyElement.time();
-            if (crucible.cookingTime[i] < time) {
-                crucible.cookingTime[i] = Math.max(crucible.cookingTime[i] + 1, 0);
+            var element = AlchemyElement.fromItem(registry, stack.getItem());
+            int time = element == null ? 300 : element.time();
+            int progress = crucible.cookingTime[i];
+            if (progress < time) {
+                progress = Math.max(progress + 1, 0);
             }
-            if (crucible.cookingTime[i] >= time) {
+            if (progress >= time) {
                 crucible.transferToRecipeSlot(stack.copy());
-                crucible.addCookedElements(alchemyElement);
+                crucible.addCookedElements(element);
                 crucible.stacks.set(i, ItemStack.EMPTY);
-                crucible.cookingTime[i] = 0;
+                progress = 0;
                 crucible.setChanged();
             }
+            crucible.cookingTime[i] = progress;
         }
         // cooking end
         // heating start
@@ -160,16 +164,16 @@ public class EnchantedCrucibleBlockEntity extends BlockEntity implements IFluidH
         return true;
     }
 
-    // 转移物品
+    /// 转移物品
     public void transferToRecipeSlot(ItemStack stack) {
-        for (int i = 0; i < recipeStacks.size(); i++) {
-            if (recipeStacks.get(i).isEmpty()) {
-                recipeStacks.set(i, stack);
+        var ingredients = this.recipeStacks;
+        for (int i = 0, end = ingredients.size(); i < end; ++i) {
+            if (ingredients.get(i).isEmpty()) {
+                ingredients.set(i, stack);
                 return;
             }
         }
     }
-
 
     public void test(Level level, GlassMagicPotionBottleItem stack, Player player) {
         int amount = this.fluid.getAmount();
@@ -190,28 +194,30 @@ public class EnchantedCrucibleBlockEntity extends BlockEntity implements IFluidH
         }
     }
 
-
     public void fillPotion(MagicPotion potion) {
-        for (var entry : this.elements.object2FloatEntrySet()) {
+        var elements = this.elements;
+        for (var entry : elements.object2FloatEntrySet()) {
             var element = entry.getKey();
             float conflict = 0.0F, bonus = 1.0F;
             for (var inner : element.resistanceElementMap().object2FloatEntrySet()) {
-                if (this.elements.containsKey(inner.getKey().value())) {
+                if (elements.containsKey(inner.getKey().value())) {
                     conflict += inner.getFloatValue();
                 }
             }
             for (var inner : element.resistanceElementMap().object2FloatEntrySet()) {
-                if (this.elements.containsKey(inner.getKey().value())) {
+                if (elements.containsKey(inner.getKey().value())) {
                     bonus += inner.getFloatValue();
                 }
             }
             entry.setValue((entry.getFloatValue() - conflict) * bonus);
         }
-        potion.setContent(this.fluid.getFluid().getFluidType(), this.elements);
+        potion.setContent(this.fluid.getFluid().getFluidType(), elements);
     }
 
+    private static Logger LOGGER = LogUtils.getLogger();
+
+    @Override
     public void load(CompoundTag tag) {
-        var registry = level.registryAccess();
         super.load(tag);
         if (tag.contains("Fluid")) {
             this.fluid = FluidStack.loadFluidStackFromNBT(tag.getCompound("Fluid"));
@@ -230,7 +236,7 @@ public class EnchantedCrucibleBlockEntity extends BlockEntity implements IFluidH
         if (tag.contains("Elements")) {
             this.elements.clear();
             var elements = tag.getCompound("Elements");
-            var lookup = registry.registryOrThrow(Element.RESOURCE_KEY);
+            var lookup = getRegistries(this.level).registryOrThrow(Element.RESOURCE_KEY);
             for (var entry : lookup.entrySet()) {
                 float value = elements.getFloat(entry.getKey().location().toString());
                 if (value <= 0.0F) continue;
@@ -246,21 +252,18 @@ public class EnchantedCrucibleBlockEntity extends BlockEntity implements IFluidH
         }
     }
 
+    @Override
     protected void saveAdditional(CompoundTag tag) {
         super.saveAdditional(tag);
         ContainerHelper.saveAllItems(tag, stacks, true);
-
         CompoundTag recipeTag = new CompoundTag();
         ContainerHelper.saveAllItems(recipeTag, recipeStacks, true);
         tag.put("RecipeItems", recipeTag);
-        
         tag.putIntArray("CookingProgress", this.cookingTime);
         tag.putInt("Temperature", this.temperature);
         tag.put("Fluid", this.fluid.writeToNBT(new CompoundTag()));
-
         var elements = new CompoundTag();
-        var registries = RegistryAccessor.access();
-        var lookup = registries.registryOrThrow(Element.RESOURCE_KEY);
+        var lookup = getRegistries(this.level).registryOrThrow(Element.RESOURCE_KEY);
         for (var entry : this.elements.object2FloatEntrySet()) {
             elements.putFloat(lookup.getKey(entry.getKey()).toString(), entry.getFloatValue());
         }

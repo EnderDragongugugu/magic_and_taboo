@@ -10,8 +10,7 @@ import net.minecraftforge.registries.RegistryObject;
 
 public class MATMenuTypes {
     public static final DeferredRegister<MenuType<?>> REGISTRY = DeferredRegister.create(ForgeRegistries.MENU_TYPES, MagicAndTabooMod.MOD_ID);
-    public static final RegistryObject<MenuType<WorkHubMenu>> WORK_HUB = REGISTRY.register(
-            "work_hub",
-            () -> IForgeMenuType.create(WorkHubMenu::formPacket)
+    public static final RegistryObject<MenuType<WorkHubMenu>> WORK_HUB = REGISTRY.register("work_hub", () ->
+            IForgeMenuType.create(WorkHubMenu::formPacket)
     );
 }

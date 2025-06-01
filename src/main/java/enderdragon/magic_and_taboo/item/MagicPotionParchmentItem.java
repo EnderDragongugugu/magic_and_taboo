@@ -17,6 +17,19 @@ import net.minecraft.world.level.material.Fluid;
 import net.minecraftforge.registries.ForgeRegistries;
 
 public class MagicPotionParchmentItem extends Item {
+    public static void writeRecipe(Player player, ItemStack parchment, NonNullList<ItemStack> stacks, int temperature, Fluid fluid) {
+        var root = new CompoundTag();
+        var recipe = new CompoundTag();
+        ContainerHelper.saveAllItems(recipe, stacks, true);
+        recipe.putInt("Temperature", temperature);
+        recipe.putString("Fluid", ForgeRegistries.FLUIDS.getKey(fluid).toString());
+        root.put("PotionRecipe", recipe);
+        var stack = new ItemStack(MATItems.MAGIC_POTION_PARCHMENT.get());
+        stack.setTag(root);
+        ContainerUtil.addItem(player, stack);
+        parchment.shrink(1);
+    }
+
     public MagicPotionParchmentItem(Properties props) {
         super(props);
     }
@@ -24,26 +37,11 @@ public class MagicPotionParchmentItem extends Item {
     @Override
     public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
         if (player.isLocalPlayer()) {
-            var itemStack = player.getItemInHand(hand);
-            var tag = itemStack.getOrCreateTag();
-            if (tag.contains("potion_recipe")) {
-                var nbt = tag.getCompound("potion_recipe");
-                ClientUtil.openMagicPotionParchmentScreen(nbt);
+            var tag = player.getItemInHand(hand).getTag();
+            if (tag != null && tag.contains("PotionRecipe")) {
+                ClientUtil.openMagicPotionParchmentScreen(tag.getCompound("PotionRecipe"));
             }
         }
         return InteractionResultHolder.success(player.getItemInHand(hand));
-    }
-
-    public static void writeRecipe(Player player, ItemStack parchment, NonNullList<ItemStack> stacks, int temperature, Fluid fluid) {
-        var tag = new CompoundTag();
-        var nbt = new CompoundTag();
-        ContainerHelper.saveAllItems(nbt, stacks, true);
-        nbt.putInt("Temperature", temperature);
-        nbt.putString("Fluid", ForgeRegistries.FLUIDS.getKey(fluid).toString());
-        tag.put("potion_recipe", nbt);
-        var itemStack = new ItemStack(MATItems.MAGIC_POTION_PARCHMENT.get());
-        itemStack.setTag(tag);
-        ContainerUtil.addItem(player, itemStack);
-        parchment.shrink(1);
     }
 }

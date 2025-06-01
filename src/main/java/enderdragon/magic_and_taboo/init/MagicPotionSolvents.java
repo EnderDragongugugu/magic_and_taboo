@@ -27,7 +27,6 @@ public class MagicPotionSolvents {
     private static final Logger LOGGER = LogUtils.getLogger();
 
     public static final MagicPotionSolvent WATER = () -> 0x385DC6;
-
     public static final MagicPotionSolvent HONEY = new HoneySolvent();
     public static final MagicPotionSolvent PLANT_EXTRACT = new PlantExtractSolvent();
 

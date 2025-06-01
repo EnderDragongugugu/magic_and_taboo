@@ -1,11 +1,11 @@
 package enderdragon.magic_and_taboo.client.book;
 
+import enderdragon.magic_and_taboo.client.ClientUtil;
 import enderdragon.magic_and_taboo.client.book.graph.GraphBuilder;
 import enderdragon.magic_and_taboo.client.book.graph.GraphChapter;
 import enderdragon.magic_and_taboo.client.book.page.*;
 import enderdragon.magic_and_taboo.init.MATItems;
 import enderdragon.magic_and_taboo.registry.Element;
-import enderdragon.magic_and_taboo.util.RegistryAccessor;
 import net.minecraft.ChatFormatting;
 import net.minecraft.advancements.FrameType;
 import net.minecraft.network.chat.ClickEvent;
@@ -69,7 +69,7 @@ public class OccultCodexChapters {
             TitleChunk.of("text.occult_codex.node.potion_1.content.title"),
             TextChunk.of("text.occult_codex.node.potion_1.content")
     ), () -> {
-        var access = RegistryAccessor.access();
+        var access = ClientUtil.getOptionalRegistries();
         return access == null ? null : access.registryOrThrow(Element.RESOURCE_KEY);
     }, element -> List.of(
             ImageChunk.squared(element.icon(), 0, 0, ICON_SIZE, 4),

@@ -1,69 +1,59 @@
 package enderdragon.magic_and_taboo.item;
 
-import enderdragon.magic_and_taboo.capability.AlchemyElementImpl;
+import enderdragon.magic_and_taboo.capability.ElementHolder;
+import enderdragon.magic_and_taboo.capability.ElementHolderImpl;
+import enderdragon.magic_and_taboo.init.MATCapabilities;
 import enderdragon.magic_and_taboo.init.MATItems;
 import enderdragon.magic_and_taboo.registry.Element;
-import enderdragon.magic_and_taboo.util.RegistryAccessor;
+import net.minecraft.core.Holder;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import org.jetbrains.annotations.Nullable;
 
 public class AlchemyElementItem extends Item {
-    public AlchemyElementItem(Properties pProperties) {
-        super(pProperties);
+    public static int getColor(ItemStack stack, int layer) {
+        if (layer > 0) return -1;
+        var element = stack.getCapability(MATCapabilities.ELEMENT_HOLDER).orElse(ElementHolder.EMPTY).getElement();
+        return element == null ? -1 : element.effect().getColor();
     }
 
-    public static CompoundTag serializeNBT(ResourceKey<Element> key, Float count) {
-        var tag = new CompoundTag();
-        var element = new CompoundTag();
-        element.putFloat(key.location().toString(), count);
-        tag.put("Element", element);
-        return tag;
+    public static ItemStack makeDisplayStack(Holder.Reference<Element> element) {
+        var stack = new ItemStack(MATItems.ALCHEMY_ELEMENT.get());
+        var holder = stack.getCapability(MATCapabilities.ELEMENT_HOLDER).orElse(ElementHolder.EMPTY);
+        holder.setElement(element.value());
+        holder.setAmount(10.0F);
+        return stack;
     }
 
-    @Nullable
-    public static Element deserializeNBT(ItemStack stack) {
-        var nbt = stack.getOrCreateTag();
-        var registries = RegistryAccessor.access();
-        if (!nbt.contains("Element")) return null;
-        var element = nbt.getCompound("Element");
-        var lookup = registries.registryOrThrow(Element.RESOURCE_KEY);
-        for (var entry : lookup.entrySet()) {
-            float value = element.getFloat(entry.getKey().location().toString());
-            if (value <= 0.0F) continue;
-            return entry.getValue();
-        }
-        return null;
+    public static void fillDisplayStacks(CreativeModeTab.ItemDisplayParameters context, CreativeModeTab.Output entries) {
+        context.holders().lookupOrThrow(Element.RESOURCE_KEY)
+                .listElements()
+                .map(AlchemyElementItem::makeDisplayStack)
+                .forEach(entries::accept);
     }
 
-    public static ItemStack createForElement(ResourceKey<Element> key) {
-        ItemStack itemStack = new ItemStack(MATItems.ALCHEMY_ELEMENT.get());
-        var tag = serializeNBT(key, 10.0F);
-        itemStack.setTag(tag);
-//        var cap = itemStack.getCapability(MATCapabilities.ALCHEMY_ELEMENT).orElse(AlchemyElement.EMPTY);
-//        cap.setElement(key, 10.0F);
-        return itemStack;
+    public AlchemyElementItem(Properties props) {
+        super(props);
     }
 
     @Override
-    public Component getName(ItemStack pStack) {
-        var element = deserializeNBT(pStack);
-        if (element != null) {
-            return Component.translatable("item.magic_and_taboo.alchemy_element.element", element.getDisplayName());
-        }
-//        var cap = pStack.getCapability(MATCapabilities.ALCHEMY_ELEMENT).orElse(AlchemyElement.EMPTY);
-//        if (cap.getElement() != null) {
-//            return Component.translatable("item.magic_and_taboo.alchemy_element.element", cap.getElement().getDisplayName());
-//        }
-        return super.getName(pStack);
+    public Component getName(ItemStack stack) {
+        var element = stack.getCapability(MATCapabilities.ELEMENT_HOLDER).orElse(ElementHolder.EMPTY).getElement();
+        return element == null
+                ? super.getName(stack)
+                : Component.translatable("item.magic_and_taboo.alchemy_element.element", element.getDisplayName());
     }
 
     @Override
     public @Nullable ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundTag nbt) {
-        return new AlchemyElementImpl();
+        var element = new ElementHolderImpl();
+        if (nbt != null) {
+            element.deserializeNBT(nbt);
+        }
+        return element;
     }
 }
