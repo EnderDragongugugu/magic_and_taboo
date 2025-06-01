@@ -15,7 +15,8 @@ import java.util.Collection;
 import java.util.List;
 
 public abstract class PageChapter implements Chapter {
-    protected static final ResourceLocation BACKGROUND = MagicAndTabooMod.makeId("textures/gui/book/book.png");
+    //    protected static final ResourceLocation BACKGROUND = MagicAndTabooMod.makeId("textures/gui/book/book.png");
+    protected static final ResourceLocation BACKGROUND = MagicAndTabooMod.makeId("textures/gui/book/1.png");
     public static final int PAGE_WIDTH = 118;
     public static final int PAGE_HEIGHT = 150;
     protected static final int FRAME_WIDTH = 271;
@@ -85,7 +86,7 @@ public abstract class PageChapter implements Chapter {
                 0,
                 FRAME_WIDTH,
                 FRAME_HEIGHT,
-                512,
+                353,
                 256
         );
         if (this.page < 0 || this.page >= this.pages.size()) return;

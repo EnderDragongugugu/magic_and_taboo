@@ -146,7 +146,7 @@ public class MATItems {
     public static final RegistryObject<PotionSyringeItem> POTION_SYRINGE = POTION.register(REGISTRY, "potion_syringe", () ->
             new PotionSyringeItem(new Properties().stacksTo(4))
     );
-    public static final RegistryObject<AlchemyElementItem> ALCHEMY_ELEMENT = REGISTRY.register("alchemy_element", () ->
+    public static final RegistryObject<AlchemyElementItem> ALCHEMY_ELEMENT = POTION.register(REGISTRY, "alchemy_element", () ->
             new AlchemyElementItem(new Properties().stacksTo(16))
     );
     public static final RegistryObject<GlassMagicPotionBottleItem> GLASS_POTION_BOTTLE = POTION.register(REGISTRY, "glass_potion_bottle", () ->
@@ -215,4 +215,38 @@ public class MATItems {
             .saturationMod(0.5F)
             .build()
     )));
+
+    public static void initAlchemyElementItem() {
+        POTION.add(AlchemyElementItem.createForElement(MATElements.MERCURY));
+        POTION.add(AlchemyElementItem.createForElement(MATElements.NAUSEA));
+        POTION.add(AlchemyElementItem.createForElement(MATElements.NIGHT_VISION));
+        POTION.add(AlchemyElementItem.createForElement(MATElements.GLOWING));
+        POTION.add(AlchemyElementItem.createForElement(MATElements.POISON));
+        POTION.add(AlchemyElementItem.createForElement(MATElements.SPEED));
+        POTION.add(AlchemyElementItem.createForElement(MATElements.SLOWNESS));
+        POTION.add(AlchemyElementItem.createForElement(MATElements.HASTE));
+        POTION.add(AlchemyElementItem.createForElement(MATElements.MINING_FATIGUE));
+        POTION.add(AlchemyElementItem.createForElement(MATElements.STRENGTH));
+        POTION.add(AlchemyElementItem.createForElement(MATElements.JUMP_BOOST));
+        POTION.add(AlchemyElementItem.createForElement(MATElements.REGENERATION));
+        POTION.add(AlchemyElementItem.createForElement(MATElements.RESISTANCE));
+        POTION.add(AlchemyElementItem.createForElement(MATElements.FIRE_RESISTANCE));
+        POTION.add(AlchemyElementItem.createForElement(MATElements.WATER_BREATHING));
+        POTION.add(AlchemyElementItem.createForElement(MATElements.INVISIBILITY));
+        POTION.add(AlchemyElementItem.createForElement(MATElements.BLINDNESS));
+        POTION.add(AlchemyElementItem.createForElement(MATElements.HUNGER));
+        POTION.add(AlchemyElementItem.createForElement(MATElements.WEAKNESS));
+        POTION.add(AlchemyElementItem.createForElement(MATElements.WITHER));
+        POTION.add(AlchemyElementItem.createForElement(MATElements.HEALTH_BOOST));
+        POTION.add(AlchemyElementItem.createForElement(MATElements.ABSORPTION));
+        POTION.add(AlchemyElementItem.createForElement(MATElements.LEVITATION));
+        POTION.add(AlchemyElementItem.createForElement(MATElements.LUCK));
+        POTION.add(AlchemyElementItem.createForElement(MATElements.UNLUCK));
+        POTION.add(AlchemyElementItem.createForElement(MATElements.SLOW_FALLING));
+        POTION.add(AlchemyElementItem.createForElement(MATElements.CONDUIT_POWER));
+        POTION.add(AlchemyElementItem.createForElement(MATElements.DOLPHINS_GRACE));
+        POTION.add(AlchemyElementItem.createForElement(MATElements.BAD_OMEN));
+        POTION.add(AlchemyElementItem.createForElement(MATElements.HERO_OF_THE_VILLAGE));
+        POTION.add(AlchemyElementItem.createForElement(MATElements.DARKNESS));
+    }
 }

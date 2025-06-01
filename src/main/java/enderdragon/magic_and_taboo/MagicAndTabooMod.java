@@ -40,6 +40,8 @@ public class MagicAndTabooMod {
         MATEffects.REGISTRY.register(modBus);
         MATBlocks.REGISTRY.register(modBus);
         MATItems.REGISTRY.register(modBus);
+
+
         MATItemGroups.REGISTRY.register(modBus);
         MATBlockEntities.REGISTRY.register(modBus);
         MATMenuTypes.REGISTRY.register(modBus);
@@ -47,6 +49,7 @@ public class MagicAndTabooMod {
         MATSerializers.REGISTRY.register(modBus);
         MATFluids.FLUIDS.register(modBus);
         MATFluids.FLUID_TYPES.register(modBus);
+
         modBus.addListener(MagicAndTabooMod::onComplete);
         modBus.addListener(MagicAndTabooMod::onCommonSetup);
         modBus.addListener(MagicAndTabooMod::registerDataPackRegistry);
@@ -67,6 +70,7 @@ public class MagicAndTabooMod {
                     MATBlocks.FIR_HANGING_SIGN.get(),
                     MATBlocks.FIR_WALL_HANGING_SIGN.get()
             );
+            MATItems.initAlchemyElementItem();
         });
     }
 

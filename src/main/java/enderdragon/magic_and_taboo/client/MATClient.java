@@ -11,6 +11,7 @@ import enderdragon.magic_and_taboo.client.renderer.EnchantedCrucibleRender;
 import enderdragon.magic_and_taboo.client.renderer.PedestalRender;
 import enderdragon.magic_and_taboo.client.renderer.WorkHubRender;
 import enderdragon.magic_and_taboo.init.*;
+import enderdragon.magic_and_taboo.item.AlchemyElementItem;
 import enderdragon.magic_and_taboo.registry.AlchemyElement;
 import enderdragon.magic_and_taboo.util.RegistryAccessor;
 import net.minecraft.client.Minecraft;
@@ -67,6 +68,15 @@ public class MATClient {
                 MATItems.POTION_BOTTLE_GLOW.get(),
                 MATItems.POTION_SYRINGE.get()
         );
+        event.register((stack, layer) ->
+                        layer > 0 ? -1 : AlchemyElementItem.deserializeNBT(stack) == null ? -1 : AlchemyElementItem.deserializeNBT(stack).effect().getColor(),
+                MATItems.ALCHEMY_ELEMENT.get());
+//        event.register((stack, layer) -> {
+//                    var cap = stack.getCapability(MATCapabilities.ALCHEMY_ELEMENT).orElse(enderdragon.magic_and_taboo.capability.AlchemyElement.EMPTY);
+//                    var element = cap.getElement();
+//                    return layer > 0 ? -1 : element == null ? -1 : element.effect().getColor();
+//                },
+//                MATItems.ALCHEMY_ELEMENT.get());
     }
 
     @SubscribeEvent
@@ -104,6 +114,10 @@ public class MATClient {
     @SubscribeEvent
     public static void loadItemGroup(BuildCreativeModeTabContentsEvent event) {
         var tab = event.getTabKey();
+//        LogManager.getLogger().info(MATItemGroups.POTION.makeTab().getType().name() + ":" + event.getTab().getType().name());
+//        if (MATItemGroups.POTION.makeTab().equals()) {
+//            event.accept(AlchemyElementItem.createForElement(MATElements.ABSORPTION));
+//        }
         if (CreativeModeTabs.BUILDING_BLOCKS.equals(tab)) {
             event.accept(MATItems.FIR_LOG);
             event.accept(MATItems.FIR_WOOD);
