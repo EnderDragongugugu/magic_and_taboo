@@ -75,7 +75,7 @@ public class OccultCodexChapters {
             ImageChunk.squared(element.icon(), 0, 0, ICON_SIZE, 4),
             TextChunk.of(
                     Component.translatable("text.occult_codex.node.potion_1.content_1.name", element.getDisplayName()),
-                    Component.translatable("text.occult_codex.node.potion_1.content_1.max_level", element.maxLevel()),
+                    Component.translatable("text.occult_codex.node.potion_1.content_1.max_level", element.maxLevel() + 1),
                     Component.translatable("text.occult_codex.node.potion_1.content_1.max_time", element.maxTime()),
                     element.concentration().format("text.occult_codex.node.potion_1.content_1.concentration"),
                     element.temperature().format("text.occult_codex.node.potion_1.content_1.temperature_range")

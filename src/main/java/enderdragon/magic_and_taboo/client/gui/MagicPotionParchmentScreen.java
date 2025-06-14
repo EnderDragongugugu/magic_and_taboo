@@ -20,8 +20,12 @@ import net.minecraftforge.registries.ForgeRegistries;
 import static enderdragon.magic_and_taboo.block.entity.EnchantedCrucibleBlockEntity.MAX_RECIPE_SIZE;
 
 public class MagicPotionParchmentScreen extends Screen {
-    public static final ResourceLocation PARCHMENT = MagicAndTabooMod.makeId("textures/item/parchment.png");
-    public static final int SIZE = 16 * 14;
+    public static final ResourceLocation PARCHMENT = MagicAndTabooMod.makeId("textures/gui/book/parchment.png");
+    public static final float SIZE = 1.4F;
+
+    public static final int W = (int) (121 * SIZE);
+
+    public static final int H = (int) (169 * SIZE);
     public static final int ITEM_COLUMNS = 8;
     public static final int ICON_SIZE = 16;
     protected final ObjectArrayList<Widget> widgets = new ObjectArrayList<>();
@@ -41,8 +45,8 @@ public class MagicPotionParchmentScreen extends Screen {
     @Override
     public void init() {
         super.init();
-        int x = this.left = (this.width - SIZE) / 2;
-        int y = this.top = (this.height - SIZE) / 2;
+        int x = this.left = (this.width - W) / 2;
+        int y = this.top = (this.height - H) / 2;
         var widgets = this.widgets;
         widgets.clear();
         TooltipRenderer renderer = GuiGraphics::renderTooltip;
@@ -80,7 +84,7 @@ public class MagicPotionParchmentScreen extends Screen {
         this.renderBackground(graphics);
         super.render(graphics, mouseX, mouseY, partialTicks);
 
-        graphics.blit(PARCHMENT, this.left, this.top, 0, 0, SIZE, SIZE, SIZE, SIZE);
+        graphics.blit(PARCHMENT, this.left, this.top, 0, 0, W, H, W, H);
 
         boolean tooltip = true;
         for (var widget : this.widgets) {
@@ -98,5 +102,6 @@ public class MagicPotionParchmentScreen extends Screen {
         void render(GuiGraphics graphics, Font font, ItemStack stack, int mouseX, int mouseY);
     }
 
-    public record Widget(int left, int top, ItemStack stack, TooltipRenderer tooltip) {}
+    public record Widget(int left, int top, ItemStack stack, TooltipRenderer tooltip) {
+    }
 }

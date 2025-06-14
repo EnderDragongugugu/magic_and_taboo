@@ -58,7 +58,7 @@ public record Element(
         while (iterator.hasNext()) {
             var stack = iterator.next();
             if (stack.isEmpty()) continue;
-            var instance = AlchemyElement.fromItem(registry, stack.getItem());
+            var instance = AlchemyElement.fromItem(registry, stack);
             if (instance == null) continue;
             for (var entry : instance.elementMap().object2FloatEntrySet()) {
                 var element = entry.getKey().value();

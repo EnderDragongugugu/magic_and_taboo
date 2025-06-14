@@ -15,14 +15,14 @@ import java.util.Collection;
 import java.util.List;
 
 public abstract class PageChapter implements Chapter {
-    //    protected static final ResourceLocation BACKGROUND = MagicAndTabooMod.makeId("textures/gui/book/book.png");
-    protected static final ResourceLocation BACKGROUND = MagicAndTabooMod.makeId("textures/gui/book/1.png");
-    public static final int PAGE_WIDTH = 118;
-    public static final int PAGE_HEIGHT = 150;
-    protected static final int FRAME_WIDTH = 271;
-    protected static final int FRAME_HEIGHT = 179;
-    protected static final int LEFT_START = 15;
-    protected static final int RIGHT_START = 140;
+    protected static final ResourceLocation BACKGROUND = MagicAndTabooMod.makeId("textures/gui/book/book.png");
+    protected static final ResourceLocation SLOT = MagicAndTabooMod.makeId("textures/gui/book/slot.png");
+    public static final int PAGE_WIDTH = 116;
+    public static final int PAGE_HEIGHT = 157;
+    protected static final int FRAME_WIDTH = 269;
+    protected static final int FRAME_HEIGHT = 176;
+    protected static final int LEFT_START = 17;
+    protected static final int RIGHT_START = 145;
     protected final ObjectArrayList<ImmutableList<Chunk>> pages = new ObjectArrayList<>();
     protected int page;
     private PageButton prevButton;
@@ -68,10 +68,10 @@ public abstract class PageChapter implements Chapter {
     public final Collection<AbstractWidget> init(Font font, int width, int height) {
         this.pages.clear();
         this.page = 0;
-        int left = (width - FRAME_WIDTH) / 2, top = (height - FRAME_HEIGHT) / 2 + 15;
+        int left = (width - FRAME_WIDTH) / 2, top = (height - FRAME_HEIGHT) / 2 + 10;
         this.layout(font, left, top);
-        this.prevButton = new PageButton(left - 2, top + 159, false, ignored -> this.prevPage(), true);
-        this.nextButton = new PageButton(left + 269 - 17 + 3, top + 159, true, ignored -> this.nextPage(), true);
+        this.prevButton = new PageButton(left - 2, top + 164, false, ignored -> this.prevPage(), true);
+        this.nextButton = new PageButton(left + 269 - 17 + 3, top + 164, true, ignored -> this.nextPage(), true);
         this.updateButtonVisibility();
         return List.of(this.prevButton, this.nextButton);
     }

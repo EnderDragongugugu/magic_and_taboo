@@ -62,7 +62,7 @@ public class EnchantedCrucibleBlockEntity extends BlockEntity implements IFluidH
         for (int i = crucible.stacks.size() - 1; i >= 0; --i) {
             var stack = crucible.stacks.get(i);
             if (stack.isEmpty()) continue;
-            var element = AlchemyElement.fromItem(registry, stack.getItem());
+            var element = AlchemyElement.fromItem(registry, stack);
             int time = element == null ? 300 : element.time();
             int progress = crucible.cookingTime[i];
             if (progress < time) {
@@ -177,20 +177,24 @@ public class EnchantedCrucibleBlockEntity extends BlockEntity implements IFluidH
 
     public void test(Level level, GlassMagicPotionBottleItem stack, Player player) {
         int amount = this.fluid.getAmount();
-        if (amount >= 250) {
-            var bottle = new ItemStack(stack.getFilled());
-            if (player.getOffhandItem().is(MATItems.PARCHMENT.get())) {
-                MagicPotionParchmentItem.writeRecipe(player, player.getOffhandItem(), this.recipeStacks, this.temperature, this.fluid.getFluid());
+        if (player.getOffhandItem().is(MATItems.MAGIC_POTION_PARCHMENT.get())) {
+            MagicPotionParchmentItem.setRecipe(player, stack, player.getOffhandItem());
+        } else {
+            if (amount >= 250) {
+                var bottle = new ItemStack(stack.getFilled());
+                if (player.getOffhandItem().is(MATItems.PARCHMENT.get())) {
+                    MagicPotionParchmentItem.writeRecipe(player, player.getOffhandItem(), this.recipeStacks, this.temperature, this.fluid.getFluid(), elements);
+                }
+                this.fillPotion(bottle.getCapability(MATCapabilities.MAGIC_POTION).orElse(MagicPotion.EMPTY));
+                ContainerUtil.addItem(player, bottle);
+                this.fluid.setAmount(amount - 250);
+                this.setChanged();
             }
-            this.fillPotion(bottle.getCapability(MATCapabilities.MAGIC_POTION).orElse(MagicPotion.EMPTY));
-            ContainerUtil.addItem(player, bottle);
-            this.fluid.setAmount(amount - 250);
-            this.setChanged();
-        }
-        if (amount <= 250) {
-            stacks.clear();
-            recipeStacks.clear();
-            elements.clear();
+            if (amount <= 250) {
+                stacks.clear();
+                recipeStacks.clear();
+                elements.clear();
+            }
         }
     }
 
@@ -272,7 +276,7 @@ public class EnchantedCrucibleBlockEntity extends BlockEntity implements IFluidH
 
     public boolean place(RegistryAccess registry, ItemStack stack, Player player) {
         if (!stack.isEmpty() && !isRecipeFull()) {
-            var alchemyElement = AlchemyElement.fromItem(registry, stack.getItem());
+            var alchemyElement = AlchemyElement.fromItem(registry, stack);
             if (alchemyElement != null) {
                 for (int i = 0; i < stacks.size(); ++i) {
                     var content = stacks.get(i);
@@ -297,7 +301,7 @@ public class EnchantedCrucibleBlockEntity extends BlockEntity implements IFluidH
         for (int i = stacks.size() - 1; i >= 0; --i) {
             var stack = stacks.get(i);
             if (stack.isEmpty()) continue;
-            var alchemyElement = AlchemyElement.fromItem(registry, stack.getItem());
+            var alchemyElement = AlchemyElement.fromItem(registry, stack);
             var time = alchemyElement == null ? 300 : alchemyElement.time();
             if (cookingTime[i] < time) {
                 stacks.set(i, ItemStack.EMPTY);

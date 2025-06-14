@@ -11,8 +11,12 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.List;
 
 public class AlchemyElementItem extends Item {
     public static int getColor(ItemStack stack, int layer) {
@@ -25,7 +29,7 @@ public class AlchemyElementItem extends Item {
         var stack = new ItemStack(MATItems.ALCHEMY_ELEMENT.get());
         var holder = stack.getCapability(MATCapabilities.ELEMENT_HOLDER).orElse(ElementHolder.EMPTY);
         holder.setElement(element.value());
-        holder.setAmount(10.0F);
+        holder.setAmount(element.get().concentration().min() * 0.1F);
         return stack;
     }
 
@@ -55,5 +59,13 @@ public class AlchemyElementItem extends Item {
             element.deserializeNBT(nbt);
         }
         return element;
+    }
+
+    @Override
+    public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltips, TooltipFlag pIsAdvanced) {
+        var element = stack.getCapability(MATCapabilities.ELEMENT_HOLDER).orElse(ElementHolder.EMPTY).getElement();
+        if (element != null) {
+            tooltips.add(Component.translatable("tooltip.magic_and_taboo.alchemy_element.element", element.getDisplayName()));
+        }
     }
 }

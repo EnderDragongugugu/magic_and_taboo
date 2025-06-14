@@ -1,5 +1,6 @@
 package enderdragon.magic_and_taboo.util;
 
+import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import net.minecraft.network.protocol.game.ClientboundContainerSetSlotPacket;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.TagKey;
@@ -41,6 +42,32 @@ public class ContainerUtil {
         if (!player.addItem(stack)) {
             player.drop(stack, false);
         }
+    }
+
+    public static boolean findAllStack(Container container, List<ItemStack> stacks) {
+        Object2IntOpenHashMap<String> stackMap = new Object2IntOpenHashMap<>();
+        for (var stack : stacks) {
+            if (!stack.isEmpty()) {
+                stackMap.addTo(stack.getHoverName().getString(), 1);
+            }
+        }
+
+        Object2IntOpenHashMap<String> invMap = new Object2IntOpenHashMap<>();
+        for (int i = 0; i < container.getContainerSize(); i++) {
+            var stack = container.getItem(i);
+            if (!stack.isEmpty()) {
+                invMap.addTo(stack.getHoverName().getString(), stack.getCount());
+            }
+        }
+
+        for (var entry : stackMap.object2IntEntrySet()) {
+            int need = entry.getIntValue();
+            int have = invMap.getOrDefault(entry.getKey(), 0);
+            if (have < need) {
+                return false;
+            }
+        }
+        return true;
     }
 
     @SafeVarargs

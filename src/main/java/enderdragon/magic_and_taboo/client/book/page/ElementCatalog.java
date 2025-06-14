@@ -34,7 +34,7 @@ public class ElementCatalog extends Catalog<Element> {
         this.top = top;
         var elements = chapter.entries.get();
         if (elements == null) return;
-        int iconLeft = left, iconTop = top + font.wordWrapHeight(this.title, PAGE_WIDTH) + 4, columns = 0;
+        int iconLeft = left, iconTop = top + font.wordWrapHeight(this.title, PAGE_WIDTH) + 7, columns = 0;
         for (var element : elements) {
             this.index.put(element, chapter.fillPage(chapter.descriptor.apply(element), font, top));
             this.icons.add(new Icon(element, iconLeft, iconTop));
@@ -56,17 +56,19 @@ public class ElementCatalog extends Catalog<Element> {
         }
         RenderSystem.enableBlend();
         RenderSystem.defaultBlendFunc();
-        graphics.blit(TitleChunk.SEPARATOR, this.left + 3, top, 140, 180, 110, 3, 512, 256);
+        graphics.blit(TitleChunk.SEPARATOR, this.left, top, 0, 0, TitleChunk.WIDTH, TitleChunk.HEIGHT, TitleChunk.WIDTH, TitleChunk.HEIGHT);
         RenderSystem.disableBlend();
         Component tooltip = null;
         for (var icon : this.icons) {
             graphics.blit(icon.element.icon(), icon.left, icon.top, 0, 0, ICON_SIZE, ICON_SIZE, ICON_SIZE, ICON_SIZE);
+
             if (tooltip == null && isMouseOver(mouseX, mouseY, icon.left, icon.top, ICON_SIZE, ICON_SIZE)) {
                 tooltip = TOOLTIPS.computeIfAbsent(icon.element, Element::getDisplayName);
             }
         }
         if (tooltip != null) {
             graphics.renderTooltip(font, tooltip, mouseX, mouseY);
+
         }
     }
 
@@ -82,5 +84,6 @@ public class ElementCatalog extends Catalog<Element> {
         return false;
     }
 
-    public record Icon(Element element, int left, int top) {}
+    public record Icon(Element element, int left, int top) {
+    }
 }

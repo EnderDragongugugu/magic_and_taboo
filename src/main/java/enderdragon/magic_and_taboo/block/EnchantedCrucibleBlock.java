@@ -173,7 +173,7 @@ public class EnchantedCrucibleBlock extends BaseEntityBlock {
                     while (iterator.hasNext()) {
                         var stack = iterator.next();
                         if (stack.isEmpty()) continue;
-                        var element = AlchemyElement.fromItem(registry, stack.getItem());
+                        var element = AlchemyElement.fromItem(registry, stack);
                         if (element != null && progress[iterator.previousIndex()] < element.time()) {
                             Containers.dropItemStack(level, pos.getX(), pos.getY(), pos.getZ(), stack);
                         }
