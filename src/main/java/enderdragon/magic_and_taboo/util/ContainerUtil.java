@@ -1,6 +1,7 @@
 package enderdragon.magic_and_taboo.util;
 
-import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
+import it.unimi.dsi.fastutil.objects.Reference2IntOpenHashMap;
 import net.minecraft.network.protocol.game.ClientboundContainerSetSlotPacket;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.TagKey;
@@ -44,30 +45,44 @@ public class ContainerUtil {
         }
     }
 
-    public static boolean findAllStack(Container container, List<ItemStack> stacks) {
-        Object2IntOpenHashMap<String> stackMap = new Object2IntOpenHashMap<>();
+    public static Reference2IntOpenHashMap<ItemStack> merge(List<ItemStack> stacks) {
+        var merged = new Reference2IntOpenHashMap<ItemStack>();
         for (var stack : stacks) {
-            if (!stack.isEmpty()) {
-                stackMap.addTo(stack.getHoverName().getString(), 1);
+            if (stack.isEmpty()) continue;
+            boolean found = false;
+            for (var iterator = merged.reference2IntEntrySet().fastIterator(); iterator.hasNext(); ) {
+                var entry = iterator.next();
+                if (!ItemStack.isSameItemSameTags(entry.getKey(), stack)) continue;
+                entry.setValue(entry.getIntValue() + stack.getCount());
+                found = true;
+                break;
             }
+            if (found) continue;
+            merged.put(stack, stack.getCount());
         }
+        return merged;
+    }
 
-        Object2IntOpenHashMap<String> invMap = new Object2IntOpenHashMap<>();
-        for (int i = 0; i < container.getContainerSize(); i++) {
+    public static List<Match> findAllStacks(Container container, List<ItemStack> stacks) {
+        var merged = merge(stacks);
+        var matches = new ObjectArrayList<Match>();
+        for (int i = 0, n = container.getContainerSize(); i < n; ++i) {
             var stack = container.getItem(i);
-            if (!stack.isEmpty()) {
-                invMap.addTo(stack.getHoverName().getString(), stack.getCount());
+            for (var iterator = merged.reference2IntEntrySet().fastIterator(); iterator.hasNext(); ) {
+                var entry = iterator.next();
+                if (!ItemStack.isSameItemSameTags(entry.getKey(), stack)) continue;
+                int count = entry.getIntValue() - stack.getCount();
+                if (count > 0) {
+                    matches.add(new Match(i, stack.getCount()));
+                    entry.setValue(count);
+                } else {
+                    matches.add(new Match(i, entry.getIntValue()));
+                    iterator.remove();
+                }
+                break;
             }
         }
-
-        for (var entry : stackMap.object2IntEntrySet()) {
-            int need = entry.getIntValue();
-            int have = invMap.getOrDefault(entry.getKey(), 0);
-            if (have < need) {
-                return false;
-            }
-        }
-        return true;
+        return merged.isEmpty() ? matches : null;
     }
 
     @SafeVarargs
@@ -108,6 +123,8 @@ public class ContainerUtil {
     }
 
     public static boolean canMerge(ItemStack old, ItemStack neo) {
-        return old.isEmpty() || (neo.is(old.getItem()) && neo.getCount() + old.getCount() <= old.getMaxStackSize());
+        return old.isEmpty() || (ItemStack.isSameItemSameTags(old, neo) && neo.getCount() + old.getCount() <= old.getMaxStackSize());
     }
+
+    public record Match(int slot, int count) {}
 }

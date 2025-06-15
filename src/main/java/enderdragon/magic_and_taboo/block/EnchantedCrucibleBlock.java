@@ -1,13 +1,19 @@
 package enderdragon.magic_and_taboo.block;
 
 import enderdragon.magic_and_taboo.block.entity.EnchantedCrucibleBlockEntity;
+import enderdragon.magic_and_taboo.capability.MagicPotion;
 import enderdragon.magic_and_taboo.init.MATBlockEntities;
+import enderdragon.magic_and_taboo.init.MATCapabilities;
+import enderdragon.magic_and_taboo.init.MATItems;
 import enderdragon.magic_and_taboo.item.GlassMagicPotionBottleItem;
+import enderdragon.magic_and_taboo.item.MagicPotionParchmentItem;
 import enderdragon.magic_and_taboo.registry.AlchemyElement;
 import enderdragon.magic_and_taboo.tag.MATBlockTags;
 import enderdragon.magic_and_taboo.tag.MATItemTags;
+import enderdragon.magic_and_taboo.util.ContainerUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.Containers;
@@ -35,6 +41,7 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
+import net.minecraftforge.fluids.capability.IFluidHandler;
 import org.jetbrains.annotations.Nullable;
 
 import static net.minecraft.world.level.block.HorizontalDirectionalBlock.FACING;
@@ -140,7 +147,9 @@ public class EnchantedCrucibleBlock extends BaseEntityBlock {
             ItemStack stack = player.getItemInHand(hand);
             if (!stack.isEmpty()) {
                 if (stack.is(MATItemTags.COOLANT) && crucible.cooling()) {
-                    stack.shrink(1);
+                    if (!player.getAbilities().instabuild) {
+                        stack.shrink(1);
+                    }
                     return InteractionResult.SUCCESS;
                 } else if (crucible.getFluidStack().isEmpty() &&
                         stack.getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM).isPresent() &&
@@ -148,8 +157,26 @@ public class EnchantedCrucibleBlock extends BaseEntityBlock {
                 ) {
                     return InteractionResult.SUCCESS;
                 } else if (stack.getItem() instanceof GlassMagicPotionBottleItem bottle) {
-                    crucible.test(level, bottle, player);
-                    level.playSound(null, pos, SoundEvents.BOTTLE_FILL, SoundSource.BLOCKS, 1.0F, 1.0F);
+                    var offhand = player.getOffhandItem();
+                    if (offhand.is(MATItems.MAGIC_POTION_PARCHMENT.get())) {
+                        if (MagicPotionParchmentItem.loadRecipe(player, offhand, bottle) && !player.getAbilities().instabuild) {
+                            stack.shrink(1);
+                        }
+                    } else if (crucible.drain(Integer.MAX_VALUE, IFluidHandler.FluidAction.SIMULATE).getAmount() >= 250) {
+                        if (offhand.is(MATItems.PARCHMENT.get())) {
+                            var info = new CompoundTag();
+                            crucible.saveAdditional(info);
+                            MagicPotionParchmentItem.writeRecipe(player, offhand, info);
+                        }
+                        var filled = new ItemStack(bottle.getFilled());
+                        crucible.fillPotion(filled.getCapability(MATCapabilities.MAGIC_POTION).orElse(MagicPotion.EMPTY));
+                        if (!player.getAbilities().instabuild) {
+                            stack.shrink(1);
+                        }
+                        ContainerUtil.addItem(player, filled);
+                        crucible.drain(250, IFluidHandler.FluidAction.EXECUTE);
+                        level.playSound(null, pos, SoundEvents.BOTTLE_FILL, SoundSource.BLOCKS, 1.0F, 1.0F);
+                    }
                     return InteractionResult.SUCCESS;
                 } else if (crucible.place(registry, player.getAbilities().instabuild ? stack.copy() : stack, player)) {
                     return InteractionResult.SUCCESS;
@@ -173,7 +200,7 @@ public class EnchantedCrucibleBlock extends BaseEntityBlock {
                     while (iterator.hasNext()) {
                         var stack = iterator.next();
                         if (stack.isEmpty()) continue;
-                        var element = AlchemyElement.fromItem(registry, stack);
+                        var element = AlchemyElement.fromStack(registry, stack);
                         if (element != null && progress[iterator.previousIndex()] < element.time()) {
                             Containers.dropItemStack(level, pos.getX(), pos.getY(), pos.getZ(), stack);
                         }

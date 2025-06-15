@@ -15,17 +15,15 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.material.Fluid;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.fluids.FluidStack;
 
 import static enderdragon.magic_and_taboo.block.entity.EnchantedCrucibleBlockEntity.MAX_RECIPE_SIZE;
 
 public class MagicPotionParchmentScreen extends Screen {
     public static final ResourceLocation PARCHMENT = MagicAndTabooMod.makeId("textures/gui/book/parchment.png");
     public static final float SIZE = 1.4F;
-
-    public static final int W = (int) (121 * SIZE);
-
-    public static final int H = (int) (169 * SIZE);
+    public static final int WIDTH = (int) (121 * SIZE);
+    public static final int HEIGHT = (int) (169 * SIZE);
     public static final int ITEM_COLUMNS = 8;
     public static final int ICON_SIZE = 16;
     protected final ObjectArrayList<Widget> widgets = new ObjectArrayList<>();
@@ -38,15 +36,15 @@ public class MagicPotionParchmentScreen extends Screen {
     public MagicPotionParchmentScreen(CompoundTag tag) {
         super(CommonComponents.EMPTY);
         ContainerHelper.loadAllItems(tag, stacks);
-        this.fluid = ForgeRegistries.FLUIDS.getValue(ResourceLocation.tryParse(tag.getString("Fluid")));
+        this.fluid = FluidStack.loadFluidStackFromNBT(tag.getCompound("Fluid")).getFluid();
         this.temperature = Component.translatable("text.magic_and_taboo.enchanted_crucible_temperature", tag.getInt("Temperature"));
     }
 
     @Override
     public void init() {
         super.init();
-        int x = this.left = (this.width - W) / 2;
-        int y = this.top = (this.height - H) / 2;
+        int x = this.left = (this.width - WIDTH) / 2;
+        int y = this.top = (this.height - HEIGHT) / 2;
         var widgets = this.widgets;
         widgets.clear();
         TooltipRenderer renderer = GuiGraphics::renderTooltip;
@@ -84,7 +82,7 @@ public class MagicPotionParchmentScreen extends Screen {
         this.renderBackground(graphics);
         super.render(graphics, mouseX, mouseY, partialTicks);
 
-        graphics.blit(PARCHMENT, this.left, this.top, 0, 0, W, H, W, H);
+        graphics.blit(PARCHMENT, this.left, this.top, 0, 0, WIDTH, HEIGHT, WIDTH, HEIGHT);
 
         boolean tooltip = true;
         for (var widget : this.widgets) {

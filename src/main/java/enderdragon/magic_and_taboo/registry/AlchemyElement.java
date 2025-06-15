@@ -31,14 +31,13 @@ public record AlchemyElement(Object2FloatMap<Holder<Element>> elementMap, int ti
             Codec.INT.fieldOf("max_time").forGetter(AlchemyElement::time)
     ).apply(instance, AlchemyElement::new));
 
-    @Nullable
-    public static AlchemyElement fromItem(RegistryAccess registry, ItemStack stack) {
+    public static @Nullable AlchemyElement fromStack(RegistryAccess registry, ItemStack stack) {
         if (stack.is(MATItems.ALCHEMY_ELEMENT.get())) {
-            Object2FloatOpenHashMap<Holder<Element>> map = new Object2FloatOpenHashMap<>();
-            var cap = stack.getCapability(MATCapabilities.ELEMENT_HOLDER).orElse(ElementHolder.EMPTY);
-            if (cap.getElement() == null) return null;
-            map.addTo(registry.registryOrThrow(Element.RESOURCE_KEY).wrapAsHolder(cap.getElement()), cap.getAmount());
-            return new AlchemyElement(map, 20);
+            var holder = stack.getCapability(MATCapabilities.ELEMENT_HOLDER).orElse(ElementHolder.EMPTY);
+            if (holder.getElement() == null) return null;
+            var elements = new Object2FloatOpenHashMap<Holder<Element>>();
+            elements.put(registry.registryOrThrow(Element.RESOURCE_KEY).wrapAsHolder(holder.getElement()), holder.getAmount());
+            return new AlchemyElement(elements, 20);
         }
         return registry.registryOrThrow(AlchemyElement.RESOURCE_KEY).get(ForgeRegistries.ITEMS.getKey(stack.getItem()));
     }

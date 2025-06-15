@@ -27,7 +27,7 @@ public class TitleChunk extends Chunk {
 
     @Override
     public int measure(Font font, int space) {
-        return font.wordWrapHeight(this.text, PAGE_WIDTH) + HEIGHT + 1;
+        return font.wordWrapHeight(this.text, PAGE_WIDTH) + HEIGHT + 4;
     }
 
     @Override

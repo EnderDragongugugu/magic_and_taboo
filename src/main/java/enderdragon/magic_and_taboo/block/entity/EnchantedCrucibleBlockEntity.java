@@ -1,14 +1,9 @@
 package enderdragon.magic_and_taboo.block.entity;
 
-import com.mojang.logging.LogUtils;
 import enderdragon.magic_and_taboo.block.EnchantedCrucibleBlock;
 import enderdragon.magic_and_taboo.capability.MagicPotion;
 import enderdragon.magic_and_taboo.client.renderer.EnchantedCrucibleInfo;
 import enderdragon.magic_and_taboo.init.MATBlockEntities;
-import enderdragon.magic_and_taboo.init.MATCapabilities;
-import enderdragon.magic_and_taboo.init.MATItems;
-import enderdragon.magic_and_taboo.item.GlassMagicPotionBottleItem;
-import enderdragon.magic_and_taboo.item.MagicPotionParchmentItem;
 import enderdragon.magic_and_taboo.registry.AlchemyElement;
 import enderdragon.magic_and_taboo.registry.Element;
 import enderdragon.magic_and_taboo.util.ContainerUtil;
@@ -38,7 +33,8 @@ import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.slf4j.Logger;
+
+import java.util.Objects;
 
 import static enderdragon.magic_and_taboo.util.RegistryAccessor.getRegistries;
 
@@ -62,7 +58,7 @@ public class EnchantedCrucibleBlockEntity extends BlockEntity implements IFluidH
         for (int i = crucible.stacks.size() - 1; i >= 0; --i) {
             var stack = crucible.stacks.get(i);
             if (stack.isEmpty()) continue;
-            var element = AlchemyElement.fromItem(registry, stack);
+            var element = AlchemyElement.fromStack(registry, stack);
             int time = element == null ? 300 : element.time();
             int progress = crucible.cookingTime[i];
             if (progress < time) {
@@ -175,29 +171,6 @@ public class EnchantedCrucibleBlockEntity extends BlockEntity implements IFluidH
         }
     }
 
-    public void test(Level level, GlassMagicPotionBottleItem stack, Player player) {
-        int amount = this.fluid.getAmount();
-        if (player.getOffhandItem().is(MATItems.MAGIC_POTION_PARCHMENT.get())) {
-            MagicPotionParchmentItem.setRecipe(player, stack, player.getOffhandItem());
-        } else {
-            if (amount >= 250) {
-                var bottle = new ItemStack(stack.getFilled());
-                if (player.getOffhandItem().is(MATItems.PARCHMENT.get())) {
-                    MagicPotionParchmentItem.writeRecipe(player, player.getOffhandItem(), this.recipeStacks, this.temperature, this.fluid.getFluid(), elements);
-                }
-                this.fillPotion(bottle.getCapability(MATCapabilities.MAGIC_POTION).orElse(MagicPotion.EMPTY));
-                ContainerUtil.addItem(player, bottle);
-                this.fluid.setAmount(amount - 250);
-                this.setChanged();
-            }
-            if (amount <= 250) {
-                stacks.clear();
-                recipeStacks.clear();
-                elements.clear();
-            }
-        }
-    }
-
     public void fillPotion(MagicPotion potion) {
         var elements = this.elements;
         for (var entry : elements.object2FloatEntrySet()) {
@@ -218,8 +191,6 @@ public class EnchantedCrucibleBlockEntity extends BlockEntity implements IFluidH
         potion.setContent(this.fluid.getFluid().getFluidType(), elements);
     }
 
-    private static Logger LOGGER = LogUtils.getLogger();
-
     @Override
     public void load(CompoundTag tag) {
         super.load(tag);
@@ -233,9 +204,12 @@ public class EnchantedCrucibleBlockEntity extends BlockEntity implements IFluidH
                 this.info.changed = true;
             }
         }
-        if (tag.contains("RecipeItems")) {
+        var recipe = tag.get("RecipeItems");
+        if (recipe != null) {
             this.recipeStacks.clear();
-            ContainerHelper.loadAllItems(tag.getCompound("RecipeItems"), this.recipeStacks);
+            var temp = new CompoundTag();
+            temp.put("Items", recipe);
+            ContainerHelper.loadAllItems(temp, this.recipeStacks);
         }
         if (tag.contains("Elements")) {
             this.elements.clear();
@@ -257,12 +231,11 @@ public class EnchantedCrucibleBlockEntity extends BlockEntity implements IFluidH
     }
 
     @Override
-    protected void saveAdditional(CompoundTag tag) {
+    public void saveAdditional(CompoundTag tag) {
         super.saveAdditional(tag);
-        ContainerHelper.saveAllItems(tag, stacks, true);
-        CompoundTag recipeTag = new CompoundTag();
-        ContainerHelper.saveAllItems(recipeTag, recipeStacks, true);
-        tag.put("RecipeItems", recipeTag);
+        ContainerHelper.saveAllItems(tag, this.recipeStacks, true);
+        tag.put("RecipeItems", Objects.requireNonNull(tag.get("Items")));
+        ContainerHelper.saveAllItems(tag, this.stacks, true);
         tag.putIntArray("CookingProgress", this.cookingTime);
         tag.putInt("Temperature", this.temperature);
         tag.put("Fluid", this.fluid.writeToNBT(new CompoundTag()));
@@ -276,7 +249,7 @@ public class EnchantedCrucibleBlockEntity extends BlockEntity implements IFluidH
 
     public boolean place(RegistryAccess registry, ItemStack stack, Player player) {
         if (!stack.isEmpty() && !isRecipeFull()) {
-            var alchemyElement = AlchemyElement.fromItem(registry, stack);
+            var alchemyElement = AlchemyElement.fromStack(registry, stack);
             if (alchemyElement != null) {
                 for (int i = 0; i < stacks.size(); ++i) {
                     var content = stacks.get(i);
@@ -301,7 +274,7 @@ public class EnchantedCrucibleBlockEntity extends BlockEntity implements IFluidH
         for (int i = stacks.size() - 1; i >= 0; --i) {
             var stack = stacks.get(i);
             if (stack.isEmpty()) continue;
-            var alchemyElement = AlchemyElement.fromItem(registry, stack);
+            var alchemyElement = AlchemyElement.fromStack(registry, stack);
             var time = alchemyElement == null ? 300 : alchemyElement.time();
             if (cookingTime[i] < time) {
                 stacks.set(i, ItemStack.EMPTY);
@@ -403,6 +376,11 @@ public class EnchantedCrucibleBlockEntity extends BlockEntity implements IFluidH
         FluidStack stack = new FluidStack(this.fluid, drained);
         if (action.execute() && drained > 0) {
             this.fluid.shrink(drained);
+            if (this.fluid.isEmpty()) {
+                this.stacks.clear();
+                this.elements.clear();
+                this.recipeStacks.clear();
+            }
             this.setChanged();
         }
         return stack;

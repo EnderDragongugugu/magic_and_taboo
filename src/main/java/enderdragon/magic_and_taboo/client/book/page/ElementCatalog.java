@@ -61,14 +61,12 @@ public class ElementCatalog extends Catalog<Element> {
         Component tooltip = null;
         for (var icon : this.icons) {
             graphics.blit(icon.element.icon(), icon.left, icon.top, 0, 0, ICON_SIZE, ICON_SIZE, ICON_SIZE, ICON_SIZE);
-
             if (tooltip == null && isMouseOver(mouseX, mouseY, icon.left, icon.top, ICON_SIZE, ICON_SIZE)) {
                 tooltip = TOOLTIPS.computeIfAbsent(icon.element, Element::getDisplayName);
             }
         }
         if (tooltip != null) {
             graphics.renderTooltip(font, tooltip, mouseX, mouseY);
-
         }
     }
 
@@ -84,6 +82,5 @@ public class ElementCatalog extends Catalog<Element> {
         return false;
     }
 
-    public record Icon(Element element, int left, int top) {
-    }
+    public record Icon(Element element, int left, int top) {}
 }

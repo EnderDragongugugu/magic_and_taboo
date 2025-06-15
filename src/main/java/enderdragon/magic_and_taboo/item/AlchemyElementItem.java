@@ -29,7 +29,7 @@ public class AlchemyElementItem extends Item {
         var stack = new ItemStack(MATItems.ALCHEMY_ELEMENT.get());
         var holder = stack.getCapability(MATCapabilities.ELEMENT_HOLDER).orElse(ElementHolder.EMPTY);
         holder.setElement(element.value());
-        holder.setAmount(element.get().concentration().min() * 0.1F);
+        holder.setAmount(element.value().concentration().min() * 0.1F);
         return stack;
     }
 
