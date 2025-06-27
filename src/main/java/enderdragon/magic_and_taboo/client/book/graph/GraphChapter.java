@@ -16,10 +16,10 @@ import java.util.Collections;
 import java.util.Optional;
 
 public class GraphChapter implements Chapter {
-    private static final ResourceLocation BACKGROUND = MagicAndTabooMod.makeId("textures/block/fir/fir_planks.png");
-    private static final ResourceLocation PAGE_FRAME = MagicAndTabooMod.makeId("textures/gui/book/frame_full.png");
-    private static final int WIDTH = 283;
-    private static final int HEIGHT = 182;
+    private static final ResourceLocation BACKGROUND = MagicAndTabooMod.makeId("textures/block/gilded_marble.png");
+    private static final ResourceLocation PAGE_FRAME = MagicAndTabooMod.makeId("textures/gui/book/book_1.png");
+    private static final int WIDTH = 269;
+    private static final int HEIGHT = 176;
     public final ImmutableList<Node> nodes;
     public final ImmutableList<Line> lines;
     private double scrollX;
@@ -59,10 +59,10 @@ public class GraphChapter implements Chapter {
 
         pose.pushPose();
         pose.translate(0, 0, 200);
-        graphics.blit(PAGE_FRAME, x, y, 0, 0, 283, 182, 283, 182);
+        graphics.blit(PAGE_FRAME, x, y, 0, 0, WIDTH, HEIGHT, 353, 256);
         pose.popPose();
 
-        graphics.enableScissor(x + 8, y + 8, x + 283 - 8, y + 182 - 8);
+        graphics.enableScissor(x + 8, y + 16, x + WIDTH - 8, y + HEIGHT - 8);
         pose.pushPose();
         pose.translate((float) x + 8, (float) y + 8, 0.0F);
         int i = Mth.floor(this.scrollX);
