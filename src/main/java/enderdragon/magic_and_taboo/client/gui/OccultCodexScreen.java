@@ -26,6 +26,11 @@ public class OccultCodexScreen extends Screen implements Book {
     }
 
     @Override
+    public boolean isPauseScreen() {
+        return false;
+    }
+
+    @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
         return this.chapter.onMouseDown(this, mouseX, mouseY, button) || super.mouseClicked(mouseX, mouseY, button);
     }

@@ -8,8 +8,8 @@ import enderdragon.magic_and_taboo.client.book.Chapter;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.Mth;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -49,33 +49,31 @@ public class GraphChapter implements Chapter {
             float partialTicks
     ) {
         var pose = graphics.pose();
-        RenderSystem.enableBlend();
-
         int startX = (int) scrollX;
         int startY = (int) scrollY;
 //        test
         int x = (width - WIDTH) / 2;
         int y = (height - HEIGHT) / 2;
 
+        RenderSystem.enableBlend();
+
+        pose.pushPose();
+        RenderSystem.disableBlend();
+        graphics.fillGradient(
+                RenderType.endGateway(),
+                x + 6, y + 14, x + WIDTH - 6, y + HEIGHT - 6,
+                0, 0, 0
+        );
+        RenderSystem.enableBlend();
+        pose.popPose();
+
+
         pose.pushPose();
         pose.translate(0, 0, 200);
         graphics.blit(PAGE_FRAME, x, y, 0, 0, WIDTH, HEIGHT, 353, 256);
         pose.popPose();
 
-        graphics.enableScissor(x + 8, y + 16, x + WIDTH - 8, y + HEIGHT - 8);
-        pose.pushPose();
-        pose.translate((float) x + 8, (float) y + 8, 0.0F);
-        int i = Mth.floor(this.scrollX);
-        int j = Mth.floor(this.scrollY);
-        int k = i % 16;
-        int l = j % 16;
-
-        for (int i1 = -1; i1 <= 15; ++i1) {
-            for (int j1 = -1; j1 <= 8; ++j1) {
-                graphics.blit(BACKGROUND, k + 16 * i1, l + 16 * j1, 0.0F, 0.0F, 16, 16, 16, 16);
-            }
-        }
-        pose.popPose();
+        graphics.enableScissor(x + 8, y + 16, x + WIDTH - 4, y + HEIGHT - 4);
 
         for (Line line : this.lines) {
             line.render(graphics, startX, startY);

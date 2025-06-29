@@ -71,7 +71,7 @@ public abstract class PageChapter implements Chapter {
         int left = (width - FRAME_WIDTH) / 2, top = (height - FRAME_HEIGHT) / 2 + 10;
         this.layout(font, left, top);
         this.prevButton = new PageButton(left - 2, top + 164, false, ignored -> this.prevPage(), true);
-        this.nextButton = new PageButton(left + 269 - 17 + 3, top + 164, true, ignored -> this.nextPage(), true);
+        this.nextButton = new PageButton(left + 269 - 22, top + 164, true, ignored -> this.nextPage(), true);
         this.updateButtonVisibility();
         return List.of(this.prevButton, this.nextButton);
     }

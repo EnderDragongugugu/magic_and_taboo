@@ -41,6 +41,7 @@ public class WorkHubRender implements BlockEntityRenderer<WorkHubBlockEntity> {
         matrices.mulPose(Axis.ZP.rotationDegrees(180.0F));
         matrices.translate(0.0F, -0.44F, 0.0F);
         this.model.setup(hub.getStacks());
+//        this.model.renderToBuffer(matrices, buffers.getBuffer(RenderType.endGateway()), light, overlay, 1.0F, 1.0F, 1.0F, 1.0F);
         this.model.renderToBuffer(matrices, buffers.getBuffer(TEXTURE), light, overlay, 1.0F, 1.0F, 1.0F, 1.0F);
         matrices.popPose();
     }
