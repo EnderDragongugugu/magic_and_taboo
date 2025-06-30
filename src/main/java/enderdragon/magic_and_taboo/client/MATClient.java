@@ -47,10 +47,6 @@ public class MATClient {
             ).ifPresent(element -> event.getTooltipElements().add(1, Either.right(element)));
         }
 
-        @SubscribeEvent
-        public static void renderGuiOverlay(RenderGuiOverlayEvent.Post event) {
-            PlayerMagicPointScreen.onRenderGuiOverlay(event);
-        }
     }
 
     @SubscribeEvent
@@ -98,6 +94,7 @@ public class MATClient {
     public static void registerOverlay(RegisterGuiOverlaysEvent event) {
         event.registerAbove(VanillaGuiOverlay.PLAYER_HEALTH.id(), "mercury_toxins", new MercuryToxinsOverlay());
         event.registerAbove(VanillaGuiOverlay.CROSSHAIR.id(), "sacrificial_dagger", new SacrificialDaggerOverlay());
+        event.registerAbove(VanillaGuiOverlay.CROSSHAIR.id(), "magic_point", new PlayerMagicPointScreen());
     }
 
 

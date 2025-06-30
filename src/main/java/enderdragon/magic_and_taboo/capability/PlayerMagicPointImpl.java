@@ -7,11 +7,17 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.common.util.LazyOptional;
+import net.minecraftforge.event.TickEvent;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
+
 public class PlayerMagicPointImpl implements ICapabilityProvider, IPlayerMagicPoint, INBTSerializable<CompoundTag> {
     public final LazyOptional<IPlayerMagicPoint> holder = LazyOptional.of(() -> this);
+    private static final Map<UUID, Integer> TICK = new HashMap<>();
 
     protected int magic = 0;
     private int maxMagic = 100;
@@ -32,8 +38,7 @@ public class PlayerMagicPointImpl implements ICapabilityProvider, IPlayerMagicPo
     @Override
     public void deserializeNBT(CompoundTag nbt) {
         this.maxMagic = nbt.getInt("max_magic_point");
-        int amount = nbt.getInt("magic_point");
-        this.addMagic(amount);
+        this.magic = nbt.getInt("magic_point");
     }
 
     @Override
@@ -61,4 +66,20 @@ public class PlayerMagicPointImpl implements ICapabilityProvider, IPlayerMagicPo
         magic = magic + amount < 0 ? 0 : Math.max(magic + amount, maxMagic);
     }
 
+    public static void tick(TickEvent.PlayerTickEvent event) {
+        if (event.player.level().isClientSide) return;
+        var player = event.player;
+        UUID uuid = player.getUUID();
+        int i = TICK.getOrDefault(uuid, 0);
+        TICK.putIfAbsent(uuid, i + 1);
+        if (i >= 20) {
+            player.getCapability(MATCapabilities.PLAYER_MAGIC_POINT).ifPresent(magic -> {
+                int MP = magic.getMagic();
+                if (MP < magic.getMaxMagic()) {
+                    magic.addMagic(1);
+                }
+            });
+            TICK.put(uuid, 0);
+        }
+    }
 }

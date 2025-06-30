@@ -1,5 +1,6 @@
 package enderdragon.magic_and_taboo;
 
+import enderdragon.magic_and_taboo.capability.PlayerMagicPointImpl;
 import enderdragon.magic_and_taboo.effect.HemolysisEffect;
 import enderdragon.magic_and_taboo.init.*;
 import enderdragon.magic_and_taboo.item.OccultCodexItem;
@@ -51,6 +52,7 @@ public class MagicAndTabooMod {
         modBus.addListener(MagicAndTabooMod::onCommonSetup);
         modBus.addListener(MagicAndTabooMod::registerDataPackRegistry);
         var forgeBus = MinecraftForge.EVENT_BUS;
+        forgeBus.addListener(PlayerMagicPointImpl::tick);
         forgeBus.addListener(SacrificialDaggerItem::onLivingDeath);
         forgeBus.addListener(HemolysisEffect::livingHurtEvent);
         forgeBus.addListener(OccultCodexItem::onPlayerLogin);
