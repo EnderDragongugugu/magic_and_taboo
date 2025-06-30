@@ -1,13 +1,17 @@
 package enderdragon.magic_and_taboo.client.book.graph;
 
 import com.google.common.collect.ImmutableList;
+import com.mojang.authlib.GameProfile;
 import com.mojang.blaze3d.systems.RenderSystem;
 import enderdragon.magic_and_taboo.MagicAndTabooMod;
 import enderdragon.magic_and_taboo.client.book.Book;
 import enderdragon.magic_and_taboo.client.book.Chapter;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
+import net.minecraft.client.gui.screens.inventory.InventoryScreen;
+import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.resources.ResourceLocation;
 
@@ -16,7 +20,6 @@ import java.util.Collections;
 import java.util.Optional;
 
 public class GraphChapter implements Chapter {
-    private static final ResourceLocation BACKGROUND = MagicAndTabooMod.makeId("textures/block/gilded_marble.png");
     private static final ResourceLocation PAGE_FRAME = MagicAndTabooMod.makeId("textures/gui/book/book_1.png");
     private static final int WIDTH = 269;
     private static final int HEIGHT = 176;
@@ -37,6 +40,7 @@ public class GraphChapter implements Chapter {
         }
         this.lines = builder.build();
     }
+
 
     @Override
     public void render(
@@ -64,9 +68,24 @@ public class GraphChapter implements Chapter {
                 x + 6, y + 14, x + WIDTH - 6, y + HEIGHT - 6,
                 0, 0, 0
         );
+
         RenderSystem.enableBlend();
         pose.popPose();
 
+        var profile = new GameProfile(null, "Ender_Dragon0629");
+        var player = new AbstractClientPlayer(
+                Minecraft.getInstance().level,
+                profile
+        ) {
+            @Override
+            public boolean isSkinLoaded() {
+                return true;
+            }
+        };
+        Minecraft.getInstance().getSkinManager().registerSkins(profile, (type, location, texture) -> {
+        }, true);
+
+        InventoryScreen.renderEntityInInventoryFollowsMouse(graphics, startX + 20, startY + 20, 30, (float) (startX + 20) - mouseX, (float) (startY + 20 - 50) - mouseY, player);
 
         pose.pushPose();
         pose.translate(0, 0, 200);
