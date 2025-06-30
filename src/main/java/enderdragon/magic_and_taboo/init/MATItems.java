@@ -98,6 +98,9 @@ public class MATItems {
     public static final RegistryObject<BlockItem> GOLD_GRAINED_MARBLE_PEDESTAL = BLOCKS.register(REGISTRY, "gold_grained_marble_pedestal", () ->
             new BlockItem(MATBlocks.GOLD_GRAINED_MARBLE_PEDESTAL.get(), new Properties())
     );
+    public static final RegistryObject<BlockItem> MAGIC_CRAFTSMAN_TABLE = BLOCKS.register(REGISTRY, "magic_craftsman_table", () ->
+            new BlockItem(MATBlocks.MAGIC_CRAFTSMAN_TABLE.get(), new Properties())
+    );
     public static final RegistryObject<BlockItem> MERCURY_ORE = BLOCKS.register(REGISTRY, "mercury_ore", () ->
             new BlockItem(MATBlocks.MERCURY_ORE.get(), new Properties())
     );

@@ -46,6 +46,11 @@ public class MATClient {
                     ResourceKey.create(AlchemyElement.RESOURCE_KEY, key)
             ).ifPresent(element -> event.getTooltipElements().add(1, Either.right(element)));
         }
+
+        @SubscribeEvent
+        public static void renderGuiOverlay(RenderGuiOverlayEvent.Post event) {
+            PlayerMagicPointScreen.onRenderGuiOverlay(event);
+        }
     }
 
     @SubscribeEvent
@@ -95,6 +100,7 @@ public class MATClient {
         event.registerAbove(VanillaGuiOverlay.CROSSHAIR.id(), "sacrificial_dagger", new SacrificialDaggerOverlay());
     }
 
+
     @SubscribeEvent
     public static void registerLayerDefinitions(EntityRenderersEvent.RegisterLayerDefinitions event) {
         event.registerLayerDefinition(WorkHubToolModel.LAYER_LOCATION, WorkHubToolModel::createBodyLayer);
@@ -103,10 +109,6 @@ public class MATClient {
     @SubscribeEvent
     public static void loadItemGroup(BuildCreativeModeTabContentsEvent event) {
         var tab = event.getTabKey();
-//        LogManager.getLogger().info(MATItemGroups.POTION.makeTab().getType().name() + ":" + event.getTab().getType().name());
-//        if (MATItemGroups.POTION.makeTab().equals()) {
-//            event.accept(AlchemyElementItem.createForElement(MATElements.ABSORPTION));
-//        }
         if (CreativeModeTabs.BUILDING_BLOCKS.equals(tab)) {
             event.accept(MATItems.FIR_LOG);
             event.accept(MATItems.FIR_WOOD);

@@ -11,6 +11,7 @@ import enderdragon.magic_and_taboo.util.BlockEntityTypeEx;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
@@ -53,6 +54,8 @@ public class MagicAndTabooMod {
         forgeBus.addListener(SacrificialDaggerItem::onLivingDeath);
         forgeBus.addListener(HemolysisEffect::livingHurtEvent);
         forgeBus.addListener(OccultCodexItem::onPlayerLogin);
+        forgeBus.addGenericListener(Entity.class, MATCapabilities::attachCapabilitiesEvent);
+
     }
 
     public static void onComplete(FMLLoadCompleteEvent event) {

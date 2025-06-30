@@ -42,6 +42,8 @@ public class MATItemModelProvider extends ItemModelProvider {
         this.basicItem(MATItems.BLAZE_BURNER);
         this.basicItem(MATItems.BLAZE_BLAST_BURNER);
         this.basicItem(MATItems.BLOOD_BOTTLE);
+        
+        this.basicBlockItem(MATBlocks.MAGIC_CRAFTSMAN_TABLE);
         this.basicBlockItem(MATBlocks.CONDENSER);
         this.basicBlockItem(MATBlocks.MAGIC_PERFUSION_PEDESTAL);
         this.basicBlockItem(MATBlocks.GOLD_GRAINED_MARBLE_PEDESTAL);

@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=east": {
+      "model": "magic_and_taboo:block/magic_craftsman_table",
+      "y": 90
+    },
+    "facing=north": {
+      "model": "magic_and_taboo:block/magic_craftsman_table"
+    },
+    "facing=south": {
+      "model": "magic_and_taboo:block/magic_craftsman_table",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "magic_and_taboo:block/magic_craftsman_table",
+      "y": 270
+    }
+  }
+}

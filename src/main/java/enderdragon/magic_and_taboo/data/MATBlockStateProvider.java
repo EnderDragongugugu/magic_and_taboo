@@ -30,6 +30,7 @@ public class MATBlockStateProvider extends BlockStateProvider {
         this.horizontalBlock(MATBlocks.ENCHANTED_CRUCIBLE.get(), customModel(MATBlocks.ENCHANTED_CRUCIBLE), 0);
         this.simpleBlock(MATBlocks.CONDENSER.get(), customModel(MATBlocks.CONDENSER));
         this.simpleBlock(MATBlocks.MAGIC_PERFUSION_PEDESTAL.get(), customModel(MATBlocks.MAGIC_PERFUSION_PEDESTAL));
+        this.horizontalBlock(MATBlocks.MAGIC_CRAFTSMAN_TABLE.get(), customModel(MATBlocks.MAGIC_CRAFTSMAN_TABLE));
         this.simpleBlock(MATBlocks.GOLD_GRAINED_MARBLE_PEDESTAL.get(), customModel(MATBlocks.GOLD_GRAINED_MARBLE_PEDESTAL));
         this.simpleBlock(MATBlocks.HONEY.get(), this.models().getBuilder(MATBlocks.HONEY.getId().getPath())
                 .texture("particle", new ResourceLocation("block/honey_block_side"))
