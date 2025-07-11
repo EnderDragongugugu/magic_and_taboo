@@ -2,14 +2,12 @@ package enderdragon.magic_and_taboo.init;
 
 import enderdragon.magic_and_taboo.MagicAndTabooMod;
 import enderdragon.magic_and_taboo.item.*;
+import enderdragon.magic_and_taboo.item.armor_material.ArmorMaterials;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.food.FoodProperties;
-import net.minecraft.world.item.BlockItem;
-import net.minecraft.world.item.BucketItem;
-import net.minecraft.world.item.Item;
+import net.minecraft.world.item.*;
 import net.minecraft.world.item.Item.Properties;
-import net.minecraft.world.item.Tiers;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
@@ -173,12 +171,26 @@ public class MATItems {
     public static final RegistryObject<OccultCodexItem> OCCULT_CODEX = ITEMS.register(REGISTRY, "occult_codex", () ->
             new OccultCodexItem(new Properties().stacksTo(1))
     );
+    public static final RegistryObject<LimiteArmorItem> LIMITE_HELMET = ITEMS.register(REGISTRY, "limite_helmet", () ->
+            new LimiteArmorItem(ArmorMaterials.LIMITE, ArmorItem.Type.HELMET, new Properties().stacksTo(1))
+    );
+    public static final RegistryObject<LimiteArmorItem> LIMITE_CHESTPLATE = ITEMS.register(REGISTRY, "limite_chestplate", () ->
+            new LimiteArmorItem(ArmorMaterials.LIMITE, ArmorItem.Type.CHESTPLATE, new Properties().stacksTo(1))
+    );
+    public static final RegistryObject<LimiteArmorItem> LIMITE_LEGGINGS = ITEMS.register(REGISTRY, "limite_leggings", () ->
+            new LimiteArmorItem(ArmorMaterials.LIMITE, ArmorItem.Type.LEGGINGS, new Properties().stacksTo(1))
+    );
+    public static final RegistryObject<LimiteArmorItem> LIMITE_BOOTS = ITEMS.register(REGISTRY, "limite_boots", () ->
+            new LimiteArmorItem(ArmorMaterials.LIMITE, ArmorItem.Type.BOOTS, new Properties().stacksTo(1))
+    );
+
     public static final RegistryObject<Item> PARCHMENT = ITEMS.register(REGISTRY, "parchment", () ->
             new Item(new Properties())
     );
     public static final RegistryObject<MagicPotionParchmentItem> MAGIC_POTION_PARCHMENT = REGISTRY.register("magic_potion_parchment", () ->
             new MagicPotionParchmentItem(new Properties().stacksTo(1))
     );
+
     public static final RegistryObject<Item> MERCURY_SLAG = POTION.register(REGISTRY, "mercury_slag", () -> new Item(new Properties().food(new FoodProperties.Builder()
             .alwaysEat()
             .nutrition(-5)

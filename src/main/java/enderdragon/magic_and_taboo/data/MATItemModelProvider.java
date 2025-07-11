@@ -42,7 +42,7 @@ public class MATItemModelProvider extends ItemModelProvider {
         this.basicItem(MATItems.BLAZE_BURNER);
         this.basicItem(MATItems.BLAZE_BLAST_BURNER);
         this.basicItem(MATItems.BLOOD_BOTTLE);
-        
+
         this.basicBlockItem(MATBlocks.MAGIC_CRAFTSMAN_TABLE);
         this.basicBlockItem(MATBlocks.CONDENSER);
         this.basicBlockItem(MATBlocks.MAGIC_PERFUSION_PEDESTAL);
@@ -123,6 +123,18 @@ public class MATItemModelProvider extends ItemModelProvider {
                 .parent(new ModelFile.UncheckedModelFile("block/wall_inventory"))
                 .texture("wall", texture);
     }
+
+//    private void trimmedArmor(RegistryObject<ArmorItem> armor) {
+//        ItemModelBuilder base = this.basicItem(armor);
+//        for (var trim : ItemModelGenerators.GENERATED_TRIM_MODELS) {
+//            String material = trim.name();
+//            String name = armor.getId().getPath() + "_" + material + "_trim";
+//            ModelFile trimModel = this.withExistingParent(name, this.mcLoc("item/generated"))
+//                    .texture("layer0", MagicAndTabooMod.makeId("item/" + armor.getId().getPath()))
+//                    .texture("layer1", this.mcLoc("trims/items/" + armor.get().getType().getName() + "_trim_" + material));
+//            base.override().predicate(new ResourceLocation("trim_type"), trim.itemModelIndex()).model(trimModel).end();
+//        }
+//    }
 
 //    public void colorItems(RegistryObject<? extends Item> filled, RegistryObject<? extends Item> container) {
 //        var id = filled.getId();

@@ -6,8 +6,10 @@ import enderdragon.magic_and_taboo.capability.MagicPotion;
 import enderdragon.magic_and_taboo.capability.PurenessStorage;
 import enderdragon.magic_and_taboo.capability.WorkHubResult;
 import enderdragon.magic_and_taboo.client.gui.*;
+import enderdragon.magic_and_taboo.client.model.MoonApprenticeHelmetModel;
 import enderdragon.magic_and_taboo.client.model.WorkHubToolModel;
 import enderdragon.magic_and_taboo.client.renderer.EnchantedCrucibleRender;
+import enderdragon.magic_and_taboo.client.renderer.MoonApprenticeHelmetLayer;
 import enderdragon.magic_and_taboo.client.renderer.PedestalRender;
 import enderdragon.magic_and_taboo.client.renderer.WorkHubRender;
 import enderdragon.magic_and_taboo.init.*;
@@ -15,7 +17,10 @@ import enderdragon.magic_and_taboo.item.AlchemyElementItem;
 import enderdragon.magic_and_taboo.registry.AlchemyElement;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.MenuScreens;
+import net.minecraft.client.model.PlayerModel;
+import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.renderer.Sheets;
+import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.client.renderer.item.ClampedItemPropertyFunction;
 import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.resources.ResourceKey;
@@ -29,6 +34,8 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.registries.ForgeRegistries;
+
+import java.lang.reflect.Field;
 
 import static enderdragon.magic_and_taboo.init.MATCapabilities.PURENESS;
 
@@ -101,6 +108,18 @@ public class MATClient {
     @SubscribeEvent
     public static void registerLayerDefinitions(EntityRenderersEvent.RegisterLayerDefinitions event) {
         event.registerLayerDefinition(WorkHubToolModel.LAYER_LOCATION, WorkHubToolModel::createBodyLayer);
+        event.registerLayerDefinition(MoonApprenticeHelmetModel.LAYER_LOCATION, MoonApprenticeHelmetModel::createBodyLayer);
+    }
+
+    private static Field field_EntityRenderersEvent$AddLayers_renderers;
+
+    @SubscribeEvent
+    public static void registerAddLayers(EntityRenderersEvent.AddLayers event) {
+        // 给所有玩家模型添加自定义渲染层
+        for (String skin : event.getSkins()) {
+            LivingEntityRenderer<AbstractClientPlayer, PlayerModel<AbstractClientPlayer>> playerRenderer = (LivingEntityRenderer<AbstractClientPlayer, PlayerModel<AbstractClientPlayer>>) event.getSkin(skin);
+            playerRenderer.addLayer(new MoonApprenticeHelmetLayer(playerRenderer));
+        }
     }
 
     @SubscribeEvent

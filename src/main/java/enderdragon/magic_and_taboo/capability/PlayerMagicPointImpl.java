@@ -68,7 +68,9 @@ public class PlayerMagicPointImpl implements ICapabilityProvider, IPlayerMagicPo
 
     public static void tick(TickEvent.PlayerTickEvent event) {
         if (event.player.level().isClientSide) return;
+
         var player = event.player;
+//        player.getEntityData().define();
         UUID uuid = player.getUUID();
         int i = TICK.getOrDefault(uuid, 0);
         TICK.putIfAbsent(uuid, i + 1);
