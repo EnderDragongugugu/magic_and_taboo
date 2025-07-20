@@ -15,13 +15,12 @@ import net.minecraft.world.entity.Entity;
 
 public class MoonApprenticeHelmetModel<T extends Entity> extends EntityModel<T> {
     // This layer location should be baked with EntityRendererProvider.Context in the entity renderer and passed into this model's constructor
-    public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(MagicAndTabooMod.makeId("moon_apprentice_helmet"), "main");
+    public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(MagicAndTabooMod.makeId("textures/model/moon_apprentice_helmet.png"), "main");
     private final ModelPart waist;
     private final ModelPart body;
     private final ModelPart head;
     private final ModelPart hat;
     private final ModelPart rightArm;
-    private final ModelPart rightItem;
     private final ModelPart leftArm;
     private final ModelPart rightLeg;
     private final ModelPart leftLeg;
@@ -31,11 +30,10 @@ public class MoonApprenticeHelmetModel<T extends Entity> extends EntityModel<T> 
         this.body = this.waist.getChild("body");
         this.head = this.body.getChild("head");
         this.hat = this.head.getChild("hat");
-        this.rightArm = this.body.getChild("rightArm");
-        this.rightItem = this.rightArm.getChild("rightItem");
-        this.leftArm = this.body.getChild("leftArm");
-        this.rightLeg = this.body.getChild("rightLeg");
-        this.leftLeg = this.body.getChild("leftLeg");
+        this.rightArm = this.body.getChild("right_arm");
+        this.leftArm = this.body.getChild("left_arm");
+        this.rightLeg = this.body.getChild("right_leg");
+        this.leftLeg = this.body.getChild("left_leg");
     }
 
     public static LayerDefinition createBodyLayer() {
@@ -59,15 +57,13 @@ public class MoonApprenticeHelmetModel<T extends Entity> extends EntityModel<T> 
 
         PartDefinition hat_r4 = hat.addOrReplaceChild("hat_r4", CubeListBuilder.create().texOffs(0, 32).addBox(-4.0F, -1.5F, -4.0F, 8.0F, 3.0F, 8.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, -10.4943F, 0.1307F, -0.1745F, 0.0F, 0.0F));
 
-        PartDefinition rightArm = body.addOrReplaceChild("rightArm", CubeListBuilder.create(), PartPose.offset(-5.0F, 2.0F, 0.0F));
+        PartDefinition rightArm = body.addOrReplaceChild("right_arm", CubeListBuilder.create(), PartPose.offset(-5.0F, 2.0F, 0.0F));
 
-        PartDefinition rightItem = rightArm.addOrReplaceChild("rightItem", CubeListBuilder.create(), PartPose.offset(-1.0F, 7.0F, 1.0F));
+        PartDefinition leftArm = body.addOrReplaceChild("left_arm", CubeListBuilder.create(), PartPose.offset(5.0F, 2.0F, 0.0F));
 
-        PartDefinition leftArm = body.addOrReplaceChild("leftArm", CubeListBuilder.create(), PartPose.offset(5.0F, 2.0F, 0.0F));
+        PartDefinition rightLeg = body.addOrReplaceChild("right_leg", CubeListBuilder.create(), PartPose.offset(-1.9F, 12.0F, 0.0F));
 
-        PartDefinition rightLeg = body.addOrReplaceChild("rightLeg", CubeListBuilder.create(), PartPose.offset(-1.9F, 12.0F, 0.0F));
-
-        PartDefinition leftLeg = body.addOrReplaceChild("leftLeg", CubeListBuilder.create(), PartPose.offset(1.9F, 12.0F, 0.0F));
+        PartDefinition leftLeg = body.addOrReplaceChild("left_leg", CubeListBuilder.create(), PartPose.offset(1.9F, 12.0F, 0.0F));
 
         return LayerDefinition.create(meshdefinition, 128, 128);
     }

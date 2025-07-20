@@ -1,4 +1,4 @@
-package enderdragon.magic_and_taboo.item.armor_material;
+package enderdragon.magic_and_taboo.item;
 
 import enderdragon.magic_and_taboo.init.MATItems;
 import net.minecraft.Util;

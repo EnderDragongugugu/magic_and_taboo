@@ -115,7 +115,7 @@ public class MATClient {
 
     @SubscribeEvent
     public static void registerAddLayers(EntityRenderersEvent.AddLayers event) {
-        // 给所有玩家模型添加自定义渲染层
+
         for (String skin : event.getSkins()) {
             LivingEntityRenderer<AbstractClientPlayer, PlayerModel<AbstractClientPlayer>> playerRenderer = (LivingEntityRenderer<AbstractClientPlayer, PlayerModel<AbstractClientPlayer>>) event.getSkin(skin);
             playerRenderer.addLayer(new MoonApprenticeHelmetLayer(playerRenderer));

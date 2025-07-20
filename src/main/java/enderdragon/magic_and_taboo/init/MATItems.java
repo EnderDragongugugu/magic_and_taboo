@@ -1,8 +1,8 @@
 package enderdragon.magic_and_taboo.init;
 
 import enderdragon.magic_and_taboo.MagicAndTabooMod;
+import enderdragon.magic_and_taboo.item.ArmorMaterials;
 import enderdragon.magic_and_taboo.item.*;
-import enderdragon.magic_and_taboo.item.armor_material.ArmorMaterials;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.food.FoodProperties;
