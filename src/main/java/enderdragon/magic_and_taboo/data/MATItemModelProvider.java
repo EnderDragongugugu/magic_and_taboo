@@ -27,6 +27,10 @@ public class MATItemModelProvider extends ItemModelProvider {
     protected void registerModels() {
         var firPlanks = makeId("block/fir/fir_planks");
         var polishedMarble = makeId("block/polished_gilded_marble");
+        this.basicItem(MATItems.LIMITE_BOOTS);
+        this.basicItem(MATItems.LIMITE_CHESTPLATE);
+        this.basicItem(MATItems.LIMITE_HELMET);
+        this.basicItem(MATItems.LIMITE_LEGGINGS);
         this.basicItem(MATItems.GROUND_MEAT);
         this.basicItem(MATItems.OCCULT_CODEX);
         this.basicItem(MATItems.MAGIC_POTION_PARCHMENT);
