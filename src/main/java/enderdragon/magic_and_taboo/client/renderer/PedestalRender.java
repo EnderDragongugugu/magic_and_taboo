@@ -22,12 +22,18 @@ public class PedestalRender implements BlockEntityRenderer<PedestalBlockEntity> 
         var stack = pedestal.getStack();
         if (stack.isEmpty()) return;
         int tick = pedestal.ticks;
+        float time = tick + partialTicks;
         matrices.pushPose();
-        matrices.translate(0.5F, 1.4F + Mth.sin((tick + 2.5F) / 15.0F) * 0.075F, 0.5F);
-        float rotation = (tick + partialTicks) * 2.0f;
+
+        float bob = Mth.sin((time + 2.5F) / 15.0F) * 0.075F;
+        matrices.translate(0.5F, 1.4F + bob, 0.5F);
+
+        float rotation = time * 2.0F;
         matrices.mulPose(Axis.YP.rotationDegrees(rotation));
+
         float scale = 0.35F;
         matrices.scale(scale, scale, scale);
+
         this.itemRenderer.renderStatic(stack, ItemDisplayContext.FIXED, light, overlay, matrices, buffer, pedestal.getLevel(), 0);
         matrices.popPose();
     }
