@@ -10,6 +10,7 @@ import enderdragon.magic_and_taboo.client.model.MoonApprenticeChestModel;
 import enderdragon.magic_and_taboo.client.model.MoonApprenticeHeadModel;
 import enderdragon.magic_and_taboo.client.model.WorkHubToolModel;
 import enderdragon.magic_and_taboo.client.renderer.EnchantedCrucibleRender;
+import enderdragon.magic_and_taboo.client.renderer.MagicCraftsmanTableRender;
 import enderdragon.magic_and_taboo.client.renderer.PedestalRender;
 import enderdragon.magic_and_taboo.client.renderer.WorkHubRender;
 import enderdragon.magic_and_taboo.init.*;
@@ -85,6 +86,7 @@ public class MATClient {
         event.registerBlockEntityRenderer(MATBlockEntities.MAGIC_PERFUSION_PEDESTAL.get(), PedestalRender::new);
         event.registerBlockEntityRenderer(MATBlockEntities.PEDESTAL.get(), PedestalRender::new);
         event.registerBlockEntityRenderer(MATBlockEntities.WORK_HUB.get(), WorkHubRender::new);
+        event.registerBlockEntityRenderer(MATBlockEntities.CRAFTSMAN_TABLE.get(), MagicCraftsmanTableRender::new);
     }
 
     @SubscribeEvent

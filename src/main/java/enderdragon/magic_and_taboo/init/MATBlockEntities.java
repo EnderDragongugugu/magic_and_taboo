@@ -1,10 +1,7 @@
 package enderdragon.magic_and_taboo.init;
 
 import enderdragon.magic_and_taboo.MagicAndTabooMod;
-import enderdragon.magic_and_taboo.block.entity.EnchantedCrucibleBlockEntity;
-import enderdragon.magic_and_taboo.block.entity.MagicPerfusionPedestalBlockEntity;
-import enderdragon.magic_and_taboo.block.entity.PedestalBlockEntity;
-import enderdragon.magic_and_taboo.block.entity.WorkHubBlockEntity;
+import enderdragon.magic_and_taboo.block.entity.*;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -29,6 +26,11 @@ public class MATBlockEntities {
     public static final RegistryObject<BlockEntityType<PedestalBlockEntity>> PEDESTAL = REGISTRY.register("pedestal", () -> of(
             PedestalBlockEntity::new,
             MATBlocks.GOLD_GRAINED_MARBLE_PEDESTAL.get()
+    ));
+
+    public static final RegistryObject<BlockEntityType<MagicCraftsmanTableBlockEntity>> CRAFTSMAN_TABLE = REGISTRY.register("magic_craftsman_table", () -> of(
+            MagicCraftsmanTableBlockEntity::new,
+            MATBlocks.MAGIC_CRAFTSMAN_TABLE.get()
     ));
 
     @SuppressWarnings("DataFlowIssue")
