@@ -31,7 +31,7 @@ public class HemolysisEffect extends MobEffect {
         }
     }
 
-    public static void livingHurtEvent(LivingHurtEvent event) {
+    public static void onLivingHurt(LivingHurtEvent event) {
         if (event.getEntity().hasEffect(MATEffects.HEMOLYSIS.get())) {
             event.setAmount(event.getAmount() * 2);
         }

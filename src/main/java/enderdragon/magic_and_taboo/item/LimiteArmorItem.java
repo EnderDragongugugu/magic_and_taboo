@@ -1,10 +1,6 @@
 package enderdragon.magic_and_taboo.item;
 
-import enderdragon.magic_and_taboo.MagicAndTabooMod;
-import enderdragon.magic_and_taboo.client.model.MoonApprenticeChestModel;
-import enderdragon.magic_and_taboo.client.model.MoonApprenticeHeadModel;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.model.ArmorStandArmorModel;
+import enderdragon.magic_and_taboo.client.model.MoonApprenticeArmorModel;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -13,19 +9,22 @@ import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ArmorMaterial;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.client.extensions.common.IClientItemExtensions;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Consumer;
 
+import static enderdragon.magic_and_taboo.MagicAndTabooMod.MOD_ID;
+
 public class LimiteArmorItem extends ArmorItem {
-    public LimiteArmorItem(ArmorMaterial pMaterial, Type pType, Properties pProperties) {
-        super(pMaterial, pType, pProperties);
+    public static final String OUTER_TEXTURE = MOD_ID + ":textures/model/armor/moon_apprentice_outer.png";
+    public static final String INNER_TEXTURE = MOD_ID + ":textures/model/armor/moon_apprentice_inner.png";
+
+    public LimiteArmorItem(ArmorMaterial material, Type type, Properties props) {
+        super(material, type, props);
     }
 
     @Override
-    public @Nullable String getArmorTexture(ItemStack stack, Entity entity, EquipmentSlot slot, String type) {
-        String name = "moon_apprentice_" + slot.getName() + ".png";
-        return MagicAndTabooMod.makeId("textures/model/armor/" + name).toString();
+    public String getArmorTexture(ItemStack stack, Entity entity, EquipmentSlot slot, String type) {
+        return slot == EquipmentSlot.LEGS ? INNER_TEXTURE : OUTER_TEXTURE;
     }
 
     @Override
@@ -33,23 +32,20 @@ public class LimiteArmorItem extends ArmorItem {
         consumer.accept(ArmorRender.INSTANCE);
     }
 
-    private static final class ArmorRender implements IClientItemExtensions {
-        private static final ArmorRender INSTANCE = new ArmorRender();
+    public static final class ArmorRender implements IClientItemExtensions {
+        public static final ArmorRender INSTANCE = new ArmorRender();
 
-        private HumanoidModel<?> model;
+        public final MoonApprenticeArmorModel.Holder outer = new MoonApprenticeArmorModel.Holder(MoonApprenticeArmorModel.OUTER_MODEL);
+        public final MoonApprenticeArmorModel.Holder inner = new MoonApprenticeArmorModel.Holder(MoonApprenticeArmorModel.INNER_MODEL);
 
         @Override
         public HumanoidModel<?> getHumanoidArmorModel(LivingEntity entity, ItemStack itemStack, EquipmentSlot slot, HumanoidModel<?> original) {
-
-            var models = Minecraft.getInstance().getEntityModels();
-            var root = models.bakeLayer(MoonApprenticeHeadModel.LAYER_LOCATION);
-            switch (slot.getName()) {
-                case "head" -> root = models.bakeLayer(MoonApprenticeHeadModel.LAYER_LOCATION);
-                case "chest" -> root = models.bakeLayer(MoonApprenticeChestModel.LAYER_LOCATION);
-            }
-            model = new ArmorStandArmorModel(root);
+            var model = (slot == EquipmentSlot.LEGS ? this.inner : this.outer).get();
+            model.leftBack.xRot = original.leftLeg.xRot + MoonApprenticeArmorModel.EXTRA_BACK_ROT;
+            model.rightBack.xRot = original.rightLeg.xRot + MoonApprenticeArmorModel.EXTRA_BACK_ROT;
             return model;
         }
 
+        private ArmorRender() {}
     }
 }

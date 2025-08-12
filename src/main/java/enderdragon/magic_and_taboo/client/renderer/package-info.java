@@ -1,0 +1,4 @@
+@javax.annotation.ParametersAreNonnullByDefault
+@net.minecraft.MethodsReturnNonnullByDefault
+package enderdragon.magic_and_taboo.client.renderer;
+

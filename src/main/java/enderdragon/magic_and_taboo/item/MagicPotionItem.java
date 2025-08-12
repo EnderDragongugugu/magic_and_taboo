@@ -1,9 +1,9 @@
 package enderdragon.magic_and_taboo.item;
 
-import enderdragon.magic_and_taboo.capability.MagicPotion;
 import enderdragon.magic_and_taboo.capability.MagicPotionImpl;
 import enderdragon.magic_and_taboo.init.MATCapabilities;
 import enderdragon.magic_and_taboo.init.MATItems;
+import enderdragon.magic_and_taboo.util.CapabilityUtil;
 import enderdragon.magic_and_taboo.util.ContainerUtil;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.nbt.CompoundTag;
@@ -34,16 +34,19 @@ public class MagicPotionItem extends Item {
         } else if (entity instanceof Player) {
             player = (Player) entity;
         }
-        MagicPotion potion = stack.getCapability(MATCapabilities.MAGIC_POTION, null).orElse(MagicPotion.EMPTY);
         if (!entity.level().isClientSide) {
-            if (potion.isFatal()) {
-                entity.kill();
-            } else {
-                for (var effect : potion.getEffects()) {
-                    if (effect.getEffect().isInstantenous()) {
-                        effect.getEffect().applyInstantenousEffect(player, player, entity, effect.getAmplifier(), 1.0D);
-                    } else {
-                        entity.addEffect(new MobEffectInstance(effect));
+            var potion = CapabilityUtil.getCapability(stack, MATCapabilities.MAGIC_POTION);
+            if (potion != null) {
+                if (potion.isFatal()) {
+                    entity.kill();
+                } else {
+                    for (var effect : potion.getEffects()) {
+                        var type = effect.getEffect();
+                        if (type.isInstantenous()) {
+                            type.applyInstantenousEffect(player, player, entity, effect.getAmplifier(), 1.0D);
+                        } else {
+                            entity.addEffect(new MobEffectInstance(effect));
+                        }
                     }
                 }
             }
@@ -90,7 +93,11 @@ public class MagicPotionItem extends Item {
 
     @Override
     public void appendHoverText(ItemStack stack, @Nullable Level pLevel, List<Component> tooltips, TooltipFlag flag) {
-        var potion = stack.getCapability(MATCapabilities.MAGIC_POTION).orElse(MagicPotion.EMPTY);
+        var potion = CapabilityUtil.getCapability(stack, MATCapabilities.MAGIC_POTION);
+        if (potion == null) {
+            PotionUtils.addPotionTooltip(List.of(), tooltips, 0.0F);
+            return;
+        }
         var solvent = potion.getSolvent();
         if (solvent != null) {
             tooltips.add(Component.translatable("tooltip.magic_and_taboo.magic_potion.solvent", solvent.getDescription()));

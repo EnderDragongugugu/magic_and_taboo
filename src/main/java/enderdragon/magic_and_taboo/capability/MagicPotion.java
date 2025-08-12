@@ -1,18 +1,21 @@
 package enderdragon.magic_and_taboo.capability;
 
+import enderdragon.magic_and_taboo.init.MATCapabilities;
 import enderdragon.magic_and_taboo.registry.Element;
+import enderdragon.magic_and_taboo.util.CapabilityUtil;
 import it.unimi.dsi.fastutil.objects.Object2FloatMap;
-import it.unimi.dsi.fastutil.objects.Object2FloatMaps;
 import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.capabilities.AutoRegisterCapability;
 import net.minecraftforge.fluids.FluidType;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Collections;
 import java.util.List;
 
 @AutoRegisterCapability
 public interface MagicPotion {
+    int DEFAULT_COLOR = 0x385DC6;
+
     Object2FloatMap<Element> getElements();
 
     /// @return {@code null} if the type is {@link net.minecraftforge.common.ForgeMod#EMPTY_TYPE}
@@ -25,31 +28,12 @@ public interface MagicPotion {
     List<MobEffectInstance> getEffects();
 
     default int getColor() {
-        return 0x385DC6;
+        return DEFAULT_COLOR;
     }
 
-    MagicPotion EMPTY = new MagicPotion() {
-        @Override
-        public Object2FloatMap<Element> getElements() {
-            return Object2FloatMaps.emptyMap();
-        }
-
-        @Override
-        public void setContent(@Nullable FluidType solvent, Object2FloatMap<Element> elements) {}
-
-        @Override
-        public @Nullable FluidType getSolvent() {
-            return null;
-        }
-
-        @Override
-        public boolean isFatal() {
-            return false;
-        }
-
-        @Override
-        public List<MobEffectInstance> getEffects() {
-            return Collections.emptyList();
-        }
-    };
+    static int getLayerColor(ItemStack stack, int layer) {
+        if (layer > 0) return -1;
+        var potion = CapabilityUtil.getCapability(stack, MATCapabilities.MAGIC_POTION);
+        return potion == null ? DEFAULT_COLOR : potion.getColor();
+    }
 }

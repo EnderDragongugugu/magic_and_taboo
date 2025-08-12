@@ -9,7 +9,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidType;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.annotation.Nonnull;
@@ -25,7 +24,7 @@ public class EnchantedCrucibleInfo implements MagicPotion {
     public @Nonnull Object2FloatMap<Element> elements = Object2FloatMaps.emptyMap();
 
     @Override
-    public @NotNull Object2FloatMap<Element> getElements() {
+    public Object2FloatMap<Element> getElements() {
         return this.elements;
     }
 
@@ -35,7 +34,7 @@ public class EnchantedCrucibleInfo implements MagicPotion {
     }
 
     @Override
-    public void setContent(@Nullable FluidType solvent, @NotNull Object2FloatMap<Element> elements) {
+    public void setContent(@Nullable FluidType solvent, Object2FloatMap<Element> elements) {
         this.solvent = solvent;
         this.elements = elements;
     }
@@ -46,7 +45,7 @@ public class EnchantedCrucibleInfo implements MagicPotion {
     }
 
     @Override
-    public @NotNull List<MobEffectInstance> getEffects() {
+    public List<MobEffectInstance> getEffects() {
         var effects = new ObjectArrayList<MobEffectInstance>(this.elements.size());
         for (var entry : this.elements.object2FloatEntrySet()) {
             effects.add(entry.getKey().getEffect(entry.getFloatValue(), 1.0F, 0));

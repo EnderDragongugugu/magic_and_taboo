@@ -10,18 +10,14 @@ import net.minecraftforge.event.AttachCapabilitiesEvent;
 
 
 public class MATCapabilities {
-    public static final Capability<PurenessStorage> PURENESS = CapabilityManager.get(new CapabilityToken<>() {
-    });
-    public static final Capability<MagicPotion> MAGIC_POTION = CapabilityManager.get(new CapabilityToken<>() {
-    });
-    public static final Capability<ElementHolder> ELEMENT_HOLDER = CapabilityManager.get(new CapabilityToken<>() {
-    });
-    public static final Capability<IPlayerMagicPoint> PLAYER_MAGIC_POINT = CapabilityManager.get(new CapabilityToken<>() {
-    });
+    public static final Capability<PurenessStorage> PURENESS = CapabilityManager.get(new CapabilityToken<>() {});
+    public static final Capability<MagicPotion> MAGIC_POTION = CapabilityManager.get(new CapabilityToken<>() {});
+    public static final Capability<ElementHolder> ELEMENT_HOLDER = CapabilityManager.get(new CapabilityToken<>() {});
+    public static final Capability<PlayerMagicPoint> PLAYER_MAGIC_POINT = CapabilityManager.get(new CapabilityToken<>() {});
 
-    public static void attachCapabilitiesEvent(AttachCapabilitiesEvent<Entity> event) {
-        if (event.getObject() instanceof Player) {
-            event.addCapability(IPlayerMagicPoint.IDENTIFIER, new PlayerMagicPointImpl());
+    public static void attachCapabilities(AttachCapabilitiesEvent<Entity> event) {
+        if (event.getObject() instanceof Player player) {
+            event.addCapability(PlayerMagicPoint.IDENTIFIER, new PlayerMagicPointImpl(player));
         }
     }
 }

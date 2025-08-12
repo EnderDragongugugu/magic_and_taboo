@@ -1,6 +1,7 @@
 package enderdragon.magic_and_taboo.block.entity;
 
 import enderdragon.magic_and_taboo.init.MATBlockEntities;
+import enderdragon.magic_and_taboo.util.BlockEntityUtil;
 import enderdragon.magic_and_taboo.util.ContainerUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.NonNullList;
@@ -19,7 +20,7 @@ public class MagicCraftsmanTableBlockEntity extends BlockEntity {
         ++table.ticks;
     }
 
-    private NonNullList<ItemStack> stacks = NonNullList.withSize(3, ItemStack.EMPTY);
+    private final NonNullList<ItemStack> stacks = NonNullList.withSize(3, ItemStack.EMPTY);
     public int ticks;
 
     public MagicCraftsmanTableBlockEntity(BlockPos pos, BlockState state) {
@@ -45,34 +46,34 @@ public class MagicCraftsmanTableBlockEntity extends BlockEntity {
         return this.stacks;
     }
 
-    public ItemStack getItem(int slot) {
+    public ItemStack getStack(int slot) {
         return this.stacks.get(slot);
     }
 
-
     public void setChanged() {
         super.setChanged();
-        if (level != null && !level.isClientSide) {
-            level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), 3);
-        }
+        BlockEntityUtil.notifyChanged(this);
     }
 
+    @Override
     public void load(CompoundTag tag) {
         super.load(tag);
         this.stacks.clear();
         ContainerHelper.loadAllItems(tag, this.stacks);
     }
 
+    @Override
     protected void saveAdditional(CompoundTag tag) {
         super.saveAdditional(tag);
         ContainerHelper.saveAllItems(tag, this.stacks, true);
     }
 
-    public boolean place(ItemStack pStack) {
-        for (int i = 0; i < this.stacks.size(); ++i) {
-            ItemStack itemstack = this.stacks.get(i);
-            if (itemstack.isEmpty()) {
-                this.stacks.set(i, pStack.split(1));
+    public boolean putItem(ItemStack stack) {
+        var iterator = this.stacks.listIterator();
+        while (iterator.hasNext()) {
+            var slot = iterator.next();
+            if (slot.isEmpty()) {
+                iterator.set(stack.split(1));
                 this.setChanged();
                 return true;
             }
@@ -80,11 +81,12 @@ public class MagicCraftsmanTableBlockEntity extends BlockEntity {
         return false;
     }
 
-    public boolean remove(Player player) {
-        for (int i = stacks.size() - 1; i >= 0; --i) {
-            var stack = stacks.get(i);
+    public boolean takeItem(Player player) {
+        var iterator = this.stacks.listIterator(this.stacks.size());
+        while (iterator.hasPrevious()) {
+            var stack = iterator.previous();
             if (stack.isEmpty()) continue;
-            stacks.set(i, ItemStack.EMPTY);
+            iterator.set(ItemStack.EMPTY);
             ContainerUtil.addItem(player, stack);
             this.setChanged();
             return true;

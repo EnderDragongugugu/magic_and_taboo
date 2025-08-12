@@ -20,13 +20,15 @@ import org.slf4j.Logger;
 
 import java.util.function.Predicate;
 
+import static enderdragon.magic_and_taboo.capability.MagicPotion.DEFAULT_COLOR;
+
 public class MagicPotionSolvents {
     private static final Reference2ObjectMap<FluidType, MagicPotionSolvent> STATIC_REGISTRY = new Reference2ObjectOpenHashMap<>();
     private static final Object2ObjectMap<RegistryObject<? extends FluidType>, MagicPotionSolvent> DEFERRED_REGISTRY = new Object2ObjectOpenHashMap<>();
     private static final Reference2ObjectMap<FluidType, MagicPotionSolvent> REGISTRY = new Reference2ObjectOpenHashMap<>();
     private static final Logger LOGGER = LogUtils.getLogger();
 
-    public static final MagicPotionSolvent WATER = () -> 0x385DC6;
+    public static final MagicPotionSolvent WATER = () -> DEFAULT_COLOR;
     public static final MagicPotionSolvent HONEY = new HoneySolvent();
     public static final MagicPotionSolvent PLANT_EXTRACT = new PlantExtractSolvent();
 

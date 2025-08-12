@@ -1,6 +1,7 @@
 package enderdragon.magic_and_taboo.block.entity;
 
 import enderdragon.magic_and_taboo.init.MATBlockEntities;
+import enderdragon.magic_and_taboo.util.BlockEntityUtil;
 import enderdragon.magic_and_taboo.util.ContainerUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -71,9 +72,7 @@ public class PedestalBlockEntity extends BlockEntity {
     @Override
     public void setChanged() {
         super.setChanged();
-        if (level != null && !level.isClientSide) {
-            level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), 3);
-        }
+        BlockEntityUtil.notifyChanged(this);
     }
 
     @Override

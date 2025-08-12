@@ -14,18 +14,4 @@ public interface ElementHolder {
     void setAmount(float amount);
 
     float getAmount();
-
-    ElementHolder EMPTY = new ElementHolder() {
-        @Override
-        public void setElement(@Nullable Element element) {}
-
-        @Override
-        public @Nullable Element getElement() {return null;}
-
-        @Override
-        public void setAmount(float amount) {}
-
-        @Override
-        public float getAmount() {return 0.0F;}
-    };
 }

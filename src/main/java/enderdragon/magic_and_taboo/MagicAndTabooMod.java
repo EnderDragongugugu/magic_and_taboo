@@ -3,7 +3,6 @@ package enderdragon.magic_and_taboo;
 import enderdragon.magic_and_taboo.capability.PlayerMagicPointImpl;
 import enderdragon.magic_and_taboo.effect.HemolysisEffect;
 import enderdragon.magic_and_taboo.init.*;
-import enderdragon.magic_and_taboo.item.OccultCodexItem;
 import enderdragon.magic_and_taboo.item.SacrificialDaggerItem;
 import enderdragon.magic_and_taboo.network.NetworkHandler;
 import enderdragon.magic_and_taboo.registry.AlchemyElement;
@@ -52,12 +51,11 @@ public class MagicAndTabooMod {
         modBus.addListener(MagicAndTabooMod::onCommonSetup);
         modBus.addListener(MagicAndTabooMod::registerDataPackRegistry);
         var forgeBus = MinecraftForge.EVENT_BUS;
-        forgeBus.addListener(PlayerMagicPointImpl::tick);
+        forgeBus.addListener(PlayerMagicPointImpl::onTick);
+        forgeBus.addListener(PlayerMagicPointImpl::onPlayerLogin);
         forgeBus.addListener(SacrificialDaggerItem::onLivingDeath);
-        forgeBus.addListener(HemolysisEffect::livingHurtEvent);
-        forgeBus.addListener(OccultCodexItem::onPlayerLogin);
-        forgeBus.addGenericListener(Entity.class, MATCapabilities::attachCapabilitiesEvent);
-
+        forgeBus.addListener(HemolysisEffect::onLivingHurt);
+        forgeBus.addGenericListener(Entity.class, MATCapabilities::attachCapabilities);
     }
 
     public static void onComplete(FMLLoadCompleteEvent event) {

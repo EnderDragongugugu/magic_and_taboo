@@ -27,7 +27,6 @@ public class MATBlockEntities {
             PedestalBlockEntity::new,
             MATBlocks.GOLD_GRAINED_MARBLE_PEDESTAL.get()
     ));
-
     public static final RegistryObject<BlockEntityType<MagicCraftsmanTableBlockEntity>> CRAFTSMAN_TABLE = REGISTRY.register("magic_craftsman_table", () -> of(
             MagicCraftsmanTableBlockEntity::new,
             MATBlocks.MAGIC_CRAFTSMAN_TABLE.get()

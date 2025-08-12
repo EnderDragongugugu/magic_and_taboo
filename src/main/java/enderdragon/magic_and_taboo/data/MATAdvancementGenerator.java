@@ -1,17 +1,19 @@
 package enderdragon.magic_and_taboo.data;
 
-import enderdragon.magic_and_taboo.MagicAndTabooMod;
 import enderdragon.magic_and_taboo.init.MATItems;
 import net.minecraft.advancements.Advancement;
+import net.minecraft.advancements.AdvancementRewards;
 import net.minecraft.advancements.FrameType;
 import net.minecraft.advancements.critereon.ImpossibleTrigger;
-import net.minecraft.advancements.critereon.InventoryChangeTrigger;
+import net.minecraft.advancements.critereon.PlayerTrigger;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.network.chat.Component;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.common.data.ForgeAdvancementProvider;
 
 import java.util.function.Consumer;
+
+import static enderdragon.magic_and_taboo.MagicAndTabooMod.makeId;
 
 public class MATAdvancementGenerator implements ForgeAdvancementProvider.AdvancementGenerator {
     @Override
@@ -20,14 +22,16 @@ public class MATAdvancementGenerator implements ForgeAdvancementProvider.Advance
                 MATItems.OCCULT_CODEX.get(),
                 Component.translatable("advancement.magic_and_taboo.root"),
                 Component.translatable("advancement.magic_and_taboo.root.desc"),
-                MagicAndTabooMod.makeId("textures/block/fir/fir_planks.png"),
+                makeId("textures/block/fir/fir_planks.png"),
                 FrameType.TASK,
-                true,
+                false,
                 false,
                 false
         ).addCriterion(
-                "has_item",
-                InventoryChangeTrigger.TriggerInstance.hasItems(MATItems.OCCULT_CODEX.get())
+                "unlock_right_away",
+                PlayerTrigger.TriggerInstance.tick()
+        ).rewards(
+                AdvancementRewards.Builder.loot(makeId("rewards/occult_codex"))
         ).save(saver, "magic_and_taboo:root");
 
         Advancement.Builder.advancement().parent(root).display(

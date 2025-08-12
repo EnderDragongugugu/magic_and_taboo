@@ -2,9 +2,9 @@ package enderdragon.magic_and_taboo.registry;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import enderdragon.magic_and_taboo.capability.ElementHolder;
 import enderdragon.magic_and_taboo.init.MATCapabilities;
 import enderdragon.magic_and_taboo.init.MATItems;
+import enderdragon.magic_and_taboo.util.CapabilityUtil;
 import enderdragon.magic_and_taboo.util.FloatMaps;
 import it.unimi.dsi.fastutil.objects.Object2FloatMap;
 import it.unimi.dsi.fastutil.objects.Object2FloatOpenHashMap;
@@ -33,8 +33,8 @@ public record AlchemyElement(Object2FloatMap<Holder<Element>> elementMap, int ti
 
     public static @Nullable AlchemyElement fromStack(RegistryAccess registry, ItemStack stack) {
         if (stack.is(MATItems.ALCHEMY_ELEMENT.get())) {
-            var holder = stack.getCapability(MATCapabilities.ELEMENT_HOLDER).orElse(ElementHolder.EMPTY);
-            if (holder.getElement() == null) return null;
+            var holder = CapabilityUtil.getCapability(stack, MATCapabilities.ELEMENT_HOLDER);
+            if (holder == null || holder.getElement() == null) return null;
             var elements = new Object2FloatOpenHashMap<Holder<Element>>();
             elements.put(registry.registryOrThrow(Element.RESOURCE_KEY).wrapAsHolder(holder.getElement()), holder.getAmount());
             return new AlchemyElement(elements, 20);

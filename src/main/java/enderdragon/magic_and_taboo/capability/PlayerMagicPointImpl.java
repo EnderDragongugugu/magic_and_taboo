@@ -1,30 +1,39 @@
 package enderdragon.magic_and_taboo.capability;
 
 import enderdragon.magic_and_taboo.init.MATCapabilities;
+import enderdragon.magic_and_taboo.network.NetworkHandler;
+import enderdragon.magic_and_taboo.network.s2c.InitMagicPointPayload;
+import enderdragon.magic_and_taboo.network.s2c.SyncMagicPointPayload;
+import enderdragon.magic_and_taboo.util.CapabilityUtil;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.util.Mth;
+import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.event.TickEvent;
+import net.minecraftforge.event.entity.player.PlayerEvent;
+import net.minecraftforge.network.PacketDistributor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
-
-public class PlayerMagicPointImpl implements ICapabilityProvider, IPlayerMagicPoint, INBTSerializable<CompoundTag> {
-    public final LazyOptional<IPlayerMagicPoint> holder = LazyOptional.of(() -> this);
-    private static final Map<UUID, Integer> TICK = new HashMap<>();
-
-    protected int magic = 0;
+public class PlayerMagicPointImpl implements ICapabilityProvider, PlayerMagicPoint, INBTSerializable<CompoundTag> {
+    public final LazyOptional<PlayerMagicPoint> holder = LazyOptional.of(() -> this);
+    public final Player player;
     private int maxMagic = 100;
+    private int magic = 0;
+    private int nextMagic;
+
+    public PlayerMagicPointImpl(Player player) {
+        this.player = player;
+    }
 
     @Override
     public @NotNull <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side) {
-        return MATCapabilities.PLAYER_MAGIC_POINT.orEmpty(cap, holder);
+        return MATCapabilities.PLAYER_MAGIC_POINT.orEmpty(cap, this.holder);
     }
 
     @Override
@@ -43,45 +52,65 @@ public class PlayerMagicPointImpl implements ICapabilityProvider, IPlayerMagicPo
 
     @Override
     public int getMagic() {
-        return magic;
+        return this.magic;
     }
 
     @Override
     public int getMaxMagic() {
-        return maxMagic;
+        return this.maxMagic;
+    }
+
+    protected void setMagicImpl(int magic) {
+        this.magic = Mth.clamp(magic, 0, this.maxMagic);
     }
 
     @Override
     public void setMagic(int amount) {
-        magic = amount;
+        this.setMagicImpl(amount);
+        if (this.player instanceof ServerPlayer) {
+            NetworkHandler.CHANNEL.send(
+                    PacketDistributor.PLAYER.with(() -> (ServerPlayer) this.player),
+                    new SyncMagicPointPayload(this.magic)
+            );
+        }
     }
 
     @Override
-    public void setMaxMagic(int amount) {
-        maxMagic = amount;
+    public void setMagic(int max, int magic) {
+        this.maxMagic = max;
+        this.setMagicImpl(magic);
+        if (this.player instanceof ServerPlayer) {
+            NetworkHandler.CHANNEL.send(
+                    PacketDistributor.PLAYER.with(() -> (ServerPlayer) this.player),
+                    new InitMagicPointPayload(this.maxMagic, this.magic)
+            );
+        }
     }
 
     @Override
-    public void addMagic(int amount) {
-        magic = magic + amount < 0 ? 0 : Math.max(magic + amount, maxMagic);
+    public void tick() {
+        if (this.nextMagic > 0) {
+            --this.nextMagic;
+            return;
+        }
+        this.nextMagic = 20;
+        this.setMagicImpl(this.magic + 1);
     }
 
-    public static void tick(TickEvent.PlayerTickEvent event) {
-        if (event.player.level().isClientSide) return;
+    public static void onTick(TickEvent.PlayerTickEvent event) {
+        if (event.phase == TickEvent.Phase.START) {
+            event.player.getCapability(MATCapabilities.PLAYER_MAGIC_POINT).ifPresent(PlayerMagicPoint::tick);
+        }
+    }
 
-        var player = event.player;
-//        player.getEntityData().define();
-        UUID uuid = player.getUUID();
-        int i = TICK.getOrDefault(uuid, 0);
-        TICK.putIfAbsent(uuid, i + 1);
-        if (i >= 20) {
-            player.getCapability(MATCapabilities.PLAYER_MAGIC_POINT).ifPresent(magic -> {
-                int MP = magic.getMagic();
-                if (MP < magic.getMaxMagic()) {
-                    magic.addMagic(1);
-                }
-            });
-            TICK.put(uuid, 0);
+    public static void onPlayerLogin(PlayerEvent.PlayerLoggedInEvent event) {
+        if (event.getEntity() instanceof ServerPlayer player) {
+            var capability = CapabilityUtil.getCapability(player, MATCapabilities.PLAYER_MAGIC_POINT);
+            if (capability == null) return;
+            NetworkHandler.CHANNEL.send(
+                    PacketDistributor.PLAYER.with(() -> player),
+                    new InitMagicPointPayload(capability.getMaxMagic(), capability.getMagic())
+            );
         }
     }
 }

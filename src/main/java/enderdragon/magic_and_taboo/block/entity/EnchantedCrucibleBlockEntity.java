@@ -6,6 +6,7 @@ import enderdragon.magic_and_taboo.client.renderer.EnchantedCrucibleInfo;
 import enderdragon.magic_and_taboo.init.MATBlockEntities;
 import enderdragon.magic_and_taboo.registry.AlchemyElement;
 import enderdragon.magic_and_taboo.registry.Element;
+import enderdragon.magic_and_taboo.util.BlockEntityUtil;
 import enderdragon.magic_and_taboo.util.ContainerUtil;
 import it.unimi.dsi.fastutil.objects.Object2FloatOpenHashMap;
 import net.minecraft.core.BlockPos;
@@ -306,9 +307,7 @@ public class EnchantedCrucibleBlockEntity extends BlockEntity implements IFluidH
     @Override
     public void setChanged() {
         super.setChanged();
-        if (level != null && !level.isClientSide) {
-            level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), 3);
-        }
+        BlockEntityUtil.notifyChanged(this);
     }
 
     @Override

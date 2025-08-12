@@ -1,10 +1,10 @@
 package enderdragon.magic_and_taboo.item;
 
-import enderdragon.magic_and_taboo.capability.MagicPotion;
 import enderdragon.magic_and_taboo.client.ClientUtil;
 import enderdragon.magic_and_taboo.init.MATCapabilities;
 import enderdragon.magic_and_taboo.init.MATItems;
 import enderdragon.magic_and_taboo.registry.Element;
+import enderdragon.magic_and_taboo.util.CapabilityUtil;
 import enderdragon.magic_and_taboo.util.ContainerUtil;
 import it.unimi.dsi.fastutil.objects.Object2FloatOpenHashMap;
 import net.minecraft.core.NonNullList;
@@ -93,7 +93,10 @@ public class MagicPotionParchmentItem extends Item {
             }
         }
         var filled = new ItemStack(bottle.getFilled());
-        filled.getCapability(MATCapabilities.MAGIC_POTION).orElse(MagicPotion.EMPTY).setContent(fluid.getFluid().getFluidType(), elements);
+        var potion = CapabilityUtil.getCapability(filled, MATCapabilities.MAGIC_POTION);
+        if (potion != null) {
+            potion.setContent(fluid.getFluid().getFluidType(), elements);
+        }
         ContainerUtil.addItem(player, filled);
         return true;
     }

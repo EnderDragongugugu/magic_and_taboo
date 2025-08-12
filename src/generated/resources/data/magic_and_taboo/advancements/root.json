@@ -1,16 +1,8 @@
 {
   "criteria": {
-    "has_item": {
-      "conditions": {
-        "items": [
-          {
-            "items": [
-              "magic_and_taboo:occult_codex"
-            ]
-          }
-        ]
-      },
-      "trigger": "minecraft:inventory_changed"
+    "unlock_right_away": {
+      "conditions": {},
+      "trigger": "minecraft:tick"
     }
   },
   "display": {
@@ -24,15 +16,20 @@
     "icon": {
       "item": "magic_and_taboo:occult_codex"
     },
-    "show_toast": true,
+    "show_toast": false,
     "title": {
       "translate": "advancement.magic_and_taboo.root"
     }
   },
   "requirements": [
     [
-      "has_item"
+      "unlock_right_away"
     ]
   ],
+  "rewards": {
+    "loot": [
+      "magic_and_taboo:rewards/occult_codex"
+    ]
+  },
   "sends_telemetry_event": true
 }

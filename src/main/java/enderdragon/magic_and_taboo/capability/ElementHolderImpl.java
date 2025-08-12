@@ -29,7 +29,7 @@ public class ElementHolderImpl implements ICapabilityProvider, ElementHolder, IN
 
     @Override
     public Element getElement() {
-        return element;
+        return this.element;
     }
 
     @Override

@@ -1,7 +1,6 @@
 package enderdragon.magic_and_taboo.block;
 
 import enderdragon.magic_and_taboo.block.entity.EnchantedCrucibleBlockEntity;
-import enderdragon.magic_and_taboo.capability.MagicPotion;
 import enderdragon.magic_and_taboo.init.MATBlockEntities;
 import enderdragon.magic_and_taboo.init.MATCapabilities;
 import enderdragon.magic_and_taboo.init.MATItems;
@@ -169,7 +168,7 @@ public class EnchantedCrucibleBlock extends BaseEntityBlock {
                             MagicPotionParchmentItem.writeRecipe(player, offhand, info);
                         }
                         var filled = new ItemStack(bottle.getFilled());
-                        crucible.fillPotion(filled.getCapability(MATCapabilities.MAGIC_POTION).orElse(MagicPotion.EMPTY));
+                        filled.getCapability(MATCapabilities.MAGIC_POTION).ifPresent(crucible::fillPotion);
                         if (!player.getAbilities().instabuild) {
                             stack.shrink(1);
                         }

@@ -6,15 +6,18 @@ import enderdragon.magic_and_taboo.capability.MagicPotion;
 import enderdragon.magic_and_taboo.capability.PurenessStorage;
 import enderdragon.magic_and_taboo.capability.WorkHubResult;
 import enderdragon.magic_and_taboo.client.gui.*;
-import enderdragon.magic_and_taboo.client.model.MoonApprenticeChestModel;
-import enderdragon.magic_and_taboo.client.model.MoonApprenticeHeadModel;
+import enderdragon.magic_and_taboo.client.model.MoonApprenticeArmorModel;
 import enderdragon.magic_and_taboo.client.model.WorkHubToolModel;
 import enderdragon.magic_and_taboo.client.renderer.EnchantedCrucibleRender;
 import enderdragon.magic_and_taboo.client.renderer.MagicCraftsmanTableRender;
 import enderdragon.magic_and_taboo.client.renderer.PedestalRender;
 import enderdragon.magic_and_taboo.client.renderer.WorkHubRender;
-import enderdragon.magic_and_taboo.init.*;
+import enderdragon.magic_and_taboo.init.MATBlockEntities;
+import enderdragon.magic_and_taboo.init.MATBlocks;
+import enderdragon.magic_and_taboo.init.MATItems;
+import enderdragon.magic_and_taboo.init.MATMenuTypes;
 import enderdragon.magic_and_taboo.item.AlchemyElementItem;
+import enderdragon.magic_and_taboo.item.LimiteArmorItem;
 import enderdragon.magic_and_taboo.registry.AlchemyElement;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.MenuScreens;
@@ -33,9 +36,9 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.registries.ForgeRegistries;
 
-import java.lang.reflect.Field;
-
 import static enderdragon.magic_and_taboo.init.MATCapabilities.PURENESS;
+import static net.minecraft.client.model.geom.LayerDefinitions.INNER_ARMOR_DEFORMATION;
+import static net.minecraft.client.model.geom.LayerDefinitions.OUTER_ARMOR_DEFORMATION;
 
 @Mod.EventBusSubscriber(modid = MagicAndTabooMod.MOD_ID, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class MATClient {
@@ -51,7 +54,6 @@ public class MATClient {
                     ResourceKey.create(AlchemyElement.RESOURCE_KEY, key)
             ).ifPresent(element -> event.getTooltipElements().add(1, Either.right(element)));
         }
-
     }
 
     @SubscribeEvent
@@ -64,8 +66,8 @@ public class MATClient {
 
     @SubscribeEvent
     public static void registerItemColors(RegisterColorHandlersEvent.Item event) {
-        event.register((stack, layer) -> layer > 0 ? -1 :
-                        stack.getCapability(MATCapabilities.MAGIC_POTION).orElse(MagicPotion.EMPTY).getColor(),
+        event.register(
+                MagicPotion::getLayerColor,
                 MATItems.POTION_BOTTLE.get(),
                 MATItems.POTION_BOTTLE_RED.get(),
                 MATItems.POTION_BOTTLE_GLOW.get(),
@@ -107,20 +109,15 @@ public class MATClient {
     @SubscribeEvent
     public static void registerLayerDefinitions(EntityRenderersEvent.RegisterLayerDefinitions event) {
         event.registerLayerDefinition(WorkHubToolModel.LAYER_LOCATION, WorkHubToolModel::createBodyLayer);
-        event.registerLayerDefinition(MoonApprenticeHeadModel.LAYER_LOCATION, MoonApprenticeHeadModel::createBodyLayer);
-        event.registerLayerDefinition(MoonApprenticeChestModel.LAYER_LOCATION, MoonApprenticeChestModel::createBodyLayer);
+        event.registerLayerDefinition(MoonApprenticeArmorModel.INNER_MODEL, () -> {
+            LimiteArmorItem.ArmorRender.INSTANCE.inner.invalidate();
+            return MoonApprenticeArmorModel.createBodyLayer(INNER_ARMOR_DEFORMATION);
+        });
+        event.registerLayerDefinition(MoonApprenticeArmorModel.OUTER_MODEL, () -> {
+            LimiteArmorItem.ArmorRender.INSTANCE.outer.invalidate();
+            return MoonApprenticeArmorModel.createBodyLayer(OUTER_ARMOR_DEFORMATION);
+        });
     }
-
-    private static Field field_EntityRenderersEvent$AddLayers_renderers;
-
-//    @SubscribeEvent
-//    public static void registerAddLayers(EntityRenderersEvent.AddLayers event) {
-//
-//        for (String skin : event.getSkins()) {
-//            LivingEntityRenderer<AbstractClientPlayer, PlayerModel<AbstractClientPlayer>> playerRenderer = (LivingEntityRenderer<AbstractClientPlayer, PlayerModel<AbstractClientPlayer>>) event.getSkin(skin);
-//            playerRenderer.addLayer(new MoonApprenticeHelmetLayer(playerRenderer));
-//        }
-//    }
 
     @SubscribeEvent
     public static void loadItemGroup(BuildCreativeModeTabContentsEvent event) {

@@ -135,7 +135,6 @@ public class WorkHubToolModel extends Model {
         return LayerDefinition.create(meshdefinition, 64, 64);
     }
 
-
     @Override
     public void renderToBuffer(PoseStack matrices, VertexConsumer buffer, int light, int overlay, float red, float green, float blue, float alpha) {
         this.root.render(matrices, buffer, light, overlay, red, green, blue, alpha);

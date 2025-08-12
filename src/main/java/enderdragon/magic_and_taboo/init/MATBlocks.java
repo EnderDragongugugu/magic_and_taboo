@@ -1,7 +1,7 @@
 package enderdragon.magic_and_taboo.init;
 
-import enderdragon.magic_and_taboo.block.HoneyBlock;
 import enderdragon.magic_and_taboo.block.*;
+import enderdragon.magic_and_taboo.block.HoneyBlock;
 import enderdragon.magic_and_taboo.block.grower.FirTreeGrower;
 import net.minecraft.core.Direction.Axis;
 import net.minecraft.util.valueproviders.UniformInt;
@@ -54,7 +54,6 @@ public class MATBlocks {
     public static final RegistryObject<CondenserBlock> CONDENSER = REGISTRY.register("condenser", () -> new CondenserBlock(
             placeholder()
     ));
-
     public static final RegistryObject<MagicCraftsmanTableBlock> MAGIC_CRAFTSMAN_TABLE = REGISTRY.register("magic_craftsman_table", () -> new MagicCraftsmanTableBlock(
             placeholder()
     ));

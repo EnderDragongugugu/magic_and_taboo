@@ -1,10 +1,10 @@
 package enderdragon.magic_and_taboo.item;
 
-import enderdragon.magic_and_taboo.capability.ElementHolder;
 import enderdragon.magic_and_taboo.capability.ElementHolderImpl;
 import enderdragon.magic_and_taboo.init.MATCapabilities;
 import enderdragon.magic_and_taboo.init.MATItems;
 import enderdragon.magic_and_taboo.registry.Element;
+import enderdragon.magic_and_taboo.util.CapabilityUtil;
 import net.minecraft.core.Holder;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -21,13 +21,16 @@ import java.util.List;
 public class AlchemyElementItem extends Item {
     public static int getColor(ItemStack stack, int layer) {
         if (layer > 0) return -1;
-        var element = stack.getCapability(MATCapabilities.ELEMENT_HOLDER).orElse(ElementHolder.EMPTY).getElement();
+        var holder = CapabilityUtil.getCapability(stack, MATCapabilities.ELEMENT_HOLDER);
+        if (holder == null) return -1;
+        var element = holder.getElement();
         return element == null ? -1 : element.effect().getColor();
     }
 
     public static ItemStack makeDisplayStack(Holder.Reference<Element> element) {
         var stack = new ItemStack(MATItems.ALCHEMY_ELEMENT.get());
-        var holder = stack.getCapability(MATCapabilities.ELEMENT_HOLDER).orElse(ElementHolder.EMPTY);
+        var holder = CapabilityUtil.getCapability(stack, MATCapabilities.ELEMENT_HOLDER);
+        if (holder == null) return stack;
         holder.setElement(element.value());
         holder.setAmount(element.value().concentration().min() * 0.1F);
         return stack;
@@ -46,7 +49,9 @@ public class AlchemyElementItem extends Item {
 
     @Override
     public Component getName(ItemStack stack) {
-        var element = stack.getCapability(MATCapabilities.ELEMENT_HOLDER).orElse(ElementHolder.EMPTY).getElement();
+        var holder = CapabilityUtil.getCapability(stack, MATCapabilities.ELEMENT_HOLDER);
+        if (holder == null) return super.getName(stack);
+        var element = holder.getElement();
         return element == null
                 ? super.getName(stack)
                 : Component.translatable("item.magic_and_taboo.alchemy_element.element", element.getDisplayName());
@@ -63,7 +68,9 @@ public class AlchemyElementItem extends Item {
 
     @Override
     public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltips, TooltipFlag pIsAdvanced) {
-        var element = stack.getCapability(MATCapabilities.ELEMENT_HOLDER).orElse(ElementHolder.EMPTY).getElement();
+        var holder = CapabilityUtil.getCapability(stack, MATCapabilities.ELEMENT_HOLDER);
+        if (holder == null) return;
+        var element = holder.getElement();
         if (element != null) {
             tooltips.add(Component.translatable("tooltip.magic_and_taboo.alchemy_element.element", element.getDisplayName()));
         }

@@ -73,10 +73,10 @@ public class MagicCraftsmanTableBlock extends BaseEntityBlock {
     public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
         if (level.getBlockEntity(pos) instanceof MagicCraftsmanTableBlockEntity table) {
             if (level.isClientSide) return InteractionResult.CONSUME;
-            if (player.isShiftKeyDown() && table.remove(player)) return InteractionResult.SUCCESS;
+            if (player.isShiftKeyDown() && table.takeItem(player)) return InteractionResult.SUCCESS;
             ItemStack stack = player.getItemInHand(hand);
             if (!stack.isEmpty()) {
-                if (table.place(player.getAbilities().instabuild ? stack.copy() : stack)) {
+                if (table.putItem(player.getAbilities().instabuild ? stack.copy() : stack)) {
                     return InteractionResult.SUCCESS;
                 }
                 return InteractionResult.CONSUME;
