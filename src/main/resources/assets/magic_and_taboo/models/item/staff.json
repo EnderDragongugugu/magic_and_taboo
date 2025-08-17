@@ -1,0 +1,8 @@
+{
+  "loader": "magic_and_taboo:staff_loader",
+  "parts": {
+    "handle_default": "magic_and_taboo:item/staff/fir_handle",
+    "core_default": "magic_and_taboo:item/staff/holy_feather",
+    "tip_default": "magic_and_taboo:item/staff/brass_tip"
+  }
+}

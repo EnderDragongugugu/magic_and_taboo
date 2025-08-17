@@ -134,6 +134,18 @@ public class MATItems {
     public static final RegistryObject<Item> BLAZE_BLAST_BURNER = ITEMS.register(REGISTRY, "blaze_blast_burner", () ->
             new Item(new Properties().durability(32))
     );
+    public static final RegistryObject<Item> STAFF = ITEMS.register(REGISTRY, "staff", () ->
+            new Item(new Properties().durability(1))
+    );
+    public static final RegistryObject<Item> FIR_HANDLE = ITEMS.register(REGISTRY, "fir_handle", () ->
+            new Item(new Properties().durability(1))
+    );
+    public static final RegistryObject<Item> BRASS_TIP = ITEMS.register(REGISTRY, "brass_tip", () ->
+            new Item(new Properties().durability(1))
+    );
+    public static final RegistryObject<Item> HOLY_FEATHER = ITEMS.register(REGISTRY, "holy_feather", () ->
+            new Item(new Properties().durability(1))
+    );
     public static final RegistryObject<MagicPotionItem> POTION_BOTTLE = POTION.register(REGISTRY, "potion_bottle", () ->
             new MagicPotionItem(new Properties().stacksTo(4))
     );

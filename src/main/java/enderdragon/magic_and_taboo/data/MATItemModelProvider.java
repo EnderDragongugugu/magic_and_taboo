@@ -94,6 +94,23 @@ public class MATItemModelProvider extends ItemModelProvider {
         this.bottleItems(MATItems.POTION_BOTTLE_GLOW, MATItems.GLASS_POTION_BOTTLE_GLOW);
         this.bottleItems(MATItems.ALCHEMY_ELEMENT);
 
+
+//        法杖
+        this.basicItem(MATItems.BRASS_TIP, "staff/");
+        this.staffModel(MATItems.BRASS_TIP);
+        this.basicItem(MATItems.FIR_HANDLE, "staff/");
+        this.staffModel(MATItems.FIR_HANDLE);
+        this.withExistingParent(MATItems.HOLY_FEATHER.getId().getPath(), "item/feather");
+//        this.basicItem(MATItems.HOLY_FEATHER);
+        this.staffModel(MATItems.HOLY_FEATHER);
+
+    }
+
+    public ItemModelBuilder staffModel(RegistryObject<? extends Item> item) {
+        var id = item.getId();
+        return this.getBuilder("item/staff/" + id.getPath())
+                .parent(GENERATED_MODEL)
+                .texture("layer0", id.withPrefix("item/staff/"));
     }
 
     public ItemModelBuilder handheldItem(RegistryObject<? extends Item> item) {
@@ -113,6 +130,13 @@ public class MATItemModelProvider extends ItemModelProvider {
         return this.getBuilder(id.getPath())
                 .parent(GENERATED_MODEL)
                 .texture("layer0", id.withPrefix("item/"));
+    }
+
+    public ItemModelBuilder basicItem(RegistryObject<? extends Item> item, String path) {
+        var id = item.getId();
+        return this.getBuilder(id.getPath())
+                .parent(GENERATED_MODEL)
+                .texture("layer0", id.withPrefix("item/" + path));
     }
 
     public ItemModelBuilder buttonItem(RegistryObject<? extends Block> block, ResourceLocation texture) {

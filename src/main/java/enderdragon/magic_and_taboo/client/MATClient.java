@@ -7,6 +7,7 @@ import enderdragon.magic_and_taboo.capability.PurenessStorage;
 import enderdragon.magic_and_taboo.capability.WorkHubResult;
 import enderdragon.magic_and_taboo.client.gui.*;
 import enderdragon.magic_and_taboo.client.model.MoonApprenticeArmorModel;
+import enderdragon.magic_and_taboo.client.model.StaffModelLoader;
 import enderdragon.magic_and_taboo.client.model.WorkHubToolModel;
 import enderdragon.magic_and_taboo.client.renderer.EnchantedCrucibleRender;
 import enderdragon.magic_and_taboo.client.renderer.MagicCraftsmanTableRender;
@@ -54,6 +55,11 @@ public class MATClient {
                     ResourceKey.create(AlchemyElement.RESOURCE_KEY, key)
             ).ifPresent(element -> event.getTooltipElements().add(1, Either.right(element)));
         }
+    }
+
+    @SubscribeEvent
+    public static void registerLoaders(ModelEvent.RegisterGeometryLoaders event) {
+        event.register("staff_loader", new StaffModelLoader());
     }
 
     @SubscribeEvent
