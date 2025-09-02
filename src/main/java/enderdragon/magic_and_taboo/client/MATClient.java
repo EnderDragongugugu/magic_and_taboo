@@ -55,12 +55,21 @@ public class MATClient {
                     ResourceKey.create(AlchemyElement.RESOURCE_KEY, key)
             ).ifPresent(element -> event.getTooltipElements().add(1, Either.right(element)));
         }
+//        @SubscribeEvent
+//        public static void containerScreenEvent(ContainerScreenEvent.Render event){
+//            int x = event.getMouseX();
+//            int y = event.getMouseY();
+//            var graphics = event.getGuiGraphics();
+//            var stack = event.getContainerScreen()
+//        }
     }
 
-    @SubscribeEvent
-    public static void registerLoaders(ModelEvent.RegisterGeometryLoaders event) {
-        event.register("staff_loader", new StaffModelLoader());
-    }
+//    @SubscribeEvent
+//    public static void registerLoaders(ModelEvent.RegisterGeometryLoaders event) {
+//        event.register("staff_loader", new StaffModelLoader());
+//    }
+
+
 
     @SubscribeEvent
     public static void init(final FMLClientSetupEvent event) {

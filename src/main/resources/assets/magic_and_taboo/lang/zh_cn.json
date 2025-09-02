@@ -155,5 +155,10 @@
   "tooltip.magic_and_taboo.work_hub_item_empty": "里面什么都没有!",
   "tooltip.magic_and_taboo.work_hub_item_show": "存有: %s, 共 %d 个",
   "tooltip.magic_and_taboo.magic_potion.solvent": "溶剂: %s",
+  "tooltip.magic_and_taboo.magic_potion.solvent.add": "制作相同药剂所需要的溶剂",
+  "tooltip.magic_and_taboo.magic_potion.temperature": "温度: %s°",
+  "tooltip.magic_and_taboo.magic_potion.temperature.add": "制作相同药剂所需要的温度",
+  "tooltip.magic_and_taboo.magic_potion.red": "可以带来效果的提升",
+  "tooltip.magic_and_taboo.magic_potion.glow": "可以带来时间的提升",
   "potion.potency.6": "VII"
 }

@@ -5,9 +5,11 @@
   "compatibilityLevel": "JAVA_17",
   "refmap": "magic_and_taboo.refmap.json",
   "mixins": [
-    "BlockEntityTypeMixin"
+    "BlockEntityTypeMixin",
+    "GuiGraphicsMixin"
   ],
   "client": [
+    "GuiGraphicsMixin"
   ],
   "injectors": {
     "defaultRequire": 1
