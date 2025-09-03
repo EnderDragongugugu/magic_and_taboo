@@ -12,9 +12,8 @@ public class IngredientUtil {
         var ingredients = new Ingredient[maxSize];
         for (int i = 0, j = 0; i < maxSize; ++i) {
             var ingredient = Ingredient.fromJson(array.get(i));
-            if (!ingredient.isEmpty()) {
-                ingredients[j++] = ingredient;
-            }
+            if (ingredient.isEmpty()) continue;
+            ingredients[j++] = ingredient;
         }
         return ImmutableList.copyOf(ingredients);
     }

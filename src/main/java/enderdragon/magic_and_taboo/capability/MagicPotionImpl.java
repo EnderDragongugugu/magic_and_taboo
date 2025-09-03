@@ -4,9 +4,9 @@ import enderdragon.magic_and_taboo.init.MATCapabilities;
 import enderdragon.magic_and_taboo.init.MagicPotionSolvents;
 import enderdragon.magic_and_taboo.registry.Element;
 import enderdragon.magic_and_taboo.util.RegistryAccessor;
-import it.unimi.dsi.fastutil.objects.Object2FloatMap;
-import it.unimi.dsi.fastutil.objects.Object2FloatMaps;
-import it.unimi.dsi.fastutil.objects.Object2FloatOpenHashMap;
+import it.unimi.dsi.fastutil.objects.Reference2FloatMap;
+import it.unimi.dsi.fastutil.objects.Reference2FloatMaps;
+import it.unimi.dsi.fastutil.objects.Reference2FloatOpenHashMap;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
@@ -18,7 +18,6 @@ import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.FluidType;
 import net.minecraftforge.registries.ForgeRegistries;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
@@ -28,10 +27,10 @@ import java.util.List;
 public class MagicPotionImpl implements ICapabilityProvider, MagicPotion, INBTSerializable<CompoundTag> {
     public final LazyOptional<MagicPotion> holder = LazyOptional.of(() -> this);
 
-    private @Nullable Object2FloatMap<Element> access;
+    private @Nullable Reference2FloatMap<Element> access;
     private @Nullable FluidType solvent;
     private @Nullable List<MobEffectInstance> effects;
-    protected @Nullable Object2FloatMap<Element> elements;
+    protected @Nullable Reference2FloatMap<Element> elements;
     protected final float timeFactor;
     protected final int baseLevel;
     private boolean invalidColor = true;
@@ -43,7 +42,7 @@ public class MagicPotionImpl implements ICapabilityProvider, MagicPotion, INBTSe
     }
 
     @Override
-    public @NotNull <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side) {
+    public <T> LazyOptional<T> getCapability(Capability<T> cap, @Nullable Direction side) {
         return MATCapabilities.MAGIC_POTION.orEmpty(cap, this.holder);
     }
 
@@ -59,7 +58,7 @@ public class MagicPotionImpl implements ICapabilityProvider, MagicPotion, INBTSe
         var registries = RegistryAccessor.getOptionalRegistries();
         if (registries == null) return root;
         var lookup = registries.registryOrThrow(Element.RESOURCE_KEY);
-        for (var entry : this.elements.object2FloatEntrySet()) {
+        for (var entry : this.elements.reference2FloatEntrySet()) {
             elements.putFloat(lookup.getKey(entry.getKey()).toString(), entry.getFloatValue());
         }
         root.put("Elements", elements);
@@ -68,7 +67,7 @@ public class MagicPotionImpl implements ICapabilityProvider, MagicPotion, INBTSe
 
     @Override
     public void deserializeNBT(CompoundTag root) {
-        var map = new Object2FloatOpenHashMap<Element>();
+        var map = new Reference2FloatOpenHashMap<Element>();
         var registries = RegistryAccessor.getOptionalRegistries();
         if (registries == null) {
             this.setContent(null, map);
@@ -86,18 +85,18 @@ public class MagicPotionImpl implements ICapabilityProvider, MagicPotion, INBTSe
     }
 
     @Override
-    public Object2FloatMap<Element> getElements() {
+    public Reference2FloatMap<Element> getElements() {
         if (this.access == null) {
             if (this.elements == null) {
-                this.elements = new Object2FloatOpenHashMap<>();
+                this.elements = new Reference2FloatOpenHashMap<>();
             }
-            this.access = Object2FloatMaps.unmodifiable(this.elements);
+            this.access = Reference2FloatMaps.unmodifiable(this.elements);
         }
         return this.access;
     }
 
     @Override
-    public void setContent(@Nullable FluidType solvent, Object2FloatMap<Element> elements) {
+    public void setContent(@Nullable FluidType solvent, Reference2FloatMap<Element> elements) {
         this.access = null;
         this.effects = null;
         this.elements = elements;
@@ -113,7 +112,7 @@ public class MagicPotionImpl implements ICapabilityProvider, MagicPotion, INBTSe
     @Override
     public boolean isFatal() {
         if (this.elements == null) return false;
-        for (var entry : this.elements.object2FloatEntrySet()) {
+        for (var entry : this.elements.reference2FloatEntrySet()) {
             if (entry.getFloatValue() >= entry.getKey().concentration().max()) {
                 return true;
             }

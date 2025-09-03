@@ -52,8 +52,7 @@ public class TextChunk extends Chunk {
     public int measure(Font font, int space) {
         this.lines.clear();
         for (var text : this.texts) {
-            var lines = font.split(text, PAGE_WIDTH);
-            this.lines.addAll(lines);
+            this.lines.addAll(font.split(text, PAGE_WIDTH));
         }
         return this.height = font.lineHeight * this.lines.size();
     }

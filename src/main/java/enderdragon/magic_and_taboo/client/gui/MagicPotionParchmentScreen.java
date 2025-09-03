@@ -1,34 +1,26 @@
 package enderdragon.magic_and_taboo.client.gui;
 
-import com.mojang.blaze3d.systems.RenderSystem;
 import enderdragon.magic_and_taboo.MagicAndTabooMod;
-import enderdragon.magic_and_taboo.capability.MagicPotion;
 import enderdragon.magic_and_taboo.client.ClientUtil;
 import enderdragon.magic_and_taboo.init.MATCapabilities;
 import enderdragon.magic_and_taboo.init.MATItems;
 import enderdragon.magic_and_taboo.registry.Element;
-import enderdragon.magic_and_taboo.util.MagicPotionBottle;
-import it.unimi.dsi.fastutil.objects.Object2FloatOpenHashMap;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
+import it.unimi.dsi.fastutil.objects.Reference2FloatOpenHashMap;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.gui.components.AbstractSliderButton;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.Style;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static enderdragon.magic_and_taboo.block.entity.EnchantedCrucibleBlockEntity.MAX_RECIPE_SIZE;
@@ -41,10 +33,9 @@ public class MagicPotionParchmentScreen extends Screen {
     public static final int HEIGHT = (int) (169 * SIZE);
     public static final int ITEM_COLUMNS = 8;
     public static final int ICON_SIZE = 16;
-    protected final ObjectArrayList<Widget> widgets = new ObjectArrayList<>();
+    protected final ObjectArrayList<Slot> slots = new ObjectArrayList<>();
     public final NonNullList<ItemStack> stacks = NonNullList.withSize(MAX_RECIPE_SIZE, ItemStack.EMPTY);
-    private final Object2FloatOpenHashMap<Element> elements = new Object2FloatOpenHashMap<>();
-
+    private final ItemStack bottle;
     private final List<Component> temperature;
     public final Fluid fluid;
     private int top;
@@ -52,22 +43,28 @@ public class MagicPotionParchmentScreen extends Screen {
 
     public MagicPotionParchmentScreen(CompoundTag tag) {
         super(CommonComponents.EMPTY);
-        var tooltips = new ArrayList<Component>();
-        tooltips.add(Component.translatable("tooltip.magic_and_taboo.magic_potion.temperature", tag.getInt("Temperature")));
-        tooltips.add(Component.translatable("tooltip.magic_and_taboo.magic_potion.temperature.add"));
         ContainerHelper.loadAllItems(tag, stacks);
         this.fluid = FluidStack.loadFluidStackFromNBT(tag.getCompound("Fluid")).getFluid();
-        if (tag.contains("Elements")) {
-            this.elements.clear();
-            var elements = tag.getCompound("Elements");
+        this.temperature = List.of(
+                Component.translatable("tooltip.magic_and_taboo.magic_potion.temperature", tag.getInt("Temperature")),
+                Component.translatable("tooltip.magic_and_taboo.magic_potion.temperature.add")
+        );
+        var elements = tag.getCompound("Elements");
+        if (elements.isEmpty()) {
+            this.bottle = ItemStack.EMPTY;
+            return;
+        }
+        (this.bottle = new ItemStack(MATItems.POTION_BOTTLE.get())).getCapability(MATCapabilities.MAGIC_POTION).ifPresent(potion -> {
+            var content = new Reference2FloatOpenHashMap<Element>();
             var lookup = getRegistries(Minecraft.getInstance().level).registryOrThrow(Element.RESOURCE_KEY);
             for (var entry : lookup.entrySet()) {
                 float value = elements.getFloat(entry.getKey().location().toString());
                 if (value <= 0.0F) continue;
-                this.elements.put(entry.getValue(), value);
+                content.put(entry.getValue(), value);
             }
-        }
-        this.temperature = tooltips;
+            Element.antagonize(content);
+            potion.setContent(this.fluid.getFluidType(), content);
+        });
     }
 
     @Override
@@ -75,13 +72,12 @@ public class MagicPotionParchmentScreen extends Screen {
         super.init();
         int x = this.left = (this.width - WIDTH) / 2;
         int y = this.top = (this.height - HEIGHT) / 2;
-        var widgets = this.widgets;
-        widgets.clear();
-        TooltipRenderer renderer = GuiGraphics::renderTooltip;
-        widgets.add(new Widget(left + 28, top + 53, setPotion(), renderer));
+        var slots = this.slots;
+        slots.clear();
+        TooltipRenderer itemTooltip = GuiGraphics::renderTooltip;
         int left = x + 5, top = y + 135, columns = 0;
         for (var stack : this.stacks) {
-            widgets.add(new Widget(left, top, stack, renderer));
+            slots.add(new Slot(left, top, stack, itemTooltip));
             left += ICON_SIZE + 4;
             if (++columns >= ITEM_COLUMNS) {
                 columns = 0;
@@ -90,78 +86,33 @@ public class MagicPotionParchmentScreen extends Screen {
             }
         }
         if (this.fluid != null) {
-            var solvent = new ArrayList<Component>();
-            solvent.add(Component.translatable("tooltip.magic_and_taboo.magic_potion.solvent", this.fluid.getFluidType().getDescription()));
-            solvent.add(Component.translatable("tooltip.magic_and_taboo.magic_potion.solvent.add"));
-            widgets.add(new Widget(
-                    x + 8,
-                    y + 29,
-                    new ItemStack(this.fluid.getBucket()),
-                    (graphics, font, stack, mouseX, mouseY) ->
-                            graphics.renderComponentTooltip(font, solvent, mouseX, mouseY)
-            ));
+            slots.add(new Slot(x + 8, y + 29, new ItemStack(this.fluid.getBucket()), TooltipRenderer.of(List.of(
+                    Component.translatable("tooltip.magic_and_taboo.magic_potion.solvent", this.fluid.getFluidType().getDescription()),
+                    Component.translatable("tooltip.magic_and_taboo.magic_potion.solvent.add")
+            ))));
         }
-        widgets.add(new Widget(
+        slots.add(new Slot(
                 x + 8,
                 y + 56,
                 new ItemStack(MATItems.BLAZE_BURNER.get()),
                 (graphics, font, stack, mouseX, mouseY) ->
                         graphics.renderComponentTooltip(font, this.temperature, mouseX, mouseY)
         ));
-
-        var red = new ArrayList<Component>();
-        red.add(Component.translatable("item.magic_and_taboo.glass_potion_bottle_red"));
-        red.add(Component.translatable("tooltip.magic_and_taboo.magic_potion.red"));
-        widgets.add(new Widget(
-                x + 8,
-                y + 82,
-                new ItemStack(MATItems.POTION_BOTTLE_RED.get()),
-                (graphics, font, stack, mouseX, mouseY) ->
-                        graphics.renderComponentTooltip(font, red, mouseX, mouseY)
-        ));
-
-        var glow = new ArrayList<Component>();
-        glow.add(Component.translatable("item.magic_and_taboo.glass_potion_bottle_glow"));
-        glow.add(Component.translatable("tooltip.magic_and_taboo.magic_potion.glow"));
-        widgets.add(new Widget(
-                x + 8,
-                y + 109,
-                new ItemStack(MATItems.POTION_BOTTLE_GLOW.get()),
-                (graphics, font, stack, mouseX, mouseY) ->
-                        graphics.renderComponentTooltip(font, glow, mouseX, mouseY)
-        ));
-//        widgets.add(new Widget(
+        slots.add(new Slot(x + 8, y + 82, new ItemStack(MATItems.POTION_BOTTLE_RED.get()), TooltipRenderer.of(List.of(
+                Component.translatable("item.magic_and_taboo.glass_potion_bottle_red"),
+                Component.translatable("tooltip.magic_and_taboo.magic_potion.red")
+        ))));
+        slots.add(new Slot(x + 8, y + 109, new ItemStack(MATItems.POTION_BOTTLE_GLOW.get()), TooltipRenderer.of(List.of(
+                Component.translatable("item.magic_and_taboo.glass_potion_bottle_glow"),
+                Component.translatable("tooltip.magic_and_taboo.magic_potion.glow")
+        ))));
+//        slots.add(new slot(
 //                x + 30,
 //                y + 53,
 //                setPotion(),
 //                (graphics, font, stack, mouseX, mouseY) ->
 //                        graphics.renderComponentTooltip(font, glow, mouseX, mouseY)
 //        ));
-
-    }
-    public ItemStack setPotion() {
-        var itemStack = new ItemStack(MATItems.POTION_BOTTLE.get());
-        var elements = this.elements;
-        for (var entry : elements.object2FloatEntrySet()) {
-            var element = entry.getKey();
-            float conflict = 0.0F, bonus = 1.0F;
-            for (var inner : element.resistanceElementMap().object2FloatEntrySet()) {
-                if (elements.containsKey(inner.getKey().value())) {
-                    conflict += inner.getFloatValue();
-                }
-            }
-            for (var inner : element.resistanceElementMap().object2FloatEntrySet()) {
-                if (elements.containsKey(inner.getKey().value())) {
-                    bonus += inner.getFloatValue();
-                }
-            }
-            entry.setValue((entry.getFloatValue() - conflict) * bonus);
-        }
-        var cap = itemStack.getCapability(MATCapabilities.MAGIC_POTION);
-        cap.ifPresent( c ->
-                c.setContent(this.fluid.getFluidType(), elements)
-        );
-        return itemStack;
     }
 
     @Override
@@ -169,59 +120,42 @@ public class MagicPotionParchmentScreen extends Screen {
         this.renderBackground(graphics);
         super.render(graphics, mouseX, mouseY, partialTicks);
         graphics.blit(PARCHMENT, this.left, this.top, 0, 0, WIDTH, HEIGHT, WIDTH, HEIGHT);
-
+        var font = this.font;
         boolean tooltip = false;
-        for (var widget : this.widgets) {
-            var stack = widget.stack;
-            if (stack.isEmpty()) continue;
-            if (stack.is(MATItems.POTION_BOTTLE.get())) {
-                renderScaledItem(graphics, stack, widget.left, widget.top, 4.0F);
-            } else {
-                graphics.renderItem(stack, widget.left, widget.top);
-            }
-            if (!tooltip) {
-                int size = stack.is(MATItems.POTION_BOTTLE.get()) ? 64 : 16;
-                if (ClientUtil.isMouseOver(mouseX, mouseY, widget.left, widget.top, size, size)) {
-                    widget.tooltip.render(graphics, this.font, stack, mouseX, mouseY);
-                    tooltip = true;
-                }
+        if (!this.bottle.isEmpty()) {
+            int left = this.left + 28, top = this.top + 53;
+            var pose = graphics.pose();
+            pose.pushPose();
+            pose.translate(left, top, 0);
+            pose.scale(4.0F, 4.0F, 1.0F);
+            pose.translate(-left, -top, 0);
+            graphics.renderItem(this.bottle, left, top);
+            pose.popPose();
+            if (ClientUtil.isMouseOver(mouseX, mouseY, left, top, 64, 64)) {
+                graphics.renderTooltip(font, this.bottle, mouseX, mouseY);
+                tooltip = true;
             }
         }
-    }
-    public void renderScaledItem(GuiGraphics graphics, ItemStack stack, int left, int top, float scale){
-        var pose = graphics.pose();
-
-        pose.pushPose();
-
-        pose.translate(left, top, 0);
-        pose.scale(scale, scale, 1.0F);
-        pose.translate(-left, -top, 0);
-        graphics.renderItem(stack, left, top);
-
-        pose.popPose();
-        RenderSystem.applyModelViewMatrix();
+        for (var slot : this.slots) {
+            var stack = slot.stack;
+            if (stack.isEmpty()) continue;
+            graphics.renderItem(stack, slot.left, slot.top);
+            if (tooltip) continue;
+            if (ClientUtil.isMouseOver(mouseX, mouseY, slot.left, slot.top, 16, 16)) {
+                slot.tooltip.render(graphics, font, stack, mouseX, mouseY);
+                tooltip = true;
+            }
+        }
     }
 
     public interface TooltipRenderer {
+        static TooltipRenderer of(List<Component> tooltips) {
+            return (graphics, font, stack, mouseX, mouseY) ->
+                    graphics.renderComponentTooltip(font, tooltips, mouseX, mouseY);
+        }
+
         void render(GuiGraphics graphics, Font font, ItemStack stack, int mouseX, int mouseY);
     }
 
-    public record Widget(int left, int top, ItemStack stack, TooltipRenderer tooltip) {
-    }
-    public class sliderButton extends AbstractSliderButton {
-
-        public sliderButton(int pX, int pY, int pWidth, int pHeight, Component pMessage, double pValue) {
-            super(pX, pY, pWidth, pHeight, pMessage, pValue);
-        }
-
-        @Override
-        protected void updateMessage() {
-
-        }
-
-        @Override
-        protected void applyValue() {
-
-        }
-    }
+    public record Slot(int left, int top, ItemStack stack, TooltipRenderer tooltip) {}
 }

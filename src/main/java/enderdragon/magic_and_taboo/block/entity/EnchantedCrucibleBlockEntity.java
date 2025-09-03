@@ -8,7 +8,8 @@ import enderdragon.magic_and_taboo.registry.AlchemyElement;
 import enderdragon.magic_and_taboo.registry.Element;
 import enderdragon.magic_and_taboo.util.BlockEntityUtil;
 import enderdragon.magic_and_taboo.util.ContainerUtil;
-import it.unimi.dsi.fastutil.objects.Object2FloatOpenHashMap;
+import it.unimi.dsi.fastutil.objects.Reference2FloatMap;
+import it.unimi.dsi.fastutil.objects.Reference2FloatOpenHashMap;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.NonNullList;
@@ -67,7 +68,7 @@ public class EnchantedCrucibleBlockEntity extends BlockEntity implements IFluidH
             }
             if (progress >= time) {
                 crucible.transferToRecipeSlot(stack.copy());
-                crucible.addCookedElements(element);
+                crucible.processElement(element);
                 crucible.stacks.set(i, ItemStack.EMPTY);
                 progress = 0;
                 crucible.setChanged();
@@ -112,7 +113,8 @@ public class EnchantedCrucibleBlockEntity extends BlockEntity implements IFluidH
     public int tick;
     /// Should only be used for rendering
     private EnchantedCrucibleInfo info;
-    private final Object2FloatOpenHashMap<Element> elements = new Object2FloatOpenHashMap<>();
+    private final Reference2FloatOpenHashMap<Element> elements = new Reference2FloatOpenHashMap<>();
+    private Reference2FloatMap<Element> antagonizedElements;
 
     public EnchantedCrucibleBlockEntity(BlockPos pos, BlockState state) {
         super(MATBlockEntities.ENCHANTED_CRUCIBLE.get(), pos, state);
@@ -141,14 +143,19 @@ public class EnchantedCrucibleBlockEntity extends BlockEntity implements IFluidH
         return true;
     }
 
-    private void addCookedElements(@Nullable AlchemyElement alchemyElement) {
+    private void processElement(@Nullable AlchemyElement alchemyElement) {
         if (alchemyElement == null) return;
+        boolean changed = false;
         for (var entry : alchemyElement.elementMap().object2FloatEntrySet()) {
             var element = entry.getKey().value();
             float amount = entry.getFloatValue();
             if (element.temperature().test(this.temperature)) {
+                changed = true;
                 this.elements.addTo(element, amount);
             }
+        }
+        if (changed) {
+            this.antagonizedElements = null;
         }
     }
 
@@ -173,23 +180,12 @@ public class EnchantedCrucibleBlockEntity extends BlockEntity implements IFluidH
     }
 
     public void fillPotion(MagicPotion potion) {
-        var elements = this.elements;
-        for (var entry : elements.object2FloatEntrySet()) {
-            var element = entry.getKey();
-            float conflict = 0.0F, bonus = 1.0F;
-            for (var inner : element.resistanceElementMap().object2FloatEntrySet()) {
-                if (elements.containsKey(inner.getKey().value())) {
-                    conflict += inner.getFloatValue();
-                }
-            }
-            for (var inner : element.resistanceElementMap().object2FloatEntrySet()) {
-                if (elements.containsKey(inner.getKey().value())) {
-                    bonus += inner.getFloatValue();
-                }
-            }
-            entry.setValue((entry.getFloatValue() - conflict) * bonus);
+        var antagonized = this.antagonizedElements;
+        if (antagonized == null) {
+            Element.antagonize(antagonized = new Reference2FloatOpenHashMap<>(this.elements));
+            this.antagonizedElements = antagonized;
         }
-        potion.setContent(this.fluid.getFluid().getFluidType(), elements);
+        potion.setContent(this.fluid.getFluid().getFluidType(), antagonized);
     }
 
     @Override
@@ -221,6 +217,7 @@ public class EnchantedCrucibleBlockEntity extends BlockEntity implements IFluidH
                 if (value <= 0.0F) continue;
                 this.elements.put(entry.getValue(), value);
             }
+            this.antagonizedElements = null;
         }
         if (tag.contains("CookingProgress", 11)) {
             int[] progresses = tag.getIntArray("CookingProgress");
@@ -242,8 +239,8 @@ public class EnchantedCrucibleBlockEntity extends BlockEntity implements IFluidH
         tag.put("Fluid", this.fluid.writeToNBT(new CompoundTag()));
         var elements = new CompoundTag();
         var lookup = getRegistries(this.level).registryOrThrow(Element.RESOURCE_KEY);
-        for (var entry : this.elements.object2FloatEntrySet()) {
-            elements.putFloat(lookup.getKey(entry.getKey()).toString(), entry.getFloatValue());
+        for (var entry : this.elements.reference2FloatEntrySet()) {
+            elements.putFloat(String.valueOf(lookup.getKey(entry.getKey())), entry.getFloatValue());
         }
         tag.put("Elements", elements);
     }
@@ -315,14 +312,14 @@ public class EnchantedCrucibleBlockEntity extends BlockEntity implements IFluidH
         return 1;
     }
 
-    public @NotNull FluidStack getFluidStack() {
+    public FluidStack getFluidStack() {
         return this.fluid;
     }
 
     /// @deprecated Use {@link #getFluidStack()} instead.
     @Override
     @Deprecated
-    public @NotNull FluidStack getFluidInTank(int tank) {
+    public FluidStack getFluidInTank(int tank) {
         return this.fluid;
     }
 
@@ -332,7 +329,7 @@ public class EnchantedCrucibleBlockEntity extends BlockEntity implements IFluidH
     }
 
     @Override
-    public boolean isFluidValid(int tank, @NotNull FluidStack stack) {
+    public boolean isFluidValid(int tank, FluidStack stack) {
         return !stack.getFluid().isSame(Fluids.LAVA);
     }
 
@@ -379,6 +376,7 @@ public class EnchantedCrucibleBlockEntity extends BlockEntity implements IFluidH
                 this.stacks.clear();
                 this.elements.clear();
                 this.recipeStacks.clear();
+                this.antagonizedElements = null;
             }
             this.setChanged();
         }
@@ -393,8 +391,7 @@ public class EnchantedCrucibleBlockEntity extends BlockEntity implements IFluidH
     }
 
     @Override
-    @NotNull
-    public <T> LazyOptional<T> getCapability(@NotNull Capability<T> capability, @Nullable Direction facing) {
+    public <T> LazyOptional<T> getCapability(Capability<T> capability, @Nullable Direction facing) {
         return capability == ForgeCapabilities.FLUID_HANDLER
                 ? this.holder.cast()
                 : super.getCapability(capability, facing);

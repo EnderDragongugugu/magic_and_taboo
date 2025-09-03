@@ -18,15 +18,9 @@ public class FloatMaps {
         return Object2FloatMaps.unmodifiable(map == null ? new Object2FloatOpenHashMap<>() : new Object2FloatOpenHashMap<>(map));
     }
 
-    public static class Builder<T> {
-        public final Object2FloatMap<T> map;
-
+    public record Builder<T>(Object2FloatMap<T> map) {
         public Builder() {
-            this.map = new Object2FloatOpenHashMap<>();
-        }
-
-        public Builder(Object2FloatMap<T> base) {
-            this.map = base;
+            this(new Object2FloatOpenHashMap<>());
         }
 
         public Builder<T> put(T element, float count) {

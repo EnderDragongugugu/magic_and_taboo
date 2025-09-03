@@ -7,7 +7,6 @@ import enderdragon.magic_and_taboo.capability.PurenessStorage;
 import enderdragon.magic_and_taboo.capability.WorkHubResult;
 import enderdragon.magic_and_taboo.client.gui.*;
 import enderdragon.magic_and_taboo.client.model.MoonApprenticeArmorModel;
-import enderdragon.magic_and_taboo.client.model.StaffModelLoader;
 import enderdragon.magic_and_taboo.client.model.WorkHubToolModel;
 import enderdragon.magic_and_taboo.client.renderer.EnchantedCrucibleRender;
 import enderdragon.magic_and_taboo.client.renderer.MagicCraftsmanTableRender;
@@ -37,12 +36,15 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.registries.ForgeRegistries;
 
+import static enderdragon.magic_and_taboo.MagicAndTabooMod.makeId;
 import static enderdragon.magic_and_taboo.init.MATCapabilities.PURENESS;
 import static net.minecraft.client.model.geom.LayerDefinitions.INNER_ARMOR_DEFORMATION;
 import static net.minecraft.client.model.geom.LayerDefinitions.OUTER_ARMOR_DEFORMATION;
 
 @Mod.EventBusSubscriber(modid = MagicAndTabooMod.MOD_ID, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class MATClient {
+    public static final ResourceLocation UNFINISHED_MASK = makeId("textures/gui/unfinished.png");
+
     @Mod.EventBusSubscriber(modid = MagicAndTabooMod.MOD_ID, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.FORGE)
     public static class ForgeBusEvent {
         @SubscribeEvent
@@ -68,7 +70,6 @@ public class MATClient {
 //    public static void registerLoaders(ModelEvent.RegisterGeometryLoaders event) {
 //        event.register("staff_loader", new StaffModelLoader());
 //    }
-
 
 
     @SubscribeEvent

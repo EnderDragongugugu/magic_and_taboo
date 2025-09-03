@@ -1,35 +1,31 @@
 package enderdragon.magic_and_taboo.mixin;
 
 
-import com.mojang.blaze3d.vertex.PoseStack;
-import enderdragon.magic_and_taboo.MagicAndTabooMod;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
-import org.spongepowered.asm.mixin.Final;
+import org.spongepowered.asm.mixin.Debug;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import static enderdragon.magic_and_taboo.client.MATClient.UNFINISHED_MASK;
+
+@Debug(export = true)
 @Mixin(GuiGraphics.class)
 public abstract class GuiGraphicsMixin {
-    private static final ResourceLocation RESOURCE_LOCATION = MagicAndTabooMod.makeId("textures/gui/unfinished.png");
-    @Shadow public abstract void blit(ResourceLocation pAtlasLocation, int pX, int pY, float pUOffset, float pVOffset, int pWidth, int pHeight, int pTextureWidth, int pTextureHeight);
-
-    @Shadow @Final private PoseStack pose;
+    @Shadow
+    public abstract void blit(ResourceLocation texture, int x, int y, int z, float u, float v, int width, int height, int textureWidth, int textureHeight);
 
     @Inject(
             method = "renderItemDecorations(Lnet/minecraft/client/gui/Font;Lnet/minecraft/world/item/ItemStack;IILjava/lang/String;)V",
-            at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/vertex/PoseStack;pushPose()V")
+            at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/ItemStack;isBarVisible()Z")
     )
-    private void renderItemDecorations(Font pFont, ItemStack pStack, int pX, int pY, @Nullable String pText, CallbackInfo ci) {
-        this.pose.pushPose();
-        this.pose.translate(0.0F, 0.0F, 200.0F);
-        this.blit(RESOURCE_LOCATION , pX, pY , 0, 0, 16, 16, 16, 16);
-        this.pose.popPose();
+    public void renderUnfinishedMask(Font font, ItemStack stack, int x, int y, @Nullable String text, CallbackInfo info) {
+        this.blit(UNFINISHED_MASK, x, y, 200, 0, 0, 16, 16, 16, 16);
     }
 }

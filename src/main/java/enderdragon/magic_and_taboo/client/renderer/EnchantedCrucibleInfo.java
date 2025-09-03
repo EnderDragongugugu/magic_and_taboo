@@ -2,9 +2,9 @@ package enderdragon.magic_and_taboo.client.renderer;
 
 import enderdragon.magic_and_taboo.capability.MagicPotion;
 import enderdragon.magic_and_taboo.registry.Element;
-import it.unimi.dsi.fastutil.objects.Object2FloatMap;
-import it.unimi.dsi.fastutil.objects.Object2FloatMaps;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
+import it.unimi.dsi.fastutil.objects.Reference2FloatMap;
+import it.unimi.dsi.fastutil.objects.Reference2FloatMaps;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraftforge.fluids.FluidStack;
@@ -21,10 +21,10 @@ public class EnchantedCrucibleInfo implements MagicPotion {
     public int temperature;
     public @Nullable Component tip;
     public @Nullable FluidType solvent;
-    public @Nonnull Object2FloatMap<Element> elements = Object2FloatMaps.emptyMap();
+    public @Nonnull Reference2FloatMap<Element> elements = Reference2FloatMaps.emptyMap();
 
     @Override
-    public Object2FloatMap<Element> getElements() {
+    public Reference2FloatMap<Element> getElements() {
         return this.elements;
     }
 
@@ -34,7 +34,7 @@ public class EnchantedCrucibleInfo implements MagicPotion {
     }
 
     @Override
-    public void setContent(@Nullable FluidType solvent, Object2FloatMap<Element> elements) {
+    public void setContent(@Nullable FluidType solvent, Reference2FloatMap<Element> elements) {
         this.solvent = solvent;
         this.elements = elements;
     }
@@ -47,7 +47,7 @@ public class EnchantedCrucibleInfo implements MagicPotion {
     @Override
     public List<MobEffectInstance> getEffects() {
         var effects = new ObjectArrayList<MobEffectInstance>(this.elements.size());
-        for (var entry : this.elements.object2FloatEntrySet()) {
+        for (var entry : this.elements.reference2FloatEntrySet()) {
             effects.add(entry.getKey().getEffect(entry.getFloatValue(), 1.0F, 0));
         }
         return effects;

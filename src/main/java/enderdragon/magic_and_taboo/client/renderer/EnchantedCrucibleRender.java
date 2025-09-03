@@ -82,7 +82,7 @@ public class EnchantedCrucibleRender implements BlockEntityRenderer<EnchantedCru
         var pose = matrices.last();
         var matrix = pose.pose();
         var normal = pose.normal();
-        for (var entry : info.elements.object2FloatEntrySet()) {
+        for (var entry : info.elements.reference2FloatEntrySet()) {
             var buffer = buffers.getBuffer(RENDER_TYPES.computeIfAbsent(entry.getKey(), RENDER_TYPE_FACTORY));
             vertex(buffer, matrix, normal, -0.5F, -0.25F, 0, 0);
             vertex(buffer, matrix, normal, 0.5F, -0.25F, 1, 0);

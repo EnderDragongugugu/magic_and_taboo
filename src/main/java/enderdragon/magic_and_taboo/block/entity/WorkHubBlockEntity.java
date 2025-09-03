@@ -6,7 +6,6 @@ import enderdragon.magic_and_taboo.init.MATRecipeTypes;
 import enderdragon.magic_and_taboo.inventory.WorkHubMenu;
 import enderdragon.magic_and_taboo.tag.MATItemTags;
 import enderdragon.magic_and_taboo.util.ContainerUtil;
-import enderdragon.magic_and_taboo.util.DataSlotImpl;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
@@ -18,6 +17,7 @@ import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.DataSlot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.level.Level;
@@ -35,8 +35,8 @@ public class WorkHubBlockEntity extends BaseContainerBlockEntity implements IIte
     private static final Logger LOGGER = LogManager.getLogger();
     private WorkHubRecipe lastRecipe;
 
-    public final DataSlotImpl time = new DataSlotImpl();
-    public final DataSlotImpl timeTotal = new DataSlotImpl();
+    public final DataSlot time = DataSlot.standalone();
+    public final DataSlot timeTotal = DataSlot.standalone();
     private NonNullList<ItemStack> stacks = NonNullList.withSize(MAX_SIZE, ItemStack.EMPTY);
     private final RecipeManager.CachedCheck<WorkHubBlockEntity, WorkHubRecipe> checker = RecipeManager.createCheck(MATRecipeTypes.WORK_HUB_RECIPE_TYPE.get());
 
@@ -50,11 +50,14 @@ public class WorkHubBlockEntity extends BaseContainerBlockEntity implements IIte
             var result = recipe.getResultItem(level.registryAccess());
             if (ContainerUtil.canMerge(hub.getStackInSlot(8), result)) {
                 hub.timeTotal.set(recipe.workTime());
-                if (hub.time.increase() == hub.timeTotal.get()) {
+                int time = hub.time.get() + 1;
+                if (time > hub.timeTotal.get()) {
                     hub.addItem(8, result, result.getCount());
                     hub.executeRecipe(recipe);
                     hub.time.set(0);
                     hub.lastRecipe = recipe;
+                } else {
+                    hub.time.set(time);
                 }
             }
         } else {

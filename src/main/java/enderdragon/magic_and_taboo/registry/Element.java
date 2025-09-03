@@ -6,7 +6,8 @@ import enderdragon.magic_and_taboo.MagicAndTabooMod;
 import enderdragon.magic_and_taboo.util.FloatMaps;
 import enderdragon.magic_and_taboo.util.FloatRange;
 import it.unimi.dsi.fastutil.objects.Object2FloatMap;
-import it.unimi.dsi.fastutil.objects.Object2FloatOpenHashMap;
+import it.unimi.dsi.fastutil.objects.Reference2FloatMap;
+import it.unimi.dsi.fastutil.objects.Reference2FloatOpenHashMap;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
 import net.minecraft.core.RegistryAccess;
@@ -51,9 +52,9 @@ public record Element(
                     .fieldOf("fusion_element").forGetter(Element::fusionElementMap)
     ).apply(instance, Element::new));
 
-    public static Object2FloatOpenHashMap<Element> fromStacks(RegistryAccess registry, List<ItemStack> stacks, int[] cookingTime, int temperature) {
+    public static Reference2FloatOpenHashMap<Element> fromStacks(RegistryAccess registry, List<ItemStack> stacks, int[] cookingTime, int temperature) {
         if (cookingTime.length < stacks.size()) throw new IndexOutOfBoundsException();
-        var elements = new Object2FloatOpenHashMap<Element>();
+        var elements = new Reference2FloatOpenHashMap<Element>();
         var iterator = stacks.listIterator();
         while (iterator.hasNext()) {
             var stack = iterator.next();
@@ -68,6 +69,24 @@ public record Element(
             }
         }
         return elements;
+    }
+
+    public static void antagonize(Reference2FloatMap<Element> elements) {
+        for (var entry : elements.reference2FloatEntrySet()) {
+            var element = entry.getKey();
+            float conflict = 0.0F, bonus = 1.0F;
+            for (var inner : element.resistanceElementMap().object2FloatEntrySet()) {
+                if (elements.containsKey(inner.getKey().value())) {
+                    conflict += inner.getFloatValue();
+                }
+            }
+            for (var inner : element.resistanceElementMap().object2FloatEntrySet()) {
+                if (elements.containsKey(inner.getKey().value())) {
+                    bonus += inner.getFloatValue();
+                }
+            }
+            entry.setValue((entry.getFloatValue() - conflict) * bonus);
+        }
     }
 
     public MobEffectInstance getEffect(float concentration, float timeFactor, int baseLevel) {

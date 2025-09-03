@@ -6,7 +6,7 @@ import enderdragon.magic_and_taboo.init.MATItems;
 import enderdragon.magic_and_taboo.registry.Element;
 import enderdragon.magic_and_taboo.util.CapabilityUtil;
 import enderdragon.magic_and_taboo.util.ContainerUtil;
-import it.unimi.dsi.fastutil.objects.Object2FloatOpenHashMap;
+import it.unimi.dsi.fastutil.objects.Reference2FloatOpenHashMap;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -47,7 +47,7 @@ public class MagicPotionParchmentItem extends Item {
         var recipe = root.getCompound("PotionRecipe");
         var container = player.getInventory();
         var stacks = NonNullList.withSize(MAX_RECIPE_SIZE, ItemStack.EMPTY);
-        var elements = new Object2FloatOpenHashMap<Element>();
+        var elements = new Reference2FloatOpenHashMap<Element>();
 
         if (!recipe.contains("Fluid")) return false;
         var fluid = FluidStack.loadFluidStackFromNBT(recipe.getCompound("Fluid"));
