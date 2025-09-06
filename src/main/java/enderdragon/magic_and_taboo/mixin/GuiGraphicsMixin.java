@@ -1,6 +1,7 @@
 package enderdragon.magic_and_taboo.mixin;
 
 
+import enderdragon.magic_and_taboo.tag.MATItemTags;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.resources.ResourceLocation;
@@ -26,6 +27,8 @@ public abstract class GuiGraphicsMixin {
             at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/ItemStack;isBarVisible()Z")
     )
     public void renderUnfinishedMask(Font font, ItemStack stack, int x, int y, @Nullable String text, CallbackInfo info) {
-        this.blit(UNFINISHED_MASK, x, y, 200, 0, 0, 16, 16, 16, 16);
+        if(stack.is(MATItemTags.UNFINISHED)){
+            this.blit(UNFINISHED_MASK, x, y, 200, 0, 0, 16, 16, 16, 16);
+        }
     }
 }

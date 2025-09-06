@@ -95,8 +95,5 @@ public class AlchemyElementItem extends Item {
                 tooltips.add(Component.translatable("tooltip.magic_and_taboo.alchemy_element.element.1", entry.getFloatValue(),entry.getKey().getDisplayName()));
             }
         }
-//        tooltips.add(Component.translatable("tooltip.magic_and_taboo.alchemy_element.element.1", 1,holder.getMaxElement().getDisplayName()));
-
-
     }
 }

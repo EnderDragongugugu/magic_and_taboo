@@ -61,5 +61,10 @@ public class MATItemTagProvider extends ItemTagsProvider {
                 .add(Items.ICE)
                 .add(Items.BLUE_ICE)
                 .add(Items.PACKED_ICE);
+        this.tag(MATItemTags.UNFINISHED)
+                .add(MATItems.LIMITE_BOOTS.get())
+                .add(MATItems.LIMITE_CHESTPLATE.get())
+                .add(MATItems.LIMITE_HELMET.get())
+                .add(MATItems.LIMITE_LEGGINGS.get());
     }
 }
