@@ -34,9 +34,11 @@ public record AlchemyElement(Object2FloatMap<Holder<Element>> elementMap, int ti
     public static @Nullable AlchemyElement fromStack(RegistryAccess registry, ItemStack stack) {
         if (stack.is(MATItems.ALCHEMY_ELEMENT.get())) {
             var holder = CapabilityUtil.getCapability(stack, MATCapabilities.ELEMENT_HOLDER);
-            if (holder == null || holder.getElement() == null) return null;
+            if (holder == null || holder.getMaxElement() == null) return null;
             var elements = new Object2FloatOpenHashMap<Holder<Element>>();
-            elements.put(registry.registryOrThrow(Element.RESOURCE_KEY).wrapAsHolder(holder.getElement()), holder.getAmount());
+            for (var entry : holder.getElements().reference2FloatEntrySet()) {
+                elements.put(registry.registryOrThrow(Element.RESOURCE_KEY).wrapAsHolder(entry.getKey()),entry.getFloatValue());
+            }
             return new AlchemyElement(elements, 20);
         }
         return registry.registryOrThrow(AlchemyElement.RESOURCE_KEY).get(ForgeRegistries.ITEMS.getKey(stack.getItem()));

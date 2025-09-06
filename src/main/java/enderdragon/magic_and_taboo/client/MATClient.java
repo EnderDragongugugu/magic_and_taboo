@@ -2,6 +2,7 @@ package enderdragon.magic_and_taboo.client;
 
 import com.mojang.datafixers.util.Either;
 import enderdragon.magic_and_taboo.MagicAndTabooMod;
+import enderdragon.magic_and_taboo.capability.ElementHolder;
 import enderdragon.magic_and_taboo.capability.MagicPotion;
 import enderdragon.magic_and_taboo.capability.PurenessStorage;
 import enderdragon.magic_and_taboo.capability.WorkHubResult;
@@ -89,7 +90,7 @@ public class MATClient {
                 MATItems.POTION_BOTTLE_GLOW.get(),
                 MATItems.POTION_SYRINGE.get()
         );
-        event.register(AlchemyElementItem::getColor, MATItems.ALCHEMY_ELEMENT.get());
+        event.register(ElementHolder::getLayerColor, MATItems.ALCHEMY_ELEMENT.get());
     }
 
     @SubscribeEvent
