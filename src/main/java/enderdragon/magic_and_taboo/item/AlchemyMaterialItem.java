@@ -19,33 +19,31 @@ import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
-import java.util.stream.Stream;
+import java.util.function.Consumer;
 
 public class AlchemyMaterialItem extends Item {
-    public static Stream<ItemStack> makeDisplayStacks(Holder.Reference<AlchemyElement> elements) {
-        var stacks = new ItemStack[]{
-                new ItemStack(MATItems.ALCHEMY_PASTE.get()),
-                new ItemStack(MATItems.ALCHEMY_SOLUTION.get()),
-                new ItemStack(MATItems.ALCHEMY_POWDER.get())
-        };
+    public static void makeDisplayStacks(Holder.Reference<AlchemyElement> elements, Consumer<ItemStack> stream) {
         var concentrations = new Reference2FloatOpenHashMap<Element>();
         for (var entry : elements.get().concentrations().object2FloatEntrySet()) {
             concentrations.addTo(entry.getKey().get(), entry.getFloatValue());
         }
-        for (var stack : stacks) {
+        for (var stack : new ItemStack[]{
+                new ItemStack(MATItems.ALCHEMY_PASTE.get()),
+                new ItemStack(MATItems.ALCHEMY_SOLUTION.get()),
+                new ItemStack(MATItems.ALCHEMY_POWDER.get())
+        }) {
             var storage = CapabilityUtil.getCapability(stack, MATCapabilities.ELEMENT_STORAGE);
-            if (storage != null) {
-                // 理论上可以省一次拷贝，但是丑
-                storage.setConcentrations(new Reference2FloatOpenHashMap<>(concentrations));
-            }
+            if (storage == null) continue;
+            // 理论上可以省一次拷贝，但是丑
+            storage.setConcentrations(new Reference2FloatOpenHashMap<>(concentrations));
+            stream.accept(stack);
         }
-        return Stream.of(stacks);
     }
 
     public static void fillDisplayStacks(CreativeModeTab.ItemDisplayParameters context, CreativeModeTab.Output entries) {
         context.holders().lookupOrThrow(AlchemyElement.RESOURCE_KEY)
                 .listElements()
-                .flatMap(AlchemyMaterialItem::makeDisplayStacks)
+                .mapMulti(AlchemyMaterialItem::makeDisplayStacks)
                 .forEach(entries::accept);
     }
 
