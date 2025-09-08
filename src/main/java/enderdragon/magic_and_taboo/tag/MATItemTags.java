@@ -18,7 +18,7 @@ public class MATItemTags {
     public static final TagKey<Item> MAGIC_POTION_BOTTLE = matTag("glass_potion_bottle");
     public static final TagKey<Item> COOLANT = matTag("coolant");
     public static final TagKey<Item> UNFINISHED = matTag("unfinished");
-
+    public static final TagKey<Item> IS_GRINDABLE = matTag("is_grindable");
     static TagKey<Item> matTag(String name) {
         return TagKey.create(Registries.ITEM, makeId(name));
     }

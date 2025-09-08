@@ -161,6 +161,15 @@ public class MATItems {
     public static final RegistryObject<AlchemyElementItem> ALCHEMY_ELEMENT = POTION.register(REGISTRY, "alchemy_element", () ->
             new AlchemyElementItem(new Properties().stacksTo(16))
     );
+    public static final RegistryObject<AlchemyMaterialItem> ALCHEMY_POWDER = POTION.register(REGISTRY, "alchemy_powder", () ->
+            new AlchemyMaterialItem(new Properties().stacksTo(16))
+    );
+    public static final RegistryObject<AlchemyMaterialItem> ALCHEMY_SOLUTION = POTION.register(REGISTRY, "alchemy_solution", () ->
+            new AlchemyMaterialItem(new Properties().stacksTo(16))
+    );
+    public static final RegistryObject<AlchemyMaterialItem> ALCHEMY_PASTE = POTION.register(REGISTRY, "alchemy_paste", () ->
+            new AlchemyMaterialItem(new Properties().stacksTo(16))
+    );
     public static final RegistryObject<GlassMagicPotionBottleItem> GLASS_POTION_BOTTLE = POTION.register(REGISTRY, "glass_potion_bottle", () ->
             new GlassMagicPotionBottleItem(new Properties(), POTION_BOTTLE.get())
     );

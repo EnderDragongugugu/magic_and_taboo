@@ -17,7 +17,6 @@ import enderdragon.magic_and_taboo.init.MATBlockEntities;
 import enderdragon.magic_and_taboo.init.MATBlocks;
 import enderdragon.magic_and_taboo.init.MATItems;
 import enderdragon.magic_and_taboo.init.MATMenuTypes;
-import enderdragon.magic_and_taboo.item.AlchemyElementItem;
 import enderdragon.magic_and_taboo.item.LimiteArmorItem;
 import enderdragon.magic_and_taboo.registry.AlchemyElement;
 import net.minecraft.client.Minecraft;
@@ -90,7 +89,13 @@ public class MATClient {
                 MATItems.POTION_BOTTLE_GLOW.get(),
                 MATItems.POTION_SYRINGE.get()
         );
-        event.register(ElementHolder::getLayerColor, MATItems.ALCHEMY_ELEMENT.get());
+        event.register(
+                ElementHolder::getLayerColor,
+                MATItems.ALCHEMY_ELEMENT.get(),
+                MATItems.ALCHEMY_POWDER.get(),
+                MATItems.ALCHEMY_PASTE.get(),
+                MATItems.ALCHEMY_SOLUTION.get()
+        );
     }
 
     @SubscribeEvent

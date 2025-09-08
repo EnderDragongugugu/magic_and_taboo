@@ -62,6 +62,14 @@ public class MATItemTagProvider extends ItemTagsProvider {
                 .add(Items.BLUE_ICE)
                 .add(Items.PACKED_ICE);
         this.tag(MATItemTags.UNFINISHED)
+//                书
+                .add(MATItems.OCCULT_CODEX.get())
+//                法杖
+                .add(MATItems.STAFF.get())
+                .add(MATItems.FIR_HANDLE.get())
+                .add(MATItems.BRASS_TIP.get())
+                .add(MATItems.HOLY_FEATHER.get())
+//                法袍
                 .add(MATItems.LIMITE_BOOTS.get())
                 .add(MATItems.LIMITE_CHESTPLATE.get())
                 .add(MATItems.LIMITE_HELMET.get())

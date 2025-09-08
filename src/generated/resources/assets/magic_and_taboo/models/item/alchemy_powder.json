@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "magic_and_taboo:item/alchemy_powder_overlay",
+    "layer1": "magic_and_taboo:item/alchemy_powder"
+  }
+}

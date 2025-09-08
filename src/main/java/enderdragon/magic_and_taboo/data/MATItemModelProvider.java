@@ -93,6 +93,9 @@ public class MATItemModelProvider extends ItemModelProvider {
         this.bottleItems(MATItems.POTION_SYRINGE, MATItems.GLASS_POTION_SYRINGE);
         this.bottleItems(MATItems.POTION_BOTTLE_GLOW, MATItems.GLASS_POTION_BOTTLE_GLOW);
         this.bottleItems(MATItems.ALCHEMY_ELEMENT);
+        this.bottleItems(MATItems.ALCHEMY_POWDER);
+        this.bottleItems(MATItems.ALCHEMY_SOLUTION);
+        this.bottleItems(MATItems.ALCHEMY_PASTE);
 
 
 //        法杖
