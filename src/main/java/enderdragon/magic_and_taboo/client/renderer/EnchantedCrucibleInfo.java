@@ -2,7 +2,6 @@ package enderdragon.magic_and_taboo.client.renderer;
 
 import enderdragon.magic_and_taboo.capability.MagicPotion;
 import enderdragon.magic_and_taboo.registry.Element;
-import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import it.unimi.dsi.fastutil.objects.Reference2FloatMap;
 import it.unimi.dsi.fastutil.objects.Reference2FloatMaps;
 import net.minecraft.network.chat.Component;
@@ -24,11 +23,6 @@ public class EnchantedCrucibleInfo implements MagicPotion {
     public @Nonnull Reference2FloatMap<Element> elements = Reference2FloatMaps.emptyMap();
 
     @Override
-    public Reference2FloatMap<Element> getElements() {
-        return this.elements;
-    }
-
-    @Override
     public @Nullable FluidType getSolvent() {
         return this.solvent;
     }
@@ -40,16 +34,17 @@ public class EnchantedCrucibleInfo implements MagicPotion {
     }
 
     @Override
-    public boolean isFatal() {
-        return false;
+    public Reference2FloatMap<Element> getConcentrations() {
+        return this.elements;
+    }
+
+    @Override
+    public float getConcentration(Element element) {
+        return this.elements.getFloat(element);
     }
 
     @Override
     public List<MobEffectInstance> getEffects() {
-        var effects = new ObjectArrayList<MobEffectInstance>(this.elements.size());
-        for (var entry : this.elements.reference2FloatEntrySet()) {
-            effects.add(entry.getKey().getEffect(entry.getFloatValue(), 1.0F, 0));
-        }
-        return effects;
+        return Element.resolveEffects(this.elements);
     }
 }

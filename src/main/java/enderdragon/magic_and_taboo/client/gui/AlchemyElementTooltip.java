@@ -29,7 +29,7 @@ public class AlchemyElementTooltip implements ClientTooltipComponent {
     public AlchemyElementTooltip(AlchemyElement element) {
         if (Screen.hasShiftDown()) {
             var widgets = new ObjectArrayList<Widget>();
-            for (var entry : element.elementMap().object2FloatEntrySet()) {
+            for (var entry : element.concentrations().object2FloatEntrySet()) {
                 float amount = entry.getFloatValue();
                 if (amount > 0) {
                     widgets.add(new Widget(entry.getKey().value(), amount));

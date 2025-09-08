@@ -146,7 +146,7 @@ public class EnchantedCrucibleBlockEntity extends BlockEntity implements IFluidH
     private void processElement(@Nullable AlchemyElement alchemyElement) {
         if (alchemyElement == null) return;
         boolean changed = false;
-        for (var entry : alchemyElement.elementMap().object2FloatEntrySet()) {
+        for (var entry : alchemyElement.concentrations().object2FloatEntrySet()) {
             var element = entry.getKey().value();
             float amount = entry.getFloatValue();
             if (element.temperature().test(this.temperature)) {

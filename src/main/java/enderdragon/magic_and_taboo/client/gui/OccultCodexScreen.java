@@ -20,7 +20,7 @@ public class OccultCodexScreen extends Screen implements Book {
     private final Stack<Chapter> hidden = new Stack<>();
     private @Nonnull Chapter chapter;
 
-    public OccultCodexScreen(@Nonnull Chapter chapter) {
+    public OccultCodexScreen(Chapter chapter) {
         super(CommonComponents.EMPTY);
         this.chapter = chapter;
     }

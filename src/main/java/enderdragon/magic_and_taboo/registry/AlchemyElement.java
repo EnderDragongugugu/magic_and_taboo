@@ -22,25 +22,27 @@ import java.util.function.Function;
 
 import static enderdragon.magic_and_taboo.MagicAndTabooMod.makeId;
 
-public record AlchemyElement(Object2FloatMap<Holder<Element>> elementMap, int time) implements TooltipComponent {
+public record AlchemyElement(Object2FloatMap<Holder<Element>> concentrations, int time) implements TooltipComponent {
     public static final ResourceKey<Registry<AlchemyElement>> RESOURCE_KEY = ResourceKey.createRegistryKey(makeId("alchemy_element"));
     public static final Codec<AlchemyElement> CODEC = RecordCodecBuilder.create(instance -> instance.group(
             Codec.unboundedMap(RegistryFixedCodec.create(Element.RESOURCE_KEY), Codec.FLOAT)
                     .xmap(FloatMaps::defaultedUnmodifiableCopy, Function.identity())
-                    .fieldOf("alchemy_element").forGetter(AlchemyElement::elementMap),
+                    .fieldOf("alchemy_element").forGetter(AlchemyElement::concentrations),
             Codec.INT.fieldOf("max_time").forGetter(AlchemyElement::time)
     ).apply(instance, AlchemyElement::new));
 
-    public static @Nullable AlchemyElement fromStack(RegistryAccess registry, ItemStack stack) {
-        if (stack.is(MATItems.ALCHEMY_ELEMENT.get())) {
-            var holder = CapabilityUtil.getCapability(stack, MATCapabilities.ELEMENT_HOLDER);
-            if (holder == null || holder.getMaxElement() == null) return null;
-            var elements = new Object2FloatOpenHashMap<Holder<Element>>();
-            for (var entry : holder.getElements().reference2FloatEntrySet()) {
-                elements.put(registry.registryOrThrow(Element.RESOURCE_KEY).wrapAsHolder(entry.getKey()),entry.getFloatValue());
+    public static @Nullable AlchemyElement fromStack(RegistryAccess registries, ItemStack stack) {
+        if (stack.is(MATItems.ALCHEMY_ELEMENT.get())) { // TODO: tag
+            var source = CapabilityUtil.getCapability(stack, MATCapabilities.ELEMENT_SOURCE);
+            if (source != null) {
+                var registry = registries.registryOrThrow(Element.RESOURCE_KEY);
+                var concentrations = new Object2FloatOpenHashMap<Holder<Element>>();
+                for (var entry : source.getConcentrations().reference2FloatEntrySet()) {
+                    concentrations.put(registry.wrapAsHolder(entry.getKey()), entry.getFloatValue());
+                }
+                return new AlchemyElement(concentrations, 20);
             }
-            return new AlchemyElement(elements, 20);
         }
-        return registry.registryOrThrow(AlchemyElement.RESOURCE_KEY).get(ForgeRegistries.ITEMS.getKey(stack.getItem()));
+        return registries.registryOrThrow(RESOURCE_KEY).get(ForgeRegistries.ITEMS.getKey(stack.getItem()));
     }
 }

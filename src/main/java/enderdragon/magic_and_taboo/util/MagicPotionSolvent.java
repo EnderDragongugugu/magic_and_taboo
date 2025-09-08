@@ -15,7 +15,7 @@ public interface MagicPotionSolvent {
         for (var entry : elements.reference2FloatEntrySet()) {
             var element = entry.getKey();
             if (element.concentration().min() <= entry.getFloatValue()) {
-                effects.add(element.getEffect(entry.getFloatValue(), timeFactor, baseLevel));
+                effects.add(element.resolveEffect(entry.getFloatValue(), timeFactor, baseLevel));
             }
         }
         return effects;

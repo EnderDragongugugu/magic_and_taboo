@@ -3,6 +3,7 @@ package enderdragon.magic_and_taboo.util;
 import it.unimi.dsi.fastutil.objects.Object2FloatMap;
 import it.unimi.dsi.fastutil.objects.Object2FloatMaps;
 import it.unimi.dsi.fastutil.objects.Object2FloatOpenHashMap;
+import it.unimi.dsi.fastutil.objects.Reference2FloatMap;
 
 import javax.annotation.Nullable;
 import java.util.Map;
@@ -16,6 +17,14 @@ public class FloatMaps {
         var copy = map == null ? new Object2FloatOpenHashMap<T>() : new Object2FloatOpenHashMap<>(map);
         copy.defaultReturnValue(1.0F);
         return Object2FloatMaps.unmodifiable(map == null ? new Object2FloatOpenHashMap<>() : new Object2FloatOpenHashMap<>(map));
+    }
+
+    public static int compareByFloat(Reference2FloatMap.Entry<?> left, Reference2FloatMap.Entry<?> right) {
+        return Float.compare(left.getFloatValue(), right.getFloatValue());
+    }
+
+    public static int compareByFloat(Object2FloatMap.Entry<?> left, Object2FloatMap.Entry<?> right) {
+        return Float.compare(left.getFloatValue(), right.getFloatValue());
     }
 
     public record Builder<T>(Object2FloatMap<T> map) {

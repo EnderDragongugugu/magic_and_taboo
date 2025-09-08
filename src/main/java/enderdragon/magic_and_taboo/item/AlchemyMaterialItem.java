@@ -1,6 +1,6 @@
 package enderdragon.magic_and_taboo.item;
 
-import enderdragon.magic_and_taboo.capability.ElementHolderImpl;
+import enderdragon.magic_and_taboo.capability.ElementStorageImpl;
 import enderdragon.magic_and_taboo.init.MATCapabilities;
 import enderdragon.magic_and_taboo.init.MATItems;
 import enderdragon.magic_and_taboo.registry.AlchemyElement;
@@ -19,44 +19,33 @@ import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
+import java.util.stream.Stream;
 
 public class AlchemyMaterialItem extends Item {
-    public static ItemStack makeDisplayStack(Item item, Holder.Reference<AlchemyElement> alchemyElement) {
-        var stack = new ItemStack(item);
-        var holder = CapabilityUtil.getCapability(stack, MATCapabilities.ELEMENT_HOLDER);
-        if (holder == null) return stack;
-
-        var map = new Reference2FloatOpenHashMap<Element>();
-        for (var entry : alchemyElement.get().elementMap().object2FloatEntrySet()) {
-            map.addTo(entry.getKey().get(), entry.getFloatValue());
+    public static Stream<ItemStack> makeDisplayStacks(Holder.Reference<AlchemyElement> elements) {
+        var stacks = new ItemStack[]{
+                new ItemStack(MATItems.ALCHEMY_PASTE.get()),
+                new ItemStack(MATItems.ALCHEMY_SOLUTION.get()),
+                new ItemStack(MATItems.ALCHEMY_POWDER.get())
+        };
+        var concentrations = new Reference2FloatOpenHashMap<Element>();
+        for (var entry : elements.get().concentrations().object2FloatEntrySet()) {
+            concentrations.addTo(entry.getKey().get(), entry.getFloatValue());
         }
-
-        holder.setElement(map);
-        return stack;
-    }
-
-    public static ItemStack makeAlchemyPasteStack(Holder.Reference<AlchemyElement> alchemyElement) {
-        return makeDisplayStack(MATItems.ALCHEMY_PASTE.get(), alchemyElement);
-    }
-
-    public static ItemStack makeAlchemySolutionStack(Holder.Reference<AlchemyElement> alchemyElement) {
-        return makeDisplayStack(MATItems.ALCHEMY_SOLUTION.get(), alchemyElement);
-    }
-
-    public static ItemStack makeAlchemyPowderStack(Holder.Reference<AlchemyElement> alchemyElement) {
-        return makeDisplayStack(MATItems.ALCHEMY_POWDER.get(), alchemyElement);
+        for (var stack : stacks) {
+            var storage = CapabilityUtil.getCapability(stack, MATCapabilities.ELEMENT_STORAGE);
+            if (storage != null) {
+                // 理论上可以省一次拷贝，但是丑
+                storage.setConcentrations(new Reference2FloatOpenHashMap<>(concentrations));
+            }
+        }
+        return Stream.of(stacks);
     }
 
     public static void fillDisplayStacks(CreativeModeTab.ItemDisplayParameters context, CreativeModeTab.Output entries) {
-        var key = context.holders().lookupOrThrow(AlchemyElement.RESOURCE_KEY);
-        key.listElements()
-                .map(AlchemyMaterialItem::makeAlchemySolutionStack)
-                .forEach(entries::accept);
-        key.listElements()
-                .map(AlchemyMaterialItem::makeAlchemyPasteStack)
-                .forEach(entries::accept);
-        key.listElements()
-                .map(AlchemyMaterialItem::makeAlchemyPowderStack)
+        context.holders().lookupOrThrow(AlchemyElement.RESOURCE_KEY)
+                .listElements()
+                .flatMap(AlchemyMaterialItem::makeDisplayStacks)
                 .forEach(entries::accept);
     }
 
@@ -65,20 +54,23 @@ public class AlchemyMaterialItem extends Item {
     }
 
     @Override
-    public @Nullable ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundTag nbt) {
-        var element = new ElementHolderImpl();
-        if (nbt != null) {
-            element.deserializeNBT(nbt);
+    public @Nullable ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundTag root) {
+        var storage = new ElementStorageImpl();
+        if (root != null) {
+            storage.deserializeNBT(root);
         }
-        return element;
+        return storage;
     }
 
     @Override
     public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltips, TooltipFlag pIsAdvanced) {
-        var holder = CapabilityUtil.getCapability(stack, MATCapabilities.ELEMENT_HOLDER);
-        if (holder == null) return;
-        var elements = holder.getElements();
-        if (elements.reference2FloatEntrySet().size() < 10) {
+        var storage = CapabilityUtil.getCapability(stack, MATCapabilities.ELEMENT_STORAGE);
+        if (storage == null) return;
+        var elements = storage.getConcentrations();
+
+        // 你最好给我把这个byd本地化键名改了
+
+        if (elements.size() < 10) {
             for (var entry : elements.reference2FloatEntrySet()) {
                 tooltips.add(Component.translatable("tooltip.magic_and_taboo.alchemy_material.element.0", entry.getKey().getDisplayName()));
             }

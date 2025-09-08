@@ -1,6 +1,7 @@
 package enderdragon.magic_and_taboo.solvent;
 
 import enderdragon.magic_and_taboo.registry.Element;
+import enderdragon.magic_and_taboo.util.FloatMaps;
 import enderdragon.magic_and_taboo.util.MagicPotionSolvent;
 import it.unimi.dsi.fastutil.objects.Object2FloatMap;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
@@ -20,8 +21,7 @@ public class HoneySolvent implements MagicPotionSolvent {
 
     @Override
     public List<MobEffectInstance> getEffects(@NotNull Reference2FloatMap<Element> elements, float timeFactor, int baseLevel) {
-        Comparator<Object2FloatMap.Entry<Holder<Element>>> comparator =
-                (left, right) -> Float.compare(left.getFloatValue(), right.getFloatValue());
+        Comparator<Object2FloatMap.Entry<Holder<Element>>> comparator = FloatMaps::compareByFloat;
         var effects = new ObjectArrayList<MobEffectInstance>(elements.size());
         for (var entry : elements.reference2FloatEntrySet()) {
             var fusion = entry.getKey()
@@ -31,7 +31,7 @@ public class HoneySolvent implements MagicPotionSolvent {
                     .max(comparator)
                     .orElse(null);
             if (fusion == null) continue;
-            effects.add(fusion.getKey().value().getEffect(entry.getFloatValue(), timeFactor, baseLevel));
+            effects.add(fusion.getKey().value().resolveEffect(entry.getFloatValue(), timeFactor, baseLevel));
         }
         return effects;
     }

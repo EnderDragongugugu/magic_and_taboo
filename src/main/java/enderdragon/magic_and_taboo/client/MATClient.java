@@ -2,8 +2,7 @@ package enderdragon.magic_and_taboo.client;
 
 import com.mojang.datafixers.util.Either;
 import enderdragon.magic_and_taboo.MagicAndTabooMod;
-import enderdragon.magic_and_taboo.capability.ElementHolder;
-import enderdragon.magic_and_taboo.capability.MagicPotion;
+import enderdragon.magic_and_taboo.capability.ElementSource;
 import enderdragon.magic_and_taboo.capability.PurenessStorage;
 import enderdragon.magic_and_taboo.capability.WorkHubResult;
 import enderdragon.magic_and_taboo.client.gui.*;
@@ -83,18 +82,15 @@ public class MATClient {
     @SubscribeEvent
     public static void registerItemColors(RegisterColorHandlersEvent.Item event) {
         event.register(
-                MagicPotion::getLayerColor,
+                ElementSource::getLayerColor,
+                MATItems.ALCHEMY_ELEMENT.get(),
+                MATItems.ALCHEMY_PASTE.get(),
+                MATItems.ALCHEMY_POWDER.get(),
+                MATItems.ALCHEMY_SOLUTION.get(),
                 MATItems.POTION_BOTTLE.get(),
                 MATItems.POTION_BOTTLE_RED.get(),
                 MATItems.POTION_BOTTLE_GLOW.get(),
                 MATItems.POTION_SYRINGE.get()
-        );
-        event.register(
-                ElementHolder::getLayerColor,
-                MATItems.ALCHEMY_ELEMENT.get(),
-                MATItems.ALCHEMY_POWDER.get(),
-                MATItems.ALCHEMY_PASTE.get(),
-                MATItems.ALCHEMY_SOLUTION.get()
         );
     }
 

@@ -6,6 +6,7 @@ import enderdragon.magic_and_taboo.MagicAndTabooMod;
 import enderdragon.magic_and_taboo.util.FloatMaps;
 import enderdragon.magic_and_taboo.util.FloatRange;
 import it.unimi.dsi.fastutil.objects.Object2FloatMap;
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import it.unimi.dsi.fastutil.objects.Reference2FloatMap;
 import it.unimi.dsi.fastutil.objects.Reference2FloatOpenHashMap;
 import net.minecraft.core.Holder;
@@ -61,7 +62,7 @@ public record Element(
             if (stack.isEmpty()) continue;
             var instance = AlchemyElement.fromStack(registry, stack);
             if (instance == null) continue;
-            for (var entry : instance.elementMap().object2FloatEntrySet()) {
+            for (var entry : instance.concentrations().object2FloatEntrySet()) {
                 var element = entry.getKey().value();
                 if (element.temperature().test(temperature) && cookingTime[iterator.previousIndex()] >= instance.time()) {
                     elements.addTo(element, entry.getFloatValue());
@@ -89,7 +90,15 @@ public record Element(
         }
     }
 
-    public MobEffectInstance getEffect(float concentration, float timeFactor, int baseLevel) {
+    public static List<MobEffectInstance> resolveEffects(Reference2FloatMap<Element> concentrations) {
+        var effects = new ObjectArrayList<MobEffectInstance>(concentrations.size());
+        for (var entry : concentrations.reference2FloatEntrySet()) {
+            effects.add(entry.getKey().resolveEffect(entry.getFloatValue(), 1.0F, 0));
+        }
+        return effects;
+    }
+
+    public MobEffectInstance resolveEffect(float concentration, float timeFactor, int baseLevel) {
         int maxTime = this.maxTime;
         float normalized = this.concentration.normalize(concentration);
         float time;

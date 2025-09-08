@@ -21,7 +21,7 @@ public class PlantExtractSolvent implements MagicPotionSolvent {
         for (var entry : elements.reference2FloatEntrySet()) {
             var element = entry.getKey();
             if (element.concentration().min() <= entry.getFloatValue()) {
-                var effect = element.getEffect(entry.getFloatValue(), timeFactor, baseLevel);
+                var effect = element.resolveEffect(entry.getFloatValue(), timeFactor, baseLevel);
                 effects.add(new MobEffectInstance(
                         element.effect(),
                         15 * 20,
