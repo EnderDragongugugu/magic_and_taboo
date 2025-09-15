@@ -65,15 +65,12 @@ public class AlchemyMaterialItem extends Item {
         var storage = CapabilityUtil.getCapability(stack, MATCapabilities.ELEMENT_STORAGE);
         if (storage == null) return;
         var elements = storage.getConcentrations();
-
-        // 你最好给我把这个byd本地化键名改了
-
         if (elements.size() < 10) {
             for (var entry : elements.reference2FloatEntrySet()) {
-                tooltips.add(Component.translatable("tooltip.magic_and_taboo.alchemy_material.element.0", entry.getKey().getDisplayName()));
+                tooltips.add(Component.translatable("tooltip.magic_and_taboo.alchemy_material.element.detected", entry.getKey().getDisplayName()));
             }
         } else {
-            tooltips.add(Component.translatable("tooltip.magic_and_taboo.alchemy_material.element.1"));
+            tooltips.add(Component.translatable("tooltip.magic_and_taboo.alchemy_material.element.unknown"));
         }
 
     }

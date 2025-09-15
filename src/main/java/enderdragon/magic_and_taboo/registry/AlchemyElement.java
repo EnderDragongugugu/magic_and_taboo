@@ -3,7 +3,7 @@ package enderdragon.magic_and_taboo.registry;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import enderdragon.magic_and_taboo.init.MATCapabilities;
-import enderdragon.magic_and_taboo.init.MATItems;
+import enderdragon.magic_and_taboo.tag.MATItemTags;
 import enderdragon.magic_and_taboo.util.CapabilityUtil;
 import enderdragon.magic_and_taboo.util.FloatMaps;
 import it.unimi.dsi.fastutil.objects.Object2FloatMap;
@@ -32,7 +32,7 @@ public record AlchemyElement(Object2FloatMap<Holder<Element>> concentrations, in
     ).apply(instance, AlchemyElement::new));
 
     public static @Nullable AlchemyElement fromStack(RegistryAccess registries, ItemStack stack) {
-        if (stack.is(MATItems.ALCHEMY_ELEMENT.get())) { // TODO: tag
+        if (stack.is(MATItemTags.IS_ALCHEMY)) { // TODO: tag
             var source = CapabilityUtil.getCapability(stack, MATCapabilities.ELEMENT_SOURCE);
             if (source != null) {
                 var registry = registries.registryOrThrow(Element.RESOURCE_KEY);

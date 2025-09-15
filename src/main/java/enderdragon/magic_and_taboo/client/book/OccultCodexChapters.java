@@ -26,14 +26,27 @@ public class OccultCodexChapters {
                     .described("text.occult_codex.node.prologue.tooltip")
                     .posited(0, -50)
                     .clicked(book -> book.turnTo(OccultCodexChapters.PROLOGUE, true))
-            )
-            .child(FrameType.CHALLENGE, root -> root
-                    .withIcon(() -> new ItemStack(MATItems.ENCHANTED_CRUCIBLE.get()))
-                    .described("text.occult_codex.node.potion")
-                    .described("text.occult_codex.node.potion.tooltip")
+                    .child(FrameType.CHALLENGE, taboo -> taboo
+                            .withIcon(() -> new ItemStack(MATItems.SACRIFICIAL_DAGGER.get()))
+                            .described("text.occult_codex.node.taboo")
+                            .described("text.occult_codex.node.taboo.tooltip")
+                            .posited(-50, 0)
+                    )
+                    .child(FrameType.CHALLENGE, magic -> magic
+                            .withIcon(() -> new ItemStack(MATItems.PARCHMENT.get()))
+                            .described("text.occult_codex.node.magic")
+                            .described("text.occult_codex.node.magic.tooltip")
+                            .posited(50, 0)
+                            .clicked(book -> book.turnTo(OccultCodexChapters.POTION, true))
+                    )
+            ).child(FrameType.CHALLENGE, magic -> magic
+                    .withIcon(() -> new ItemStack(Items.BONE))
+                    .described("text.occult_codex.node.gravedigger")
+                    .described("text.occult_codex.node.gravedigger.tooltip")
                     .posited(0, 0)
                     .clicked(book -> book.turnTo(OccultCodexChapters.POTION, true))
             ).build();
+
 
     public static final GraphChapter POTION = new GraphBuilder()
             .child(FrameType.TASK, root -> root
@@ -53,7 +66,7 @@ public class OccultCodexChapters {
                     .clicked(book -> book.turnTo(OccultCodexChapters.DEVELOPERS, true))
             ).child(FrameType.TASK, root -> root
                     .withIcon(() -> new ItemStack(Items.ENDER_PEARL))
-                    .described("text.occult_codex.node.prologue_2")
+                    .described("text.occult_codex.node.prologue_2.content.title")
                     .described("text.occult_codex.node.prologue_2.tooltip")
                     .clicked(book -> book.turnTo(OccultCodexChapters.STORY, true))
             ).build();
@@ -83,26 +96,42 @@ public class OccultCodexChapters {
     ));
 
     public static final PageChapter DEVELOPERS = ContentChapter.of(
-            TitleChunk.of("text.occult_codex.node.prologue_2.content.title"),
+            TitleChunk.of(""),
+            RenderPlayerChunk.renderPlayer("Ender_Dragon0629"),
             TextChunk.of(
                     Component.translatable("book.magic_and_taboo.occult_codex.owner.label"),
                     Component.literal("EnderDragon").withStyle(style -> style.withClickEvent(
                             new ClickEvent(ClickEvent.Action.OPEN_URL, "https://github.com/EnderDragongugugu")
                     ).applyFormat(ChatFormatting.GOLD))
             ),
+            Separator.NEXT_PAGE,
+            TitleChunk.of(""),
+            RenderPlayerChunk.renderPlayer("2190303755"),
             TextChunk.of(
                     Component.translatable("book.magic_and_taboo.occult_codex.collaborative_dev.label"),
                     Component.literal("2190303755").withStyle(style -> style.withClickEvent(
                             new ClickEvent(ClickEvent.Action.OPEN_URL, "https://github.com/2190303755")
                     ).applyFormat(ChatFormatting.GOLD))
             ),
+            Separator.NEXT_PAGE,
+            TitleChunk.of(""),
+            RenderPlayerChunk.renderPlayer("bltsbb_114514"),
             TextChunk.of(
                     Component.translatable("book.magic_and_taboo.occult_codex.artist.label"),
                     Component.literal("bltsbb").withStyle(style -> style.withClickEvent(
                             new ClickEvent(ClickEvent.Action.OPEN_URL, "https://github.com/bltsbb")
-                    ).applyFormat(ChatFormatting.GOLD)),
-                    Component.literal("这条大龙很灵性").withStyle(ChatFormatting.GOLD)
+                    ).applyFormat(ChatFormatting.GOLD))
             ),
+            Separator.NEXT_PAGE,
+            TitleChunk.of(""),
+            RenderPlayerChunk.renderPlayer("DarlonZero"),
+            TextChunk.of(
+                    Component.translatable("book.magic_and_taboo.occult_codex.artist.label"),
+                    Component.literal("这条大龙很灵性").withStyle(style -> style.applyFormat(ChatFormatting.GOLD))
+            ),
+            Separator.NEXT_PAGE,
+            TitleChunk.of(""),
+            RenderPlayerChunk.renderPlayer("LPaicen"),
             TextChunk.of(
                     Component.translatable("book.magic_and_taboo.occult_codex.lpaicen.label"),
                     Component.literal("LPaicen").withStyle(style -> style.withClickEvent(
@@ -111,17 +140,23 @@ public class OccultCodexChapters {
                             new HoverEvent(HoverEvent.Action.SHOW_TEXT, Component.literal("\\ LPaicen /"))
                     ).applyFormat(ChatFormatting.GOLD))
             ),
+            Separator.NEXT_PAGE,
+            TitleChunk.of(""),
+            RenderPlayerChunk.renderPlayer("QianShanYao"),
+            TextChunk.of(
+                    Component.translatable("book.magic_and_taboo.occult_codex.lpaicen.label"),
+                    Component.literal("QianShanYao").withStyle(style -> style.withClickEvent(
+                            new ClickEvent(ClickEvent.Action.OPEN_URL, "https://github.com/QianShanYao")
+                    ).withHoverEvent(
+                            new HoverEvent(HoverEvent.Action.SHOW_TEXT, Component.literal("\\ GanShanYao /"))
+                    ).applyFormat(ChatFormatting.GOLD))
+            ),
+            Separator.NEXT_PAGE,
+            TitleChunk.of(""),
+            RenderPlayerChunk.renderPlayer("steven"),
             TextChunk.of(
                     Component.translatable("book.magic_and_taboo.occult_codex.art_contributer.label"),
                     Component.literal("两个大脑同时坠毁").withStyle(ChatFormatting.GOLD)
-            ),
-            Separator.NEXT_PAGE,
-            TextChunk.of(
-                    Component.literal("\\ LPaicen!!! /").withStyle(ChatFormatting.DARK_RED)
-            ),
-            Separator.NEXT_PAGE,
-            TextChunk.of(
-                    Component.literal("\\ LPaicen!!!!! /").withStyle(ChatFormatting.DARK_RED)
             )
     );
 }

@@ -6,24 +6,17 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import enderdragon.magic_and_taboo.MagicAndTabooMod;
 import enderdragon.magic_and_taboo.client.book.Book;
 import enderdragon.magic_and_taboo.client.book.Chapter;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
-import net.minecraft.client.gui.screens.inventory.InventoryScreen;
 import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.resources.DefaultPlayerSkin;
-import net.minecraft.core.UUIDUtil;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.level.block.entity.SkullBlockEntity;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Optional;
-
-import static com.mojang.authlib.minecraft.MinecraftProfileTexture.Type.SKIN;
 
 public class GraphChapter implements Chapter {
     private static final int WIDTH = 269;
@@ -47,7 +40,7 @@ public class GraphChapter implements Chapter {
             builder.add(new Line(node.parent, node));
         }
         this.lines = builder.build();
-        SkullBlockEntity.updateGameprofile(robotProfile, this::updateProfile);
+//        SkullBlockEntity.updateGameprofile(robotProfile, this::updateProfile);
     }
 
     @Override
@@ -80,17 +73,17 @@ public class GraphChapter implements Chapter {
         RenderSystem.enableBlend();
         pose.popPose();
 
-        if (this.robot != null) {
-            InventoryScreen.renderEntityInInventoryFollowsMouse(
-                    graphics,
-                    startX + 20,
-                    startY + 20,
-                    30,
-                    (float) (startX + 20) - mouseX,
-                    (float) (startY + 20 - 50) - mouseY,
-                    this.robot
-            );
-        }
+//        if (this.robot != null) {
+//            InventoryScreen.renderEntityInInventoryFollowsMouse(
+//                    graphics,
+//                    startX + 20,
+//                    startY + 20,
+//                    30,
+//                    (float) (startX + 20) - mouseX,
+//                    (float) (startY + 20 - 50) - mouseY,
+//                    this.robot
+//            );
+//        }
 
         pose.pushPose();
         pose.translate(0, 0, 200);
@@ -130,7 +123,7 @@ public class GraphChapter implements Chapter {
         this.nodes.forEach(Node::reload);
         this.clickable = false;
         this.robot = null;
-        SkullBlockEntity.updateGameprofile(robotProfile, this::updateProfile);
+//        SkullBlockEntity.updateGameprofile(robotProfile, this::updateProfile);
         return Collections.emptyList();
     }
 
@@ -169,24 +162,24 @@ public class GraphChapter implements Chapter {
         return true;
     }
 
-    protected void updateProfile(GameProfile profile) {
-        robotProfile = profile;
-        var level = Minecraft.getInstance().level;
-        if (level == null) return;
-        this.robot = new AbstractClientPlayer(level, profile) {
-            @Override
-            public boolean isSkinLoaded() {
-                return true;
-            }
-
-            @Override
-            public @NotNull ResourceLocation getSkinTextureLocation() {
-                var minecraft = Minecraft.getInstance();
-                var map = minecraft.getSkinManager().getInsecureSkinInformation(this.getGameProfile());
-                return map.containsKey(SKIN)
-                        ? minecraft.getSkinManager().registerTexture(map.get(SKIN), SKIN)
-                        : DefaultPlayerSkin.getDefaultSkin(UUIDUtil.getOrCreatePlayerUUID(this.getGameProfile()));
-            }
-        };
-    }
+//    protected void updateProfile(GameProfile profile) {
+//        robotProfile = profile;
+//        var level = Minecraft.getInstance().level;
+//        if (level == null) return;
+//        this.robot = new AbstractClientPlayer(level, profile) {
+//            @Override
+//            public boolean isSkinLoaded() {
+//                return true;
+//            }
+//
+//            @Override
+//            public @NotNull ResourceLocation getSkinTextureLocation() {
+//                var minecraft = Minecraft.getInstance();
+//                var map = minecraft.getSkinManager().getInsecureSkinInformation(this.getGameProfile());
+//                return map.containsKey(SKIN)
+//                        ? minecraft.getSkinManager().registerTexture(map.get(SKIN), SKIN)
+//                        : DefaultPlayerSkin.getDefaultSkin(UUIDUtil.getOrCreatePlayerUUID(this.getGameProfile()));
+//            }
+//        };
+//    }
 }

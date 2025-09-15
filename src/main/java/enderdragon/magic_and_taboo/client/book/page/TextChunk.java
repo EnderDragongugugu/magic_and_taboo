@@ -24,6 +24,7 @@ public class TextChunk extends Chunk {
     public static TextChunk of(String translationKey) {
         return new TextChunk(Collections.singletonList(Component.translatable(translationKey)));
     }
+    
 
     private final ObjectArrayList<FormattedCharSequence> lines = new ObjectArrayList<>();
     /// make it private because {@link Component} might be mutable

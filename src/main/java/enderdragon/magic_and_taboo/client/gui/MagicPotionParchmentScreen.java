@@ -106,13 +106,7 @@ public class MagicPotionParchmentScreen extends Screen {
                 Component.translatable("item.magic_and_taboo.glass_potion_bottle_glow"),
                 Component.translatable("tooltip.magic_and_taboo.magic_potion.glow")
         ))));
-//        slots.add(new slot(
-//                x + 30,
-//                y + 53,
-//                setPotion(),
-//                (graphics, font, stack, mouseX, mouseY) ->
-//                        graphics.renderComponentTooltip(font, glow, mouseX, mouseY)
-//        ));
+
     }
 
     @Override
@@ -157,5 +151,6 @@ public class MagicPotionParchmentScreen extends Screen {
         void render(GuiGraphics graphics, Font font, ItemStack stack, int mouseX, int mouseY);
     }
 
-    public record Slot(int left, int top, ItemStack stack, TooltipRenderer tooltip) {}
+    public record Slot(int left, int top, ItemStack stack, TooltipRenderer tooltip) {
+    }
 }

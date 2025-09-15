@@ -61,6 +61,11 @@ public class MATItemTagProvider extends ItemTagsProvider {
                 .add(Items.ICE)
                 .add(Items.BLUE_ICE)
                 .add(Items.PACKED_ICE);
+        this.tag(MATItemTags.IS_ALCHEMY)
+                .add(MATItems.ALCHEMY_ELEMENT.get())
+                .add(MATItems.ALCHEMY_PASTE.get())
+                .add(MATItems.ALCHEMY_SOLUTION.get())
+                .add(MATItems.ALCHEMY_POWDER.get());
         this.tag(MATItemTags.UNFINISHED)
 //                书
                 .add(MATItems.OCCULT_CODEX.get())
