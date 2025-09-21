@@ -15,7 +15,7 @@ public class TitleChunk extends Chunk {
     public static final int WIDTH = 110;
     public static final int HEIGHT = 7;
 
-    public static TitleChunk of(String translationKey) {
+    public static TitleChunk translatable(String translationKey) {
         return new TitleChunk(Component.translatable(translationKey));
     }
 

@@ -13,23 +13,26 @@ import net.minecraft.world.entity.player.PlayerModelPart;
 import net.minecraft.world.level.block.entity.SkullBlockEntity;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.function.Consumer;
+
 import static com.mojang.authlib.minecraft.MinecraftProfileTexture.Type.SKIN;
 
-public class RenderPlayerChunk extends Chunk {
-    public static RenderPlayerChunk renderPlayer(String name) {
-        return new RenderPlayerChunk(name);
+public class MannequinChunk extends Chunk implements Consumer<GameProfile> {
+    public static MannequinChunk of(String name) {
+        return new MannequinChunk(name);
     }
 
-    private @NotNull GameProfile robotProfile;
-    private AbstractClientPlayer robot;
+    private @NotNull GameProfile profile;
+    private AbstractClientPlayer mannequin;
 
-    public RenderPlayerChunk(String name) {
-        robotProfile = new GameProfile(null, name);
+    public MannequinChunk(String name) {
+        this.profile = new GameProfile(null, name);
     }
 
     @Override
     public int measure(Font font, int space) {
-        return this.top + 80;
+        SkullBlockEntity.updateGameprofile(this.profile, this);
+        return 80;
     }
 
     @Override
@@ -38,8 +41,7 @@ public class RenderPlayerChunk extends Chunk {
         pose.popPose();
         int x = this.left + 55;
         int y = this.top + 70;
-        SkullBlockEntity.updateGameprofile(robotProfile, this::updateProfile);
-        if (this.robot != null) {
+        if (this.mannequin != null) {
             InventoryScreen.renderEntityInInventoryFollowsMouse(
                     graphics,
                     x,
@@ -47,23 +49,18 @@ public class RenderPlayerChunk extends Chunk {
                     30,
                     (float) x - mouseX,
                     (float) y - mouseY,
-                    this.robot
+                    this.mannequin
             );
         }
-
         pose.pushPose();
     }
 
-    protected void updateProfile(GameProfile profile) {
-        robotProfile = profile;
+    @Override
+    public void accept(GameProfile profile) {
+        this.profile = profile;
         var level = Minecraft.getInstance().level;
         if (level == null) return;
-        this.robot = new AbstractClientPlayer(level, profile) {
-            @Override
-            public boolean isSkinLoaded() {
-                return true;
-            }
-
+        this.mannequin = new AbstractClientPlayer(level, profile) {
             @Override
             public @NotNull ResourceLocation getSkinTextureLocation() {
                 var minecraft = Minecraft.getInstance();
@@ -74,13 +71,12 @@ public class RenderPlayerChunk extends Chunk {
             }
 
             @Override
-            public boolean isModelPartShown(PlayerModelPart pPart) {
-//                if (profile.getName().equals("2190303755")) {
-//                    return false;
-//                }
-//                if (profile.getName().equals("bltsbb_114514")) {
-//                    return false;
-//                }
+            public boolean isSkinLoaded() {
+                return true;
+            }
+
+            @Override
+            public boolean isModelPartShown(PlayerModelPart part) {
                 return true;
             }
         };

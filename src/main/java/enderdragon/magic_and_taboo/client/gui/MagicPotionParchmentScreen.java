@@ -106,7 +106,6 @@ public class MagicPotionParchmentScreen extends Screen {
                 Component.translatable("item.magic_and_taboo.glass_potion_bottle_glow"),
                 Component.translatable("tooltip.magic_and_taboo.magic_potion.glow")
         ))));
-
     }
 
     @Override

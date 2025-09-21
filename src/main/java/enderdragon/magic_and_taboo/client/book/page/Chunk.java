@@ -13,6 +13,7 @@ public abstract class Chunk {
         this.top = top;
     }
 
+    /// @return the measured height of the chunk
     public abstract int measure(Font font, int space);
 
     public abstract void render(

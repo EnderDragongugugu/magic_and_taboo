@@ -67,10 +67,10 @@ public class AlchemyMaterialItem extends Item {
         var elements = storage.getConcentrations();
         if (elements.size() < 10) {
             for (var entry : elements.reference2FloatEntrySet()) {
-                tooltips.add(Component.translatable("tooltip.magic_and_taboo.alchemy_material.element.detected", entry.getKey().getDisplayName()));
+                tooltips.add(Component.translatable("tooltip.magic_and_taboo.alchemy_material.suspected", entry.getKey().getDisplayName()));
             }
         } else {
-            tooltips.add(Component.translatable("tooltip.magic_and_taboo.alchemy_material.element.unknown"));
+            tooltips.add(Component.translatable("tooltip.magic_and_taboo.alchemy_material.unidentifiable"));
         }
 
     }

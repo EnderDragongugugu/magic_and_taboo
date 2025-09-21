@@ -1,7 +1,6 @@
 package enderdragon.magic_and_taboo.client.book.graph;
 
 import com.google.common.collect.ImmutableList;
-import com.mojang.authlib.GameProfile;
 import com.mojang.blaze3d.systems.RenderSystem;
 import enderdragon.magic_and_taboo.MagicAndTabooMod;
 import enderdragon.magic_and_taboo.client.book.Book;
@@ -9,10 +8,8 @@ import enderdragon.magic_and_taboo.client.book.Chapter;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
-import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.resources.ResourceLocation;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -22,25 +19,22 @@ public class GraphChapter implements Chapter {
     private static final int WIDTH = 269;
     private static final int HEIGHT = 176;
     private static final ResourceLocation PAGE_FRAME = MagicAndTabooMod.makeId("textures/gui/book/book_1.png");
-    private static @NotNull GameProfile robotProfile = new GameProfile(null, "Ender_Dragon0629");
     public final ImmutableList<Node> nodes;
     public final ImmutableList<Line> lines;
     private double scrollX;
     private double scrollY;
     private boolean dragging;
     private boolean clickable;
-    private AbstractClientPlayer robot;
 
     @SuppressWarnings("UnstableApiUsage")
     public GraphChapter(ImmutableList.Builder<Node> nodes) {
         this.nodes = nodes.build();
         var builder = ImmutableList.<Line>builderWithExpectedSize(this.nodes.size());
-        for (Node node : this.nodes) {
+        for (var node : this.nodes) {
             if (node.parent == null) continue;
             builder.add(new Line(node.parent, node));
         }
         this.lines = builder.build();
-//        SkullBlockEntity.updateGameprofile(robotProfile, this::updateProfile);
     }
 
     @Override
@@ -72,18 +66,6 @@ public class GraphChapter implements Chapter {
 
         RenderSystem.enableBlend();
         pose.popPose();
-
-//        if (this.robot != null) {
-//            InventoryScreen.renderEntityInInventoryFollowsMouse(
-//                    graphics,
-//                    startX + 20,
-//                    startY + 20,
-//                    30,
-//                    (float) (startX + 20) - mouseX,
-//                    (float) (startY + 20 - 50) - mouseY,
-//                    this.robot
-//            );
-//        }
 
         pose.pushPose();
         pose.translate(0, 0, 200);
@@ -122,8 +104,6 @@ public class GraphChapter implements Chapter {
         this.scrollY = height / 2.0;
         this.nodes.forEach(Node::reload);
         this.clickable = false;
-        this.robot = null;
-//        SkullBlockEntity.updateGameprofile(robotProfile, this::updateProfile);
         return Collections.emptyList();
     }
 
@@ -161,25 +141,4 @@ public class GraphChapter implements Chapter {
         }
         return true;
     }
-
-//    protected void updateProfile(GameProfile profile) {
-//        robotProfile = profile;
-//        var level = Minecraft.getInstance().level;
-//        if (level == null) return;
-//        this.robot = new AbstractClientPlayer(level, profile) {
-//            @Override
-//            public boolean isSkinLoaded() {
-//                return true;
-//            }
-//
-//            @Override
-//            public @NotNull ResourceLocation getSkinTextureLocation() {
-//                var minecraft = Minecraft.getInstance();
-//                var map = minecraft.getSkinManager().getInsecureSkinInformation(this.getGameProfile());
-//                return map.containsKey(SKIN)
-//                        ? minecraft.getSkinManager().registerTexture(map.get(SKIN), SKIN)
-//                        : DefaultPlayerSkin.getDefaultSkin(UUIDUtil.getOrCreatePlayerUUID(this.getGameProfile()));
-//            }
-//        };
-//    }
 }

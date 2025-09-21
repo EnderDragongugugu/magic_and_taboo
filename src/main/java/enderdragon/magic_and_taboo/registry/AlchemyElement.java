@@ -32,7 +32,7 @@ public record AlchemyElement(Object2FloatMap<Holder<Element>> concentrations, in
     ).apply(instance, AlchemyElement::new));
 
     public static @Nullable AlchemyElement fromStack(RegistryAccess registries, ItemStack stack) {
-        if (stack.is(MATItemTags.IS_ALCHEMY)) { // TODO: tag
+        if (stack.is(MATItemTags.IS_ALCHEMY)) {
             var source = CapabilityUtil.getCapability(stack, MATCapabilities.ELEMENT_SOURCE);
             if (source != null) {
                 var registry = registries.registryOrThrow(Element.RESOURCE_KEY);

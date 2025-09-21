@@ -72,14 +72,14 @@ public class OccultCodexChapters {
             ).build();
 
     public static final PageChapter STORY = ContentChapter.of(
-            TitleChunk.of("text.occult_codex.node.prologue_2.content.title"),
+            TitleChunk.translatable("text.occult_codex.node.prologue_2.content.title"),
             TextChunk.of("text.occult_codex.node.prologue_2.content")
     );
 
     public static final IndexedChapter<Element> ELEMENTS = new IndexedChapter<>(new ElementCatalog(
             Component.translatable("text.occult_codex.node.potion_1.content_1")
     ), List.of(
-            TitleChunk.of("text.occult_codex.node.potion_1.content.title"),
+            TitleChunk.translatable("text.occult_codex.node.potion_1.content.title"),
             TextChunk.of("text.occult_codex.node.potion_1.content")
     ), () -> {
         var access = ClientUtil.getOptionalRegistries();
@@ -96,8 +96,8 @@ public class OccultCodexChapters {
     ));
 
     public static final PageChapter DEVELOPERS = ContentChapter.of(
-            TitleChunk.of(""),
-            RenderPlayerChunk.renderPlayer("Ender_Dragon0629"),
+            new TitleChunk(Component.empty()),
+            MannequinChunk.of("Ender_Dragon0629"),
             TextChunk.of(
                     Component.translatable("book.magic_and_taboo.occult_codex.owner.label"),
                     Component.literal("EnderDragon").withStyle(style -> style.withClickEvent(
@@ -105,8 +105,8 @@ public class OccultCodexChapters {
                     ).applyFormat(ChatFormatting.GOLD))
             ),
             Separator.NEXT_PAGE,
-            TitleChunk.of(""),
-            RenderPlayerChunk.renderPlayer("2190303755"),
+            new TitleChunk(Component.empty()),
+            MannequinChunk.of("2190303755"),
             TextChunk.of(
                     Component.translatable("book.magic_and_taboo.occult_codex.collaborative_dev.label"),
                     Component.literal("2190303755").withStyle(style -> style.withClickEvent(
@@ -114,8 +114,8 @@ public class OccultCodexChapters {
                     ).applyFormat(ChatFormatting.GOLD))
             ),
             Separator.NEXT_PAGE,
-            TitleChunk.of(""),
-            RenderPlayerChunk.renderPlayer("bltsbb_114514"),
+            new TitleChunk(Component.empty()),
+            MannequinChunk.of("bltsbb_114514"),
             TextChunk.of(
                     Component.translatable("book.magic_and_taboo.occult_codex.artist.label"),
                     Component.literal("bltsbb").withStyle(style -> style.withClickEvent(
@@ -123,15 +123,15 @@ public class OccultCodexChapters {
                     ).applyFormat(ChatFormatting.GOLD))
             ),
             Separator.NEXT_PAGE,
-            TitleChunk.of(""),
-            RenderPlayerChunk.renderPlayer("DarlonZero"),
+            new TitleChunk(Component.empty()),
+            MannequinChunk.of("DarlonZero"),
             TextChunk.of(
                     Component.translatable("book.magic_and_taboo.occult_codex.artist.label"),
                     Component.literal("这条大龙很灵性").withStyle(style -> style.applyFormat(ChatFormatting.GOLD))
             ),
             Separator.NEXT_PAGE,
-            TitleChunk.of(""),
-            RenderPlayerChunk.renderPlayer("LPaicen"),
+            new TitleChunk(Component.empty()),
+            MannequinChunk.of("LPaicen"),
             TextChunk.of(
                     Component.translatable("book.magic_and_taboo.occult_codex.lpaicen.label"),
                     Component.literal("LPaicen").withStyle(style -> style.withClickEvent(
@@ -141,8 +141,8 @@ public class OccultCodexChapters {
                     ).applyFormat(ChatFormatting.GOLD))
             ),
             Separator.NEXT_PAGE,
-            TitleChunk.of(""),
-            RenderPlayerChunk.renderPlayer("QianShanYao"),
+            new TitleChunk(Component.empty()),
+            MannequinChunk.of("QianShanYao"),
             TextChunk.of(
                     Component.translatable("book.magic_and_taboo.occult_codex.lpaicen.label"),
                     Component.literal("QianShanYao").withStyle(style -> style.withClickEvent(
@@ -152,8 +152,8 @@ public class OccultCodexChapters {
                     ).applyFormat(ChatFormatting.GOLD))
             ),
             Separator.NEXT_PAGE,
-            TitleChunk.of(""),
-            RenderPlayerChunk.renderPlayer("steven"),
+            new TitleChunk(Component.empty()),
+            MannequinChunk.of("steven"),
             TextChunk.of(
                     Component.translatable("book.magic_and_taboo.occult_codex.art_contributer.label"),
                     Component.literal("两个大脑同时坠毁").withStyle(ChatFormatting.GOLD)
