@@ -23,15 +23,16 @@ import java.util.function.Consumer;
 
 public class AlchemyMaterialItem extends Item {
     public static void makeDisplayStacks(Holder.Reference<AlchemyElement> elements, Consumer<ItemStack> stream) {
+        var list = new ItemStack[]{
+                new ItemStack(MATItems.ALCHEMY_PASTE.get()),
+                new ItemStack(MATItems.ALCHEMY_SOLUTION.get()),
+                new ItemStack(MATItems.ALCHEMY_POWDER.get())
+        };
         var concentrations = new Reference2FloatOpenHashMap<Element>();
         for (var entry : elements.get().concentrations().object2FloatEntrySet()) {
             concentrations.addTo(entry.getKey().get(), entry.getFloatValue());
         }
-        for (var stack : new ItemStack[]{
-                new ItemStack(MATItems.ALCHEMY_PASTE.get()),
-                new ItemStack(MATItems.ALCHEMY_SOLUTION.get()),
-                new ItemStack(MATItems.ALCHEMY_POWDER.get())
-        }) {
+        for (var stack : list) {
             var storage = CapabilityUtil.getCapability(stack, MATCapabilities.ELEMENT_STORAGE);
             if (storage == null) continue;
             // 理论上可以省一次拷贝，但是丑

@@ -6,7 +6,7 @@
         "items": [
           {
             "items": [
-              "magic_and_taboo:glass_potion_bottle_red"
+              "magic_and_taboo:alchemy_powder"
             ]
           }
         ]
@@ -15,7 +15,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "magic_and_taboo:glass_potion_bottle_red"
+        "recipe": "magic_and_taboo:alchemy_powder"
       },
       "trigger": "minecraft:recipe_unlocked"
     }
@@ -28,7 +28,7 @@
   ],
   "rewards": {
     "recipes": [
-      "magic_and_taboo:glass_potion_bottle_red"
+      "magic_and_taboo:alchemy_powder"
     ]
   },
   "sends_telemetry_event": false

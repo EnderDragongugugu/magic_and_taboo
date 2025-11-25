@@ -66,6 +66,9 @@ public class MATItemTagProvider extends ItemTagsProvider {
                 .add(MATItems.ALCHEMY_PASTE.get())
                 .add(MATItems.ALCHEMY_SOLUTION.get())
                 .add(MATItems.ALCHEMY_POWDER.get());
+        this.tag(MATItemTags.IS_ALCHEMY_MATERIALS)
+                .add(Items.BLAZE_POWDER)
+                .add(Items.GLOWSTONE);
         this.tag(MATItemTags.UNFINISHED)
 //                书
                 .add(MATItems.OCCULT_CODEX.get())

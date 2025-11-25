@@ -27,17 +27,17 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 
-public record WorkHubRecipe(
-        ImmutableList<Ingredient> ingredients,
-        ResourceLocation id,
-        String group,
-        ItemStack output,
-        Ingredient container,
-        Ingredient burner,
-        float experience,
-        int workTime,
-        boolean requireMortar
-) implements Recipe<WorkHubBlockEntity> {
+
+public class WorkHubRecipe implements Recipe<WorkHubBlockEntity> {
+    ImmutableList<Ingredient> ingredients;
+    ResourceLocation id;
+    String group;
+    ItemStack output;
+    Ingredient container;
+    Ingredient burner;
+    float experience;
+    int workTime;
+    boolean requireMortar;
     private static final Logger LOGGER = LogManager.getLogger();
 
     public WorkHubRecipe(
@@ -62,6 +62,18 @@ public record WorkHubRecipe(
                 workTime,
                 requireMortar
         );
+    }
+
+    public WorkHubRecipe(ImmutableList<Ingredient> ingredients, ResourceLocation id, String group, ItemStack output, Ingredient container, Ingredient burner, float experience, int workTime, boolean requireMortar) {
+        this.ingredients = ingredients;
+        this.id = id;
+        this.group = group;
+        this.output = output;
+        this.container = container;
+        this.burner = burner;
+        this.experience = experience;
+        this.workTime = workTime;
+        this.requireMortar = requireMortar;
     }
 
     @Override
@@ -116,6 +128,23 @@ public record WorkHubRecipe(
     public RecipeType<?> getType() {
         return MATRecipeTypes.WORK_HUB_RECIPE_TYPE.get();
     }
+
+    public boolean requireMortar() {
+        return this.requireMortar;
+    }
+
+    public Ingredient burner() {
+        return this.burner;
+    }
+
+    public Ingredient container() {
+        return this.container;
+    }
+
+    public int workTime() {
+        return workTime;
+    }
+
 
     public static class Serializer implements RecipeSerializer<WorkHubRecipe> {
         @Override
@@ -174,5 +203,4 @@ public record WorkHubRecipe(
             buffer.writeVarInt(recipe.workTime);
         }
     }
-
 }

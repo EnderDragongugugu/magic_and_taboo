@@ -1,0 +1,18 @@
+{
+  "type": "magic_and_taboo:work_hub",
+  "blaze_burner": {
+    "item": "magic_and_taboo:blaze_burner"
+  },
+  "container": {
+    "item": "minecraft:bowl"
+  },
+  "experience": 10,
+  "ingredient": {
+    "item": "minecraft:blaze_powder"
+  },
+  "require_mortar": true,
+  "result": {
+    "item": "magic_and_taboo:alchemy_powder"
+  },
+  "work_time": 100
+}

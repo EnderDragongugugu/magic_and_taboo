@@ -1,5 +1,6 @@
 package enderdragon.magic_and_taboo.data;
 
+import enderdragon.magic_and_taboo.data.recipe.AlchemyMaterialRecipeBuilder;
 import enderdragon.magic_and_taboo.data.recipe.WorkHubRecipeBuilder;
 import enderdragon.magic_and_taboo.init.MATBlocks;
 import enderdragon.magic_and_taboo.init.MATItems;
@@ -175,7 +176,7 @@ public class MATRecipeProvider extends RecipeProvider {
                 .requires(Items.REDSTONE)
                 .withBlazeBurner(MATItems.BLAZE_BURNER.get())
                 .withContainer(MATItems.GLASS_POTION_BOTTLE.get())
-                .unlockedBy("has_material", has(MATItems.GLASS_POTION_BOTTLE_GLOW.get()))
+                .unlockedBy("has_material", has(MATItems.GLASS_POTION_BOTTLE_RED.get()))
                 .save(writer);
 //        蜂蜜桶
         new WorkHubRecipeBuilder(true, 100, 10, MATItems.HONEY_BUCKET.get(), 1)
@@ -183,6 +184,13 @@ public class MATRecipeProvider extends RecipeProvider {
                 .withBlazeBurner(MATItems.BLAZE_BURNER.get())
                 .withContainer(MATItems.GLASS_POTION_BOTTLE.get())
                 .unlockedBy("has_material", has(MATItems.HONEY_BUCKET.get()))
+                .save(writer);
+//                test
+        new AlchemyMaterialRecipeBuilder(true, 100, 10, MATItems.ALCHEMY_POWDER.get(), 1)
+                .requires(Items.BLAZE_POWDER)
+                .withBlazeBurner(MATItems.BLAZE_BURNER.get())
+                .withContainer(Items.BOWL)
+                .unlockedBy("has_material", has(MATItems.ALCHEMY_POWDER.get()))
                 .save(writer);
     }
 }

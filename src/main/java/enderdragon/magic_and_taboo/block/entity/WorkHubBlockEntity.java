@@ -19,6 +19,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.DataSlot;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
@@ -26,6 +27,8 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.items.IItemHandlerModifiable;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
+import java.util.ArrayList;
 
 import static net.minecraftforge.items.ItemHandlerHelper.canItemStacksStack;
 import static net.minecraftforge.items.ItemHandlerHelper.copyStackWithSize;
@@ -39,6 +42,7 @@ public class WorkHubBlockEntity extends BaseContainerBlockEntity implements IIte
     public final DataSlot timeTotal = DataSlot.standalone();
     private NonNullList<ItemStack> stacks = NonNullList.withSize(MAX_SIZE, ItemStack.EMPTY);
     private final RecipeManager.CachedCheck<WorkHubBlockEntity, WorkHubRecipe> checker = RecipeManager.createCheck(MATRecipeTypes.WORK_HUB_RECIPE_TYPE.get());
+    private final RecipeManager.CachedCheck<WorkHubBlockEntity, WorkHubRecipe> checker1 = RecipeManager.createCheck(MATRecipeTypes.ALCHEMY_MATERIAL_RECIPE_TYPE.get());
 
     public WorkHubBlockEntity(BlockPos pos, BlockState state) {
         super(MATBlockEntities.WORK_HUB.get(), pos, state);
@@ -46,6 +50,8 @@ public class WorkHubBlockEntity extends BaseContainerBlockEntity implements IIte
 
     public static void tick(Level level, BlockPos pos, BlockState state, WorkHubBlockEntity hub) {
         var recipe = hub.checker.getRecipeFor(hub, level).orElse(null);
+        var alchemyMaterialRecipe = hub.checker1.getRecipeFor(hub, level).orElse(null);
+        LOGGER.warn(alchemyMaterialRecipe);
         if (recipe != null) {
             var result = recipe.getResultItem(level.registryAccess());
             if (ContainerUtil.canMerge(hub.getStackInSlot(8), result)) {
@@ -68,24 +74,27 @@ public class WorkHubBlockEntity extends BaseContainerBlockEntity implements IIte
         }
     }
 
-    //    protected void playParticle(WorkHubRecipe recipe) {
-//        if (level != null && !recipe.burner().isEmpty()) {
-//        var pos = this.getBlockPos();
-//        var facing = this.getBlockState().getValue(HorizontalDirectionalBlock.FACING);
-//        level.addParticle(ParticleTypes.SMOKE, pos.getX() + 0.08, pos.getY() + 1.3125, pos.getZ() + 0.85, 0.0, 0.1, 0.0);
-//            switch (facing) {
-//                case NORTH ->
-//                        level.addParticle(ParticleTypes.SMOKE, pos.getX() + 0.5, pos.getY() + 1.76, pos.getZ() + 0.5, 0.0, 0.1, 0.0);
-//                case SOUTH ->
-//                        level.addParticle(ParticleTypes.SMOKE, pos.getX() + 0.5, pos.getY() + 1.76, pos.getZ() + 0.5, 0.0, 0.1, 0.0);
-//                case EAST ->
-//                        level.addParticle(ParticleTypes.SMOKE, pos.getX() + 0.5, pos.getY() + 1.76, pos.getZ() + 0.5, 0.0, 0.1, 0.0);
-//                case WEST ->
-//                        level.addParticle(ParticleTypes.SMOKE, pos.getX() + 0.5, pos.getY() + 1.76, pos.getZ() + 0.5, 0.0, 0.1, 0.0);
-//            }
-//
-//        }
-//    }
+
+    public boolean matches(Boolean requireMortar, Ingredient burner) {
+        if (requireMortar != this.getStackInSlot(0).is(MATItemTags.MORTARS)) return false;
+        if (burner.isEmpty() && burner.isEmpty() != burner.test(this.getStackInSlot(1))) {
+            return false;
+        } else if (!burner.test(this.getStackInSlot(1))) {
+            return false;
+        }
+        boolean flag = false;
+        var inputs = new ArrayList<ItemStack>(6);
+        for (int i = 2; i <= 7; ++i) {
+            var stack = this.getItem(i);
+            if (!stack.isEmpty()) {
+                inputs.add(stack);
+            }
+        }
+        return flag;
+//        return RecipeMatcher.findMatches(inputs, this.ingredients) != null;
+    }
+
+
     protected void executeRecipe(WorkHubRecipe recipe) {
         ItemStack temp;
         if (recipe.requireMortar()) {
