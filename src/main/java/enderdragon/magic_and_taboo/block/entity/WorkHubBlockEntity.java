@@ -19,7 +19,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.DataSlot;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
@@ -27,8 +26,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.items.IItemHandlerModifiable;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
-import java.util.ArrayList;
 
 import static net.minecraftforge.items.ItemHandlerHelper.canItemStacksStack;
 import static net.minecraftforge.items.ItemHandlerHelper.copyStackWithSize;
@@ -42,17 +39,16 @@ public class WorkHubBlockEntity extends BaseContainerBlockEntity implements IIte
     public final DataSlot timeTotal = DataSlot.standalone();
     private NonNullList<ItemStack> stacks = NonNullList.withSize(MAX_SIZE, ItemStack.EMPTY);
     private final RecipeManager.CachedCheck<WorkHubBlockEntity, WorkHubRecipe> checker = RecipeManager.createCheck(MATRecipeTypes.WORK_HUB_RECIPE_TYPE.get());
-    private final RecipeManager.CachedCheck<WorkHubBlockEntity, WorkHubRecipe> checker1 = RecipeManager.createCheck(MATRecipeTypes.ALCHEMY_MATERIAL_RECIPE_TYPE.get());
+    private final RecipeManager.CachedCheck<WorkHubBlockEntity, WorkHubRecipe> alchemyChecker = RecipeManager.createCheck(MATRecipeTypes.ALCHEMY_MATERIAL_RECIPE_TYPE.get());
 
     public WorkHubBlockEntity(BlockPos pos, BlockState state) {
         super(MATBlockEntities.WORK_HUB.get(), pos, state);
     }
 
     public static void tick(Level level, BlockPos pos, BlockState state, WorkHubBlockEntity hub) {
-        var recipe = hub.checker.getRecipeFor(hub, level).orElse(null);
-        LOGGER.warn(hub.checker1.getRecipeFor(hub, level).orElse(null));
+        var recipe = hub.checker.getRecipeFor(hub, level).or(() -> hub.alchemyChecker.getRecipeFor(hub, level)).orElse(null);
         if (recipe != null) {
-            var result = recipe.getResultItem(level.registryAccess());
+            var result = recipe.assemble(hub, level.registryAccess());
             if (ContainerUtil.canMerge(hub.getStackInSlot(8), result)) {
                 hub.timeTotal.set(recipe.workTime());
                 int time = hub.time.get() + 1;
@@ -73,27 +69,6 @@ public class WorkHubBlockEntity extends BaseContainerBlockEntity implements IIte
         }
     }
 
-
-    public boolean matches(Boolean requireMortar, Ingredient burner) {
-        if (requireMortar != this.getStackInSlot(0).is(MATItemTags.MORTARS)) return false;
-        if (burner.isEmpty() && burner.isEmpty() != burner.test(this.getStackInSlot(1))) {
-            return false;
-        } else if (!burner.test(this.getStackInSlot(1))) {
-            return false;
-        }
-        boolean flag = false;
-        var inputs = new ArrayList<ItemStack>(6);
-        for (int i = 2; i <= 7; ++i) {
-            var stack = this.getItem(i);
-            if (!stack.isEmpty()) {
-                inputs.add(stack);
-            }
-        }
-        return flag;
-//        return RecipeMatcher.findMatches(inputs, this.ingredients) != null;
-    }
-
-
     protected void executeRecipe(WorkHubRecipe recipe) {
         ItemStack temp;
         if (recipe.requireMortar()) {
@@ -109,9 +84,10 @@ public class WorkHubBlockEntity extends BaseContainerBlockEntity implements IIte
         }
     }
 
+
     protected void output(WorkHubRecipe recipe) {
         var oldOutput = getStackInSlot(8);
-        var resultItem = recipe.getResultItem(level.registryAccess());
+        var resultItem = recipe.assemble(this, level.registryAccess());
         var container = recipe.container();
         var itemStack = getStackInSlot(9);
         var output = getStackInSlot(10);

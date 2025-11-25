@@ -3,10 +3,16 @@ package enderdragon.magic_and_taboo.crafting;
 import com.google.common.collect.ImmutableList;
 import com.google.gson.JsonObject;
 import enderdragon.magic_and_taboo.block.entity.WorkHubBlockEntity;
+import enderdragon.magic_and_taboo.init.MATCapabilities;
 import enderdragon.magic_and_taboo.init.MATRecipeTypes;
 import enderdragon.magic_and_taboo.init.MATSerializers;
+import enderdragon.magic_and_taboo.registry.AlchemyElement;
+import enderdragon.magic_and_taboo.registry.Element;
 import enderdragon.magic_and_taboo.tag.MATItemTags;
+import enderdragon.magic_and_taboo.util.CapabilityUtil;
 import enderdragon.magic_and_taboo.util.IngredientUtil;
+import it.unimi.dsi.fastutil.objects.Reference2FloatOpenHashMap;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.GsonHelper;
@@ -16,8 +22,13 @@ import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.common.crafting.CraftingHelper;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.jetbrains.annotations.NotNull;
 
 public class AlchemyMaterialRecipe extends WorkHubRecipe {
+    private static final Logger LOGGER = LogManager.getLogger();
+
     Ingredient ingredient;
 
     public AlchemyMaterialRecipe(
@@ -49,7 +60,7 @@ public class AlchemyMaterialRecipe extends WorkHubRecipe {
             if (!stack.isEmpty()) {
                 if (ingredient.isEmpty() && this.ingredient.test(stack)) {
                     ingredient = stack;
-                } else if (baseStack.isEmpty() && stack.is(MATItemTags.IS_ALCHEMY_MATERIALS)) {
+                } else if (stack.is(MATItemTags.IS_ALCHEMY_MATERIALS)) {
                     baseStack = stack;
                 } else {
                     return false;
@@ -59,6 +70,27 @@ public class AlchemyMaterialRecipe extends WorkHubRecipe {
         return !ingredient.isEmpty() && !baseStack.isEmpty();
     }
 
+    @Override
+    public @NotNull ItemStack assemble(WorkHubBlockEntity hub, RegistryAccess access) {
+        var concentrations = new Reference2FloatOpenHashMap<Element>();
+        var output = this.output.copy();
+        var storage = CapabilityUtil.getCapability(output, MATCapabilities.ELEMENT_STORAGE);
+        if (storage == null) return output;
+        for (int i = 2; i <= 7; i++) {
+            ItemStack stack = hub.getItem(i);
+            if (!stack.isEmpty()) {
+                var instance = AlchemyElement.fromStack(access, stack);
+                if (instance == null) continue;
+                for (var entry : instance.concentrations().object2FloatEntrySet()) {
+                    concentrations.addTo(entry.getKey().value(), entry.getFloatValue());
+                    LOGGER.warn(entry.getFloatValue());
+
+                }
+            }
+        }
+        storage.setConcentrations(concentrations);
+        return output;
+    }
 
     @Override
     public RecipeSerializer<?> getSerializer() {
