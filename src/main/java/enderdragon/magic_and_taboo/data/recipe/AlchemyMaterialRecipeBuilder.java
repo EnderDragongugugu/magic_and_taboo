@@ -201,7 +201,7 @@ public class AlchemyMaterialRecipeBuilder implements RecipeBuilder {
 
         @Override
         public RecipeSerializer<?> getType() {
-            return MATSerializers.WORK_HUB_RECIPE_SERIALIZER.get();
+            return MATSerializers.ALCHEMY_MATERIAL_SERIALIZER.get();
         }
 
         @Nullable

@@ -50,8 +50,7 @@ public class WorkHubBlockEntity extends BaseContainerBlockEntity implements IIte
 
     public static void tick(Level level, BlockPos pos, BlockState state, WorkHubBlockEntity hub) {
         var recipe = hub.checker.getRecipeFor(hub, level).orElse(null);
-        var alchemyMaterialRecipe = hub.checker1.getRecipeFor(hub, level).orElse(null);
-        LOGGER.warn(alchemyMaterialRecipe);
+        LOGGER.warn(hub.checker1.getRecipeFor(hub, level).orElse(null));
         if (recipe != null) {
             var result = recipe.getResultItem(level.registryAccess());
             if (ContainerUtil.canMerge(hub.getStackInSlot(8), result)) {
