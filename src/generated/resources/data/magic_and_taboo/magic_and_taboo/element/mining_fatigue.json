@@ -1,26 +1,27 @@
 {
   "blood_drug_concentration": {
-    "max": 200.0,
-    "min": 30.0
+    "max": 75.0,
+    "min": 25.0
   },
   "effect": "minecraft:mining_fatigue",
   "fusion_element": {
-    "magic_and_taboo:slowness": 1.5,
-    "magic_and_taboo:weakness": 0.5
+    "magic_and_taboo:conduit_power": 15.0,
+    "magic_and_taboo:haste": 30.0,
+    "magic_and_taboo:luck": 10.0,
+    "magic_and_taboo:speed": 25.0
   },
   "icon": "minecraft:textures/mob_effect/mining_fatigue.png",
   "max_level": 4,
   "max_time": 7200,
   "name": "element.magic_and_taboo.mining_fatigue",
   "resistance_element": {
-    "magic_and_taboo:haste": 150.5,
-    "magic_and_taboo:health_boost": 175.5,
-    "magic_and_taboo:jump_boost": 100.5,
-    "magic_and_taboo:speed": 150.0,
-    "magic_and_taboo:strength": 200.0
+    "magic_and_taboo:bad_omen": 0.25,
+    "magic_and_taboo:poison": 0.45,
+    "magic_and_taboo:slowness": 0.6,
+    "magic_and_taboo:wither": 0.5
   },
   "temperature_range": {
-    "max": 100.0,
-    "min": 0.0
+    "max": 65.0,
+    "min": 55.0
   }
 }

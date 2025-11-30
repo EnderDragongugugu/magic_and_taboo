@@ -1,17 +1,27 @@
 {
   "blood_drug_concentration": {
-    "max": 100.0,
-    "min": 30.0
+    "max": 85.0,
+    "min": 15.0
   },
   "effect": "minecraft:luck",
-  "fusion_element": {},
+  "fusion_element": {
+    "magic_and_taboo:bad_omen": 25.0,
+    "magic_and_taboo:mining_fatigue": 10.0,
+    "magic_and_taboo:unluck": 30.0,
+    "magic_and_taboo:wither": 15.0
+  },
   "icon": "minecraft:textures/mob_effect/luck.png",
   "max_level": 4,
   "max_time": 7200,
   "name": "element.magic_and_taboo.luck",
-  "resistance_element": {},
+  "resistance_element": {
+    "magic_and_taboo:absorption": 0.25,
+    "magic_and_taboo:conduit_power": 0.4,
+    "magic_and_taboo:glowing": 0.3,
+    "magic_and_taboo:hero_of_the_village": 0.6
+  },
   "temperature_range": {
-    "max": 100.0,
-    "min": 0.0
+    "max": 35.0,
+    "min": 25.0
   }
 }

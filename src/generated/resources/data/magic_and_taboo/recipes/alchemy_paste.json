@@ -4,15 +4,15 @@
     "item": "magic_and_taboo:blaze_burner"
   },
   "container": {
-    "item": "minecraft:paper"
+    "item": "minecraft:bowl"
   },
   "experience": 10,
   "ingredient": {
-    "item": "minecraft:flint"
+    "item": "minecraft:slime_ball"
   },
   "require_mortar": true,
   "result": {
-    "item": "magic_and_taboo:alchemy_powder"
+    "item": "magic_and_taboo:alchemy_paste"
   },
   "work_time": 100
 }

@@ -1,17 +1,26 @@
 {
   "blood_drug_concentration": {
-    "max": 100.0,
-    "min": 30.0
+    "max": 85.0,
+    "min": 15.0
   },
   "effect": "minecraft:regeneration",
-  "fusion_element": {},
+  "fusion_element": {
+    "magic_and_taboo:hunger": 12.0,
+    "magic_and_taboo:mining_fatigue": 8.0,
+    "magic_and_taboo:poison": 15.0,
+    "magic_and_taboo:wither": 20.0
+  },
   "icon": "minecraft:textures/mob_effect/regeneration.png",
   "max_level": 4,
   "max_time": 7200,
   "name": "element.magic_and_taboo.regeneration",
-  "resistance_element": {},
+  "resistance_element": {
+    "magic_and_taboo:absorption": 0.6,
+    "magic_and_taboo:health_boost": 0.55,
+    "magic_and_taboo:mercury": 1.0
+  },
   "temperature_range": {
-    "max": 100.0,
-    "min": 0.0
+    "max": 35.0,
+    "min": 25.0
   }
 }

@@ -1,8 +1,7 @@
 {
   "alchemy_element": {
-    "magic_and_taboo:absorption": 1.5,
-    "magic_and_taboo:health_boost": 3.0,
-    "magic_and_taboo:regeneration": 4.5
+    "magic_and_taboo:health_boost": 5.0,
+    "magic_and_taboo:regeneration": 15.0
   },
   "max_time": 150
 }

@@ -1,10 +1,9 @@
 {
   "alchemy_element": {
-    "magic_and_taboo:hunger": 7.5,
-    "magic_and_taboo:nausea": 6.5,
-    "magic_and_taboo:poison": 4.5,
-    "magic_and_taboo:water_breathing": 10.0,
-    "magic_and_taboo:weakness": 1.5
+    "magic_and_taboo:hunger": 6.0,
+    "magic_and_taboo:nausea": 7.0,
+    "magic_and_taboo:poison": 8.0,
+    "magic_and_taboo:water_breathing": 15.0
   },
   "max_time": 150
 }

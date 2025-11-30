@@ -1,17 +1,27 @@
 {
   "blood_drug_concentration": {
-    "max": 100.0,
-    "min": 30.0
+    "max": 70.0,
+    "min": 20.0
   },
   "effect": "minecraft:bad_omen",
-  "fusion_element": {},
+  "fusion_element": {
+    "magic_and_taboo:absorption": 25.0,
+    "magic_and_taboo:hero_of_the_village": 40.0,
+    "magic_and_taboo:luck": 35.0,
+    "magic_and_taboo:regeneration": 30.0
+  },
   "icon": "minecraft:textures/mob_effect/bad_omen.png",
   "max_level": 4,
   "max_time": 7200,
   "name": "element.magic_and_taboo.bad_omen",
-  "resistance_element": {},
+  "resistance_element": {
+    "magic_and_taboo:hunger": 0.5,
+    "magic_and_taboo:mining_fatigue": 0.45,
+    "magic_and_taboo:unluck": 0.6,
+    "magic_and_taboo:wither": 0.55
+  },
   "temperature_range": {
-    "max": 100.0,
-    "min": 0.0
+    "max": 45.0,
+    "min": 35.0
   }
 }

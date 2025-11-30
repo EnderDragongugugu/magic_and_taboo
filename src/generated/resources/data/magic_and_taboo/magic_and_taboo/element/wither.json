@@ -1,17 +1,27 @@
 {
   "blood_drug_concentration": {
-    "max": 100.0,
+    "max": 70.0,
     "min": 30.0
   },
   "effect": "minecraft:wither",
-  "fusion_element": {},
+  "fusion_element": {
+    "magic_and_taboo:absorption": 25.0,
+    "magic_and_taboo:fire_resistance": 15.0,
+    "magic_and_taboo:health_boost": 20.0,
+    "magic_and_taboo:regeneration": 30.0
+  },
   "icon": "minecraft:textures/mob_effect/wither.png",
   "max_level": 4,
   "max_time": 7200,
   "name": "element.magic_and_taboo.wither",
-  "resistance_element": {},
+  "resistance_element": {
+    "magic_and_taboo:bad_omen": 0.45,
+    "magic_and_taboo:hunger": 0.55,
+    "magic_and_taboo:mining_fatigue": 0.5,
+    "magic_and_taboo:poison": 0.6
+  },
   "temperature_range": {
-    "max": 100.0,
-    "min": 0.0
+    "max": 80.0,
+    "min": 70.0
   }
 }

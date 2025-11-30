@@ -1,7 +1,6 @@
 {
   "alchemy_element": {
-    "magic_and_taboo:fire_resistance": 2.0,
-    "magic_and_taboo:strength": 2.0
+    "magic_and_taboo:strength": 10.0
   },
   "max_time": 600
 }

@@ -1,8 +1,7 @@
 {
   "alchemy_element": {
-    "magic_and_taboo:conduit_power": 10.5,
-    "magic_and_taboo:dolphins_grace": 10.5,
-    "magic_and_taboo:resistance": 1.0
+    "magic_and_taboo:conduit_power": 12.0,
+    "magic_and_taboo:dolphins_grace": 8.0
   },
   "max_time": 600
 }

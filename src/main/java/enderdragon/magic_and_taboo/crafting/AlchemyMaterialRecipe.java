@@ -11,12 +11,14 @@ import enderdragon.magic_and_taboo.registry.Element;
 import enderdragon.magic_and_taboo.tag.MATItemTags;
 import enderdragon.magic_and_taboo.util.CapabilityUtil;
 import enderdragon.magic_and_taboo.util.IngredientUtil;
+import it.unimi.dsi.fastutil.floats.FloatUnaryOperator;
 import it.unimi.dsi.fastutil.objects.Reference2FloatOpenHashMap;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
@@ -82,15 +84,27 @@ public class AlchemyMaterialRecipe extends WorkHubRecipe {
                 var instance = AlchemyElement.fromStack(access, stack);
                 if (instance == null) continue;
                 for (var entry : instance.concentrations().object2FloatEntrySet()) {
-                    concentrations.addTo(entry.getKey().value(), entry.getFloatValue());
-                    LOGGER.warn(entry.getFloatValue());
-
+                    concentrations.addTo(entry.getKey().value(), getConcentrationOperator(stack).apply(entry.getFloatValue()));
                 }
             }
         }
         storage.setConcentrations(concentrations);
         return output;
     }
+
+    private FloatUnaryOperator getConcentrationOperator(ItemStack item) {
+        if (item.is(Items.FLINT)) {
+            return v -> v * 1.25F;
+        }
+        if (item.is(MATItemTags.IS_SOLVENT)) {
+            return v -> v * 0.75F;
+        }
+        if (item.is(Items.SLIME_BALL)) {
+            return v -> v + 10.0F;
+        }
+        return v -> v;
+    }
+
 
     @Override
     public RecipeSerializer<?> getSerializer() {

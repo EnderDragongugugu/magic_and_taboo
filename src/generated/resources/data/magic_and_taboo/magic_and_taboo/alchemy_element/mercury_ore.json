@@ -1,7 +1,7 @@
 {
   "alchemy_element": {
-    "magic_and_taboo:mercury": 5.0,
-    "magic_and_taboo:poison": 1.0
+    "magic_and_taboo:mercury": 3.0,
+    "magic_and_taboo:poison": 2.0
   },
   "max_time": 600
 }

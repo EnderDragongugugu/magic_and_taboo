@@ -1,7 +1,7 @@
 {
   "alchemy_element": {
-    "magic_and_taboo:levitation": 0.5,
-    "magic_and_taboo:nausea": 1.0
+    "magic_and_taboo:levitation": 4.0,
+    "magic_and_taboo:nausea": 3.0
   },
   "max_time": 150
 }

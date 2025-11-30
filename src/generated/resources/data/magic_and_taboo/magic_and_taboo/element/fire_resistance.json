@@ -1,17 +1,26 @@
 {
   "blood_drug_concentration": {
-    "max": 100.0,
-    "min": 30.0
+    "max": 95.0,
+    "min": 25.0
   },
   "effect": "minecraft:fire_resistance",
-  "fusion_element": {},
+  "fusion_element": {
+    "magic_and_taboo:levitation": 6.0,
+    "magic_and_taboo:slowness": 8.0,
+    "magic_and_taboo:water_breathing": 10.0
+  },
   "icon": "minecraft:textures/mob_effect/fire_resistance.png",
   "max_level": 4,
   "max_time": 7200,
   "name": "element.magic_and_taboo.fire_resistance",
-  "resistance_element": {},
+  "resistance_element": {
+    "magic_and_taboo:mercury": 0.3,
+    "magic_and_taboo:resistance": 0.1,
+    "magic_and_taboo:strength": 0.15,
+    "magic_and_taboo:wither": 0.2
+  },
   "temperature_range": {
-    "max": 100.0,
-    "min": 0.0
+    "max": 90.0,
+    "min": 80.0
   }
 }

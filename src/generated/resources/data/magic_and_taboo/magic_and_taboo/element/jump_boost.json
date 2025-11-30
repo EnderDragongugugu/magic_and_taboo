@@ -1,24 +1,25 @@
 {
   "blood_drug_concentration": {
-    "max": 110.0,
-    "min": 50.0
+    "max": 80.0,
+    "min": 10.0
   },
   "effect": "minecraft:jump_boost",
   "fusion_element": {
-    "magic_and_taboo:slow_falling": 50.0,
-    "magic_and_taboo:slowness": 25.5
+    "magic_and_taboo:mining_fatigue": 7.0,
+    "magic_and_taboo:slowness": 8.0
   },
   "icon": "minecraft:textures/mob_effect/jump_boost.png",
   "max_level": 4,
   "max_time": 7200,
   "name": "element.magic_and_taboo.jump_boost",
   "resistance_element": {
-    "magic_and_taboo:health_boost": 1.0,
-    "magic_and_taboo:regeneration": 1.5,
-    "magic_and_taboo:speed": 0.5
+    "magic_and_taboo:conduit_power": 0.2,
+    "magic_and_taboo:levitation": 0.3,
+    "magic_and_taboo:luck": 0.15,
+    "magic_and_taboo:speed": 0.25
   },
   "temperature_range": {
-    "max": 100.0,
-    "min": 0.0
+    "max": 15.0,
+    "min": 5.0
   }
 }

@@ -1,30 +1,26 @@
 {
   "blood_drug_concentration": {
-    "max": 200.0,
-    "min": 30.0
+    "max": 80.0,
+    "min": 12.0
   },
   "effect": "minecraft:speed",
   "fusion_element": {
-    "magic_and_taboo:haste": 1.5,
-    "magic_and_taboo:jump_boost": 0.5,
-    "magic_and_taboo:strength": 0.5
+    "magic_and_taboo:darkness": 3.5,
+    "magic_and_taboo:mining_fatigue": 15.0,
+    "magic_and_taboo:slowness": 18.0
   },
   "icon": "minecraft:textures/mob_effect/speed.png",
   "max_level": 4,
   "max_time": 4800,
   "name": "element.magic_and_taboo.speed",
   "resistance_element": {
-    "magic_and_taboo:blindness": 25.5,
-    "magic_and_taboo:darkness": 16.5,
-    "magic_and_taboo:mercury": 25.0,
-    "magic_and_taboo:mining_fatigue": 30.0,
-    "magic_and_taboo:nausea": 20.0,
-    "magic_and_taboo:slowness": 150.0,
-    "magic_and_taboo:weakness": 100.5,
-    "magic_and_taboo:wither": 200.0
+    "magic_and_taboo:conduit_power": 0.5,
+    "magic_and_taboo:dolphins_grace": 0.6,
+    "magic_and_taboo:jump_boost": 0.45,
+    "magic_and_taboo:levitation": 0.25
   },
   "temperature_range": {
-    "max": 100.0,
-    "min": 30.5
+    "max": 25.0,
+    "min": 15.5
   }
 }

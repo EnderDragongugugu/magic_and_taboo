@@ -1,6 +1,6 @@
 {
   "alchemy_element": {
-    "magic_and_taboo:speed": 0.5
+    "magic_and_taboo:slowness": 3.0
   },
   "max_time": 300
 }

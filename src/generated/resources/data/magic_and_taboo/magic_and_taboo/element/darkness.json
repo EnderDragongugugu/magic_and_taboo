@@ -1,17 +1,27 @@
 {
   "blood_drug_concentration": {
-    "max": 100.0,
-    "min": 30.0
+    "max": 45.0,
+    "min": 5.0
   },
   "effect": "minecraft:darkness",
-  "fusion_element": {},
+  "fusion_element": {
+    "magic_and_taboo:conduit_power": 10.0,
+    "magic_and_taboo:glowing": 12.0,
+    "magic_and_taboo:luck": 8.0,
+    "magic_and_taboo:night_vision": 15.0
+  },
   "icon": "minecraft:textures/mob_effect/darkness.png",
   "max_level": 4,
   "max_time": 7200,
   "name": "element.magic_and_taboo.darkness",
-  "resistance_element": {},
+  "resistance_element": {
+    "magic_and_taboo:bad_omen": 0.35,
+    "magic_and_taboo:blindness": 0.4,
+    "magic_and_taboo:nausea": 0.45,
+    "magic_and_taboo:wither": 0.5
+  },
   "temperature_range": {
-    "max": 100.0,
+    "max": 5.0,
     "min": 0.0
   }
 }

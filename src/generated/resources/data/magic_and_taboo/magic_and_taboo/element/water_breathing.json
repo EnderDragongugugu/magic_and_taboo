@@ -1,17 +1,25 @@
 {
   "blood_drug_concentration": {
-    "max": 100.0,
-    "min": 30.0
+    "max": 80.0,
+    "min": 12.0
   },
   "effect": "minecraft:water_breathing",
-  "fusion_element": {},
+  "fusion_element": {
+    "magic_and_taboo:fire_resistance": 10.0,
+    "magic_and_taboo:wither": 8.0
+  },
   "icon": "minecraft:textures/mob_effect/water_breathing.png",
   "max_level": 4,
   "max_time": 7200,
   "name": "element.magic_and_taboo.water_breathing",
-  "resistance_element": {},
+  "resistance_element": {
+    "magic_and_taboo:conduit_power": 0.5,
+    "magic_and_taboo:dolphins_grace": 0.6,
+    "magic_and_taboo:levitation": 0.3,
+    "magic_and_taboo:speed": 0.4
+  },
   "temperature_range": {
-    "max": 100.0,
-    "min": 0.0
+    "max": 15.0,
+    "min": 5.0
   }
 }

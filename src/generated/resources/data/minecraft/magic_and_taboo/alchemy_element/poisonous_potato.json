@@ -1,8 +1,7 @@
 {
   "alchemy_element": {
-    "magic_and_taboo:nausea": 1.5,
-    "magic_and_taboo:poison": 4.5,
-    "magic_and_taboo:slowness": 0.5
+    "magic_and_taboo:hunger": 2.0,
+    "magic_and_taboo:poison": 6.0
   },
   "max_time": 150
 }

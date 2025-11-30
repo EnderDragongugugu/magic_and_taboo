@@ -34,6 +34,7 @@ public class WorkHubBlockEntity extends BaseContainerBlockEntity implements IIte
     public final static int MAX_SIZE = 11;
     private static final Logger LOGGER = LogManager.getLogger();
     private WorkHubRecipe lastRecipe;
+    private ItemStack lastRecipeStack = ItemStack.EMPTY;
 
     public final DataSlot time = DataSlot.standalone();
     public final DataSlot timeTotal = DataSlot.standalone();
@@ -57,6 +58,7 @@ public class WorkHubBlockEntity extends BaseContainerBlockEntity implements IIte
                     hub.executeRecipe(recipe);
                     hub.time.set(0);
                     hub.lastRecipe = recipe;
+                    hub.lastRecipeStack = result;
                 } else {
                     hub.time.set(time);
                 }
@@ -87,7 +89,7 @@ public class WorkHubBlockEntity extends BaseContainerBlockEntity implements IIte
 
     protected void output(WorkHubRecipe recipe) {
         var oldOutput = getStackInSlot(8);
-        var resultItem = recipe.assemble(this, level.registryAccess());
+        var resultItem = this.lastRecipeStack;
         var container = recipe.container();
         var itemStack = getStackInSlot(9);
         var output = getStackInSlot(10);
@@ -135,6 +137,9 @@ public class WorkHubBlockEntity extends BaseContainerBlockEntity implements IIte
         time.set(tag.getInt("time"));
         timeTotal.set(tag.getInt("time_total"));
         ContainerHelper.loadAllItems(tag, stacks);
+        if (tag.contains("last_recipe_stack")) {
+            this.lastRecipeStack = ItemStack.of(tag.getCompound("last_recipe_stack"));
+        }
         if (this.level == null) return;
         var id = ResourceLocation.tryParse(tag.getString("last_recipe"));
         if (id == null) return;
@@ -149,6 +154,7 @@ public class WorkHubBlockEntity extends BaseContainerBlockEntity implements IIte
         ContainerHelper.saveAllItems(tag, stacks);
         tag.putInt("time", time.get());
         tag.putInt("time_total", timeTotal.get());
+        tag.put("last_recipe_stack", this.lastRecipeStack.save(tag));
         if (this.lastRecipe != null) {
             tag.putString("last_recipe", this.lastRecipe.getId().toString());
         }

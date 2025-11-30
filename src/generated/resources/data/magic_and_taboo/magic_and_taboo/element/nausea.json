@@ -1,28 +1,29 @@
 {
   "blood_drug_concentration": {
-    "max": 150.0,
+    "max": 60.0,
     "min": 10.0
   },
   "effect": "minecraft:nausea",
   "fusion_element": {
-    "magic_and_taboo:blindness": 0.2,
-    "magic_and_taboo:mercury": 3.0,
-    "magic_and_taboo:poison": 0.5,
-    "magic_and_taboo:weakness": 2.0,
-    "magic_and_taboo:wither": 0.5
+    "magic_and_taboo:dolphins_grace": 1.5,
+    "magic_and_taboo:glowing": 4.0,
+    "magic_and_taboo:luck": 2.0,
+    "magic_and_taboo:night_vision": 5.0,
+    "magic_and_taboo:speed": 3.0
   },
   "icon": "minecraft:textures/mob_effect/nausea.png",
   "max_level": 9,
-  "max_time": 6000,
+  "max_time": 2400,
   "name": "element.magic_and_taboo.element_nausea",
   "resistance_element": {
-    "magic_and_taboo:fire_resistance": 5.5,
-    "magic_and_taboo:regeneration": 10.0,
-    "magic_and_taboo:resistance": 20.5,
-    "magic_and_taboo:strength": 5.5
+    "magic_and_taboo:blindness": 0.3,
+    "magic_and_taboo:darkness": 0.2,
+    "magic_and_taboo:hunger": 0.25,
+    "magic_and_taboo:unluck": 0.1,
+    "magic_and_taboo:wither": 0.15
   },
   "temperature_range": {
-    "max": 50.0,
-    "min": 0.0
+    "max": 30.0,
+    "min": 20.0
   }
 }

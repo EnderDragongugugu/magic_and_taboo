@@ -1,17 +1,27 @@
 {
   "blood_drug_concentration": {
-    "max": 100.0,
-    "min": 30.0
+    "max": 70.0,
+    "min": 10.0
   },
   "effect": "minecraft:invisibility",
-  "fusion_element": {},
+  "fusion_element": {
+    "magic_and_taboo:bad_omen": 8.0,
+    "magic_and_taboo:darkness": 6.0,
+    "magic_and_taboo:glowing": 10.0,
+    "magic_and_taboo:nausea": 7.0
+  },
   "icon": "minecraft:textures/mob_effect/invisibility.png",
   "max_level": 4,
   "max_time": 7200,
   "name": "element.magic_and_taboo.invisibility",
-  "resistance_element": {},
+  "resistance_element": {
+    "magic_and_taboo:levitation": 0.25,
+    "magic_and_taboo:luck": 0.4,
+    "magic_and_taboo:night_vision": 0.35,
+    "magic_and_taboo:speed": 0.3
+  },
   "temperature_range": {
-    "max": 100.0,
-    "min": 0.0
+    "max": 30.0,
+    "min": 20.0
   }
 }

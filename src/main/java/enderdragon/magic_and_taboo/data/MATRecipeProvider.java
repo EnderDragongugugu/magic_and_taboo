@@ -17,6 +17,8 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Consumer;
 
+import static net.minecraft.data.recipes.RecipeBuilder.getDefaultRecipeId;
+
 public class MATRecipeProvider extends RecipeProvider {
     public MATRecipeProvider(PackOutput output) {
         super(output);
@@ -185,12 +187,42 @@ public class MATRecipeProvider extends RecipeProvider {
                 .withContainer(MATItems.GLASS_POTION_BOTTLE.get())
                 .unlockedBy("has_material", has(MATItems.HONEY_BUCKET.get()))
                 .save(writer);
-//                test
+//         粉
         new AlchemyMaterialRecipeBuilder(true, 100, 10, MATItems.ALCHEMY_POWDER.get(), 1)
-                .requires(Items.BLAZE_POWDER)
+                .requires(Items.FLINT)
+                .withBlazeBurner(MATItems.BLAZE_BURNER.get())
+                .withContainer(Items.PAPER)
+                .unlockedBy("has_material", has(MATItems.ALCHEMY_POWDER.get()))
+                .save(writer);
+//        溶液-水
+        new AlchemyMaterialRecipeBuilder(true, 100, 10, MATItems.ALCHEMY_SOLUTION.get(), 1)
+                .requires(Items.WATER_BUCKET)
+                .withBlazeBurner(MATItems.BLAZE_BURNER.get())
+                .withContainer(Items.GLASS_BOTTLE)
+                .unlockedBy("has_material", has(MATItems.ALCHEMY_SOLUTION.get()))
+                .save(writer, getDefaultRecipeId(MATItems.ALCHEMY_SOLUTION.get()) + "_0");
+
+//        溶液-植物
+        new AlchemyMaterialRecipeBuilder(true, 100, 10, MATItems.ALCHEMY_SOLUTION.get(), 1)
+                .requires(MATItems.PLANT_EXTRACT_BUCKET.get())
+                .withBlazeBurner(MATItems.BLAZE_BURNER.get())
+                .withContainer(Items.GLASS_BOTTLE)
+                .unlockedBy("has_material", has(MATItems.ALCHEMY_SOLUTION.get()))
+                .save(writer, getDefaultRecipeId(MATItems.ALCHEMY_SOLUTION.get()) + "_1");
+
+//        溶液-哈机密
+        new AlchemyMaterialRecipeBuilder(true, 100, 10, MATItems.ALCHEMY_SOLUTION.get(), 1)
+                .requires(MATItems.HONEY_BUCKET.get())
                 .withBlazeBurner(MATItems.BLAZE_BURNER.get())
                 .withContainer(Items.BOWL)
-                .unlockedBy("has_material", has(MATItems.ALCHEMY_POWDER.get()))
+                .unlockedBy("has_material", has(MATItems.ALCHEMY_SOLUTION.get()))
+                .save(writer, getDefaultRecipeId(MATItems.ALCHEMY_SOLUTION.get()) + "_2");
+//        糊
+        new AlchemyMaterialRecipeBuilder(true, 100, 10, MATItems.ALCHEMY_PASTE.get(), 1)
+                .requires(Items.SLIME_BALL)
+                .withBlazeBurner(MATItems.BLAZE_BURNER.get())
+                .withContainer(Items.BOWL)
+                .unlockedBy("has_material", has(MATItems.ALCHEMY_PASTE.get()))
                 .save(writer);
     }
 }

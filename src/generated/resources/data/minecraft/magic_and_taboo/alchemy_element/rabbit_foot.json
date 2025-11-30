@@ -1,8 +1,6 @@
 {
   "alchemy_element": {
-    "magic_and_taboo:jump_boost": 5.0,
-    "magic_and_taboo:luck": 7.5,
-    "magic_and_taboo:regeneration": 0.5
+    "magic_and_taboo:jump_boost": 8.0
   },
   "max_time": 150
 }

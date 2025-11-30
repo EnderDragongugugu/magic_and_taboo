@@ -1,12 +1,8 @@
 {
   "alchemy_element": {
-    "magic_and_taboo:blindness": 1.5,
-    "magic_and_taboo:darkness": 0.5,
-    "magic_and_taboo:mining_fatigue": 3.5,
-    "magic_and_taboo:nausea": 2.0,
-    "magic_and_taboo:poison": 1.5,
-    "magic_and_taboo:slowness": 2.5,
-    "magic_and_taboo:weakness": 1.5
+    "magic_and_taboo:mining_fatigue": 2.0,
+    "magic_and_taboo:nausea": 3.0,
+    "magic_and_taboo:poison": 5.0
   },
   "max_time": 150
 }

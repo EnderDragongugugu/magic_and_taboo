@@ -1,17 +1,27 @@
 {
   "blood_drug_concentration": {
-    "max": 100.0,
-    "min": 30.0
+    "max": 50.0,
+    "min": 10.0
   },
   "effect": "minecraft:blindness",
-  "fusion_element": {},
+  "fusion_element": {
+    "magic_and_taboo:glowing": 7.0,
+    "magic_and_taboo:hero_of_the_village": 4.0,
+    "magic_and_taboo:luck": 5.0,
+    "magic_and_taboo:night_vision": 8.0
+  },
   "icon": "minecraft:textures/mob_effect/blindness.png",
   "max_level": 4,
   "max_time": 7200,
   "name": "element.magic_and_taboo.blindness",
-  "resistance_element": {},
+  "resistance_element": {
+    "magic_and_taboo:darkness": 0.3,
+    "magic_and_taboo:hunger": 0.25,
+    "magic_and_taboo:nausea": 0.4,
+    "magic_and_taboo:wither": 0.35
+  },
   "temperature_range": {
-    "max": 100.0,
-    "min": 0.0
+    "max": 20.0,
+    "min": 10.0
   }
 }

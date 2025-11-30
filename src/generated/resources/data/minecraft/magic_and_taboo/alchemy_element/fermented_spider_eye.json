@@ -1,11 +1,9 @@
 {
   "alchemy_element": {
-    "magic_and_taboo:blindness": 0.5,
-    "magic_and_taboo:hunger": 1.5,
-    "magic_and_taboo:invisibility": 4.5,
-    "magic_and_taboo:poison": 3.5,
-    "magic_and_taboo:slowness": 5.5,
-    "magic_and_taboo:weakness": 6.5
+    "magic_and_taboo:invisibility": 5.0,
+    "magic_and_taboo:poison": 8.0,
+    "magic_and_taboo:slowness": 6.0,
+    "magic_and_taboo:weakness": 7.0
   },
   "max_time": 300
 }
