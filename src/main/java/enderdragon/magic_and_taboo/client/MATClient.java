@@ -2,12 +2,15 @@ package enderdragon.magic_and_taboo.client;
 
 import com.mojang.datafixers.util.Either;
 import enderdragon.magic_and_taboo.MagicAndTabooMod;
+import enderdragon.magic_and_taboo.block.MagicPerfusionPedestalBlock;
+import enderdragon.magic_and_taboo.block.entity.MagicPerfusionPedestalBlockEntity;
 import enderdragon.magic_and_taboo.capability.ElementSource;
 import enderdragon.magic_and_taboo.capability.PurenessStorage;
 import enderdragon.magic_and_taboo.capability.WorkHubResult;
 import enderdragon.magic_and_taboo.client.gui.*;
 import enderdragon.magic_and_taboo.client.model.MoonApprenticeArmorModel;
 import enderdragon.magic_and_taboo.client.model.WorkHubToolModel;
+import enderdragon.magic_and_taboo.client.particle.PedestalParticleRenderer;
 import enderdragon.magic_and_taboo.client.renderer.EnchantedCrucibleRender;
 import enderdragon.magic_and_taboo.client.renderer.MagicCraftsmanTableRender;
 import enderdragon.magic_and_taboo.client.renderer.PedestalRender;
@@ -23,6 +26,7 @@ import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.client.renderer.Sheets;
 import net.minecraft.client.renderer.item.ClampedItemPropertyFunction;
 import net.minecraft.client.renderer.item.ItemProperties;
+import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.CreativeModeTabs;
@@ -30,6 +34,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.*;
 import net.minecraftforge.client.gui.overlay.VanillaGuiOverlay;
 import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
+import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
@@ -46,6 +51,45 @@ public class MATClient {
 
     @Mod.EventBusSubscriber(modid = MagicAndTabooMod.MOD_ID, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.FORGE)
     public static class ForgeBusEvent {
+        @SubscribeEvent
+        public static void onClientTick(TickEvent.ClientTickEvent event) {
+            if (event.phase != TickEvent.Phase.END) return;
+
+            var mc = Minecraft.getInstance();
+            var level = mc.level;
+            if (level == null || mc.player == null) return;
+            int renderDistance = mc.options.renderDistance().get();
+            BlockPos playerPos = mc.player.blockPosition();
+            int chunkX = playerPos.getX() >> 4;
+            int chunkZ = playerPos.getZ() >> 4;
+            for (int x = chunkX - renderDistance; x <= chunkX + renderDistance; x++) {
+                for (int z = chunkZ - renderDistance; z <= chunkZ + renderDistance; z++) {
+                    var chunk = level.getChunk(x, z);
+                    if (chunk == null) continue;
+                    chunk.getBlockEntities().forEach((pos, be) -> {
+                        if (be instanceof MagicPerfusionPedestalBlockEntity pedestal) {
+                            var currentRecipe = pedestal.getCurrentRecipe();
+                            var craftingTimeTotal = pedestal.getCraftingTimeTotal();
+                            var craftingTime = pedestal.getCraftingTime();
+                            // 添加安全检查：确保配方存在且制作时间有效
+                            if (currentRecipe != null && craftingTimeTotal > 0 && craftingTime >= 0 && craftingTime <= craftingTimeTotal) {
+                                float progress = (float) craftingTime / craftingTimeTotal;
+                                var stacks = MagicPerfusionPedestalBlock.getSurroundingStacks(level, pos);
+                                PedestalParticleRenderer.render(
+                                        level,
+                                        pos,
+                                        stacks,
+                                        pedestal.getStack(),
+                                        progress,
+                                        currentRecipe.particleType()
+                                );
+                            }
+                        }
+                    });
+                }
+            }
+        }
+
         @SubscribeEvent
         public static void onGatherTooltips(RenderTooltipEvent.GatherComponents event) {
             var stack = event.getItemStack();

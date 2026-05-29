@@ -1,0 +1,38 @@
+{
+  "type": "magic_and_taboo:pedestal",
+  "core": {
+    "item": "minecraft:golden_apple"
+  },
+  "ingredients": [
+    {
+      "item": "minecraft:gold_block"
+    },
+    {
+      "item": "minecraft:gold_block"
+    },
+    {
+      "item": "minecraft:gold_block"
+    },
+    {
+      "item": "minecraft:gold_block"
+    },
+    {
+      "item": "minecraft:gold_block"
+    },
+    {
+      "item": "minecraft:gold_block"
+    },
+    {
+      "item": "minecraft:gold_block"
+    },
+    {
+      "item": "minecraft:gold_block"
+    }
+  ],
+  "magic": 50,
+  "particle": "spiral",
+  "result": {
+    "item": "minecraft:enchanted_golden_apple"
+  },
+  "time": 600
+}

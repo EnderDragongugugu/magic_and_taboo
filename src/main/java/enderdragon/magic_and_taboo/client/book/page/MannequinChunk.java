@@ -26,7 +26,7 @@ public class MannequinChunk extends Chunk implements Consumer<GameProfile> {
     private AbstractClientPlayer mannequin;
 
     public MannequinChunk(String name) {
-        this.profile = new GameProfile(null, name);
+        this.profile = new GameProfile(UUIDUtil.getOrCreatePlayerUUID(new GameProfile(null, name)), name);
     }
 
     @Override

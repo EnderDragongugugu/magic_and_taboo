@@ -41,13 +41,17 @@ public class WorkHubBlockEntity extends BaseContainerBlockEntity implements IIte
     private NonNullList<ItemStack> stacks = NonNullList.withSize(MAX_SIZE, ItemStack.EMPTY);
     private final RecipeManager.CachedCheck<WorkHubBlockEntity, WorkHubRecipe> checker = RecipeManager.createCheck(MATRecipeTypes.WORK_HUB_RECIPE_TYPE.get());
     private final RecipeManager.CachedCheck<WorkHubBlockEntity, WorkHubRecipe> alchemyChecker = RecipeManager.createCheck(MATRecipeTypes.ALCHEMY_MATERIAL_RECIPE_TYPE.get());
+    private final RecipeManager.CachedCheck<WorkHubBlockEntity, WorkHubRecipe> alchemyPowderChecker = RecipeManager.createCheck(MATRecipeTypes.ALCHEMY_POWDER_RECIPE_TYPE.get());
 
     public WorkHubBlockEntity(BlockPos pos, BlockState state) {
         super(MATBlockEntities.WORK_HUB.get(), pos, state);
     }
 
     public static void tick(Level level, BlockPos pos, BlockState state, WorkHubBlockEntity hub) {
-        var recipe = hub.checker.getRecipeFor(hub, level).or(() -> hub.alchemyChecker.getRecipeFor(hub, level)).orElse(null);
+        var recipe = hub.checker.getRecipeFor(hub, level)
+                .or(() -> hub.alchemyChecker.getRecipeFor(hub, level))
+                .or(() -> hub.alchemyPowderChecker.getRecipeFor(hub, level))
+                .orElse(null);
         if (recipe != null) {
             var result = recipe.assemble(hub, level.registryAccess());
             if (ContainerUtil.canMerge(hub.getStackInSlot(8), result)) {
@@ -81,9 +85,11 @@ public class WorkHubBlockEntity extends BaseContainerBlockEntity implements IIte
             temp = this.stacks.get(1);
             temp.setDamageValue(temp.getDamageValue() + 1);
         }
+        // 消耗材料槽（2-7），跳过催化剂槽（9）
         for (int i = 2; i <= 7; i++) {
             this.stacks.get(i).shrink(1);
         }
+        // 槽位9是催化剂槽，不会被消耗
     }
 
 

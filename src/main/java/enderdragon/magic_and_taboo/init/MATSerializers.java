@@ -2,6 +2,7 @@ package enderdragon.magic_and_taboo.init;
 
 import enderdragon.magic_and_taboo.MagicAndTabooMod;
 import enderdragon.magic_and_taboo.crafting.AlchemyMaterialRecipe;
+import enderdragon.magic_and_taboo.crafting.AlchemyPowderRecipe;
 import enderdragon.magic_and_taboo.crafting.PedestalRecipe;
 import enderdragon.magic_and_taboo.crafting.WorkHubRecipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
@@ -14,4 +15,5 @@ public class MATSerializers {
     public static final RegistryObject<RecipeSerializer<?>> WORK_HUB_RECIPE_SERIALIZER = REGISTRY.register("work_hub", WorkHubRecipe.Serializer::new);
     public static final RegistryObject<RecipeSerializer<?>> ALCHEMY_MATERIAL_SERIALIZER = REGISTRY.register("alchemy_material", AlchemyMaterialRecipe.Serializer::new);
     public static final RegistryObject<RecipeSerializer<?>> PEDESTAL_RECIPE_SERIALIZER = REGISTRY.register("pedestal", PedestalRecipe.Serializer::new);
+    public static final RegistryObject<RecipeSerializer<?>> ALCHEMY_POWDER_SERIALIZER = REGISTRY.register("alchemy_powder", AlchemyPowderRecipe.Serializer::new);
 }

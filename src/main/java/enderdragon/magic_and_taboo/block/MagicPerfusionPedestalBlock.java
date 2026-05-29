@@ -79,6 +79,14 @@ public class MagicPerfusionPedestalBlock extends BaseEntityBlock {
                 .map(PedestalBlockEntity.class::cast);
     }
 
+    public static void updateStructureState(Level level, BlockPos center) {
+        boolean intact = isStructureValid(level, center);
+        BlockState state = level.getBlockState(center);
+        if (state.hasProperty(IS_INTACT) && state.getValue(IS_INTACT) != intact) {
+            level.setBlock(center, state.setValue(IS_INTACT, intact), 3);
+        }
+    }
+
 
     public MagicPerfusionPedestalBlock(Properties props) {
         super(props);

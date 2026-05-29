@@ -1,0 +1,26 @@
+{
+  "type": "magic_and_taboo:pedestal",
+  "core": {
+    "item": "minecraft:coal_block"
+  },
+  "ingredients": [
+    {
+      "item": "minecraft:coal"
+    },
+    {
+      "item": "minecraft:coal"
+    },
+    {
+      "item": "minecraft:coal"
+    },
+    {
+      "item": "minecraft:coal"
+    }
+  ],
+  "magic": 30,
+  "particle": "rise",
+  "result": {
+    "item": "minecraft:diamond"
+  },
+  "time": 400
+}

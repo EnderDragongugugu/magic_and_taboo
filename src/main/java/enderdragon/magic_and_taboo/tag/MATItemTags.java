@@ -23,6 +23,17 @@ public class MATItemTags {
     public static final TagKey<Item> IS_SOLVENT = matTag("is_solvent");
     public static final TagKey<Item> IS_GRINDABLE = matTag("is_grindable");
 
+    // 元素处理相关标签
+    public static final TagKey<Item> ELEMENT_ENHANCERS = matTag("element_enhancers");
+    public static final TagKey<Item> ELEMENT_Diluents = matTag("element_diluents");
+    public static final TagKey<Item> ELEMENT_STABILIZERS = matTag("element_stabilizers");
+    // 特殊元素处理物品标签
+    public static final TagKey<Item> ELEMENT_CONCENTRATED = matTag("element_concentrated");
+    public static final TagKey<Item> ELEMENT_STABILIZED = matTag("element_stabilized");
+    public static final TagKey<Item> ELEMENT_DILUTED = matTag("element_diluted");
+    public static final TagKey<Item> ALCHEMY_INGREDIENTS = matTag("alchemy_ingredients");
+    public static final TagKey<Item> CONTAINERS = matTag("containers");
+
     static TagKey<Item> matTag(String name) {
         return TagKey.create(Registries.ITEM, makeId(name));
     }

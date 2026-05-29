@@ -73,6 +73,39 @@ public class MATItemTagProvider extends ItemTagsProvider {
                 .add(Items.WATER_BUCKET)
                 .add(MATItems.HONEY_BUCKET.get())
                 .add(MATItems.PLANT_EXTRACT_BUCKET.get());
+
+        // 元素处理相关标签
+        this.tag(MATItemTags.ELEMENT_ENHANCERS)
+                .add(Items.FLINT)
+                .add(Items.GLOWSTONE_DUST)
+                .add(Items.REDSTONE);
+        this.tag(MATItemTags.ELEMENT_Diluents)
+                .add(Items.SUGAR)
+                .add(Items.GUNPOWDER);
+        this.tag(MATItemTags.ELEMENT_STABILIZERS)
+                .add(Items.SLIME_BALL)
+                .add(Items.GLISTERING_MELON_SLICE)
+                .add(Items.GOLDEN_CARROT);
+
+        // 特殊元素处理物品标签（用于特殊修正效果）
+        this.tag(MATItemTags.ELEMENT_CONCENTRATED)
+                .add(Items.GUNPOWDER);  // 1.5倍 + 自定义修正
+        this.tag(MATItemTags.ELEMENT_STABILIZED)
+                .add(Items.GLISTERING_MELON_SLICE)  // +15固定增量
+                .add(Items.GOLDEN_CARROT);  // 1.15倍 + 自定义修正
+        this.tag(MATItemTags.ELEMENT_DILUTED)
+                .add(Items.SUGAR);  // 0.9倍 + 自定义修正
+        this.tag(MATItemTags.ALCHEMY_INGREDIENTS)
+                .addTag(MATItemTags.ELEMENT_ENHANCERS)
+                .addTag(MATItemTags.ELEMENT_Diluents)
+                .addTag(MATItemTags.ELEMENT_STABILIZERS)
+                .add(Items.NETHER_WART)
+                .add(Items.GOLDEN_APPLE)
+                .add(Items.DRAGON_BREATH);
+        this.tag(MATItemTags.CONTAINERS)
+                .add(Items.PAPER)
+                .add(Items.GLASS_BOTTLE);
+
         this.tag(MATItemTags.UNFINISHED)
 //                书
                 .add(MATItems.OCCULT_CODEX.get())

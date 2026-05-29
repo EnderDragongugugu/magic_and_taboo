@@ -21,7 +21,8 @@ public class PedestalRender implements BlockEntityRenderer<PedestalBlockEntity> 
     @Override
     public void render(PedestalBlockEntity pedestal, float partialTicks, PoseStack matrices, MultiBufferSource buffer, int light, int overlay) {
         var stack = pedestal.getStack();
-        if (stack.isEmpty()) return;
+        // 如果物品为空或已被视觉消耗，则不渲染
+        if (stack.isEmpty() || pedestal.isVisuallyConsumed()) return;
         float time = pedestal.ticks + partialTicks;
         matrices.pushPose();
         matrices.translate(

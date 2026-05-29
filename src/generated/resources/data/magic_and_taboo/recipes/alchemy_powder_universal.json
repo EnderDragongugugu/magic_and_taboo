@@ -1,0 +1,16 @@
+{
+  "type": "magic_and_taboo:alchemy_powder",
+  "apply_antagonism": true,
+  "blaze_burner": {
+    "tag": "magic_and_taboo:blaze_burners"
+  },
+  "catalyst": {
+    "tag": "magic_and_taboo:element_enhancers"
+  },
+  "experience": 10,
+  "require_mortar": true,
+  "result": {
+    "item": "magic_and_taboo:alchemy_powder"
+  },
+  "work_time": 100
+}

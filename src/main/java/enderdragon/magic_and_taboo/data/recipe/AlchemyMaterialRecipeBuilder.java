@@ -37,6 +37,9 @@ public class AlchemyMaterialRecipeBuilder implements RecipeBuilder {
     private Ingredient container = Ingredient.EMPTY;
     @Nullable
     private String group;
+    private boolean allowMultipleMaterials = false;
+    private boolean applyAntagonism = true;
+    private float baseMaterialLoss = 0.1f;
 
     public AlchemyMaterialRecipeBuilder(boolean requireMortar, int duration, int experience, ItemLike result, int count) {
         this.requireMortar = requireMortar;
@@ -93,6 +96,30 @@ public class AlchemyMaterialRecipeBuilder implements RecipeBuilder {
         return this;
     }
 
+    /**
+     * 允许使用多个炼金材料作为基础
+     */
+    public AlchemyMaterialRecipeBuilder allowMultipleMaterials(boolean allow) {
+        this.allowMultipleMaterials = allow;
+        return this;
+    }
+
+    /**
+     * 是否应用元素对抗系统
+     */
+    public AlchemyMaterialRecipeBuilder applyAntagonism(boolean apply) {
+        this.applyAntagonism = apply;
+        return this;
+    }
+
+    /**
+     * 设置基础材料的损失率（0-1）
+     */
+    public AlchemyMaterialRecipeBuilder baseMaterialLoss(float loss) {
+        this.baseMaterialLoss = Math.max(0, Math.min(1, loss));
+        return this;
+    }
+
     @Override
     public AlchemyMaterialRecipeBuilder unlockedBy(String criterion, CriterionTriggerInstance trigger) {
         this.advancement.addCriterion(criterion, trigger);
@@ -124,6 +151,9 @@ public class AlchemyMaterialRecipeBuilder implements RecipeBuilder {
                 this.ingredient,
                 this.blazeBurner,
                 this.container,
+                this.allowMultipleMaterials,
+                this.applyAntagonism,
+                this.baseMaterialLoss,
                 this.advancement,
                 identifier.withPrefix("recipes/work_hub")
         ));
@@ -140,6 +170,9 @@ public class AlchemyMaterialRecipeBuilder implements RecipeBuilder {
         private final Ingredient ingredient;
         private final Ingredient blazeBurner;
         private final Ingredient container;
+        private final boolean allowMultipleMaterials;
+        private final boolean applyAntagonism;
+        private final float baseMaterialLoss;
         private final Advancement.Builder advancement;
         private final ResourceLocation advancementId;
 
@@ -154,6 +187,9 @@ public class AlchemyMaterialRecipeBuilder implements RecipeBuilder {
                 Ingredient ingredient,
                 Ingredient blazeBurner,
                 Ingredient container,
+                boolean allowMultipleMaterials,
+                boolean applyAntagonism,
+                float baseMaterialLoss,
                 Advancement.Builder advancement,
                 ResourceLocation advancementId
         ) {
@@ -167,6 +203,9 @@ public class AlchemyMaterialRecipeBuilder implements RecipeBuilder {
             this.ingredient = ingredient;
             this.blazeBurner = blazeBurner;
             this.container = container;
+            this.allowMultipleMaterials = allowMultipleMaterials;
+            this.applyAntagonism = applyAntagonism;
+            this.baseMaterialLoss = baseMaterialLoss;
             this.advancement = advancement;
             this.advancementId = advancementId;
         }
@@ -186,6 +225,18 @@ public class AlchemyMaterialRecipeBuilder implements RecipeBuilder {
                 json.add("container", this.container.toJson());
             }
             json.add("ingredient", this.ingredient.toJson());
+
+            // 新增配置选项
+            if (this.allowMultipleMaterials) {
+                json.addProperty("allow_multiple_materials", true);
+            }
+            if (!this.applyAntagonism) {
+                json.addProperty("apply_antagonism", false);
+            }
+            if (this.baseMaterialLoss != 0.1f) {
+                json.addProperty("base_material_loss", this.baseMaterialLoss);
+            }
+
             JsonObject result = new JsonObject();
             result.addProperty("item", Objects.requireNonNull(ForgeRegistries.ITEMS.getKey(this.result)).toString());
             if (this.count > 1) {
